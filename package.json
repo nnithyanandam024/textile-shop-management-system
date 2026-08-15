@@ -11,6 +11,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev:electron": "tsc -p tsconfig.electron.json && concurrently \"vite\" \"electron .\"",
     "build": "tsc && vite build && tsc -p tsconfig.electron.json",
     "build:renderer": "vite build",
     "build:electron": "tsc -p tsconfig.electron.json",

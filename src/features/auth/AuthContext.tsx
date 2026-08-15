@@ -41,6 +41,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           const user = await window.api.auth.getCurrentUser();
           setCurrentUser(user);
         }
+      } else {
+        // Web Browser Fallback (when opened directly in Chrome browser at http://localhost:5173)
+        console.warn('Electron IPC API not detected. Web Browser fallback active.');
+        setSetupRequired(false);
       }
     } catch (err) {
       console.error('Failed to check auth status:', err);
@@ -55,8 +59,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const login = async (username: string, password: string) => {
     if (!window.api || !window.api.auth) {
-      return { success: false, error: 'IPC API not available.' };
+      // Browser Demo Fallback
+      console.info(`[Browser Mock Auth] Logging in user: ${username}`);
+      const mockUser: AuthUser = {
+        userId: 1,
+        username: username || 'admin',
+        displayName: username === 'admin' ? 'Store Administrator' : username,
+        roleId: 1,
+        roleName: 'Owner',
+        permissions: ['*'],
+      };
+      setCurrentUser(mockUser);
+      setIsLocked(false);
+      return { success: true };
     }
+
     const res = await window.api.auth.login(username, password);
     if (res.success && res.user) {
       setCurrentUser(res.user);
@@ -81,9 +98,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const unlockScreen = async (password: string) => {
-    if (!currentUser || !window.api || !window.api.auth) {
+    if (!currentUser) {
       return { success: false, error: 'Session expired.' };
     }
+
+    if (!window.api || !window.api.auth) {
+      setIsLocked(false);
+      return { success: true };
+    }
+
     const res = await window.api.auth.login(currentUser.username, password);
     if (res.success) {
       setIsLocked(false);
@@ -94,7 +117,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const hasPermission = (permissionCode: string): boolean => {
     if (!currentUser) return false;
-    if (currentUser.roleId === 1 || currentUser.roleName === 'Owner') return true;
+    if (currentUser.roleId === 1 || currentUser.roleName === 'Owner' || currentUser.permissions.includes('*')) return true;
     return currentUser.permissions.includes(permissionCode);
   };
 

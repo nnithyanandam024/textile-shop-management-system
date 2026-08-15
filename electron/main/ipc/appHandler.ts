@@ -1,5 +1,6 @@
 import { ipcMain, app } from 'electron';
 import os from 'os';
+import path from 'path';
 import { getDatabase, getDatabasePath, getBackupDirectoryPath } from '../database';
 import { seedDatabase } from '../database/seed';
 import { ProductRepository } from '../repositories/productRepository';

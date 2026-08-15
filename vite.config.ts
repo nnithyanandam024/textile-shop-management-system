@@ -10,6 +10,9 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  optimizeDeps: {
+    include: ['react-is', 'recharts', 'lucide-react', 'react-router-dom'],
+  },
   server: {
     port: 5173,
     strictPort: true,

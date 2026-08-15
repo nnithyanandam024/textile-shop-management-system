@@ -217,4 +217,11 @@ export class SalesService {
       return { success: false, error: error.message || String(error) };
     }
   }
+
+  getSaleDetails(saleId: number) {
+    const sale = this.saleRepo.getSaleById(saleId);
+    const items = this.saleRepo.getSaleItems(saleId);
+    const payments = this.saleRepo.getPayments(saleId);
+    return { sale, items, payments };
+  }
 }

@@ -21,6 +21,27 @@
     "package:win": "cross-env CSC_IDENTITY_AUTO_DISCOVERY=false npm run build && electron-builder --win",
     "preview": "vite preview"
   },
+  "build": {
+    "appId": "com.textileshop.management",
+    "productName": "Textile Shop Management System",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Textile Shop Management System"
+    }
+  },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "better-sqlite3": "^11.8.0",

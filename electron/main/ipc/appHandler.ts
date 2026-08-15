@@ -17,6 +17,8 @@ import { SalesService, CreateSaleInput } from '../services/salesService';
 import { PurchaseService, CreatePurchaseInput } from '../services/purchaseService';
 import { ReturnService, ProcessReturnInput, ProcessExchangeInput } from '../services/returnService';
 import { ExpenseService, CreateExpenseInput } from '../services/expenseService';
+import { DashboardService } from '../services/dashboardService';
+import { ReportService } from '../services/reportService';
 import { BackupService } from '../services/backupService';
 import { InvoiceService } from '../services/invoiceService';
 import { AuthService } from '../services/auth/authService';
@@ -391,6 +393,73 @@ export function registerIpcHandlers() {
     const session = SessionService.getSession();
     const service = new ExpenseService(getDatabase());
     return service.cancelExpense(expenseId, session?.userId);
+  });
+
+  // Dashboard API
+  ipcMain.handle('dashboard:get-kpis', (_, startDate?: string, endDate?: string) => {
+    AuthorizationService.requirePermission('dashboard.view');
+    const service = new DashboardService(getDatabase());
+    return service.getKPIs(startDate, endDate);
+  });
+
+  ipcMain.handle('dashboard:get-sales-trend', (_, days?: number) => {
+    AuthorizationService.requirePermission('dashboard.view');
+    const service = new DashboardService(getDatabase());
+    return service.getSalesTrend(days);
+  });
+
+  ipcMain.handle('dashboard:get-bestsellers', (_, limit?: number) => {
+    AuthorizationService.requirePermission('dashboard.view');
+    const service = new DashboardService(getDatabase());
+    return service.getBestSellers(limit);
+  });
+
+  ipcMain.handle('dashboard:get-low-stock-alerts', (_, limit?: number) => {
+    AuthorizationService.requirePermission('dashboard.view');
+    const service = new DashboardService(getDatabase());
+    return service.getLowStockAlerts(limit);
+  });
+
+  ipcMain.handle('dashboard:get-recent-transactions', (_, limit?: number) => {
+    AuthorizationService.requirePermission('dashboard.view');
+    const service = new DashboardService(getDatabase());
+    return service.getRecentTransactions(limit);
+  });
+
+  // Reports API
+  ipcMain.handle('reports:get-sales', (_, filter: any) => {
+    AuthorizationService.requirePermission('sales.view');
+    const service = new ReportService(getDatabase());
+    return service.getSalesReport(filter || {});
+  });
+
+  ipcMain.handle('reports:get-inventory', () => {
+    AuthorizationService.requirePermission('inventory.view');
+    const service = new ReportService(getDatabase());
+    return service.getInventoryReport();
+  });
+
+  ipcMain.handle('reports:get-financial', (_, filter: any) => {
+    AuthorizationService.requirePermission('dashboard.view');
+    const service = new ReportService(getDatabase());
+    return service.getFinancialReport(filter || {});
+  });
+
+  ipcMain.handle('reports:get-customers', () => {
+    AuthorizationService.requirePermission('customers.view');
+    const service = new ReportService(getDatabase());
+    return service.getCustomerReport();
+  });
+
+  ipcMain.handle('reports:get-suppliers', () => {
+    AuthorizationService.requirePermission('suppliers.view');
+    const service = new ReportService(getDatabase());
+    return service.getSupplierReport();
+  });
+
+  ipcMain.handle('reports:export-csv', (_, { data, headers }: { data: any[]; headers: { key: string; label: string }[] }) => {
+    const service = new ReportService(getDatabase());
+    return service.exportToCSV(data, headers);
   });
 
   // Settings

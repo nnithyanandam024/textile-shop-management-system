@@ -124,8 +124,20 @@ export interface ElectronAPI {
     create: (purchase: any) => Promise<{ success: boolean; purchaseId?: number; purchaseNumber?: string; error?: string }>;
     cancel: (purchaseId: number) => Promise<{ success: boolean; error?: string }>;
   };
-  stock: {
-    getTransactions: () => Promise<any[]>;
+  dashboard: {
+    getKPIs: (startDate?: string, endDate?: string) => Promise<any>;
+    getSalesTrend: (days?: number) => Promise<any[]>;
+    getBestSellers: (limit?: number) => Promise<any[]>;
+    getLowStockAlerts: (limit?: number) => Promise<any[]>;
+    getRecentTransactions: (limit?: number) => Promise<any[]>;
+  };
+  reports: {
+    getSales: (filter?: any) => Promise<any>;
+    getInventory: () => Promise<any>;
+    getFinancial: (filter?: any) => Promise<any>;
+    getCustomers: () => Promise<any[]>;
+    getSuppliers: () => Promise<any[]>;
+    exportCSV: (data: any[], headers: { key: string; label: string }[]) => Promise<string>;
   };
   returns: {
     getAll: () => Promise<any[]>;
@@ -223,8 +235,20 @@ const api: ElectronAPI = {
     create: (purchase) => ipcRenderer.invoke('purchases:create', purchase),
     cancel: (purchaseId) => ipcRenderer.invoke('purchases:cancel', purchaseId),
   },
-  stock: {
-    getTransactions: () => ipcRenderer.invoke('stock:get-transactions'),
+  dashboard: {
+    getKPIs: (startDate, endDate) => ipcRenderer.invoke('dashboard:get-kpis', startDate, endDate),
+    getSalesTrend: (days) => ipcRenderer.invoke('dashboard:get-sales-trend', days),
+    getBestSellers: (limit) => ipcRenderer.invoke('dashboard:get-bestsellers', limit),
+    getLowStockAlerts: (limit) => ipcRenderer.invoke('dashboard:get-low-stock-alerts', limit),
+    getRecentTransactions: (limit) => ipcRenderer.invoke('dashboard:get-recent-transactions', limit),
+  },
+  reports: {
+    getSales: (filter) => ipcRenderer.invoke('reports:get-sales', filter),
+    getInventory: () => ipcRenderer.invoke('reports:get-inventory'),
+    getFinancial: (filter) => ipcRenderer.invoke('reports:get-financial', filter),
+    getCustomers: () => ipcRenderer.invoke('reports:get-customers'),
+    getSuppliers: () => ipcRenderer.invoke('reports:get-suppliers'),
+    exportCSV: (data, headers) => ipcRenderer.invoke('reports:export-csv', { data, headers }),
   },
   returns: {
     getAll: () => ipcRenderer.invoke('returns:get-all'),

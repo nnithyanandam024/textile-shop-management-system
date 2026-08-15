@@ -1,73 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { Database, ShieldCheck, User } from 'lucide-react';
-import { Badge } from '../ui/Badge';
+import React from 'react';
+import { Search, Bell, History, User } from 'lucide-react';
 
 export const Header: React.FC = () => {
-  const location = useLocation();
-  const [dbStatus, setDbStatus] = useState<'online' | 'error' | 'checking'>('checking');
-  const [version, setVersion] = useState<string>('0.1.0');
-
-  useEffect(() => {
-    if (window.api?.app) {
-      window.api.app.getVersion().then(setVersion).catch(console.error);
-    }
-    if (window.api?.db) {
-      window.api.db.checkStatus().then((res) => {
-        setDbStatus(res.status);
-      }).catch(() => setDbStatus('error'));
-    }
-  }, []);
-
-  const getPageTitle = (pathname: string) => {
-    switch (pathname) {
-      case '/dashboard': return 'Business Dashboard';
-      case '/billing': return 'Point of Sale (POS) Billing';
-      case '/products': return 'Product & Variant Management';
-      case '/inventory': return 'Inventory & Stock Control';
-      case '/sales': return 'Sales Transactions';
-      case '/customers': return 'Customer Directory';
-      case '/suppliers': return 'Supplier Management';
-      case '/purchases': return 'Purchase Orders';
-      case '/returns': return 'Returns & Exchanges';
-      case '/reports': return 'Reports & Analytics';
-      case '/users': return 'User Access & Roles';
-      case '/backup': return 'Database Backup & Restore';
-      case '/settings': return 'System Settings';
-      default: return 'Textile Shop Management';
-    }
-  };
-
   return (
-    <header className="h-16 bg-slate-900 border-b border-slate-800 px-6 flex items-center justify-between shrink-0 select-none">
-      <div>
-        <h2 className="text-lg font-bold text-slate-100">{getPageTitle(location.pathname)}</h2>
-        <p className="text-xs text-slate-400">Textile Retail Management ERP</p>
+    <header className="h-16 bg-white border-b border-slate-200/90 px-8 flex items-center justify-between shrink-0 select-none z-10">
+      {/* Search Input Bar */}
+      <div className="relative w-96">
+        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+          <Search className="w-4 h-4" />
+        </div>
+        <input
+          type="text"
+          placeholder="Search inventory, POs, or staff..."
+          className="w-full bg-slate-50 border border-slate-200 rounded-full pl-10 pr-4 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/30 focus:border-[#2818cf] transition-colors"
+        />
       </div>
 
-      <div className="flex items-center gap-4">
-        {/* DB Status Badge */}
-        <Badge variant={dbStatus === 'online' ? 'success' : dbStatus === 'error' ? 'danger' : 'warning'}>
-          <Database className="w-3.5 h-3.5 mr-1.5" />
-          {dbStatus === 'online' ? 'SQLite Connected' : dbStatus === 'error' ? 'DB Error' : 'Connecting DB...'}
-        </Badge>
+      {/* Right Header Actions */}
+      <div className="flex items-center gap-5">
+        <button className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-full transition-colors relative">
+          <Bell className="w-5 h-5" />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white" />
+        </button>
 
-        {/* System Version */}
-        <Badge variant="neutral">
-          <ShieldCheck className="w-3.5 h-3.5 mr-1.5 text-brand-400" />
-          v{version}
-        </Badge>
+        <button className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-full transition-colors">
+          <History className="w-5 h-5" />
+        </button>
 
-        {/* User Pill */}
-        <div className="flex items-center gap-2 pl-2 border-l border-slate-800">
-          <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300">
-            <User className="w-4 h-4" />
-          </div>
-          <div className="text-left hidden sm:block">
-            <p className="text-xs font-semibold text-slate-200">Admin User</p>
-            <p className="text-[10px] text-slate-400">Owner Access</p>
-          </div>
-        </div>
+        <button className="p-1.5 text-slate-600 hover:text-slate-900 border border-slate-200 rounded-full transition-colors">
+          <User className="w-5 h-5" />
+        </button>
       </div>
     </header>
   );

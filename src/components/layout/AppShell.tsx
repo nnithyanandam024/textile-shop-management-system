@@ -5,11 +5,11 @@ import { Header } from './Header';
 
 export const AppShell: React.FC = () => {
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-slate-950 text-slate-100">
+    <div className="flex h-screen w-screen overflow-hidden bg-[#f9fafc] text-slate-800">
       <Sidebar />
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         <Header />
-        <main className="flex-1 overflow-y-auto p-6 bg-slate-950/60">
+        <main className="flex-1 overflow-y-auto p-8 bg-grid-pattern">
           <Outlet />
         </main>
       </div>

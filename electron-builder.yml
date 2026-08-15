@@ -1,6 +1,6 @@
 appId: com.textileshop.management
 productName: Textile Shop Management System
-artifactName: TextileShopSetup.${ext}
+artifactName: TextileShopSetup.exe
 
 directories:
   output: release
@@ -11,10 +11,7 @@ files:
   - package.json
 
 win:
-  target:
-    - target: nsis
-      arch:
-        - x64
+  target: nsis
   signAndEditExecutable: false
   verifyUpdateCodeSignature: false
 

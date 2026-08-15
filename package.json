@@ -10,8 +10,8 @@
     "build": "tsc && vite build && tsc -p tsconfig.electron.json",
     "build:renderer": "vite build",
     "build:electron": "tsc -p tsconfig.electron.json",
-    "package": "npm run build && electron-builder -c.win.sign=null",
-    "package:win": "npm run build && electron-builder --win -c.win.sign=null",
+    "package": "cross-env CSC_IDENTITY_AUTO_DISCOVERY=false npm run build && electron-builder",
+    "package:win": "cross-env CSC_IDENTITY_AUTO_DISCOVERY=false npm run build && electron-builder --win",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -51,22 +51,22 @@ export const SettingsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold text-slate-100">System & Shop Configuration</h2>
-        <p className="text-xs text-slate-400">Configure business information, contact details, currency & tax settings</p>
+        <h2 className="text-xl font-bold text-slate-900">System & Shop Configuration</h2>
+        <p className="text-xs font-medium text-slate-500">Configure business information, contact details, currency & tax settings</p>
       </div>
 
       {message && (
         <div
-          className={`p-4 rounded-xl border flex items-center gap-3 text-sm ${
+          className={`p-4 rounded-xl border flex items-center gap-3 text-xs font-semibold ${
             message.type === 'success'
-              ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300'
-              : 'bg-rose-500/10 border-rose-500/20 text-rose-300'
+              ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+              : 'bg-rose-50 border-rose-200 text-rose-700'
           }`}
         >
           {message.type === 'success' ? (
-            <CheckCircle className="w-5 h-5 shrink-0 text-emerald-400" />
+            <CheckCircle className="w-4 h-4 shrink-0 text-emerald-500" />
           ) : (
-            <AlertCircle className="w-5 h-5 shrink-0 text-rose-400" />
+            <AlertCircle className="w-4 h-4 shrink-0 text-rose-500" />
           )}
           <span>{message.text}</span>
         </div>

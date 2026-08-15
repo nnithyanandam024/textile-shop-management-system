@@ -82,7 +82,7 @@ export const DashboardPage: React.FC = () => {
       {/* 8 Primary KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {/* Today's Sales */}
-        <Card className="relative overflow-hidden border-l-4 border-l-[#2818cf]">
+        <Card>
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-[#2818cf]">
               <ShoppingCart className="w-5 h-5" />
@@ -96,7 +96,7 @@ export const DashboardPage: React.FC = () => {
         </Card>
 
         {/* Net Revenue */}
-        <Card className="relative overflow-hidden border-l-4 border-l-emerald-500">
+        <Card>
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
               <TrendingUp className="w-5 h-5" />
@@ -110,7 +110,7 @@ export const DashboardPage: React.FC = () => {
         </Card>
 
         {/* Gross Profit */}
-        <Card className="relative overflow-hidden border-l-4 border-l-cyan-500">
+        <Card>
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-xl bg-cyan-50 flex items-center justify-center text-cyan-600">
               <Wallet className="w-5 h-5" />
@@ -124,7 +124,7 @@ export const DashboardPage: React.FC = () => {
         </Card>
 
         {/* Operating Expenses */}
-        <Card className="relative overflow-hidden border-l-4 border-l-amber-500">
+        <Card>
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
               <DollarSign className="w-5 h-5" />

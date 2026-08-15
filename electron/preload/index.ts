@@ -42,6 +42,13 @@ export interface AuthUser {
   permissions: string[];
 }
 
+export interface InventoryMetrics {
+  totalVariants: number;
+  totalStockUnits: number;
+  lowStockCount: number;
+  outOfStockCount: number;
+}
+
 export interface ElectronAPI {
   app: {
     getVersion: () => Promise<string>;
@@ -70,6 +77,8 @@ export interface ElectronAPI {
   products: {
     getAll: () => Promise<any[]>;
     create: (product: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    createWithVariants: (input: any) => Promise<{ success: boolean; productId?: number; error?: string }>;
+    deactivate: (productId: number) => Promise<{ success: boolean; error?: string }>;
   };
   variants: {
     getAll: () => Promise<any[]>;
@@ -77,11 +86,20 @@ export interface ElectronAPI {
     getByBarcode: (barcode: string) => Promise<any>;
     create: (variant: any) => Promise<{ success: boolean; id?: number; error?: string }>;
   };
+  inventory: {
+    getMetrics: () => Promise<InventoryMetrics>;
+    getLowStock: () => Promise<any[]>;
+    getOutOfStock: () => Promise<any[]>;
+    getHistory: (variantId?: number) => Promise<any[]>;
+    adjust: (input: any) => Promise<{ success: boolean; newStock?: number; error?: string }>;
+  };
   categories: {
     getAll: () => Promise<any[]>;
+    create: (category: any) => Promise<{ success: boolean; id?: number; error?: string }>;
   };
   brands: {
     getAll: () => Promise<any[]>;
+    create: (brand: any) => Promise<{ success: boolean; id?: number; error?: string }>;
   };
   customers: {
     getAll: () => Promise<any[]>;
@@ -143,6 +161,8 @@ const api: ElectronAPI = {
   products: {
     getAll: () => ipcRenderer.invoke('products:get-all'),
     create: (product) => ipcRenderer.invoke('products:create', product),
+    createWithVariants: (input) => ipcRenderer.invoke('products:create-with-variants', input),
+    deactivate: (productId) => ipcRenderer.invoke('products:deactivate', productId),
   },
   variants: {
     getAll: () => ipcRenderer.invoke('variants:get-all'),
@@ -150,11 +170,20 @@ const api: ElectronAPI = {
     getByBarcode: (barcode) => ipcRenderer.invoke('variants:get-by-barcode', barcode),
     create: (variant) => ipcRenderer.invoke('variants:create', variant),
   },
+  inventory: {
+    getMetrics: () => ipcRenderer.invoke('inventory:get-metrics'),
+    getLowStock: () => ipcRenderer.invoke('inventory:get-low-stock'),
+    getOutOfStock: () => ipcRenderer.invoke('inventory:get-out-of-stock'),
+    getHistory: (variantId) => ipcRenderer.invoke('inventory:get-history', variantId),
+    adjust: (input) => ipcRenderer.invoke('inventory:adjust', input),
+  },
   categories: {
     getAll: () => ipcRenderer.invoke('categories:get-all'),
+    create: (category) => ipcRenderer.invoke('categories:create', category),
   },
   brands: {
     getAll: () => ipcRenderer.invoke('brands:get-all'),
+    create: (brand) => ipcRenderer.invoke('brands:create', brand),
   },
   customers: {
     getAll: () => ipcRenderer.invoke('customers:get-all'),

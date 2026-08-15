@@ -17,6 +17,8 @@ import { PurchaseService, CreatePurchaseInput } from '../services/purchaseServic
 import { BackupService } from '../services/backupService';
 import { AuthService } from '../services/auth/authService';
 import { UserService, CreateUserInput, UpdateUserInput } from '../services/auth/userService';
+import { ProductService, CreateProductInput } from '../services/productService';
+import { InventoryService } from '../services/inventoryService';
 import { AuthorizationService } from '../services/auth/authorizationService';
 import { SessionService } from '../services/auth/sessionService';
 import log from '../logger';
@@ -67,7 +69,7 @@ export function registerIpcHandlers() {
   });
 
   // ----------------------------------------------------
-  // AUTHENTICATION & USER MANAGEMENT IPC HANDLERS
+  // AUTHENTICATION & USER MANAGEMENT
   // ----------------------------------------------------
   ipcMain.handle('auth:check-setup', () => {
     const service = new AuthService(getDatabase());
@@ -101,7 +103,6 @@ export function registerIpcHandlers() {
     return service.changePassword(session.userId, currentPassword, newPassword);
   });
 
-  // USERS MANAGEMENT (Protected by `users.view` & `users.manage`)
   ipcMain.handle('users:get-all', () => {
     AuthorizationService.requirePermission('users.view');
     const service = new UserService(getDatabase());
@@ -131,10 +132,8 @@ export function registerIpcHandlers() {
   });
 
   // ----------------------------------------------------
-  // BUSINESS MODULE IPC HANDLERS WITH AUTHORIZATION
+  // PRODUCTS & VARIANTS
   // ----------------------------------------------------
-
-  // Products & Variants
   ipcMain.handle('products:get-all', () => {
     AuthorizationService.requirePermission('products.view');
     const repo = new ProductRepository(getDatabase());
@@ -159,26 +158,52 @@ export function registerIpcHandlers() {
     return repo.getVariantByBarcode(barcode);
   });
 
-  ipcMain.handle('products:create', (_, p: { name: string; category_id: number; brand_id?: number; material?: string; description?: string }) => {
+  ipcMain.handle('products:create-with-variants', (_, input: CreateProductInput) => {
     AuthorizationService.requirePermission('products.manage');
-    try {
-      const repo = new ProductRepository(getDatabase());
-      const id = repo.createProduct(p);
-      return { success: true, id };
-    } catch (error: any) {
-      return { success: false, error: error.message || String(error) };
-    }
+    const session = SessionService.getSession();
+    const service = new ProductService(getDatabase());
+    return service.createProductWithVariants(input, session?.userId);
   });
 
-  ipcMain.handle('variants:create', (_, v: any) => {
+  ipcMain.handle('products:deactivate', (_, productId: number) => {
     AuthorizationService.requirePermission('products.manage');
-    try {
-      const repo = new ProductRepository(getDatabase());
-      const id = repo.createVariant(v);
-      return { success: true, id };
-    } catch (error: any) {
-      return { success: false, error: error.message || String(error) };
-    }
+    const session = SessionService.getSession();
+    const service = new ProductService(getDatabase());
+    return service.deactivateProduct(productId, session?.userId);
+  });
+
+  // ----------------------------------------------------
+  // INVENTORY & STOCK CONTROL
+  // ----------------------------------------------------
+  ipcMain.handle('inventory:get-metrics', () => {
+    AuthorizationService.requirePermission('inventory.view');
+    const service = new InventoryService(getDatabase());
+    return service.getMetrics();
+  });
+
+  ipcMain.handle('inventory:get-low-stock', () => {
+    AuthorizationService.requirePermission('inventory.view');
+    const service = new InventoryService(getDatabase());
+    return service.getLowStockVariants();
+  });
+
+  ipcMain.handle('inventory:get-out-of-stock', () => {
+    AuthorizationService.requirePermission('inventory.view');
+    const service = new InventoryService(getDatabase());
+    return service.getOutOfStockVariants();
+  });
+
+  ipcMain.handle('inventory:get-history', (_, variantId?: number) => {
+    AuthorizationService.requirePermission('inventory.view');
+    const service = new InventoryService(getDatabase());
+    return service.getStockHistory(variantId);
+  });
+
+  ipcMain.handle('inventory:adjust', (_, input) => {
+    AuthorizationService.requirePermission('inventory.adjust');
+    const session = SessionService.getSession();
+    const service = new InventoryService(getDatabase());
+    return service.adjustStock({ ...input, created_by: session?.userId });
   });
 
   // Categories & Brands
@@ -187,9 +212,31 @@ export function registerIpcHandlers() {
     return repo.getAll();
   });
 
+  ipcMain.handle('categories:create', (_, c: { name: string; description?: string; parent_id?: number }) => {
+    AuthorizationService.requirePermission('products.manage');
+    try {
+      const repo = new CategoryRepository(getDatabase());
+      const id = repo.create(c);
+      return { success: true, id };
+    } catch (error: any) {
+      return { success: false, error: error.message || String(error) };
+    }
+  });
+
   ipcMain.handle('brands:get-all', () => {
     const repo = new BrandRepository(getDatabase());
     return repo.getAll();
+  });
+
+  ipcMain.handle('brands:create', (_, b: { name: string; description?: string }) => {
+    AuthorizationService.requirePermission('products.manage');
+    try {
+      const repo = new BrandRepository(getDatabase());
+      const id = repo.create(b);
+      return { success: true, id };
+    } catch (error: any) {
+      return { success: false, error: error.message || String(error) };
+    }
   });
 
   // Customers & Suppliers

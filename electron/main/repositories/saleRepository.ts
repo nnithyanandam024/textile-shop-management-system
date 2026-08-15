@@ -69,11 +69,12 @@ export class SaleRepository {
     tax?: number;
     total: number;
     paid_amount?: number;
+    balance_amount?: number;
     notes?: string;
     created_by?: number;
   }): number {
     const paid = s.paid_amount ?? s.total;
-    const balance = s.total - paid;
+    const balance = s.balance_amount ?? (s.total - paid);
     const info = this.db.prepare(`
       INSERT INTO sales (
         invoice_number, customer_id, subtotal, discount, tax, total, paid_amount, balance_amount, notes, created_by

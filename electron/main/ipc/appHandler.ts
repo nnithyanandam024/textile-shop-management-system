@@ -15,6 +15,7 @@ import { SettingsRepository } from '../repositories/settingsRepository';
 import { SalesService, CreateSaleInput } from '../services/salesService';
 import { PurchaseService, CreatePurchaseInput } from '../services/purchaseService';
 import { BackupService } from '../services/backupService';
+import { InvoiceService } from '../services/invoiceService';
 import { AuthService } from '../services/auth/authService';
 import { UserService, CreateUserInput, UpdateUserInput } from '../services/auth/userService';
 import { ProductService, CreateProductInput } from '../services/productService';

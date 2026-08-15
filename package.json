@@ -5,6 +5,10 @@
   "description": "Modern Windows Desktop Retail & POS Software for Textile Shops",
   "main": "dist-electron/main/index.js",
   "author": "TextileShop Management System Team",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nnithyanandam024/textile-shop-management-system.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && tsc -p tsconfig.electron.json",

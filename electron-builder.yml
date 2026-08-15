@@ -1,0 +1,27 @@
+appId: com.textileshop.management
+productName: Textile Shop Management System
+artifactName: TextileShopSetup.${ext}
+
+directories:
+  output: release
+
+files:
+  - dist/**/*
+  - dist-electron/**/*
+  - package.json
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  signAndEditExecutable: false
+  verifyUpdateCodeSignature: false
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Textile Shop System
+  artifactName: TextileShopSetup.exe

@@ -70,16 +70,18 @@ export class SaleRepository {
     total: number;
     paid_amount?: number;
     balance_amount?: number;
+    status?: string;
     notes?: string;
     created_by?: number;
   }): number {
     const paid = s.paid_amount ?? s.total;
     const balance = s.balance_amount ?? (s.total - paid);
+    const status = s.status || 'COMPLETED';
     const info = this.db.prepare(`
       INSERT INTO sales (
-        invoice_number, customer_id, subtotal, discount, tax, total, paid_amount, balance_amount, notes, created_by
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(s.invoice_number, s.customer_id, s.subtotal, s.discount ?? 0, s.tax ?? 0, s.total, paid, balance, s.notes || null, s.created_by || null);
+        invoice_number, customer_id, subtotal, discount, tax, total, paid_amount, balance_amount, status, notes, created_by
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(s.invoice_number, s.customer_id, s.subtotal, s.discount ?? 0, s.tax ?? 0, s.total, paid, balance, status, s.notes || null, s.created_by || null);
     return Number(info.lastInsertRowid);
   }
 

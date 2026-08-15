@@ -33,6 +33,15 @@ export interface HealthCheckResult {
   error?: string;
 }
 
+export interface AuthUser {
+  userId: number;
+  username: string;
+  displayName: string;
+  roleId: number;
+  roleName: string;
+  permissions: string[];
+}
+
 export interface ElectronAPI {
   app: {
     getVersion: () => Promise<string>;
@@ -43,6 +52,20 @@ export interface ElectronAPI {
     checkStatus: () => Promise<DbStatus>;
     healthCheck: () => Promise<HealthCheckResult>;
     seed: () => Promise<{ success: boolean; error?: string }>;
+  };
+  auth: {
+    checkSetup: () => Promise<{ setupRequired: boolean }>;
+    firstTimeSetup: (input: any) => Promise<{ success: boolean; error?: string }>;
+    login: (username: string, password: string) => Promise<{ success: boolean; user?: AuthUser; error?: string }>;
+    logout: () => Promise<{ success: boolean }>;
+    getCurrentUser: () => Promise<AuthUser | null>;
+    changePassword: (currentPassword: string, newPassword: string) => Promise<{ success: boolean; error?: string }>;
+  };
+  users: {
+    getAll: () => Promise<any[]>;
+    create: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    update: (id: number, input: any) => Promise<{ success: boolean; error?: string }>;
+    resetPassword: (targetUserId: number, newPassword: string) => Promise<{ success: boolean; error?: string }>;
   };
   products: {
     getAll: () => Promise<any[]>;
@@ -102,6 +125,20 @@ const api: ElectronAPI = {
     checkStatus: () => ipcRenderer.invoke('db:check-status'),
     healthCheck: () => ipcRenderer.invoke('db:health-check'),
     seed: () => ipcRenderer.invoke('db:seed'),
+  },
+  auth: {
+    checkSetup: () => ipcRenderer.invoke('auth:check-setup'),
+    firstTimeSetup: (input) => ipcRenderer.invoke('auth:first-time-setup', input),
+    login: (username, password) => ipcRenderer.invoke('auth:login', { username, password }),
+    logout: () => ipcRenderer.invoke('auth:logout'),
+    getCurrentUser: () => ipcRenderer.invoke('auth:get-current-user'),
+    changePassword: (currentPassword, newPassword) => ipcRenderer.invoke('auth:change-password', { currentPassword, newPassword }),
+  },
+  users: {
+    getAll: () => ipcRenderer.invoke('users:get-all'),
+    create: (input) => ipcRenderer.invoke('users:create', input),
+    update: (id, input) => ipcRenderer.invoke('users:update', { id, input }),
+    resetPassword: (targetUserId, newPassword) => ipcRenderer.invoke('users:reset-password', { targetUserId, newPassword }),
   },
   products: {
     getAll: () => ipcRenderer.invoke('products:get-all'),

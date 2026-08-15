@@ -27,9 +27,13 @@ describe('Phase 2 Database & Core Data Foundation Test Suite', () => {
     if (db) {
       db.close();
     }
-    if (fs.existsSync(tempDbPath)) {
-      const tempDir = path.dirname(tempDbPath);
-      fs.rmSync(tempDir, { recursive: true, force: true });
+    try {
+      if (fs.existsSync(tempDbPath)) {
+        const tempDir = path.dirname(tempDbPath);
+        fs.rmSync(tempDir, { recursive: true, force: true });
+      }
+    } catch {
+      // Ignore Windows async file handle release delays
     }
   });
 

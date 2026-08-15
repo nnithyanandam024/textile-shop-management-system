@@ -1,13 +1,81 @@
 import React from 'react';
-import { HashRouter } from 'react-router-dom';
-import { AppRoutes } from './app/routes';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './features/auth/AuthContext';
+import { LoginPage } from './features/auth/LoginPage';
+import { SetupWizard } from './features/auth/SetupWizard';
+import { LockScreenModal } from './features/auth/LockScreenModal';
+import { ProtectedRoute } from './features/auth/ProtectedRoute';
+import { AppShell } from './components/layout/AppShell';
 
-export const App: React.FC = () => {
+// Pages
+import { DashboardPage } from './features/dashboard/DashboardPage';
+import { ProductsPage } from './features/products/ProductsPage';
+import { InventoryPage } from './features/inventory/InventoryPage';
+import { BillingPage } from './features/billing/BillingPage';
+import { SalesPage } from './features/sales/SalesPage';
+import { CustomersPage } from './features/customers/CustomersPage';
+import { SuppliersPage } from './features/suppliers/SuppliersPage';
+import { PurchasesPage } from './features/purchases/PurchasesPage';
+import { ReturnsPage } from './features/returns/ReturnsPage';
+import { ReportsPage } from './features/reports/ReportsPage';
+import { UsersPage } from './features/users/UsersPage';
+import { BackupPage } from './features/backup/BackupPage';
+import { SettingsPage } from './features/settings/SettingsPage';
+
+const MainAppRouter: React.FC = () => {
+  const { currentUser, isLoading, isLocked, setupRequired } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#f9fafc] flex flex-col justify-center items-center">
+        <div className="w-10 h-10 border-4 border-[#2818cf] border-t-transparent rounded-full animate-spin mb-3" />
+        <p className="text-sm font-semibold text-slate-600">Initializing Texora Management System...</p>
+      </div>
+    );
+  }
+
+  if (setupRequired) {
+    return <SetupWizard />;
+  }
+
+  if (!currentUser) {
+    return <LoginPage />;
+  }
+
   return (
-    <HashRouter>
-      <AppRoutes />
-    </HashRouter>
+    <>
+      {isLocked && <LockScreenModal />}
+      <AppShell>
+        <Routes>
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/dashboard" element={<ProtectedRoute permission="dashboard.view"><DashboardPage /></ProtectedRoute>} />
+          <Route path="/products" element={<ProtectedRoute permission="products.view"><ProductsPage /></ProtectedRoute>} />
+          <Route path="/inventory" element={<ProtectedRoute permission="inventory.view"><InventoryPage /></ProtectedRoute>} />
+          <Route path="/billing" element={<ProtectedRoute permission="billing.create"><BillingPage /></ProtectedRoute>} />
+          <Route path="/sales" element={<ProtectedRoute permission="sales.view"><SalesPage /></ProtectedRoute>} />
+          <Route path="/customers" element={<ProtectedRoute permission="customers.view"><CustomersPage /></ProtectedRoute>} />
+          <Route path="/suppliers" element={<ProtectedRoute permission="suppliers.view"><SuppliersPage /></ProtectedRoute>} />
+          <Route path="/purchases" element={<ProtectedRoute permission="purchases.view"><PurchasesPage /></ProtectedRoute>} />
+          <Route path="/returns" element={<ProtectedRoute permission="returns.create"><ReturnsPage /></ProtectedRoute>} />
+          <Route path="/reports" element={<ProtectedRoute permission="reports.view"><ReportsPage /></ProtectedRoute>} />
+          <Route path="/users" element={<ProtectedRoute permission="users.view"><UsersPage /></ProtectedRoute>} />
+          <Route path="/backup" element={<ProtectedRoute permission="backup.create"><BackupPage /></ProtectedRoute>} />
+          <Route path="/settings" element={<ProtectedRoute permission="settings.view"><SettingsPage /></ProtectedRoute>} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
+      </AppShell>
+    </>
   );
 };
+
+export function App() {
+  return (
+    <HashRouter>
+      <AuthProvider>
+        <MainAppRouter />
+      </AuthProvider>
+    </HashRouter>
+  );
+}
 
 export default App;

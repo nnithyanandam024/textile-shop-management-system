@@ -15,6 +15,10 @@ import { SettingsRepository } from '../repositories/settingsRepository';
 import { SalesService, CreateSaleInput } from '../services/salesService';
 import { PurchaseService, CreatePurchaseInput } from '../services/purchaseService';
 import { BackupService } from '../services/backupService';
+import { AuthService } from '../services/auth/authService';
+import { UserService, CreateUserInput, UpdateUserInput } from '../services/auth/userService';
+import { AuthorizationService } from '../services/auth/authorizationService';
+import { SessionService } from '../services/auth/sessionService';
 import log from '../logger';
 
 export function registerIpcHandlers() {
@@ -62,28 +66,101 @@ export function registerIpcHandlers() {
     }
   });
 
+  // ----------------------------------------------------
+  // AUTHENTICATION & USER MANAGEMENT IPC HANDLERS
+  // ----------------------------------------------------
+  ipcMain.handle('auth:check-setup', () => {
+    const service = new AuthService(getDatabase());
+    return service.checkInitialSetup();
+  });
+
+  ipcMain.handle('auth:first-time-setup', (_, input) => {
+    const service = new AuthService(getDatabase());
+    return service.firstTimeSetup(input);
+  });
+
+  ipcMain.handle('auth:login', (_, { username, password }) => {
+    const service = new AuthService(getDatabase());
+    return service.login(username, password);
+  });
+
+  ipcMain.handle('auth:logout', () => {
+    const service = new AuthService(getDatabase());
+    return service.logout();
+  });
+
+  ipcMain.handle('auth:get-current-user', () => {
+    const service = new AuthService(getDatabase());
+    return service.getCurrentUser();
+  });
+
+  ipcMain.handle('auth:change-password', (_, { currentPassword, newPassword }) => {
+    const session = SessionService.getSession();
+    if (!session) return { success: false, error: 'Unauthorized.' };
+    const service = new AuthService(getDatabase());
+    return service.changePassword(session.userId, currentPassword, newPassword);
+  });
+
+  // USERS MANAGEMENT (Protected by `users.view` & `users.manage`)
+  ipcMain.handle('users:get-all', () => {
+    AuthorizationService.requirePermission('users.view');
+    const service = new UserService(getDatabase());
+    return service.getUsers();
+  });
+
+  ipcMain.handle('users:create', (_, input: CreateUserInput) => {
+    AuthorizationService.requirePermission('users.manage');
+    const session = SessionService.getSession();
+    const service = new UserService(getDatabase());
+    return service.createUser(input, session?.userId);
+  });
+
+  ipcMain.handle('users:update', (_, { id, input }: { id: number; input: UpdateUserInput }) => {
+    AuthorizationService.requirePermission('users.manage');
+    const session = SessionService.getSession();
+    const service = new UserService(getDatabase());
+    return service.updateUser(id, input, session?.userId);
+  });
+
+  ipcMain.handle('users:reset-password', (_, { targetUserId, newPassword }: { targetUserId: number; newPassword: string }) => {
+    AuthorizationService.requirePermission('users.manage');
+    const session = SessionService.getSession();
+    if (!session) return { success: false, error: 'Unauthorized.' };
+    const service = new UserService(getDatabase());
+    return service.resetPassword(session.userId, targetUserId, newPassword);
+  });
+
+  // ----------------------------------------------------
+  // BUSINESS MODULE IPC HANDLERS WITH AUTHORIZATION
+  // ----------------------------------------------------
+
   // Products & Variants
   ipcMain.handle('products:get-all', () => {
+    AuthorizationService.requirePermission('products.view');
     const repo = new ProductRepository(getDatabase());
     return repo.getAllProducts();
   });
 
   ipcMain.handle('variants:get-all', () => {
+    AuthorizationService.requirePermission('products.view');
     const repo = new ProductRepository(getDatabase());
     return repo.getAllVariants();
   });
 
   ipcMain.handle('variants:get-by-sku', (_, sku: string) => {
+    AuthorizationService.requirePermission('products.view');
     const repo = new ProductRepository(getDatabase());
     return repo.getVariantBySku(sku);
   });
 
   ipcMain.handle('variants:get-by-barcode', (_, barcode: string) => {
+    AuthorizationService.requirePermission('products.view');
     const repo = new ProductRepository(getDatabase());
     return repo.getVariantByBarcode(barcode);
   });
 
   ipcMain.handle('products:create', (_, p: { name: string; category_id: number; brand_id?: number; material?: string; description?: string }) => {
+    AuthorizationService.requirePermission('products.manage');
     try {
       const repo = new ProductRepository(getDatabase());
       const id = repo.createProduct(p);
@@ -93,19 +170,8 @@ export function registerIpcHandlers() {
     }
   });
 
-  ipcMain.handle('variants:create', (_, v: {
-    product_id: number;
-    sku: string;
-    barcode?: string;
-    size?: string;
-    color?: string;
-    pattern?: string;
-    purchase_price: number;
-    selling_price: number;
-    tax_rate?: number;
-    minimum_stock?: number;
-    current_stock?: number;
-  }) => {
+  ipcMain.handle('variants:create', (_, v: any) => {
+    AuthorizationService.requirePermission('products.manage');
     try {
       const repo = new ProductRepository(getDatabase());
       const id = repo.createVariant(v);
@@ -128,11 +194,13 @@ export function registerIpcHandlers() {
 
   // Customers & Suppliers
   ipcMain.handle('customers:get-all', () => {
+    AuthorizationService.requirePermission('customers.view');
     const repo = new CustomerRepository(getDatabase());
     return repo.getAll();
   });
 
-  ipcMain.handle('customers:create', (_, c: { customer_code: string; name: string; phone?: string; address?: string; gst_number?: string }) => {
+  ipcMain.handle('customers:create', (_, c: any) => {
+    AuthorizationService.requirePermission('customers.manage');
     try {
       const repo = new CustomerRepository(getDatabase());
       const id = repo.create(c);
@@ -143,11 +211,13 @@ export function registerIpcHandlers() {
   });
 
   ipcMain.handle('suppliers:get-all', () => {
+    AuthorizationService.requirePermission('suppliers.view');
     const repo = new SupplierRepository(getDatabase());
     return repo.getAll();
   });
 
-  ipcMain.handle('suppliers:create', (_, s: { supplier_code: string; company_name: string; contact_person?: string; phone?: string; gst_number?: string }) => {
+  ipcMain.handle('suppliers:create', (_, s: any) => {
+    AuthorizationService.requirePermission('suppliers.manage');
     try {
       const repo = new SupplierRepository(getDatabase());
       const id = repo.create(s);
@@ -159,28 +229,34 @@ export function registerIpcHandlers() {
 
   // Sales & POS Terminal
   ipcMain.handle('sales:get-all', () => {
+    AuthorizationService.requirePermission('sales.view');
     const repo = new SaleRepository(getDatabase());
     return repo.getAllSales();
   });
 
   ipcMain.handle('sales:create', (_, input: CreateSaleInput) => {
+    AuthorizationService.requirePermission('billing.create');
+    const session = SessionService.getSession();
     const service = new SalesService(getDatabase());
-    return service.createSale(input);
+    return service.createSale({ ...input, created_by: session?.userId });
   });
 
   // Purchases
   ipcMain.handle('purchases:get-all', () => {
+    AuthorizationService.requirePermission('purchases.view');
     const repo = new PurchaseRepository(getDatabase());
     return repo.getAll();
   });
 
   ipcMain.handle('purchases:create', (_, input: CreatePurchaseInput) => {
+    AuthorizationService.requirePermission('purchases.manage');
     const service = new PurchaseService(getDatabase());
     return service.createPurchase(input);
   });
 
   // Stock Ledger
   ipcMain.handle('stock:get-transactions', () => {
+    AuthorizationService.requirePermission('inventory.view');
     const repo = new StockRepository(getDatabase());
     return repo.getAllTransactions();
   });
@@ -191,10 +267,11 @@ export function registerIpcHandlers() {
     return repo.getAll();
   });
 
-  ipcMain.handle('expenses:create', (_, e: { category: string; description?: string; amount: number; payment_method?: string }) => {
+  ipcMain.handle('expenses:create', (_, e: any) => {
     try {
+      const session = SessionService.getSession();
       const repo = new ExpenseRepository(getDatabase());
-      const id = repo.create(e);
+      const id = repo.create({ ...e, created_by: session?.userId });
       return { success: true, id };
     } catch (error: any) {
       return { success: false, error: error.message || String(error) };
@@ -212,6 +289,7 @@ export function registerIpcHandlers() {
   });
 
   ipcMain.handle('settings:update', (_, { key, value }: { key: string; value: string }) => {
+    AuthorizationService.requirePermission('settings.update');
     try {
       const repo = new SettingsRepository(getDatabase());
       repo.set(key, value);
@@ -221,8 +299,11 @@ export function registerIpcHandlers() {
     }
   });
 
-  // Backup
-  ipcMain.handle('backup:create', (_, customName?: string) => BackupService.createBackup(customName));
+  // Backup & Restore
+  ipcMain.handle('backup:create', (_, customName?: string) => {
+    AuthorizationService.requirePermission('backup.create');
+    return BackupService.createBackup(customName);
+  });
 
   // Renderer Log
   ipcMain.handle('app:log', (_, { level, message, details }: { level: string; message: string; details?: any }) => {

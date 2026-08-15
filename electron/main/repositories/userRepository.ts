@@ -8,6 +8,8 @@ export interface UserRow {
   role_id: number;
   role_name?: string;
   is_active: number;
+  failed_login_attempts: number;
+  locked_until?: string;
   created_at: string;
   updated_at: string;
   last_login_at?: string;
@@ -43,6 +45,26 @@ export class UserRepository {
     `).get(username) as UserRow | undefined;
   }
 
+  getUserPermissions(roleId: number): string[] {
+    const rows = this.db.prepare(`
+      SELECT p.code 
+      FROM permissions p
+      JOIN role_permissions rp ON p.id = rp.permission_id
+      WHERE rp.role_id = ?
+    `).all(roleId) as { code: string }[];
+    return rows.map((r) => r.code);
+  }
+
+  getActiveOwnerCount(): number {
+    const row = this.db.prepare(`
+      SELECT COUNT(*) as count 
+      FROM users u 
+      JOIN roles r ON u.role_id = r.id 
+      WHERE r.name = 'Owner' AND u.is_active = 1
+    `).get() as { count: number };
+    return row.count;
+  }
+
   create(user: { username: string; password_hash: string; display_name: string; role_id: number }): number {
     const info = this.db.prepare(`
       INSERT INTO users (username, password_hash, display_name, role_id)
@@ -75,5 +97,30 @@ export class UserRepository {
 
     const info = this.db.prepare(`UPDATE users SET ${fields.join(', ')} WHERE id = ?`).run(...params);
     return info.changes > 0;
+  }
+
+  updatePasswordHash(id: number, hash: string): boolean {
+    const info = this.db.prepare(`
+      UPDATE users 
+      SET password_hash = ?, updated_at = CURRENT_TIMESTAMP 
+      WHERE id = ?
+    `).run(hash, id);
+    return info.changes > 0;
+  }
+
+  updateFailedAttempts(id: number, attempts: number, lockUntil?: string): void {
+    this.db.prepare(`
+      UPDATE users 
+      SET failed_login_attempts = ?, locked_until = ? 
+      WHERE id = ?
+    `).run(attempts, lockUntil || null, id);
+  }
+
+  recordSuccessfulLogin(id: number): void {
+    this.db.prepare(`
+      UPDATE users 
+      SET failed_login_attempts = 0, locked_until = NULL, last_login_at = CURRENT_TIMESTAMP 
+      WHERE id = ?
+    `).run(id);
   }
 }

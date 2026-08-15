@@ -1,36 +1,117 @@
-import React from 'react';
-import { Search, Bell, History, User } from 'lucide-react';
+import React, { useState } from 'react';
+import { Search, Bell, History, Lock, LogOut, KeyRound, ChevronDown } from 'lucide-react';
+import { useAuth } from '../../features/auth/AuthContext';
+import { ChangePasswordModal } from '../../features/auth/ChangePasswordModal';
 
 export const Header: React.FC = () => {
+  const { currentUser, lockScreen, logout } = useAuth();
+  const [showMenu, setShowMenu] = useState<boolean>(false);
+  const [showChangePass, setShowChangePass] = useState<boolean>(false);
+
   return (
-    <header className="h-16 bg-white border-b border-slate-200/90 px-8 flex items-center justify-between shrink-0 select-none z-10">
-      {/* Search Input Bar */}
-      <div className="relative w-96">
-        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-          <Search className="w-4 h-4" />
+    <header className="h-16 bg-white border-b border-slate-200/80 px-6 flex items-center justify-between sticky top-0 z-30 shadow-sm/50">
+      {/* Left: Global Search Input */}
+      <div className="flex items-center gap-3 w-96">
+        <div className="relative w-full">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            placeholder="Search items, invoices, customers... (Ctrl + K)"
+            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200/80 rounded-xl text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2818cf] focus:bg-white transition-all"
+          />
         </div>
-        <input
-          type="text"
-          placeholder="Search inventory, POs, or staff..."
-          className="w-full bg-slate-50 border border-slate-200 rounded-full pl-10 pr-4 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/30 focus:border-[#2818cf] transition-colors"
-        />
       </div>
 
-      {/* Right Header Actions */}
-      <div className="flex items-center gap-5">
-        <button className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-full transition-colors relative">
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white" />
-        </button>
-
-        <button className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-full transition-colors">
+      {/* Right: Actions & User Profile */}
+      <div className="flex items-center gap-3">
+        {/* Quick History Button */}
+        <button
+          className="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-xl transition-all border border-transparent hover:border-slate-200"
+          title="Recent History"
+        >
           <History className="w-5 h-5" />
         </button>
 
-        <button className="p-1.5 text-slate-600 hover:text-slate-900 border border-slate-200 rounded-full transition-colors">
-          <User className="w-5 h-5" />
+        {/* Notifications Bell */}
+        <button
+          className="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-xl transition-all border border-transparent hover:border-slate-200 relative"
+          title="Notifications"
+        >
+          <Bell className="w-5 h-5" />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#2818cf] rounded-full ring-2 ring-white" />
         </button>
+
+        {/* Vertical Divider */}
+        <div className="h-6 w-px bg-slate-200 mx-1" />
+
+        {/* User Profile Menu Dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => setShowMenu(!showMenu)}
+            className="flex items-center gap-3 p-1.5 pl-2.5 rounded-xl border border-slate-200/80 hover:bg-slate-50 transition-all text-left"
+          >
+            <div className="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf] font-bold text-xs">
+              {currentUser?.displayName ? currentUser.displayName.charAt(0).toUpperCase() : 'U'}
+            </div>
+            <div className="hidden sm:block">
+              <div className="text-xs font-bold text-slate-900 leading-tight">
+                {currentUser?.displayName || 'Store Staff'}
+              </div>
+              <div className="text-[10px] font-semibold text-slate-500">
+                {currentUser?.roleName || 'Cashier'}
+              </div>
+            </div>
+            <ChevronDown className="w-4 h-4 text-slate-400" />
+          </button>
+
+          {/* Dropdown Menu Popup */}
+          {showMenu && (
+            <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-200/80 rounded-2xl shadow-xl py-2 z-50 animate-scale-up">
+              <div className="px-4 py-2 border-b border-slate-100">
+                <p className="text-xs font-bold text-slate-900">{currentUser?.displayName}</p>
+                <p className="text-[10px] text-slate-500 font-mono">@{currentUser?.username}</p>
+              </div>
+
+              <button
+                onClick={() => {
+                  setShowMenu(false);
+                  lockScreen();
+                }}
+                className="w-full px-4 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-[#2818cf] flex items-center gap-2 transition-colors"
+              >
+                <Lock className="w-4 h-4" />
+                <span>Lock Station</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowMenu(false);
+                  setShowChangePass(true);
+                }}
+                className="w-full px-4 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-[#2818cf] flex items-center gap-2 transition-colors"
+              >
+                <KeyRound className="w-4 h-4" />
+                <span>Change Password</span>
+              </button>
+
+              <div className="my-1 border-t border-slate-100" />
+
+              <button
+                onClick={() => {
+                  setShowMenu(false);
+                  logout();
+                }}
+                className="w-full px-4 py-2 text-left text-xs font-semibold text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Logout</span>
+              </button>
+            </div>
+          )}
+        </div>
       </div>
+
+      <ChangePasswordModal isOpen={showChangePass} onClose={() => setShowChangePass(false)} />
     </header>
   );
 };

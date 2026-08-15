@@ -2,93 +2,87 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
-  Shirt,
+  Package,
   Boxes,
   ShoppingCart,
   Receipt,
   Users,
+  Building2,
   Truck,
-  PackagePlus,
-  Undo2,
+  RotateCcw,
   BarChart3,
   UserCheck,
+  Database,
   Settings,
-  DatabaseBackup,
-  Scissors,
-  PlusCircle,
 } from 'lucide-react';
+import { useAuth } from '../../features/auth/AuthContext';
 
 interface NavItem {
   name: string;
   path: string;
-  icon: React.ReactNode;
+  icon: React.ElementType;
+  permission?: string;
 }
 
 const navItems: NavItem[] = [
-  { name: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
-  { name: 'POS / Billing', path: '/billing', icon: <ShoppingCart className="w-5 h-5" /> },
-  { name: 'Products', path: '/products', icon: <Shirt className="w-5 h-5" /> },
-  { name: 'Inventory', path: '/inventory', icon: <Boxes className="w-5 h-5" /> },
-  { name: 'Sales History', path: '/sales', icon: <Receipt className="w-5 h-5" /> },
-  { name: 'Customers', path: '/customers', icon: <Users className="w-5 h-5" /> },
-  { name: 'Suppliers', path: '/suppliers', icon: <Truck className="w-5 h-5" /> },
-  { name: 'Purchases', path: '/purchases', icon: <PackagePlus className="w-5 h-5" /> },
-  { name: 'Returns & Exchange', path: '/returns', icon: <Undo2 className="w-5 h-5" /> },
-  { name: 'Reports & Analytics', path: '/reports', icon: <BarChart3 className="w-5 h-5" /> },
-  { name: 'User Management', path: '/users', icon: <UserCheck className="w-5 h-5" /> },
-  { name: 'Backup & Restore', path: '/backup', icon: <DatabaseBackup className="w-5 h-5" /> },
-  { name: 'Settings', path: '/settings', icon: <Settings className="w-5 h-5" /> },
+  { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, permission: 'dashboard.view' },
+  { name: 'Products', path: '/products', icon: Package, permission: 'products.view' },
+  { name: 'Inventory', path: '/inventory', icon: Boxes, permission: 'inventory.view' },
+  { name: 'POS Billing', path: '/billing', icon: ShoppingCart, permission: 'billing.create' },
+  { name: 'Sales History', path: '/sales', icon: Receipt, permission: 'sales.view' },
+  { name: 'Customers', path: '/customers', icon: Users, permission: 'customers.view' },
+  { name: 'Suppliers', path: '/suppliers', icon: Truck, permission: 'suppliers.view' },
+  { name: 'Purchases', path: '/purchases', icon: Building2, permission: 'purchases.view' },
+  { name: 'Returns', path: '/returns', icon: RotateCcw, permission: 'returns.create' },
+  { name: 'Reports', path: '/reports', icon: BarChart3, permission: 'reports.view' },
+  { name: 'Users & Roles', path: '/users', icon: UserCheck, permission: 'users.view' },
+  { name: 'Backup & Restore', path: '/backup', icon: Database, permission: 'backup.create' },
+  { name: 'Settings', path: '/settings', icon: Settings, permission: 'settings.view' },
 ];
 
 export const Sidebar: React.FC = () => {
+  const { hasPermission } = useAuth();
+
+  const filteredItems = navItems.filter((item) => !item.permission || hasPermission(item.permission));
+
   return (
-    <aside className="w-64 bg-white border-r border-slate-200/90 flex flex-col h-screen shrink-0 select-none z-20">
+    <aside className="w-64 bg-white border-r border-slate-200/80 flex flex-col h-screen select-none shrink-0 shadow-sm">
       {/* Brand Header */}
-      <div className="p-5 border-b border-slate-100 flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-[#2818cf] flex items-center justify-center text-white shadow-sm">
-          <Scissors className="w-5 h-5" />
+      <div className="h-16 px-6 flex items-center gap-3 border-b border-slate-200/80">
+        <div className="w-9 h-9 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-[#2818cf] shadow-sm">
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          </svg>
         </div>
         <div>
-          <h1 className="font-extrabold text-sm text-slate-900 leading-tight">TextileShop POS</h1>
-          <p className="text-[11px] text-slate-400 font-medium">Management System</p>
+          <h1 className="text-base font-bold text-slate-900 tracking-tight leading-tight">TEXORA</h1>
+          <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Textile Manager</p>
         </div>
       </div>
 
-      {/* Quick Action POS Button */}
-      <div className="px-4 py-3.5">
-        <NavLink
-          to="/billing"
-          className="w-full bg-[#2818cf] hover:bg-[#2011ba] text-white font-semibold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all duration-150 active:scale-[0.98]"
-        >
-          <PlusCircle className="w-4 h-4" />
-          <span className="text-xs">Quick Billing / POS</span>
-        </NavLink>
-      </div>
-
-      {/* Complete 13 Navigation Links */}
-      <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto">
-        {navItems.map((item) => (
+      {/* Navigation Links */}
+      <nav className="flex-1 overflow-y-auto p-4 space-y-1.5 custom-scrollbar">
+        {filteredItems.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-150 ${
+              `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                 isActive
-                  ? 'bg-indigo-50/80 text-[#2818cf] border-l-[3px] border-[#2818cf]'
+                  ? 'bg-indigo-50/80 text-[#2818cf] shadow-sm border border-indigo-100/80'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               }`
             }
           >
-            <span className="shrink-0">{item.icon}</span>
+            <item.icon className="w-4 h-4 shrink-0" />
             <span className="truncate">{item.name}</span>
           </NavLink>
         ))}
       </nav>
 
-      {/* Footer Version Info */}
-      <div className="p-3 border-t border-slate-100 bg-slate-50/50 text-[11px] text-slate-400 flex items-center justify-between font-medium">
-        <span>TextileShop v0.1.0</span>
-        <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" title="System Ready" />
+      {/* Footer Version */}
+      <div className="p-4 border-t border-slate-100 text-center text-[10px] font-medium text-slate-400">
+        Texora Retail v0.1.0
       </div>
     </aside>
   );

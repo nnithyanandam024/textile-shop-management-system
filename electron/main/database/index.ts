@@ -85,6 +85,8 @@ function runMigrations(db: Database.Database) {
             display_name TEXT NOT NULL,
             role_id INTEGER NOT NULL,
             is_active INTEGER DEFAULT 1,
+            failed_login_attempts INTEGER DEFAULT 0,
+            locked_until DATETIME,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             last_login_at DATETIME,
@@ -274,7 +276,7 @@ function runMigrations(db: Database.Database) {
           CREATE TABLE IF NOT EXISTS payments (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             sale_id INTEGER NOT NULL,
-            payment_method TEXT NOT NULL, -- CASH, UPI, CARD, BANK_TRANSFER, CREDIT
+            payment_method TEXT NOT NULL,
             amount REAL NOT NULL CHECK (amount >= 0),
             reference_number TEXT,
             payment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -290,7 +292,7 @@ function runMigrations(db: Database.Database) {
             sale_id INTEGER NOT NULL,
             customer_id INTEGER NOT NULL,
             return_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-            return_type TEXT NOT NULL, -- REFUND, EXCHANGE, STORE_CREDIT
+            return_type TEXT NOT NULL,
             refund_amount REAL DEFAULT 0.0,
             status TEXT DEFAULT 'COMPLETED',
             reason TEXT,
@@ -316,11 +318,11 @@ function runMigrations(db: Database.Database) {
             FOREIGN KEY (product_variant_id) REFERENCES product_variants(id) ON DELETE RESTRICT
           );
 
-          -- 18. Stock Transactions (Ledger)
+          -- 18. Stock Transactions
           CREATE TABLE IF NOT EXISTS stock_transactions (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             product_variant_id INTEGER NOT NULL,
-            transaction_type TEXT NOT NULL, -- PURCHASE, SALE, RETURN, DAMAGE, ADJUSTMENT
+            transaction_type TEXT NOT NULL,
             quantity INTEGER NOT NULL,
             reference_type TEXT,
             reference_id INTEGER,
@@ -368,22 +370,86 @@ function runMigrations(db: Database.Database) {
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
           );
 
-          -- INDEXES FOR HIGH-PERFORMANCE SEARCH
+          -- INDEXES
           CREATE INDEX IF NOT EXISTS idx_products_name ON products(name);
           CREATE INDEX IF NOT EXISTS idx_products_category ON products(category_id);
           CREATE INDEX IF NOT EXISTS idx_products_brand ON products(brand_id);
-
           CREATE INDEX IF NOT EXISTS idx_variants_sku ON product_variants(sku);
           CREATE INDEX IF NOT EXISTS idx_variants_barcode ON product_variants(barcode);
           CREATE INDEX IF NOT EXISTS idx_variants_product ON product_variants(product_id);
-
           CREATE INDEX IF NOT EXISTS idx_sales_invoice ON sales(invoice_number);
           CREATE INDEX IF NOT EXISTS idx_sales_customer ON sales(customer_id);
           CREATE INDEX IF NOT EXISTS idx_sales_date ON sales(sale_date);
-
           CREATE INDEX IF NOT EXISTS idx_stock_tx_variant ON stock_transactions(product_variant_id);
           CREATE INDEX IF NOT EXISTS idx_customers_phone ON customers(phone);
           CREATE INDEX IF NOT EXISTS idx_suppliers_code ON suppliers(supplier_code);
+        `);
+      }
+    },
+    {
+      version: 2,
+      name: 'auth_and_rbac_permissions',
+      up: (database: Database.Database) => {
+        database.exec(`
+          -- Seed Permissions Table
+          INSERT OR IGNORE INTO permissions (id, code, module, description) VALUES
+            (1, 'dashboard.view', 'Dashboard', 'View dashboard metrics'),
+            (2, 'products.view', 'Products', 'View products and variants'),
+            (3, 'products.manage', 'Products', 'Create, update, and delete products'),
+            (4, 'inventory.view', 'Inventory', 'View stock levels'),
+            (5, 'inventory.adjust', 'Inventory', 'Adjust stock quantities'),
+            (6, 'billing.create', 'Billing', 'Create POS sale transactions'),
+            (7, 'sales.view', 'Sales', 'View sales transaction history'),
+            (8, 'sales.cancel', 'Sales', 'Cancel or void sales transactions'),
+            (9, 'customers.view', 'Customers', 'View customer directory'),
+            (10, 'customers.manage', 'Customers', 'Create and update customer details'),
+            (11, 'suppliers.view', 'Suppliers', 'View supplier registry'),
+            (12, 'suppliers.manage', 'Suppliers', 'Create and update supplier details'),
+            (13, 'purchases.view', 'Purchases', 'View purchase orders'),
+            (14, 'purchases.manage', 'Purchases', 'Create and inward purchase orders'),
+            (15, 'returns.create', 'Returns', 'Process customer returns and exchanges'),
+            (16, 'reports.view', 'Reports', 'Access business analytics and reports'),
+            (17, 'reports.export', 'Reports', 'Export reporting data'),
+            (18, 'users.view', 'Users', 'View user account list'),
+            (19, 'users.manage', 'Users', 'Create, update, deactivate users and reset passwords'),
+            (20, 'settings.view', 'Settings', 'View system settings'),
+            (21, 'settings.update', 'Settings', 'Modify system settings'),
+            (22, 'backup.create', 'Backup', 'Generate database backups'),
+            (23, 'backup.restore', 'Backup', 'Restore database from backup file');
+
+          -- Ensure Default Roles exist
+          INSERT OR IGNORE INTO roles (id, name, description) VALUES
+            (1, 'Owner', 'Full system access and store administrative privileges'),
+            (2, 'Manager', 'Access to sales, inventory, purchases, and reporting'),
+            (3, 'Cashier', 'Access to POS billing terminal and customer registry'),
+            (4, 'Inventory Staff', 'Access to stock movements and product management');
+
+          -- Clear and Map Role Permissions
+          DELETE FROM role_permissions;
+
+          -- Role 1: Owner (All Permissions 1..23)
+          INSERT INTO role_permissions (role_id, permission_id)
+          SELECT 1, id FROM permissions;
+
+          -- Role 2: Manager (Permissions 1..17, 20)
+          INSERT INTO role_permissions (role_id, permission_id)
+          SELECT 2, id FROM permissions WHERE code NOT IN (
+            'users.view', 'users.manage', 'settings.update', 'backup.create', 'backup.restore'
+          );
+
+          -- Role 3: Cashier (Dashboard, Products View, Billing, Sales View, Customers Manage, Returns Create)
+          INSERT INTO role_permissions (role_id, permission_id)
+          SELECT 3, id FROM permissions WHERE code IN (
+            'dashboard.view', 'products.view', 'inventory.view', 'billing.create', 'sales.view',
+            'customers.view', 'customers.manage', 'returns.create'
+          );
+
+          -- Role 4: Inventory Staff (Dashboard, Products Manage, Inventory Manage, Suppliers Manage, Purchases Manage)
+          INSERT INTO role_permissions (role_id, permission_id)
+          SELECT 4, id FROM permissions WHERE code IN (
+            'dashboard.view', 'products.view', 'products.manage', 'inventory.view', 'inventory.adjust',
+            'customers.view', 'suppliers.view', 'suppliers.manage', 'purchases.view', 'purchases.manage'
+          );
         `);
       }
     }

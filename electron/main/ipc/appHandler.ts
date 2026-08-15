@@ -12,6 +12,8 @@ import { PurchaseRepository } from '../repositories/purchaseRepository';
 import { StockRepository } from '../repositories/stockRepository';
 import { ExpenseRepository } from '../repositories/expenseRepository';
 import { SettingsRepository } from '../repositories/settingsRepository';
+import { CustomerService } from '../services/customerService';
+import { SupplierService } from '../services/supplierService';
 import { SalesService, CreateSaleInput } from '../services/salesService';
 import { PurchaseService, CreatePurchaseInput } from '../services/purchaseService';
 import { BackupService } from '../services/backupService';
@@ -247,15 +249,24 @@ export function registerIpcHandlers() {
     return repo.getAll();
   });
 
+  ipcMain.handle('customers:get-profile', (_, id: number) => {
+    AuthorizationService.requirePermission('customers.view');
+    const service = new CustomerService(getDatabase());
+    return service.getCustomerProfile(id);
+  });
+
   ipcMain.handle('customers:create', (_, c: any) => {
     AuthorizationService.requirePermission('customers.manage');
-    try {
-      const repo = new CustomerRepository(getDatabase());
-      const id = repo.create(c);
-      return { success: true, id };
-    } catch (error: any) {
-      return { success: false, error: error.message || String(error) };
-    }
+    const session = SessionService.getSession();
+    const service = new CustomerService(getDatabase());
+    return service.createCustomer(c, session?.userId);
+  });
+
+  ipcMain.handle('customers:receive-payment', (_, { customerId, amount, paymentMethod }: { customerId: number; amount: number; paymentMethod: string }) => {
+    AuthorizationService.requirePermission('customers.manage');
+    const session = SessionService.getSession();
+    const service = new CustomerService(getDatabase());
+    return service.receiveCustomerPayment(customerId, amount, paymentMethod, session?.userId);
   });
 
   ipcMain.handle('suppliers:get-all', () => {
@@ -264,15 +275,24 @@ export function registerIpcHandlers() {
     return repo.getAll();
   });
 
+  ipcMain.handle('suppliers:get-profile', (_, id: number) => {
+    AuthorizationService.requirePermission('suppliers.view');
+    const service = new SupplierService(getDatabase());
+    return service.getSupplierProfile(id);
+  });
+
   ipcMain.handle('suppliers:create', (_, s: any) => {
     AuthorizationService.requirePermission('suppliers.manage');
-    try {
-      const repo = new SupplierRepository(getDatabase());
-      const id = repo.create(s);
-      return { success: true, id };
-    } catch (error: any) {
-      return { success: false, error: error.message || String(error) };
-    }
+    const session = SessionService.getSession();
+    const service = new SupplierService(getDatabase());
+    return service.createSupplier(s, session?.userId);
+  });
+
+  ipcMain.handle('suppliers:make-payment', (_, { supplierId, amount, paymentMethod }: { supplierId: number; amount: number; paymentMethod: string }) => {
+    AuthorizationService.requirePermission('suppliers.manage');
+    const session = SessionService.getSession();
+    const service = new SupplierService(getDatabase());
+    return service.makeSupplierPayment(supplierId, amount, paymentMethod, session?.userId);
   });
 
   // Sales & POS Terminal
@@ -311,8 +331,16 @@ export function registerIpcHandlers() {
 
   ipcMain.handle('purchases:create', (_, input: CreatePurchaseInput) => {
     AuthorizationService.requirePermission('purchases.manage');
+    const session = SessionService.getSession();
     const service = new PurchaseService(getDatabase());
-    return service.createPurchase(input);
+    return service.createPurchase({ ...input, created_by: session?.userId });
+  });
+
+  ipcMain.handle('purchases:cancel', (_, purchaseId: number) => {
+    AuthorizationService.requirePermission('purchases.manage');
+    const session = SessionService.getSession();
+    const service = new PurchaseService(getDatabase());
+    return service.cancelPurchase(purchaseId, session?.userId);
   });
 
   // Stock Ledger

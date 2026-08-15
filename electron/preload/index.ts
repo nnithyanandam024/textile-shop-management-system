@@ -103,11 +103,15 @@ export interface ElectronAPI {
   };
   customers: {
     getAll: () => Promise<any[]>;
-    create: (customer: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    getProfile: (id: number) => Promise<{ success: boolean; customer?: any; purchases?: any[]; error?: string }>;
+    create: (customer: any) => Promise<{ success: boolean; id?: number; code?: string; error?: string }>;
+    receivePayment: (input: { customerId: number; amount: number; paymentMethod: string }) => Promise<{ success: boolean; error?: string }>;
   };
   suppliers: {
     getAll: () => Promise<any[]>;
-    create: (supplier: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    getProfile: (id: number) => Promise<{ success: boolean; supplier?: any; purchases?: any[]; error?: string }>;
+    create: (supplier: any) => Promise<{ success: boolean; id?: number; code?: string; error?: string }>;
+    makePayment: (input: { supplierId: number; amount: number; paymentMethod: string }) => Promise<{ success: boolean; error?: string }>;
   };
   sales: {
     getAll: () => Promise<any[]>;
@@ -117,7 +121,8 @@ export interface ElectronAPI {
   };
   purchases: {
     getAll: () => Promise<any[]>;
-    create: (purchase: any) => Promise<{ success: boolean; purchaseId?: number; error?: string }>;
+    create: (purchase: any) => Promise<{ success: boolean; purchaseId?: number; purchaseNumber?: string; error?: string }>;
+    cancel: (purchaseId: number) => Promise<{ success: boolean; error?: string }>;
   };
   stock: {
     getTransactions: () => Promise<any[]>;
@@ -189,11 +194,15 @@ const api: ElectronAPI = {
   },
   customers: {
     getAll: () => ipcRenderer.invoke('customers:get-all'),
+    getProfile: (id) => ipcRenderer.invoke('customers:get-profile', id),
     create: (customer) => ipcRenderer.invoke('customers:create', customer),
+    receivePayment: (input) => ipcRenderer.invoke('customers:receive-payment', input),
   },
   suppliers: {
     getAll: () => ipcRenderer.invoke('suppliers:get-all'),
+    getProfile: (id) => ipcRenderer.invoke('suppliers:get-profile', id),
     create: (supplier) => ipcRenderer.invoke('suppliers:create', supplier),
+    makePayment: (input) => ipcRenderer.invoke('suppliers:make-payment', input),
   },
   sales: {
     getAll: () => ipcRenderer.invoke('sales:get-all'),
@@ -204,6 +213,7 @@ const api: ElectronAPI = {
   purchases: {
     getAll: () => ipcRenderer.invoke('purchases:get-all'),
     create: (purchase) => ipcRenderer.invoke('purchases:create', purchase),
+    cancel: (purchaseId) => ipcRenderer.invoke('purchases:cancel', purchaseId),
   },
   stock: {
     getTransactions: () => ipcRenderer.invoke('stock:get-transactions'),

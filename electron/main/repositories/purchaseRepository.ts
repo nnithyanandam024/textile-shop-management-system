@@ -42,6 +42,25 @@ export class PurchaseRepository {
     `).all() as PurchaseRow[];
   }
 
+  getPurchaseById(id: number): PurchaseRow | undefined {
+    return this.db.prepare(`
+      SELECT p.*, s.company_name as supplier_name
+      FROM purchases p
+      JOIN suppliers s ON p.supplier_id = s.id
+      WHERE p.id = ?
+    `).get(id) as PurchaseRow | undefined;
+  }
+
+  getPurchaseItems(purchaseId: number): PurchaseItemRow[] {
+    return this.db.prepare(`
+      SELECT pi.*, pv.sku, p.name as product_name
+      FROM purchase_items pi
+      JOIN product_variants pv ON pi.product_variant_id = pv.id
+      JOIN products p ON pv.product_id = p.id
+      WHERE pi.purchase_id = ?
+    `).all(purchaseId) as PurchaseItemRow[];
+  }
+
   createPurchase(p: {
     purchase_number: string;
     supplier_id: number;

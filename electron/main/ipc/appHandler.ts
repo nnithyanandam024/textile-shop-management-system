@@ -9,14 +9,13 @@ import { CustomerRepository } from '../repositories/customerRepository';
 import { SupplierRepository } from '../repositories/supplierRepository';
 import { SaleRepository } from '../repositories/saleRepository';
 import { PurchaseRepository } from '../repositories/purchaseRepository';
-import { StockRepository } from '../repositories/stockRepository';
-import { ExpenseRepository } from '../repositories/expenseRepository';
 import { SettingsRepository } from '../repositories/settingsRepository';
 import { CustomerService } from '../services/customerService';
 import { SupplierService } from '../services/supplierService';
 import { SalesService, CreateSaleInput } from '../services/salesService';
 import { PurchaseService, CreatePurchaseInput } from '../services/purchaseService';
-import { BackupService } from '../services/backupService';
+import { ReturnService, ProcessReturnInput, ProcessExchangeInput } from '../services/returnService';
+import { ExpenseService, CreateExpenseInput } from '../services/expenseService';
 import { InvoiceService } from '../services/invoiceService';
 import { AuthService } from '../services/auth/authService';
 import { UserService, CreateUserInput, UpdateUserInput } from '../services/auth/userService';
@@ -350,21 +349,46 @@ export function registerIpcHandlers() {
     return repo.getAllTransactions();
   });
 
-  // Expenses
-  ipcMain.handle('expenses:get-all', () => {
-    const repo = new ExpenseRepository(getDatabase());
-    return repo.getAll();
+  // Returns & Exchanges
+  ipcMain.handle('returns:get-all', () => {
+    AuthorizationService.requirePermission('returns.view');
+    const service = new ReturnService(getDatabase());
+    return service.getAllReturns();
   });
 
-  ipcMain.handle('expenses:create', (_, e: any) => {
-    try {
-      const session = SessionService.getSession();
-      const repo = new ExpenseRepository(getDatabase());
-      const id = repo.create({ ...e, created_by: session?.userId });
-      return { success: true, id };
-    } catch (error: any) {
-      return { success: false, error: error.message || String(error) };
-    }
+  ipcMain.handle('returns:create', (_, input: ProcessReturnInput) => {
+    AuthorizationService.requirePermission('returns.create');
+    const session = SessionService.getSession();
+    const service = new ReturnService(getDatabase());
+    return service.processReturn({ ...input, created_by: session?.userId });
+  });
+
+  ipcMain.handle('exchanges:create', (_, input: ProcessExchangeInput) => {
+    AuthorizationService.requirePermission('returns.create');
+    const session = SessionService.getSession();
+    const service = new ReturnService(getDatabase());
+    return service.processExchange({ ...input, created_by: session?.userId });
+  });
+
+  // Expenses
+  ipcMain.handle('expenses:get-all', () => {
+    AuthorizationService.requirePermission('expenses.view');
+    const service = new ExpenseService(getDatabase());
+    return service.getAllExpenses();
+  });
+
+  ipcMain.handle('expenses:create', (_, input: CreateExpenseInput) => {
+    AuthorizationService.requirePermission('expenses.create');
+    const session = SessionService.getSession();
+    const service = new ExpenseService(getDatabase());
+    return service.createExpense({ ...input, created_by: session?.userId });
+  });
+
+  ipcMain.handle('expenses:cancel', (_, expenseId: number) => {
+    AuthorizationService.requirePermission('expenses.cancel');
+    const session = SessionService.getSession();
+    const service = new ExpenseService(getDatabase());
+    return service.cancelExpense(expenseId, session?.userId);
   });
 
   // Settings

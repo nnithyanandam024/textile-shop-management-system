@@ -127,9 +127,17 @@ export interface ElectronAPI {
   stock: {
     getTransactions: () => Promise<any[]>;
   };
+  returns: {
+    getAll: () => Promise<any[]>;
+    create: (input: any) => Promise<{ success: boolean; returnId?: number; returnNumber?: string; refundAmount?: number; error?: string }>;
+  };
+  exchanges: {
+    create: (input: any) => Promise<{ success: boolean; exchangeNumber?: string; differenceAmount?: number; error?: string }>;
+  };
   expenses: {
     getAll: () => Promise<any[]>;
-    create: (expense: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    create: (expense: any) => Promise<{ success: boolean; id?: number; expenseNumber?: string; error?: string }>;
+    cancel: (expenseId: number) => Promise<{ success: boolean; error?: string }>;
   };
   settings: {
     getAll: () => Promise<{ success: boolean; data?: Record<string, string>; error?: string }>;
@@ -218,9 +226,17 @@ const api: ElectronAPI = {
   stock: {
     getTransactions: () => ipcRenderer.invoke('stock:get-transactions'),
   },
+  returns: {
+    getAll: () => ipcRenderer.invoke('returns:get-all'),
+    create: (input) => ipcRenderer.invoke('returns:create', input),
+  },
+  exchanges: {
+    create: (input) => ipcRenderer.invoke('exchanges:create', input),
+  },
   expenses: {
     getAll: () => ipcRenderer.invoke('expenses:get-all'),
     create: (expense) => ipcRenderer.invoke('expenses:create', expense),
+    cancel: (expenseId) => ipcRenderer.invoke('expenses:cancel', expenseId),
   },
   settings: {
     getAll: () => ipcRenderer.invoke('settings:get-all'),

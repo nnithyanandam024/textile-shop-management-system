@@ -105,7 +105,7 @@ export const PurchasesPage: React.FC = () => {
             className="px-4 py-2.5 bg-[#2818cf] hover:bg-[#2012ad] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2818cf]/20 transition-all flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
-            <span>+ New Purchase Inward</span>
+            <span>New Purchase Inward</span>
           </button>
         </div>
       </div>

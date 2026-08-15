@@ -20,14 +20,14 @@ export function getBackupDirectoryPath(): string {
   return backupPath;
 }
 
-export function initDatabase(): Database.Database {
-  if (dbInstance) {
+export function initDatabase(customDbPath?: string): Database.Database {
+  if (dbInstance && !customDbPath) {
     return dbInstance;
   }
 
-  const dbPath = getDatabasePath();
+  const dbPath = customDbPath || getDatabasePath();
   const dbDir = path.dirname(dbPath);
-  
+
   if (!fs.existsSync(dbDir)) {
     fs.mkdirSync(dbDir, { recursive: true });
   }
@@ -35,16 +35,19 @@ export function initDatabase(): Database.Database {
   log.info(`Initializing SQLite Database at: ${dbPath}`);
 
   try {
-    dbInstance = new Database(dbPath, { verbose: (msg) => log.debug(`[SQL] ${msg}`) });
-    
-    // Enable PRAGMAs for performance and integrity
-    dbInstance.pragma('journal_mode = WAL');
-    dbInstance.pragma('foreign_keys = ON');
+    const instance = new Database(dbPath, { verbose: (msg) => log.debug(`[SQL] ${msg}`) });
 
-    runMigrations(dbInstance);
+    // Enable WAL mode & Foreign Keys
+    instance.pragma('journal_mode = WAL');
+    instance.pragma('foreign_keys = ON');
 
-    log.info('Database initialized successfully.');
-    return dbInstance;
+    runMigrations(instance);
+
+    if (!customDbPath) {
+      dbInstance = instance;
+    }
+    log.info('Database initialized and migrated successfully.');
+    return instance;
   } catch (error) {
     log.error('Failed to initialize SQLite Database:', error);
     throw error;
@@ -52,7 +55,6 @@ export function initDatabase(): Database.Database {
 }
 
 function runMigrations(db: Database.Database) {
-  // Create schema_migrations table if not exists
   db.exec(`
     CREATE TABLE IF NOT EXISTS schema_migrations (
       version INTEGER PRIMARY KEY,
@@ -64,22 +66,324 @@ function runMigrations(db: Database.Database) {
   const migrations = [
     {
       version: 1,
-      name: 'initial_settings_schema',
+      name: 'core_textile_shop_schema',
       up: (database: Database.Database) => {
         database.exec(`
+          -- 1. Roles
+          CREATE TABLE IF NOT EXISTS roles (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL UNIQUE,
+            description TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 2. Users
+          CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL UNIQUE,
+            password_hash TEXT NOT NULL,
+            display_name TEXT NOT NULL,
+            role_id INTEGER NOT NULL,
+            is_active INTEGER DEFAULT 1,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            last_login_at DATETIME,
+            FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE RESTRICT
+          );
+
+          -- 3. Permissions
+          CREATE TABLE IF NOT EXISTS permissions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            code TEXT NOT NULL UNIQUE,
+            module TEXT NOT NULL,
+            description TEXT
+          );
+
+          -- 4. Role Permissions
+          CREATE TABLE IF NOT EXISTS role_permissions (
+            role_id INTEGER NOT NULL,
+            permission_id INTEGER NOT NULL,
+            PRIMARY KEY (role_id, permission_id),
+            FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE,
+            FOREIGN KEY (permission_id) REFERENCES permissions(id) ON DELETE CASCADE
+          );
+
+          -- 5. Categories
+          CREATE TABLE IF NOT EXISTS categories (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            description TEXT,
+            parent_id INTEGER,
+            is_active INTEGER DEFAULT 1,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (parent_id) REFERENCES categories(id) ON DELETE SET NULL
+          );
+
+          -- 6. Brands
+          CREATE TABLE IF NOT EXISTS brands (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL UNIQUE,
+            description TEXT,
+            is_active INTEGER DEFAULT 1,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 7. Products
+          CREATE TABLE IF NOT EXISTS products (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            category_id INTEGER NOT NULL,
+            brand_id INTEGER,
+            material TEXT,
+            description TEXT,
+            image_path TEXT,
+            is_active INTEGER DEFAULT 1,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE RESTRICT,
+            FOREIGN KEY (brand_id) REFERENCES brands(id) ON DELETE SET NULL
+          );
+
+          -- 8. Product Variants
+          CREATE TABLE IF NOT EXISTS product_variants (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            product_id INTEGER NOT NULL,
+            sku TEXT NOT NULL UNIQUE,
+            barcode TEXT UNIQUE,
+            size TEXT,
+            color TEXT,
+            pattern TEXT,
+            purchase_price REAL NOT NULL CHECK (purchase_price >= 0),
+            selling_price REAL NOT NULL CHECK (selling_price >= 0),
+            tax_rate REAL DEFAULT 0.0 CHECK (tax_rate >= 0),
+            minimum_stock INTEGER DEFAULT 5 CHECK (minimum_stock >= 0),
+            current_stock INTEGER DEFAULT 0 CHECK (current_stock >= 0),
+            is_active INTEGER DEFAULT 1,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+          );
+
+          -- 9. Customers
+          CREATE TABLE IF NOT EXISTS customers (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            customer_code TEXT NOT NULL UNIQUE,
+            name TEXT NOT NULL,
+            phone TEXT,
+            email TEXT,
+            address TEXT,
+            city TEXT,
+            state TEXT,
+            pincode TEXT,
+            gst_number TEXT,
+            credit_limit REAL DEFAULT 0.0,
+            is_active INTEGER DEFAULT 1,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 10. Suppliers
+          CREATE TABLE IF NOT EXISTS suppliers (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            supplier_code TEXT NOT NULL UNIQUE,
+            company_name TEXT NOT NULL,
+            contact_person TEXT,
+            phone TEXT,
+            email TEXT,
+            address TEXT,
+            city TEXT,
+            state TEXT,
+            pincode TEXT,
+            gst_number TEXT,
+            is_active INTEGER DEFAULT 1,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 11. Purchases
+          CREATE TABLE IF NOT EXISTS purchases (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            purchase_number TEXT NOT NULL UNIQUE,
+            supplier_id INTEGER NOT NULL,
+            purchase_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+            subtotal REAL NOT NULL DEFAULT 0.0,
+            discount REAL DEFAULT 0.0,
+            tax REAL DEFAULT 0.0,
+            total REAL NOT NULL DEFAULT 0.0,
+            paid_amount REAL DEFAULT 0.0,
+            balance_amount REAL DEFAULT 0.0,
+            status TEXT DEFAULT 'COMPLETED',
+            notes TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (supplier_id) REFERENCES suppliers(id) ON DELETE RESTRICT
+          );
+
+          -- 12. Purchase Items
+          CREATE TABLE IF NOT EXISTS purchase_items (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            purchase_id INTEGER NOT NULL,
+            product_variant_id INTEGER NOT NULL,
+            quantity INTEGER NOT NULL CHECK (quantity > 0),
+            unit_cost REAL NOT NULL CHECK (unit_cost >= 0),
+            discount REAL DEFAULT 0.0,
+            tax REAL DEFAULT 0.0,
+            total REAL NOT NULL CHECK (total >= 0),
+            FOREIGN KEY (purchase_id) REFERENCES purchases(id) ON DELETE CASCADE,
+            FOREIGN KEY (product_variant_id) REFERENCES product_variants(id) ON DELETE RESTRICT
+          );
+
+          -- 13. Sales
+          CREATE TABLE IF NOT EXISTS sales (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            invoice_number TEXT NOT NULL UNIQUE,
+            customer_id INTEGER NOT NULL,
+            sale_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+            subtotal REAL NOT NULL DEFAULT 0.0,
+            discount REAL DEFAULT 0.0,
+            tax REAL DEFAULT 0.0,
+            total REAL NOT NULL DEFAULT 0.0,
+            paid_amount REAL DEFAULT 0.0,
+            balance_amount REAL DEFAULT 0.0,
+            status TEXT DEFAULT 'COMPLETED',
+            notes TEXT,
+            created_by INTEGER,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE RESTRICT,
+            FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
+          );
+
+          -- 14. Sale Items
+          CREATE TABLE IF NOT EXISTS sale_items (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            sale_id INTEGER NOT NULL,
+            product_variant_id INTEGER NOT NULL,
+            quantity INTEGER NOT NULL CHECK (quantity > 0),
+            unit_price REAL NOT NULL CHECK (unit_price >= 0),
+            discount REAL DEFAULT 0.0,
+            tax REAL DEFAULT 0.0,
+            total REAL NOT NULL CHECK (total >= 0),
+            FOREIGN KEY (sale_id) REFERENCES sales(id) ON DELETE CASCADE,
+            FOREIGN KEY (product_variant_id) REFERENCES product_variants(id) ON DELETE RESTRICT
+          );
+
+          -- 15. Payments
+          CREATE TABLE IF NOT EXISTS payments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            sale_id INTEGER NOT NULL,
+            payment_method TEXT NOT NULL, -- CASH, UPI, CARD, BANK_TRANSFER, CREDIT
+            amount REAL NOT NULL CHECK (amount >= 0),
+            reference_number TEXT,
+            payment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+            notes TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (sale_id) REFERENCES sales(id) ON DELETE CASCADE
+          );
+
+          -- 16. Returns
+          CREATE TABLE IF NOT EXISTS returns (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            return_number TEXT NOT NULL UNIQUE,
+            sale_id INTEGER NOT NULL,
+            customer_id INTEGER NOT NULL,
+            return_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+            return_type TEXT NOT NULL, -- REFUND, EXCHANGE, STORE_CREDIT
+            refund_amount REAL DEFAULT 0.0,
+            status TEXT DEFAULT 'COMPLETED',
+            reason TEXT,
+            created_by INTEGER,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (sale_id) REFERENCES sales(id) ON DELETE RESTRICT,
+            FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE RESTRICT,
+            FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
+          );
+
+          -- 17. Return Items
+          CREATE TABLE IF NOT EXISTS return_items (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            return_id INTEGER NOT NULL,
+            sale_item_id INTEGER NOT NULL,
+            product_variant_id INTEGER NOT NULL,
+            quantity INTEGER NOT NULL CHECK (quantity > 0),
+            refund_amount REAL DEFAULT 0.0,
+            condition TEXT DEFAULT 'GOOD',
+            reason TEXT,
+            FOREIGN KEY (return_id) REFERENCES returns(id) ON DELETE CASCADE,
+            FOREIGN KEY (sale_item_id) REFERENCES sale_items(id) ON DELETE RESTRICT,
+            FOREIGN KEY (product_variant_id) REFERENCES product_variants(id) ON DELETE RESTRICT
+          );
+
+          -- 18. Stock Transactions (Ledger)
+          CREATE TABLE IF NOT EXISTS stock_transactions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            product_variant_id INTEGER NOT NULL,
+            transaction_type TEXT NOT NULL, -- PURCHASE, SALE, RETURN, DAMAGE, ADJUSTMENT
+            quantity INTEGER NOT NULL,
+            reference_type TEXT,
+            reference_id INTEGER,
+            previous_quantity INTEGER NOT NULL,
+            new_quantity INTEGER NOT NULL,
+            notes TEXT,
+            created_by INTEGER,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (product_variant_id) REFERENCES product_variants(id) ON DELETE RESTRICT,
+            FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
+          );
+
+          -- 19. Expenses
+          CREATE TABLE IF NOT EXISTS expenses (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            category TEXT NOT NULL,
+            description TEXT,
+            amount REAL NOT NULL CHECK (amount >= 0),
+            payment_method TEXT DEFAULT 'CASH',
+            expense_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created_by INTEGER,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
+          );
+
+          -- 20. Settings
           CREATE TABLE IF NOT EXISTS settings (
             key TEXT PRIMARY KEY,
             value TEXT NOT NULL,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
           );
 
-          INSERT OR IGNORE INTO settings (key, value) VALUES
-            ('shop_name', 'Textile Fashion Store'),
-            ('shop_address', '123 Main Bazaar Road, Textile City'),
-            ('shop_phone', '+91 98765 43210'),
-            ('gst_number', '33AAAAA0000A1Z5'),
-            ('currency', 'INR'),
-            ('app_version', '0.1.0');
+          -- 21. Audit Logs
+          CREATE TABLE IF NOT EXISTS audit_logs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            action TEXT NOT NULL,
+            entity_type TEXT NOT NULL,
+            entity_id INTEGER,
+            old_value TEXT,
+            new_value TEXT,
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+            ip_or_device TEXT,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+          );
+
+          -- INDEXES FOR HIGH-PERFORMANCE SEARCH
+          CREATE INDEX IF NOT EXISTS idx_products_name ON products(name);
+          CREATE INDEX IF NOT EXISTS idx_products_category ON products(category_id);
+          CREATE INDEX IF NOT EXISTS idx_products_brand ON products(brand_id);
+
+          CREATE INDEX IF NOT EXISTS idx_variants_sku ON product_variants(sku);
+          CREATE INDEX IF NOT EXISTS idx_variants_barcode ON product_variants(barcode);
+          CREATE INDEX IF NOT EXISTS idx_variants_product ON product_variants(product_id);
+
+          CREATE INDEX IF NOT EXISTS idx_sales_invoice ON sales(invoice_number);
+          CREATE INDEX IF NOT EXISTS idx_sales_customer ON sales(customer_id);
+          CREATE INDEX IF NOT EXISTS idx_sales_date ON sales(sale_date);
+
+          CREATE INDEX IF NOT EXISTS idx_stock_tx_variant ON stock_transactions(product_variant_id);
+          CREATE INDEX IF NOT EXISTS idx_customers_phone ON customers(phone);
+          CREATE INDEX IF NOT EXISTS idx_suppliers_code ON suppliers(supplier_code);
         `);
       }
     }

@@ -1,6 +1,7 @@
 appId: com.textileshop.management
 productName: Textile Shop Management System
 artifactName: TextileShopSetup.exe
+publish: null
 
 directories:
   output: release

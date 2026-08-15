@@ -23,6 +23,8 @@ import { UsersPage } from './features/users/UsersPage';
 import { BackupPage } from './features/backup/BackupPage';
 import { SettingsPage } from './features/settings/SettingsPage';
 
+import { SystemHealthPage } from './features/settings/SystemHealthPage';
+
 const MainAppRouter: React.FC = () => {
   const { currentUser, isLoading, isLocked, setupRequired } = useAuth();
 
@@ -62,6 +64,7 @@ const MainAppRouter: React.FC = () => {
           <Route path="/reports" element={<ProtectedRoute permission="reports.view"><ReportsPage /></ProtectedRoute>} />
           <Route path="/users" element={<ProtectedRoute permission="users.view"><UsersPage /></ProtectedRoute>} />
           <Route path="/backup" element={<ProtectedRoute permission="backup.create"><BackupPage /></ProtectedRoute>} />
+          <Route path="/health" element={<ProtectedRoute permission="settings.view"><SystemHealthPage /></ProtectedRoute>} />
           <Route path="/settings" element={<ProtectedRoute permission="settings.view"><SettingsPage /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>

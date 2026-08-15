@@ -20,6 +20,7 @@ import { ExpenseService, CreateExpenseInput } from '../services/expenseService';
 import { DashboardService } from '../services/dashboardService';
 import { ReportService } from '../services/reportService';
 import { BackupService } from '../services/backupService';
+import { RestoreService } from '../services/restoreService';
 import { InvoiceService } from '../services/invoiceService';
 import { AuthService } from '../services/auth/authService';
 import { UserService, CreateUserInput, UpdateUserInput } from '../services/auth/userService';
@@ -460,6 +461,51 @@ export function registerIpcHandlers() {
   ipcMain.handle('reports:export-csv', (_, { data, headers }: { data: any[]; headers: { key: string; label: string }[] }) => {
     const service = new ReportService(getDatabase());
     return service.exportToCSV(data, headers);
+  });
+
+  // Backup & Restore API
+  ipcMain.handle('backup:create', async (_, customName?: string) => {
+    AuthorizationService.requirePermission('backup.create');
+    return await BackupService.createBackup(customName);
+  });
+
+  ipcMain.handle('backup:list', () => {
+    AuthorizationService.requirePermission('backup.create');
+    return BackupService.getBackupsList();
+  });
+
+  ipcMain.handle('backup:verify', (_, filename: string) => {
+    AuthorizationService.requirePermission('backup.create');
+    const backupDir = getBackupDirectoryPath();
+    const targetPath = path.join(backupDir, filename);
+    return BackupService.verifyBackupFile(targetPath);
+  });
+
+  ipcMain.handle('backup:export', (_, { filename, targetDir }: { filename: string; targetDir: string }) => {
+    AuthorizationService.requirePermission('backup.create');
+    return BackupService.exportBackup(filename, targetDir);
+  });
+
+  ipcMain.handle('backup:delete', (_, filename: string) => {
+    AuthorizationService.requirePermission('backup.create');
+    return BackupService.deleteBackup(filename);
+  });
+
+  ipcMain.handle('backup:restore', async (_, filename: string) => {
+    AuthorizationService.requirePermission('backup.restore');
+    const session = SessionService.getSession();
+    return await RestoreService.restoreBackup(filename, session?.userId);
+  });
+
+  // System Health API
+  ipcMain.handle('system:get-health', () => {
+    AuthorizationService.requirePermission('settings.view');
+    return BackupService.getHealthCheck();
+  });
+
+  ipcMain.handle('system:check-integrity', () => {
+    AuthorizationService.requirePermission('settings.view');
+    return BackupService.checkIntegrity();
   });
 
   // Settings

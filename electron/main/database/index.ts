@@ -5,14 +5,16 @@ import { app } from 'electron';
 import log from '../logger';
 
 let dbInstance: Database.Database | null = null;
+let currentActiveDbPath: string | null = null;
 
 export function getDatabasePath(): string {
-  const userDataPath = app.getPath('userData');
+  if (currentActiveDbPath) return currentActiveDbPath;
+  const userDataPath = app?.getPath ? app.getPath('userData') : process.cwd();
   return path.join(userDataPath, 'textile-shop.db');
 }
 
 export function getBackupDirectoryPath(): string {
-  const userDataPath = app.getPath('userData');
+  const userDataPath = app?.getPath ? app.getPath('userData') : process.cwd();
   const backupPath = path.join(userDataPath, 'Backups');
   if (!fs.existsSync(backupPath)) {
     fs.mkdirSync(backupPath, { recursive: true });
@@ -26,6 +28,7 @@ export function initDatabase(customDbPath?: string): Database.Database {
   }
 
   const dbPath = customDbPath || getDatabasePath();
+  currentActiveDbPath = dbPath;
   const dbDir = path.dirname(dbPath);
 
   if (!fs.existsSync(dbDir)) {
@@ -483,5 +486,6 @@ export function closeDatabase() {
     log.info('Closing SQLite Database...');
     dbInstance.close();
     dbInstance = null;
+    currentActiveDbPath = null;
   }
 }

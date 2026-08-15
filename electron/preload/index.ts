@@ -151,12 +151,21 @@ export interface ElectronAPI {
     create: (expense: any) => Promise<{ success: boolean; id?: number; expenseNumber?: string; error?: string }>;
     cancel: (expenseId: number) => Promise<{ success: boolean; error?: string }>;
   };
+  backup: {
+    create: (customName?: string) => Promise<{ success: boolean; backupPath?: string; sha256?: string; error?: string }>;
+    list: () => Promise<any[]>;
+    verify: (filename: string) => Promise<{ valid: boolean; error?: string }>;
+    export: (filename: string, targetDir: string) => Promise<{ success: boolean; error?: string }>;
+    delete: (filename: string) => Promise<{ success: boolean; error?: string }>;
+    restore: (filename: string) => Promise<{ success: boolean; error?: string }>;
+  };
+  system: {
+    getHealth: () => Promise<any>;
+    checkIntegrity: () => Promise<{ healthy: boolean; foreignKeysOk: boolean; error?: string }>;
+  };
   settings: {
     getAll: () => Promise<{ success: boolean; data?: Record<string, string>; error?: string }>;
     update: (key: string, value: string) => Promise<{ success: boolean; error?: string }>;
-  };
-  backup: {
-    create: (customName?: string) => Promise<{ success: boolean; backupPath?: string; error?: string }>;
   };
 }
 
@@ -268,6 +277,15 @@ const api: ElectronAPI = {
   },
   backup: {
     create: (customName) => ipcRenderer.invoke('backup:create', customName),
+    list: () => ipcRenderer.invoke('backup:list'),
+    verify: (filename) => ipcRenderer.invoke('backup:verify', filename),
+    export: (filename, targetDir) => ipcRenderer.invoke('backup:export', { filename, targetDir }),
+    delete: (filename) => ipcRenderer.invoke('backup:delete', filename),
+    restore: (filename) => ipcRenderer.invoke('backup:restore', filename),
+  },
+  system: {
+    getHealth: () => ipcRenderer.invoke('system:get-health'),
+    checkIntegrity: () => ipcRenderer.invoke('system:check-integrity'),
   },
 };
 

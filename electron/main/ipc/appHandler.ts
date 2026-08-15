@@ -281,11 +281,24 @@ export function registerIpcHandlers() {
     return repo.getAllSales();
   });
 
+  ipcMain.handle('sales:get-details', (_, saleId: number) => {
+    AuthorizationService.requirePermission('sales.view');
+    const service = new InvoiceService(getDatabase());
+    return service.getInvoiceData(saleId);
+  });
+
   ipcMain.handle('sales:create', (_, input: CreateSaleInput) => {
     AuthorizationService.requirePermission('billing.create');
     const session = SessionService.getSession();
     const service = new SalesService(getDatabase());
     return service.createSale({ ...input, created_by: session?.userId });
+  });
+
+  ipcMain.handle('sales:cancel', (_, saleId: number) => {
+    AuthorizationService.requirePermission('sales.manage');
+    const session = SessionService.getSession();
+    const service = new SalesService(getDatabase());
+    return service.cancelSale(saleId, session?.userId);
   });
 
   // Purchases

@@ -99,6 +99,22 @@ export class SaleRepository {
     return Number(info.lastInsertRowid);
   }
 
+  getSaleItems(saleId: number): SaleItemRow[] {
+    return this.db.prepare(`
+      SELECT si.*, pv.sku, p.name as product_name, pv.color, pv.size
+      FROM sale_items si
+      JOIN product_variants pv ON si.product_variant_id = pv.id
+      JOIN products p ON pv.product_id = p.id
+      WHERE si.sale_id = ?
+    `).all(saleId) as SaleItemRow[];
+  }
+
+  getPayments(saleId: number): PaymentRow[] {
+    return this.db.prepare(`
+      SELECT * FROM payments WHERE sale_id = ? ORDER BY id ASC
+    `).all(saleId) as PaymentRow[];
+  }
+
   createPayment(p: { sale_id: number; payment_method: string; amount: number; reference_number?: string }): number {
     const info = this.db.prepare(`
       INSERT INTO payments (sale_id, payment_method, amount, reference_number)

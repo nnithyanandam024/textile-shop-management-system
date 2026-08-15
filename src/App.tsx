@@ -11,8 +11,9 @@ import { AppShell } from './components/layout/AppShell';
 import { DashboardPage } from './features/dashboard/DashboardPage';
 import { ProductsPage } from './features/products/ProductsPage';
 import { InventoryPage } from './features/inventory/InventoryPage';
-import { BillingPage } from './features/billing/BillingPage';
-import { SalesPage } from './features/sales/SalesPage';
+import { PosPage } from './features/pos/PosPage';
+import { SalesHistoryPage } from './features/sales/SalesHistoryPage';
+import { CategoriesPage } from './features/categories/CategoriesPage';
 import { CustomersPage } from './features/customers/CustomersPage';
 import { SuppliersPage } from './features/suppliers/SuppliersPage';
 import { PurchasesPage } from './features/purchases/PurchasesPage';
@@ -50,9 +51,10 @@ const MainAppRouter: React.FC = () => {
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<ProtectedRoute permission="dashboard.view"><DashboardPage /></ProtectedRoute>} />
           <Route path="/products" element={<ProtectedRoute permission="products.view"><ProductsPage /></ProtectedRoute>} />
+          <Route path="/categories" element={<ProtectedRoute permission="products.manage"><CategoriesPage /></ProtectedRoute>} />
           <Route path="/inventory" element={<ProtectedRoute permission="inventory.view"><InventoryPage /></ProtectedRoute>} />
-          <Route path="/billing" element={<ProtectedRoute permission="billing.create"><BillingPage /></ProtectedRoute>} />
-          <Route path="/sales" element={<ProtectedRoute permission="sales.view"><SalesPage /></ProtectedRoute>} />
+          <Route path="/billing" element={<ProtectedRoute permission="billing.create"><PosPage /></ProtectedRoute>} />
+          <Route path="/sales" element={<ProtectedRoute permission="sales.view"><SalesHistoryPage /></ProtectedRoute>} />
           <Route path="/customers" element={<ProtectedRoute permission="customers.view"><CustomersPage /></ProtectedRoute>} />
           <Route path="/suppliers" element={<ProtectedRoute permission="suppliers.view"><SuppliersPage /></ProtectedRoute>} />
           <Route path="/purchases" element={<ProtectedRoute permission="purchases.view"><PurchasesPage /></ProtectedRoute>} />

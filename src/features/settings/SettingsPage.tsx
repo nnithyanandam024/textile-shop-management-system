@@ -41,7 +41,7 @@ export const SettingsPage: React.FC = () => {
         }
         setMessage({ type: 'success', text: 'Shop settings saved successfully to SQLite database!' });
       }
-    } catch (err) {
+    } catch (_err) {
       setMessage({ type: 'error', text: 'Failed to save settings to database.' });
     } finally {
       setSaving(false);

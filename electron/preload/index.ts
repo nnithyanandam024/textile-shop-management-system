@@ -96,6 +96,21 @@ export interface ElectronAPI {
     approveCorrection: (correctionId: number, approve: boolean) => Promise<{ success: boolean; error?: string }>;
     getPendingCorrections: () => Promise<any[]>;
   };
+  shifts: {
+    getTemplates: (includeInactive?: boolean) => Promise<any[]>;
+    getTemplateById: (id: number) => Promise<any>;
+    createTemplate: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    updateTemplate: (id: number, input: any) => Promise<{ success: boolean; error?: string }>;
+    deactivateTemplate: (id: number) => Promise<{ success: boolean; error?: string }>;
+    assignStaff: (input: any) => Promise<{ success: boolean; error?: string }>;
+    getStaffHistory: (staffId: number) => Promise<any[]>;
+    getSchedule: (staffId: number, dateStr?: string) => Promise<any[]>;
+    setSchedule: (staffId: number, scheduleDays: any[]) => Promise<{ success: boolean; error?: string }>;
+    createOverride: (input: any) => Promise<{ success: boolean; error?: string }>;
+    deleteOverride: (id: number) => Promise<{ success: boolean; error?: string }>;
+    getOverrides: (startDate: string, endDate: string) => Promise<any[]>;
+    resolveDate: (staffId: number, dateStr: string) => Promise<any>;
+  };
   products: {
     getAll: () => Promise<any[]>;
     create: (product: any) => Promise<{ success: boolean; id?: number; error?: string }>;
@@ -269,6 +284,21 @@ const api: ElectronAPI = {
     requestCorrection: (attendanceId, input) => ipcRenderer.invoke('attendance:request-correction', { attendanceId, input }),
     approveCorrection: (correctionId, approve) => ipcRenderer.invoke('attendance:approve-correction', { correctionId, approve }),
     getPendingCorrections: () => ipcRenderer.invoke('attendance:get-pending-corrections'),
+  },
+  shifts: {
+    getTemplates: (includeInactive) => ipcRenderer.invoke('shift:get-templates', includeInactive),
+    getTemplateById: (id) => ipcRenderer.invoke('shift:get-template-by-id', id),
+    createTemplate: (input) => ipcRenderer.invoke('shift:create-template', input),
+    updateTemplate: (id, input) => ipcRenderer.invoke('shift:update-template', { id, input }),
+    deactivateTemplate: (id) => ipcRenderer.invoke('shift:deactivate-template', id),
+    assignStaff: (input) => ipcRenderer.invoke('shift:assign-staff', input),
+    getStaffHistory: (staffId) => ipcRenderer.invoke('shift:get-staff-history', staffId),
+    getSchedule: (staffId, dateStr) => ipcRenderer.invoke('shift:get-schedule', { staffId, dateStr }),
+    setSchedule: (staffId, scheduleDays) => ipcRenderer.invoke('shift:set-schedule', { staffId, scheduleDays }),
+    createOverride: (input) => ipcRenderer.invoke('shift:create-override', input),
+    deleteOverride: (id) => ipcRenderer.invoke('shift:delete-override', id),
+    getOverrides: (startDate, endDate) => ipcRenderer.invoke('shift:get-overrides', { startDate, endDate }),
+    resolveDate: (staffId, dateStr) => ipcRenderer.invoke('shift:resolve-date', { staffId, dateStr }),
   },
   products: {
     getAll: () => ipcRenderer.invoke('products:get-all'),

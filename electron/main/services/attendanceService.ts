@@ -3,6 +3,7 @@ import { AttendanceRepository, AttendanceRow, AttendanceSettingsRow } from '../r
 import { AttendanceCorrectionRepository, AttendanceCorrectionRow } from '../repositories/attendanceCorrectionRepository';
 import { StaffRepository } from '../repositories/staffRepository';
 import { AuditRepository } from '../repositories/auditRepository';
+import { ShiftService } from './shiftService';
 import log from '../logger';
 
 // Helper to convert HH:MM to total minutes from midnight
@@ -44,12 +45,14 @@ export class AttendanceService {
   private corrRepo: AttendanceCorrectionRepository;
   private staffRepo: StaffRepository;
   private auditRepo: AuditRepository;
+  private shiftService: ShiftService;
 
   constructor(private db: Database.Database) {
     this.attRepo = new AttendanceRepository(db);
     this.corrRepo = new AttendanceCorrectionRepository(db);
     this.staffRepo = new StaffRepository(db);
     this.auditRepo = new AuditRepository(db);
+    this.shiftService = new ShiftService(db);
   }
 
   private sanitizeActorUserId(actorUserId?: number): number | undefined {
@@ -93,10 +96,12 @@ export class AttendanceService {
       return { success: false, error: 'Staff member is already checked in today.' };
     }
 
-    const settings = this.getSettings();
-    const workStartMins = timeToMinutes(settings.work_start_time);
+    // Resolve assigned shift
+    const resolved = this.shiftService.resolveStaffShiftForDate(staffId, todayStr);
+    const shift = resolved.template;
+    const workStartMins = timeToMinutes(shift.start_time);
     const checkInMins = timeToMinutes(checkInTime);
-    const graceMins = settings.grace_minutes || 10;
+    const graceMins = shift.grace_minutes || 10;
 
     let lateMinutes = 0;
     if (checkInMins > workStartMins + graceMins) {
@@ -106,18 +111,26 @@ export class AttendanceService {
     if (existing) {
       this.attRepo.update(existing.id, {
         check_in: checkInTime,
-        status: existing.status === 'ABSENT' ? 'PRESENT' : existing.status,
+        status: existing.status === 'ABSENT' ? (resolved.isWeekOff ? 'WEEK_OFF' : 'PRESENT') : existing.status,
         late_minutes: lateMinutes,
+        shift_template_id: shift.id,
+        scheduled_start: shift.start_time,
+        scheduled_end: shift.end_time,
+        scheduled_minutes: shift.minimum_work_minutes,
       });
     } else {
       this.attRepo.create({
         staff_id: staffId,
         attendance_date: todayStr,
-        status: 'PRESENT',
+        status: resolved.isWeekOff ? 'WEEK_OFF' : 'PRESENT',
         check_in: checkInTime,
         late_minutes: lateMinutes,
         source: actorUserId ? 'ADMIN_ENTRY' : 'SELF_CHECK_IN',
         created_by: actorUserId,
+        shift_template_id: shift.id,
+        scheduled_start: shift.start_time,
+        scheduled_end: shift.end_time,
+        scheduled_minutes: shift.minimum_work_minutes,
       });
     }
 
@@ -126,7 +139,7 @@ export class AttendanceService {
       action: 'CHECK_IN',
       entity_type: 'ATTENDANCE',
       entity_id: staffId,
-      new_value: `Check in at ${checkInTime} (Late: ${lateMinutes}m)`,
+      new_value: `Check in at ${checkInTime} for ${shift.name} (Late: ${lateMinutes}m)`,
     });
 
     return { success: true };
@@ -157,8 +170,10 @@ export class AttendanceService {
       return { success: false, error: 'Check-out time cannot be earlier than check-in time.' };
     }
 
-    const settings = this.getSettings();
-    const workEndMins = timeToMinutes(settings.work_end_time);
+    // Resolve assigned shift
+    const resolved = this.shiftService.resolveStaffShiftForDate(staffId, todayStr);
+    const shift = resolved.template;
+    const workEndMins = timeToMinutes(shift.end_time);
 
     let earlyExitMins = 0;
     if (checkOutMins < workEndMins) {
@@ -168,9 +183,18 @@ export class AttendanceService {
     const grossWorked = checkOutMins - checkInMins;
     const workedMinutes = Math.max(0, grossWorked - (existing.permission_minutes || 0));
 
-    // Determine status (HALF_DAY if worked < half_day_minutes)
+    // Overtime calculation
+    const scheduledMins = shift.minimum_work_minutes || 480;
+    let overtimeMins = 0;
+    let overtimeStatus = 'NOT_APPLICABLE';
+    if (workedMinutes > scheduledMins) {
+      overtimeMins = workedMinutes - scheduledMins;
+      overtimeStatus = 'PENDING';
+    }
+
+    // Determine status (HALF_DAY if worked < half scheduled minutes)
     let status = existing.status;
-    if (workedMinutes < settings.half_day_minutes && status === 'PRESENT') {
+    if (workedMinutes < Math.floor(scheduledMins / 2) && status === 'PRESENT') {
       status = 'HALF_DAY';
     }
 
@@ -178,6 +202,8 @@ export class AttendanceService {
       check_out: checkOutTime,
       worked_minutes: workedMinutes,
       early_exit_minutes: earlyExitMins,
+      overtime_minutes: overtimeMins,
+      overtime_status: overtimeStatus,
       status,
     });
 

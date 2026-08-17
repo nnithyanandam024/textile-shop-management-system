@@ -221,6 +221,7 @@ export const StaffProfilePage: React.FC = () => {
     'Contact',
     'Access & Login',
     'Attendance',
+    'Shift Schedule',
     'Emergency',
     'Documents',
     'Bank / Payroll',
@@ -384,6 +385,36 @@ export const StaffProfilePage: React.FC = () => {
             <p className="text-xs text-[#2818cf] font-bold">
               Staff ID: {staff.staff_code}
             </p>
+          </div>
+        </Card>
+      )}
+
+      {activeTab === 'Shift Schedule' && (
+        <Card className="space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div>
+              <h3 className="text-base font-bold text-slate-900">Work Shift Schedule & Roster</h3>
+              <p className="text-xs text-slate-500">Current assigned shift, weekly working days, and shift history timeline</p>
+            </div>
+            <Button variant="outline" onClick={() => navigate('/staff/shifts')}>
+              Manage Shifts Module
+            </Button>
+          </div>
+
+          <div className="p-4 bg-indigo-50/50 border border-indigo-100 rounded-2xl flex items-center justify-between">
+            <div className="space-y-1">
+              <span className="text-[10px] font-extrabold text-[#2818cf] uppercase tracking-wider">Current Assigned Shift</span>
+              <h4 className="text-lg font-extrabold text-slate-900">General Shift (09:00 AM — 06:00 PM)</h4>
+              <p className="text-xs text-slate-600">Grace Period: 10 mins • Break: 60 mins • Full Working Hours: 8 hrs</p>
+            </div>
+            <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-full border border-emerald-200">
+              ACTIVE
+            </span>
+          </div>
+
+          <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl space-y-2">
+            <h4 className="text-xs font-extrabold text-slate-900 uppercase">Weekly Work Days</h4>
+            <p className="text-xs text-slate-600">Monday to Saturday: <span className="font-bold text-slate-900">General Shift</span> | Sunday: <span className="font-bold text-slate-500">Week Off</span></p>
           </div>
         </Card>
       )}

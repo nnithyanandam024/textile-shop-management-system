@@ -32,12 +32,14 @@ import { AuthorizationService } from '../services/auth/authorizationService';
 import { SessionService } from '../services/auth/sessionService';
 import { registerStaffHandlers } from './staffHandler';
 import { registerAttendanceHandlers } from './attendanceHandler';
+import { registerShiftHandlers } from './shiftHandler';
 import log from '../logger';
 
 export function registerIpcHandlers() {
   const db = getDatabase();
   registerStaffHandlers(db);
   registerAttendanceHandlers(db);
+  registerShiftHandlers(db);
 
   // App Info
   ipcMain.handle('app:get-version', () => app.getVersion() || '0.1.0');

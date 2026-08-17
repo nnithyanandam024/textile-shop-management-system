@@ -31,6 +31,12 @@ export interface AttendanceRow {
   created_by?: number;
   approved_by?: number;
   approved_at?: string;
+  shift_template_id?: number;
+  scheduled_start?: string;
+  scheduled_end?: string;
+  scheduled_minutes?: number;
+  overtime_minutes?: number;
+  overtime_status?: string;
   created_at: string;
   updated_at: string;
   // Joined fields
@@ -154,8 +160,10 @@ export class AttendanceRepository {
       INSERT INTO attendance (
         staff_id, attendance_date, status, check_in, check_out,
         worked_minutes, late_minutes, early_exit_minutes, permission_minutes,
-        remarks, source, approval_status, is_locked, created_by
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        remarks, source, approval_status, is_locked, created_by,
+        shift_template_id, scheduled_start, scheduled_end, scheduled_minutes,
+        overtime_minutes, overtime_status
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
       att.staff_id,
       att.attendance_date,
@@ -170,7 +178,13 @@ export class AttendanceRepository {
       att.source || 'SELF_CHECK_IN',
       att.approval_status || 'NOT_REQUIRED',
       att.is_locked ? 1 : 0,
-      att.created_by || null
+      att.created_by || null,
+      att.shift_template_id || null,
+      att.scheduled_start || null,
+      att.scheduled_end || null,
+      att.scheduled_minutes || 480,
+      att.overtime_minutes || 0,
+      att.overtime_status || 'NOT_APPLICABLE'
     );
     return Number(info.lastInsertRowid);
   }
@@ -190,6 +204,12 @@ export class AttendanceRepository {
     if (att.approval_status !== undefined) { fields.push('approval_status = ?'); params.push(att.approval_status); }
     if (att.approved_by !== undefined) { fields.push('approved_by = ?'); params.push(att.approved_by); }
     if (att.approved_at !== undefined) { fields.push('approved_at = ?'); params.push(att.approved_at); }
+    if (att.shift_template_id !== undefined) { fields.push('shift_template_id = ?'); params.push(att.shift_template_id); }
+    if (att.scheduled_start !== undefined) { fields.push('scheduled_start = ?'); params.push(att.scheduled_start); }
+    if (att.scheduled_end !== undefined) { fields.push('scheduled_end = ?'); params.push(att.scheduled_end); }
+    if (att.scheduled_minutes !== undefined) { fields.push('scheduled_minutes = ?'); params.push(att.scheduled_minutes); }
+    if (att.overtime_minutes !== undefined) { fields.push('overtime_minutes = ?'); params.push(att.overtime_minutes); }
+    if (att.overtime_status !== undefined) { fields.push('overtime_status = ?'); params.push(att.overtime_status); }
 
     if (fields.length === 0) return;
     fields.push('updated_at = CURRENT_TIMESTAMP');

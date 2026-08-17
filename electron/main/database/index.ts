@@ -872,6 +872,115 @@ function runMigrations(db: Database.Database) {
           SELECT 6, id FROM permissions WHERE module = 'Attendance';
         `);
       }
+    },
+    {
+      version: 7,
+      name: 'staff_module_shift_system',
+      up: (database: Database.Database) => {
+        database.exec(`
+          -- 1. Shift Templates Table
+          CREATE TABLE IF NOT EXISTS shift_templates (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            shift_code TEXT NOT NULL UNIQUE,
+            name TEXT NOT NULL,
+            start_time TEXT NOT NULL,
+            end_time TEXT NOT NULL,
+            grace_minutes INTEGER DEFAULT 10,
+            break_minutes INTEGER DEFAULT 60,
+            minimum_work_minutes INTEGER DEFAULT 480,
+            is_overnight INTEGER DEFAULT 0,
+            status TEXT DEFAULT 'ACTIVE',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 2. Staff Shift Assignments Table (Long term assignments)
+          CREATE TABLE IF NOT EXISTS staff_shift_assignments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            shift_template_id INTEGER NOT NULL REFERENCES shift_templates(id),
+            effective_from TEXT NOT NULL,
+            effective_to TEXT,
+            reason TEXT,
+            assigned_by INTEGER,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 3. Staff Schedule Days Table (Mon-Sun weekly day configuration)
+          CREATE TABLE IF NOT EXISTS staff_schedule_days (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            day_of_week INTEGER NOT NULL,
+            shift_template_id INTEGER REFERENCES shift_templates(id),
+            is_week_off INTEGER DEFAULT 0,
+            effective_from TEXT NOT NULL,
+            effective_to TEXT,
+            created_by INTEGER,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 4. Staff Shift Overrides Table (Single-day temporary changes)
+          CREATE TABLE IF NOT EXISTS staff_shift_overrides (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            override_date TEXT NOT NULL,
+            shift_template_id INTEGER REFERENCES shift_templates(id),
+            is_week_off INTEGER DEFAULT 0,
+            reason TEXT NOT NULL,
+            created_by INTEGER,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE(staff_id, override_date)
+          );
+
+          -- Indexes for fast shift resolution queries
+          CREATE INDEX IF NOT EXISTS idx_staff_shift_assignments_staff ON staff_shift_assignments(staff_id, effective_from);
+          CREATE INDEX IF NOT EXISTS idx_staff_schedule_days_staff ON staff_schedule_days(staff_id, day_of_week);
+          CREATE INDEX IF NOT EXISTS idx_staff_shift_overrides_staff ON staff_shift_overrides(staff_id, override_date);
+
+          -- Add shift snapshot & overtime columns to attendance table
+          ALTER TABLE attendance ADD COLUMN shift_template_id INTEGER REFERENCES shift_templates(id);
+          ALTER TABLE attendance ADD COLUMN scheduled_start TEXT;
+          ALTER TABLE attendance ADD COLUMN scheduled_end TEXT;
+          ALTER TABLE attendance ADD COLUMN scheduled_minutes INTEGER DEFAULT 480;
+          ALTER TABLE attendance ADD COLUMN overtime_minutes INTEGER DEFAULT 0;
+          ALTER TABLE attendance ADD COLUMN overtime_status TEXT DEFAULT 'NOT_APPLICABLE';
+
+          -- Seed Default Shift Templates
+          INSERT OR IGNORE INTO shift_templates (shift_code, name, start_time, end_time, grace_minutes, break_minutes, minimum_work_minutes, is_overnight, status) VALUES
+            ('SFT-001', 'Morning Shift', '08:00', '16:00', 10, 60, 420, 0, 'ACTIVE'),
+            ('SFT-002', 'General Shift', '09:00', '18:00', 10, 60, 480, 0, 'ACTIVE'),
+            ('SFT-003', 'Evening Shift', '13:00', '21:00', 10, 60, 420, 0, 'ACTIVE');
+
+          -- Seed Shift Permissions
+          INSERT OR IGNORE INTO permissions (code, module, description) VALUES
+            ('shift.view', 'Shifts', 'View shift templates, rosters and staff schedules'),
+            ('shift.create', 'Shifts', 'Create new shift templates'),
+            ('shift.update', 'Shifts', 'Edit existing shift templates'),
+            ('shift.deactivate', 'Shifts', 'Deactivate shift templates'),
+            ('shift.assign', 'Shifts', 'Assign shifts to staff members'),
+            ('shift.override', 'Shifts', 'Create single-day temporary shift overrides'),
+            ('shift.approve', 'Shifts', 'Approve or reject overtime and schedule changes'),
+            ('shift.export', 'Shifts', 'Export shift schedules and reports'),
+            ('shift.manage_settings', 'Shifts', 'Manage default shift configurations');
+
+          -- Map Shift Permissions to System Roles
+          -- 1. Owner (Role 1)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 1, id FROM permissions WHERE module = 'Shifts';
+
+          -- 2. Manager (Role 2)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 2, id FROM permissions WHERE module = 'Shifts';
+
+          -- 3. Cashier (Role 3)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 3, id FROM permissions WHERE code IN ('shift.view');
+
+          -- 6. HR Staff (Role 6)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 6, id FROM permissions WHERE module = 'Shifts';
+        `);
+      }
     }
   ];
 

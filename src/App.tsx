@@ -22,8 +22,10 @@ import { ReportsPage } from './features/reports/ReportsPage';
 import { UsersPage } from './features/users/UsersPage';
 import { BackupPage } from './features/backup/BackupPage';
 import { SettingsPage } from './features/settings/SettingsPage';
-
 import { SystemHealthPage } from './features/settings/SystemHealthPage';
+import { StaffListPage } from './features/staff/StaffListPage';
+import { DepartmentListPage } from './features/staff/DepartmentListPage';
+import { DesignationListPage } from './features/staff/DesignationListPage';
 
 const MainAppRouter: React.FC = () => {
   const { currentUser, isLoading, isLocked, setupRequired } = useAuth();
@@ -62,6 +64,9 @@ const MainAppRouter: React.FC = () => {
           <Route path="/purchases" element={<ProtectedRoute permission="purchases.view"><PurchasesPage /></ProtectedRoute>} />
           <Route path="/returns" element={<ProtectedRoute permission="returns.create"><ReturnsPage /></ProtectedRoute>} />
           <Route path="/reports" element={<ProtectedRoute permission="reports.view"><ReportsPage /></ProtectedRoute>} />
+          <Route path="/staff" element={<ProtectedRoute permission="staff.view"><StaffListPage /></ProtectedRoute>} />
+          <Route path="/staff/departments" element={<ProtectedRoute permission="staff.organization"><DepartmentListPage /></ProtectedRoute>} />
+          <Route path="/staff/designations" element={<ProtectedRoute permission="staff.organization"><DesignationListPage /></ProtectedRoute>} />
           <Route path="/users" element={<ProtectedRoute permission="users.view"><UsersPage /></ProtectedRoute>} />
           <Route path="/backup" element={<ProtectedRoute permission="backup.create"><BackupPage /></ProtectedRoute>} />
           <Route path="/health" element={<ProtectedRoute permission="settings.view"><SystemHealthPage /></ProtectedRoute>} />

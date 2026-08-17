@@ -167,6 +167,25 @@ export interface ElectronAPI {
     getAll: () => Promise<{ success: boolean; data?: Record<string, string>; error?: string }>;
     update: (key: string, value: string) => Promise<{ success: boolean; error?: string }>;
   };
+  staff: {
+    getAll: (params?: any) => Promise<{ staff: any[]; total: number }>;
+    getById: (id: number) => Promise<any>;
+    create: (token: string, input: any) => Promise<{ success: boolean; id?: number; staff_code?: string; error?: string }>;
+    update: (token: string, id: number, input: any) => Promise<{ success: boolean; error?: string }>;
+    deactivate: (token: string, id: number) => Promise<{ success: boolean; error?: string }>;
+  };
+  department: {
+    getAll: (includeInactive?: boolean) => Promise<any[]>;
+    create: (token: string, input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    update: (token: string, id: number, input: any) => Promise<{ success: boolean; error?: string }>;
+    deactivate: (token: string, id: number) => Promise<{ success: boolean; activeStaffCount?: number; error?: string }>;
+  };
+  designation: {
+    getAll: (departmentId?: number, includeInactive?: boolean) => Promise<any[]>;
+    create: (token: string, input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    update: (token: string, id: number, input: any) => Promise<{ success: boolean; error?: string }>;
+    deactivate: (token: string, id: number) => Promise<{ success: boolean; activeStaffCount?: number; error?: string }>;
+  };
 }
 
 const api: ElectronAPI = {
@@ -286,6 +305,25 @@ const api: ElectronAPI = {
   system: {
     getHealth: () => ipcRenderer.invoke('system:get-health'),
     checkIntegrity: () => ipcRenderer.invoke('system:check-integrity'),
+  },
+  staff: {
+    getAll: (params) => ipcRenderer.invoke('staff:getAll', params),
+    getById: (id) => ipcRenderer.invoke('staff:getById', id),
+    create: (token, input) => ipcRenderer.invoke('staff:create', token, input),
+    update: (token, id, input) => ipcRenderer.invoke('staff:update', token, id, input),
+    deactivate: (token, id) => ipcRenderer.invoke('staff:deactivate', token, id),
+  },
+  department: {
+    getAll: (includeInactive) => ipcRenderer.invoke('department:getAll', includeInactive),
+    create: (token, input) => ipcRenderer.invoke('department:create', token, input),
+    update: (token, id, input) => ipcRenderer.invoke('department:update', token, id, input),
+    deactivate: (token, id) => ipcRenderer.invoke('department:deactivate', token, id),
+  },
+  designation: {
+    getAll: (departmentId, includeInactive) => ipcRenderer.invoke('designation:getAll', departmentId, includeInactive),
+    create: (token, input) => ipcRenderer.invoke('designation:create', token, input),
+    update: (token, id, input) => ipcRenderer.invoke('designation:update', token, id, input),
+    deactivate: (token, id) => ipcRenderer.invoke('designation:deactivate', token, id),
   },
 };
 

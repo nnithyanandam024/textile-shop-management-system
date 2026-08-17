@@ -12,7 +12,10 @@ build
 # Database local test files (not production app data in %APPDATA%)
 *.db
 *.db-journal
+*.db-shm
+*.db-wal
 *.sqlite
+Backups/
 
 # Environment files
 .env

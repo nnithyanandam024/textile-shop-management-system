@@ -455,6 +455,117 @@ function runMigrations(db: Database.Database) {
           );
         `);
       }
+    },
+    {
+      version: 3,
+      name: 'staff_module_foundation',
+      up: (database: Database.Database) => {
+        database.exec(`
+          -- 1. Departments
+          CREATE TABLE IF NOT EXISTS departments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            department_code TEXT NOT NULL UNIQUE,
+            name TEXT NOT NULL UNIQUE,
+            description TEXT,
+            status TEXT DEFAULT 'ACTIVE' CHECK (status IN ('ACTIVE', 'INACTIVE')),
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 2. Designations
+          CREATE TABLE IF NOT EXISTS designations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            designation_code TEXT NOT NULL UNIQUE,
+            name TEXT NOT NULL,
+            department_id INTEGER NOT NULL,
+            description TEXT,
+            status TEXT DEFAULT 'ACTIVE' CHECK (status IN ('ACTIVE', 'INACTIVE')),
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE RESTRICT
+          );
+
+          -- 3. Staff
+          CREATE TABLE IF NOT EXISTS staff (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_code TEXT NOT NULL UNIQUE,
+            first_name TEXT NOT NULL,
+            last_name TEXT,
+            phone TEXT NOT NULL,
+            email TEXT,
+            address TEXT,
+            joining_date TEXT NOT NULL,
+            department_id INTEGER NOT NULL,
+            designation_id INTEGER NOT NULL,
+            employment_type TEXT NOT NULL DEFAULT 'FULL_TIME' CHECK (employment_type IN ('FULL_TIME', 'PART_TIME', 'TEMPORARY', 'CONTRACT', 'INTERN')),
+            status TEXT NOT NULL DEFAULT 'ACTIVE' CHECK (status IN ('ACTIVE', 'INACTIVE', 'ON_LEAVE', 'SUSPENDED', 'RESIGNED', 'TERMINATED')),
+            photo_path TEXT,
+            user_id INTEGER UNIQUE,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE RESTRICT,
+            FOREIGN KEY (designation_id) REFERENCES designations(id) ON DELETE RESTRICT,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+          );
+
+          -- Add permissions for Staff Management
+          INSERT OR IGNORE INTO permissions (code, module, description) VALUES
+            ('staff.view', 'Staff', 'View staff directory and profiles'),
+            ('staff.manage', 'Staff', 'Create, edit, and deactivate staff records'),
+            ('staff.organization', 'Staff', 'Manage departments and designations');
+
+          -- Map permissions to Owner (Role 1) and Manager (Role 2)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 1, id FROM permissions WHERE module = 'Staff';
+
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 2, id FROM permissions WHERE module = 'Staff';
+
+          -- Seed Default Departments if empty
+          INSERT INTO departments (department_code, name, description)
+          SELECT 'DEP-001', 'Sales', 'Sales & Storefront operations' WHERE NOT EXISTS (SELECT 1 FROM departments);
+
+          INSERT INTO departments (department_code, name, description)
+          SELECT 'DEP-002', 'Inventory', 'Stock & warehouse management' WHERE NOT EXISTS (SELECT 1 FROM departments WHERE department_code = 'DEP-002');
+
+          INSERT INTO departments (department_code, name, description)
+          SELECT 'DEP-003', 'Purchase', 'Supplier procurement & receiving' WHERE NOT EXISTS (SELECT 1 FROM departments WHERE department_code = 'DEP-003');
+
+          INSERT INTO departments (department_code, name, description)
+          SELECT 'DEP-004', 'Accounts', 'Financial accounting & billing' WHERE NOT EXISTS (SELECT 1 FROM departments WHERE department_code = 'DEP-004');
+
+          INSERT INTO departments (department_code, name, description)
+          SELECT 'DEP-005', 'Management', 'Executive management & oversight' WHERE NOT EXISTS (SELECT 1 FROM departments WHERE department_code = 'DEP-005');
+
+          INSERT INTO departments (department_code, name, description)
+          SELECT 'DEP-006', 'Administration', 'General store administration' WHERE NOT EXISTS (SELECT 1 FROM departments WHERE department_code = 'DEP-006');
+
+          -- Seed Default Designations if empty
+          INSERT INTO designations (designation_code, name, department_id, description)
+          SELECT 'DES-001', 'Sales Executive', (SELECT id FROM departments WHERE name = 'Sales'), 'Frontline sales'
+          WHERE NOT EXISTS (SELECT 1 FROM designations WHERE designation_code = 'DES-001');
+
+          INSERT INTO designations (designation_code, name, department_id, description)
+          SELECT 'DES-002', 'Senior Sales Executive', (SELECT id FROM departments WHERE name = 'Sales'), 'Senior sales staff'
+          WHERE NOT EXISTS (SELECT 1 FROM designations WHERE designation_code = 'DES-002');
+
+          INSERT INTO designations (designation_code, name, department_id, description)
+          SELECT 'DES-003', 'Inventory Assistant', (SELECT id FROM departments WHERE name = 'Inventory'), 'Stock handler'
+          WHERE NOT EXISTS (SELECT 1 FROM designations WHERE designation_code = 'DES-003');
+
+          INSERT INTO designations (designation_code, name, department_id, description)
+          SELECT 'DES-004', 'Inventory Manager', (SELECT id FROM departments WHERE name = 'Inventory'), 'Head of inventory'
+          WHERE NOT EXISTS (SELECT 1 FROM designations WHERE designation_code = 'DES-004');
+
+          INSERT INTO designations (designation_code, name, department_id, description)
+          SELECT 'DES-005', 'Accountant', (SELECT id FROM departments WHERE name = 'Accounts'), 'Bookkeeper & billing accountant'
+          WHERE NOT EXISTS (SELECT 1 FROM designations WHERE designation_code = 'DES-005');
+
+          INSERT INTO designations (designation_code, name, department_id, description)
+          SELECT 'DES-006', 'Store Manager', (SELECT id FROM departments WHERE name = 'Management'), 'Overall store operations manager'
+          WHERE NOT EXISTS (SELECT 1 FROM designations WHERE designation_code = 'DES-006');
+        `);
+      }
     }
   ];
 

@@ -24,6 +24,7 @@ import { BackupPage } from './features/backup/BackupPage';
 import { SettingsPage } from './features/settings/SettingsPage';
 import { SystemHealthPage } from './features/settings/SystemHealthPage';
 import { StaffListPage } from './features/staff/StaffListPage';
+import { StaffProfilePage } from './features/staff/StaffProfilePage';
 import { DepartmentListPage } from './features/staff/DepartmentListPage';
 import { DesignationListPage } from './features/staff/DesignationListPage';
 
@@ -65,6 +66,7 @@ const MainAppRouter: React.FC = () => {
           <Route path="/returns" element={<ProtectedRoute permission="returns.create"><ReturnsPage /></ProtectedRoute>} />
           <Route path="/reports" element={<ProtectedRoute permission="reports.view"><ReportsPage /></ProtectedRoute>} />
           <Route path="/staff" element={<ProtectedRoute permission="staff.view"><StaffListPage /></ProtectedRoute>} />
+          <Route path="/staff/profile/:id" element={<ProtectedRoute permission="staff.view"><StaffProfilePage /></ProtectedRoute>} />
           <Route path="/staff/departments" element={<ProtectedRoute permission="staff.organization"><DepartmentListPage /></ProtectedRoute>} />
           <Route path="/staff/designations" element={<ProtectedRoute permission="staff.organization"><DesignationListPage /></ProtectedRoute>} />
           <Route path="/users" element={<ProtectedRoute permission="users.view"><UsersPage /></ProtectedRoute>} />

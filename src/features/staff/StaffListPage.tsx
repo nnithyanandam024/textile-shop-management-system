@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { StaffFormModal } from './StaffFormModal';
@@ -19,6 +20,7 @@ import {
 } from 'lucide-react';
 
 export const StaffListPage: React.FC = () => {
+  const navigate = useNavigate();
   const [staffList, setStaffList] = useState<any[]>([]);
   const [totalStaff, setTotalStaff] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -117,11 +119,6 @@ export const StaffListPage: React.FC = () => {
   const handleOpenEdit = (s: any) => {
     setSelectedStaff(s);
     setIsFormOpen(true);
-  };
-
-  const handleOpenProfile = (s: any) => {
-    setSelectedStaff(s);
-    setIsProfileOpen(true);
   };
 
   const handleConfirmDeactivate = async () => {
@@ -300,6 +297,7 @@ export const StaffListPage: React.FC = () => {
                 <th className="py-3.5 px-4">Contact</th>
                 <th className="py-3.5 px-4">Department & Designation</th>
                 <th className="py-3.5 px-4">Employment</th>
+                <th className="py-3.5 px-4">Profile %</th>
                 <th className="py-3.5 px-4">Status</th>
                 <th className="py-3.5 px-4 text-right">Actions</th>
               </tr>
@@ -307,21 +305,22 @@ export const StaffListPage: React.FC = () => {
             <tbody className="divide-y divide-slate-100 text-xs font-semibold text-slate-700">
               {loading ? (
                 <tr>
-                  <td colSpan={7} className="py-12 text-center text-slate-400 text-xs font-medium">
+                  <td colSpan={8} className="py-12 text-center text-slate-400 text-xs font-medium">
                     Loading staff records from database...
                   </td>
                 </tr>
               ) : staffList.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-12 text-center text-slate-400 text-xs font-medium">
+                  <td colSpan={8} className="py-12 text-center text-slate-400 text-xs font-medium">
                     No staff members match the selected search & filter criteria.
                   </td>
                 </tr>
               ) : (
                 staffList.map((s) => {
                   const fullName = `${s.first_name} ${s.last_name || ''}`.trim();
+                  const comp = s.profile_completion || 0;
                   return (
-                    <tr key={s.id} className="hover:bg-slate-50/60 transition-all">
+                    <tr key={s.id} className="hover:bg-slate-50/60 transition-all cursor-pointer" onClick={() => navigate(`/staff/profile/${s.id}`)}>
                       <td className="py-3 px-4 font-mono font-bold text-[#2818cf]">
                         {s.staff_code}
                       </td>
@@ -336,7 +335,7 @@ export const StaffListPage: React.FC = () => {
                             )}
                           </div>
                           <div>
-                            <p className="font-bold text-slate-900">{fullName}</p>
+                            <p className="font-bold text-slate-900 hover:text-[#2818cf]">{fullName}</p>
                             <p className="text-[10px] text-slate-400">Joined: {s.joining_date}</p>
                           </div>
                         </div>
@@ -359,6 +358,12 @@ export const StaffListPage: React.FC = () => {
                       </td>
 
                       <td className="py-3 px-4">
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-indigo-50 text-[#2818cf] border border-indigo-100 font-mono">
+                          {comp}%
+                        </span>
+                      </td>
+
+                      <td className="py-3 px-4">
                         <span
                           className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
                             s.status === 'ACTIVE'
@@ -370,12 +375,12 @@ export const StaffListPage: React.FC = () => {
                         </span>
                       </td>
 
-                      <td className="py-3 px-4 text-right">
+                      <td className="py-3 px-4 text-right" onClick={(e) => e.stopPropagation()}>
                         <div className="flex items-center justify-end gap-1.5">
                           <button
-                            onClick={() => handleOpenProfile(s)}
+                            onClick={() => navigate(`/staff/profile/${s.id}`)}
                             className="p-1.5 rounded-lg text-slate-400 hover:text-[#2818cf] hover:bg-indigo-50 transition-all"
-                            title="View Staff Profile"
+                            title="View Full Staff Profile"
                           >
                             <Eye className="w-4 h-4" />
                           </button>

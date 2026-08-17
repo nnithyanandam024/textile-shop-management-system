@@ -6,15 +6,29 @@ export interface StaffRow {
   first_name: string;
   last_name?: string;
   phone: string;
+  alternate_phone?: string;
   email?: string;
   address?: string;
+  address_line_1?: string;
+  address_line_2?: string;
+  city?: string;
+  district?: string;
+  state?: string;
+  pincode?: string;
+  date_of_birth?: string;
+  gender?: 'Male' | 'Female' | 'Other' | 'Prefer not to say';
   joining_date: string;
+  confirmation_date?: string;
+  exit_date?: string;
   department_id: number;
   department_name?: string;
   department_code?: string;
   designation_id: number;
   designation_name?: string;
   designation_code?: string;
+  manager_id?: number;
+  manager_name?: string;
+  work_location?: string;
   employment_type: 'FULL_TIME' | 'PART_TIME' | 'TEMPORARY' | 'CONTRACT' | 'INTERN';
   status: 'ACTIVE' | 'INACTIVE' | 'ON_LEAVE' | 'SUSPENDED' | 'RESIGNED' | 'TERMINATED';
   photo_path?: string;
@@ -127,10 +141,12 @@ export class StaffRepository {
       SELECT s.*, 
              dep.name as department_name, dep.department_code,
              des.name as designation_name, des.designation_code,
+             (mgr.first_name || ' ' || COALESCE(mgr.last_name, '')) as manager_name,
              u.username, u.display_name as user_display_name
       FROM staff s
       JOIN departments dep ON s.department_id = dep.id
       JOIN designations des ON s.designation_id = des.id
+      LEFT JOIN staff mgr ON s.manager_id = mgr.id
       LEFT JOIN users u ON s.user_id = u.id
       ${whereClause}
       ORDER BY ${orderBy}
@@ -145,10 +161,12 @@ export class StaffRepository {
       SELECT s.*, 
              dep.name as department_name, dep.department_code,
              des.name as designation_name, des.designation_code,
+             (mgr.first_name || ' ' || COALESCE(mgr.last_name, '')) as manager_name,
              u.username, u.display_name as user_display_name
       FROM staff s
       JOIN departments dep ON s.department_id = dep.id
       JOIN designations des ON s.designation_id = des.id
+      LEFT JOIN staff mgr ON s.manager_id = mgr.id
       LEFT JOIN users u ON s.user_id = u.id
       WHERE s.id = ?
     `).get(id) as StaffRow | undefined;
@@ -166,38 +184,39 @@ export class StaffRepository {
     return this.db.prepare('SELECT * FROM staff WHERE user_id = ?').get(userId) as StaffRow | undefined;
   }
 
-  create(s: {
-    staff_code?: string;
-    first_name: string;
-    last_name?: string;
-    phone: string;
-    email?: string;
-    address?: string;
-    joining_date: string;
-    department_id: number;
-    designation_id: number;
-    employment_type?: string;
-    status?: string;
-    photo_path?: string;
-    user_id?: number;
-  }): number {
+  create(s: Partial<StaffRow>): number {
     const code = s.staff_code || this.generateStaffCode();
     const info = this.db.prepare(`
       INSERT INTO staff (
-        staff_code, first_name, last_name, phone, email, address,
-        joining_date, department_id, designation_id, employment_type,
-        status, photo_path, user_id
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        staff_code, first_name, last_name, phone, alternate_phone, email, address,
+        address_line_1, address_line_2, city, district, state, pincode,
+        date_of_birth, gender, joining_date, confirmation_date, exit_date,
+        department_id, designation_id, manager_id, work_location,
+        employment_type, status, photo_path, user_id
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
       code,
-      s.first_name.trim(),
+      s.first_name?.trim() || '',
       s.last_name?.trim() || null,
-      s.phone.trim(),
+      s.phone?.trim() || '',
+      s.alternate_phone?.trim() || null,
       s.email?.trim() || null,
       s.address?.trim() || null,
-      s.joining_date,
+      s.address_line_1?.trim() || null,
+      s.address_line_2?.trim() || null,
+      s.city?.trim() || null,
+      s.district?.trim() || null,
+      s.state?.trim() || null,
+      s.pincode?.trim() || null,
+      s.date_of_birth || null,
+      s.gender || null,
+      s.joining_date || '',
+      s.confirmation_date || null,
+      s.exit_date || null,
       s.department_id,
       s.designation_id,
+      s.manager_id || null,
+      s.work_location || 'Main Store',
       s.employment_type || 'FULL_TIME',
       s.status || 'ACTIVE',
       s.photo_path || null,
@@ -211,8 +230,10 @@ export class StaffRepository {
     const values: any[] = [];
 
     const allowedKeys: (keyof StaffRow)[] = [
-      'first_name', 'last_name', 'phone', 'email', 'address',
-      'joining_date', 'department_id', 'designation_id',
+      'first_name', 'last_name', 'phone', 'alternate_phone', 'email', 'address',
+      'address_line_1', 'address_line_2', 'city', 'district', 'state', 'pincode',
+      'date_of_birth', 'gender', 'joining_date', 'confirmation_date', 'exit_date',
+      'department_id', 'designation_id', 'manager_id', 'work_location',
       'employment_type', 'status', 'photo_path', 'user_id'
     ];
 

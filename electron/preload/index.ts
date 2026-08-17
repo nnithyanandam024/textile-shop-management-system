@@ -173,6 +173,19 @@ export interface ElectronAPI {
     create: (token: string, input: any) => Promise<{ success: boolean; id?: number; staff_code?: string; error?: string }>;
     update: (token: string, id: number, input: any) => Promise<{ success: boolean; error?: string }>;
     deactivate: (token: string, id: number) => Promise<{ success: boolean; error?: string }>;
+    getEmergencyContacts: (staffId: number) => Promise<any[]>;
+    saveEmergencyContact: (token: string, input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    deleteEmergencyContact: (token: string, id: number) => Promise<{ success: boolean; error?: string }>;
+    getBankDetails: (staffId: number, revealFull?: boolean) => Promise<any>;
+    saveBankDetails: (token: string, input: any) => Promise<{ success: boolean; error?: string }>;
+    getDocuments: (staffId: number) => Promise<any[]>;
+    uploadDocument: (token: string, input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    verifyDocument: (token: string, id: number, status: string) => Promise<{ success: boolean; error?: string }>;
+    deleteDocument: (token: string, id: number) => Promise<{ success: boolean; error?: string }>;
+    getNotes: (staffId: number) => Promise<any[]>;
+    addNote: (token: string, input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    deleteNote: (token: string, id: number) => Promise<{ success: boolean; error?: string }>;
+    getHistory: (staffId: number) => Promise<any[]>;
   };
   department: {
     getAll: (includeInactive?: boolean) => Promise<any[]>;
@@ -312,6 +325,19 @@ const api: ElectronAPI = {
     create: (token, input) => ipcRenderer.invoke('staff:create', token, input),
     update: (token, id, input) => ipcRenderer.invoke('staff:update', token, id, input),
     deactivate: (token, id) => ipcRenderer.invoke('staff:deactivate', token, id),
+    getEmergencyContacts: (staffId) => ipcRenderer.invoke('staff:emergency:getAll', staffId),
+    saveEmergencyContact: (token, input) => ipcRenderer.invoke('staff:emergency:save', token, input),
+    deleteEmergencyContact: (token, id) => ipcRenderer.invoke('staff:emergency:delete', token, id),
+    getBankDetails: (staffId, revealFull) => ipcRenderer.invoke('staff:bank:get', staffId, revealFull),
+    saveBankDetails: (token, input) => ipcRenderer.invoke('staff:bank:save', token, input),
+    getDocuments: (staffId) => ipcRenderer.invoke('staff:document:getAll', staffId),
+    uploadDocument: (token, input) => ipcRenderer.invoke('staff:document:upload', token, input),
+    verifyDocument: (token, id, status) => ipcRenderer.invoke('staff:document:verify', token, id, status),
+    deleteDocument: (token, id) => ipcRenderer.invoke('staff:document:delete', token, id),
+    getNotes: (staffId) => ipcRenderer.invoke('staff:notes:getAll', staffId),
+    addNote: (token, input) => ipcRenderer.invoke('staff:notes:add', token, input),
+    deleteNote: (token, id) => ipcRenderer.invoke('staff:notes:delete', token, id),
+    getHistory: (staffId) => ipcRenderer.invoke('staff:history:getAll', staffId),
   },
   department: {
     getAll: (includeInactive) => ipcRenderer.invoke('department:getAll', includeInactive),

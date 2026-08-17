@@ -566,6 +566,123 @@ function runMigrations(db: Database.Database) {
           WHERE NOT EXISTS (SELECT 1 FROM designations WHERE designation_code = 'DES-006');
         `);
       }
+    },
+    {
+      version: 4.0,
+      name: 'staff_module_profiles_and_details',
+      up: (db: Database.Database) => {
+        db.exec(`
+          -- Expand staff table with Phase 2 Profile & Employment columns
+          ALTER TABLE staff ADD COLUMN date_of_birth TEXT;
+          ALTER TABLE staff ADD COLUMN gender TEXT CHECK (gender IN ('Male', 'Female', 'Other', 'Prefer not to say'));
+          ALTER TABLE staff ADD COLUMN alternate_phone TEXT;
+          ALTER TABLE staff ADD COLUMN address_line_1 TEXT;
+          ALTER TABLE staff ADD COLUMN address_line_2 TEXT;
+          ALTER TABLE staff ADD COLUMN city TEXT;
+          ALTER TABLE staff ADD COLUMN district TEXT;
+          ALTER TABLE staff ADD COLUMN state TEXT;
+          ALTER TABLE staff ADD COLUMN pincode TEXT;
+          ALTER TABLE staff ADD COLUMN manager_id INTEGER REFERENCES staff(id) ON DELETE SET NULL;
+          ALTER TABLE staff ADD COLUMN work_location TEXT DEFAULT 'Main Store';
+          ALTER TABLE staff ADD COLUMN confirmation_date TEXT;
+          ALTER TABLE staff ADD COLUMN exit_date TEXT;
+
+          -- Staff Emergency Contacts Table
+          CREATE TABLE IF NOT EXISTS staff_emergency_contacts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL,
+            name TEXT NOT NULL,
+            relationship TEXT NOT NULL,
+            phone TEXT NOT NULL,
+            alternate_phone TEXT,
+            address TEXT,
+            is_primary INTEGER DEFAULT 1,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (staff_id) REFERENCES staff(id) ON DELETE CASCADE
+          );
+
+          -- Staff Bank & Payroll Details Table
+          CREATE TABLE IF NOT EXISTS staff_bank_details (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL UNIQUE,
+            bank_name TEXT NOT NULL,
+            account_holder_name TEXT NOT NULL,
+            account_number_encrypted TEXT NOT NULL,
+            ifsc TEXT NOT NULL,
+            payment_method TEXT DEFAULT 'Bank Transfer' CHECK (payment_method IN ('Bank Transfer', 'Cash', 'Cheque', 'Other')),
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (staff_id) REFERENCES staff(id) ON DELETE CASCADE
+          );
+
+          -- Staff Documents Table
+          CREATE TABLE IF NOT EXISTS staff_documents (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL,
+            document_type TEXT NOT NULL,
+            file_name TEXT NOT NULL,
+            file_path TEXT NOT NULL,
+            file_size INTEGER NOT NULL,
+            mime_type TEXT NOT NULL,
+            verification_status TEXT DEFAULT 'Pending' CHECK (verification_status IN ('Pending', 'Verified', 'Rejected')),
+            uploaded_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+            uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            verified_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+            verified_at DATETIME,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (staff_id) REFERENCES staff(id) ON DELETE CASCADE
+          );
+
+          -- Staff Notes Table
+          CREATE TABLE IF NOT EXISTS staff_notes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL,
+            note TEXT NOT NULL,
+            created_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (staff_id) REFERENCES staff(id) ON DELETE CASCADE
+          );
+
+          -- Staff Employment History Table
+          CREATE TABLE IF NOT EXISTS staff_employment_history (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL,
+            department_id INTEGER NOT NULL,
+            designation_id INTEGER NOT NULL,
+            manager_id INTEGER,
+            employment_type TEXT NOT NULL,
+            effective_from TEXT NOT NULL,
+            effective_to TEXT,
+            reason TEXT,
+            created_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (staff_id) REFERENCES staff(id) ON DELETE CASCADE,
+            FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE RESTRICT,
+            FOREIGN KEY (designation_id) REFERENCES designations(id) ON DELETE RESTRICT,
+            FOREIGN KEY (manager_id) REFERENCES staff(id) ON DELETE SET NULL
+          );
+
+          -- Add permissions for Staff Phase 2
+          INSERT OR IGNORE INTO permissions (code, module, description) VALUES
+            ('staff.documents.view', 'Staff', 'View staff uploaded documents'),
+            ('staff.documents.manage', 'Staff', 'Upload, verify, and delete staff documents'),
+            ('staff.bank.view', 'Staff', 'View sensitive bank and payroll account setup'),
+            ('staff.bank.manage', 'Staff', 'Edit staff bank account setup'),
+            ('staff.notes.view', 'Staff', 'View internal staff notes'),
+            ('staff.notes.manage', 'Staff', 'Create and edit internal staff notes'),
+            ('staff.history.view', 'Staff', 'View staff employment history timeline');
+
+          -- Map permissions to Owner (Role 1) and Manager (Role 2)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 1, id FROM permissions WHERE module = 'Staff';
+
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 2, id FROM permissions WHERE module = 'Staff';
+        `);
+      }
     }
   ];
 

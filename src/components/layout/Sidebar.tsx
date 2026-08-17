@@ -18,6 +18,7 @@ import {
   Briefcase,
   BadgeCheck,
   ShieldCheck,
+  CalendarCheck,
 } from 'lucide-react';
 import { useAuth } from '../../features/auth/AuthContext';
 
@@ -45,6 +46,7 @@ const staffNavItems: NavItem[] = [
   { name: 'Staff', path: '/staff', icon: Users2, permission: 'staff.view' },
   { name: 'Departments', path: '/staff/departments', icon: Briefcase, permission: 'staff.organization' },
   { name: 'Designations', path: '/staff/designations', icon: BadgeCheck, permission: 'staff.organization' },
+  { name: 'Attendance', path: '/staff/attendance', icon: CalendarCheck, permission: 'attendance.view' },
   { name: 'Roles & Access', path: '/roles', icon: ShieldCheck, permission: 'role.view' },
 ];
 

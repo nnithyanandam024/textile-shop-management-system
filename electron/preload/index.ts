@@ -84,6 +84,18 @@ export interface ElectronAPI {
     update: (id: number, input: any) => Promise<{ success: boolean; error?: string }>;
     delete: (id: number) => Promise<{ success: boolean; error?: string }>;
   };
+  attendance: {
+    getSettings: () => Promise<any>;
+    updateSettings: (input: any) => Promise<{ success: boolean; error?: string }>;
+    checkIn: (staffId: number, time?: string) => Promise<{ success: boolean; error?: string }>;
+    checkOut: (staffId: number, time?: string) => Promise<{ success: boolean; error?: string }>;
+    getDaily: (date: string, filters?: any) => Promise<{ kpis: any; list: any[] }>;
+    getStaffMonthly: (staffId: number, year: number, month: number) => Promise<any>;
+    markManual: (input: any) => Promise<{ success: boolean; error?: string }>;
+    requestCorrection: (attendanceId: number, input: any) => Promise<{ success: boolean; error?: string }>;
+    approveCorrection: (correctionId: number, approve: boolean) => Promise<{ success: boolean; error?: string }>;
+    getPendingCorrections: () => Promise<any[]>;
+  };
   products: {
     getAll: () => Promise<any[]>;
     create: (product: any) => Promise<{ success: boolean; id?: number; error?: string }>;
@@ -245,6 +257,18 @@ const api: ElectronAPI = {
     create: (input) => ipcRenderer.invoke('roles:create', input),
     update: (id, input) => ipcRenderer.invoke('roles:update', { id, input }),
     delete: (id) => ipcRenderer.invoke('roles:delete', id),
+  },
+  attendance: {
+    getSettings: () => ipcRenderer.invoke('attendance:get-settings'),
+    updateSettings: (input) => ipcRenderer.invoke('attendance:update-settings', input),
+    checkIn: (staffId, time) => ipcRenderer.invoke('attendance:check-in', { staffId, time }),
+    checkOut: (staffId, time) => ipcRenderer.invoke('attendance:check-out', { staffId, time }),
+    getDaily: (date, filters) => ipcRenderer.invoke('attendance:get-daily', { date, filters }),
+    getStaffMonthly: (staffId, year, month) => ipcRenderer.invoke('attendance:get-staff-monthly', { staffId, year, month }),
+    markManual: (input) => ipcRenderer.invoke('attendance:mark-manual', input),
+    requestCorrection: (attendanceId, input) => ipcRenderer.invoke('attendance:request-correction', { attendanceId, input }),
+    approveCorrection: (correctionId, approve) => ipcRenderer.invoke('attendance:approve-correction', { correctionId, approve }),
+    getPendingCorrections: () => ipcRenderer.invoke('attendance:get-pending-corrections'),
   },
   products: {
     getAll: () => ipcRenderer.invoke('products:get-all'),

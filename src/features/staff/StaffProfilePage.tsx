@@ -220,6 +220,7 @@ export const StaffProfilePage: React.FC = () => {
     'Employment',
     'Contact',
     'Access & Login',
+    'Attendance',
     'Emergency',
     'Documents',
     'Bank / Payroll',
@@ -362,6 +363,29 @@ export const StaffProfilePage: React.FC = () => {
           onChangeRole={() => setIsChangeRoleOpen(true)}
           onResetPassword={() => setIsResetPasswordOpen(true)}
         />
+      )}
+
+      {activeTab === 'Attendance' && (
+        <Card className="space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div>
+              <h3 className="text-base font-bold text-slate-900">Attendance History & Monthly Log</h3>
+              <p className="text-xs text-slate-500">Recorded check-in, check-out and working hours summary</p>
+            </div>
+            <Button variant="outline" onClick={() => navigate('/staff/attendance')}>
+              Go to Attendance Module
+            </Button>
+          </div>
+
+          <div className="text-center py-8 bg-slate-50 border border-slate-100 rounded-2xl space-y-2">
+            <p className="text-xs text-slate-600 font-semibold">
+              Daily check-ins, late arrivals, and working hours for {staff.first_name} are recorded in the central Attendance Module.
+            </p>
+            <p className="text-xs text-[#2818cf] font-bold">
+              Staff ID: {staff.staff_code}
+            </p>
+          </div>
+        </Card>
       )}
 
       {activeTab === 'Emergency' && (

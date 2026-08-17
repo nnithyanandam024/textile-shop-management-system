@@ -31,11 +31,13 @@ import { InventoryService } from '../services/inventoryService';
 import { AuthorizationService } from '../services/auth/authorizationService';
 import { SessionService } from '../services/auth/sessionService';
 import { registerStaffHandlers } from './staffHandler';
+import { registerAttendanceHandlers } from './attendanceHandler';
 import log from '../logger';
 
 export function registerIpcHandlers() {
   const db = getDatabase();
   registerStaffHandlers(db);
+  registerAttendanceHandlers(db);
 
   // App Info
   ipcMain.handle('app:get-version', () => app.getVersion() || '0.1.0');

@@ -774,6 +774,104 @@ function runMigrations(db: Database.Database) {
           SELECT 6, id FROM permissions WHERE module IN ('Staff', 'Users') AND code NOT IN ('user.reset_password');
         `);
       }
+    },
+    {
+      version: 6,
+      name: 'staff_module_attendance_system',
+      up: (database: Database.Database) => {
+        database.exec(`
+          -- Attendance Settings Table
+          CREATE TABLE IF NOT EXISTS attendance_settings (
+            id INTEGER PRIMARY KEY DEFAULT 1,
+            work_start_time TEXT DEFAULT '09:00',
+            work_end_time TEXT DEFAULT '18:00',
+            grace_minutes INTEGER DEFAULT 10,
+            full_day_minutes INTEGER DEFAULT 480,
+            half_day_minutes INTEGER DEFAULT 240,
+            allow_manual_entry INTEGER DEFAULT 1,
+            require_approval_for_correction INTEGER DEFAULT 1,
+            updated_by INTEGER,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          INSERT OR IGNORE INTO attendance_settings (id, work_start_time, work_end_time, grace_minutes, full_day_minutes, half_day_minutes)
+          VALUES (1, '09:00', '18:00', 10, 480, 240);
+
+          -- Attendance Core Table
+          CREATE TABLE IF NOT EXISTS attendance (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            attendance_date TEXT NOT NULL,
+            status TEXT NOT NULL DEFAULT 'PRESENT',
+            check_in TEXT,
+            check_out TEXT,
+            worked_minutes INTEGER DEFAULT 0,
+            late_minutes INTEGER DEFAULT 0,
+            early_exit_minutes INTEGER DEFAULT 0,
+            permission_minutes INTEGER DEFAULT 0,
+            remarks TEXT,
+            source TEXT DEFAULT 'SELF_CHECK_IN',
+            approval_status TEXT DEFAULT 'NOT_REQUIRED',
+            is_locked INTEGER DEFAULT 0,
+            created_by INTEGER,
+            approved_by INTEGER,
+            approved_at DATETIME,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE(staff_id, attendance_date)
+          );
+
+          CREATE INDEX IF NOT EXISTS idx_attendance_staff ON attendance(staff_id);
+          CREATE INDEX IF NOT EXISTS idx_attendance_date ON attendance(attendance_date);
+          CREATE INDEX IF NOT EXISTS idx_attendance_status ON attendance(status);
+          CREATE INDEX IF NOT EXISTS idx_attendance_staff_date ON attendance(staff_id, attendance_date);
+
+          -- Attendance Corrections & Audit Trail
+          CREATE TABLE IF NOT EXISTS attendance_corrections (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            attendance_id INTEGER NOT NULL REFERENCES attendance(id) ON DELETE CASCADE,
+            original_check_in TEXT,
+            original_check_out TEXT,
+            original_status TEXT,
+            new_check_in TEXT,
+            new_check_out TEXT,
+            new_status TEXT,
+            reason TEXT NOT NULL,
+            status TEXT DEFAULT 'PENDING',
+            requested_by INTEGER NOT NULL,
+            reviewed_by INTEGER,
+            reviewed_at DATETIME,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- Seed Attendance Permissions
+          INSERT OR IGNORE INTO permissions (code, module, description) VALUES
+            ('attendance.view', 'Attendance', 'View attendance dashboard and daily records'),
+            ('attendance.create', 'Attendance', 'Perform daily check-in and check-out'),
+            ('attendance.update', 'Attendance', 'Mark manual attendance entries'),
+            ('attendance.correct', 'Attendance', 'Request attendance corrections'),
+            ('attendance.approve', 'Attendance', 'Approve or reject attendance corrections'),
+            ('attendance.export', 'Attendance', 'Export attendance reports and summaries'),
+            ('attendance.manage_settings', 'Attendance', 'Configure work timing and grace period settings');
+
+          -- Map Attendance Permissions to System Roles
+          -- 1. Owner (Role 1)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 1, id FROM permissions WHERE module = 'Attendance';
+
+          -- 2. Manager (Role 2)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 2, id FROM permissions WHERE module = 'Attendance';
+
+          -- 3. Cashier (Role 3)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 3, id FROM permissions WHERE code IN ('attendance.view', 'attendance.create');
+
+          -- 6. HR Staff (Role 6)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 6, id FROM permissions WHERE module = 'Attendance';
+        `);
+      }
     }
   ];
 

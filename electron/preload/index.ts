@@ -71,8 +71,18 @@ export interface ElectronAPI {
   users: {
     getAll: () => Promise<any[]>;
     create: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    createStaffLogin: (staffId: number, input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
     update: (id: number, input: any) => Promise<{ success: boolean; error?: string }>;
     resetPassword: (targetUserId: number, newPassword: string) => Promise<{ success: boolean; error?: string }>;
+  };
+  roles: {
+    getAll: () => Promise<any[]>;
+    getById: (id: number) => Promise<any>;
+    getAllPermissions: () => Promise<any[]>;
+    getRolePermissions: (roleId: number) => Promise<string[]>;
+    create: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    update: (id: number, input: any) => Promise<{ success: boolean; error?: string }>;
+    delete: (id: number) => Promise<{ success: boolean; error?: string }>;
   };
   products: {
     getAll: () => Promise<any[]>;
@@ -223,8 +233,18 @@ const api: ElectronAPI = {
   users: {
     getAll: () => ipcRenderer.invoke('users:get-all'),
     create: (input) => ipcRenderer.invoke('users:create', input),
+    createStaffLogin: (staffId, input) => ipcRenderer.invoke('users:create-staff-login', { staffId, input }),
     update: (id, input) => ipcRenderer.invoke('users:update', { id, input }),
     resetPassword: (targetUserId, newPassword) => ipcRenderer.invoke('users:reset-password', { targetUserId, newPassword }),
+  },
+  roles: {
+    getAll: () => ipcRenderer.invoke('roles:get-all'),
+    getById: (id) => ipcRenderer.invoke('roles:get-by-id', id),
+    getAllPermissions: () => ipcRenderer.invoke('roles:get-all-permissions'),
+    getRolePermissions: (roleId) => ipcRenderer.invoke('roles:get-role-permissions', roleId),
+    create: (input) => ipcRenderer.invoke('roles:create', input),
+    update: (id, input) => ipcRenderer.invoke('roles:update', { id, input }),
+    delete: (id) => ipcRenderer.invoke('roles:delete', id),
   },
   products: {
     getAll: () => ipcRenderer.invoke('products:get-all'),

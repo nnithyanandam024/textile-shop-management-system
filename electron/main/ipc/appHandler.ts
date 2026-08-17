@@ -25,6 +25,7 @@ import { RestoreService } from '../services/restoreService';
 import { InvoiceService } from '../services/invoiceService';
 import { AuthService } from '../services/auth/authService';
 import { UserService, CreateUserInput, UpdateUserInput } from '../services/auth/userService';
+import { RoleService } from '../services/auth/roleService';
 import { ProductService, CreateProductInput } from '../services/productService';
 import { InventoryService } from '../services/inventoryService';
 import { AuthorizationService } from '../services/auth/authorizationService';
@@ -138,9 +139,63 @@ export function registerIpcHandlers() {
   ipcMain.handle('users:reset-password', (_, { targetUserId, newPassword }: { targetUserId: number; newPassword: string }) => {
     AuthorizationService.requirePermission('users.manage');
     const session = SessionService.getSession();
-    if (!session) return { success: false, error: 'Unauthorized.' };
     const service = new UserService(getDatabase());
-    return service.resetPassword(session.userId, targetUserId, newPassword);
+    return service.resetPassword(session?.userId || 1, targetUserId, newPassword);
+  });
+
+  ipcMain.handle('users:create-staff-login', async (_, { staffId, input }: { staffId: number; input: CreateUserInput }) => {
+    AuthorizationService.requirePermission('user.create');
+    const session = SessionService.getSession();
+    const service = new UserService(getDatabase());
+    return await service.createStaffLogin(staffId, input, session?.userId);
+  });
+
+  // ----------------------------------------------------
+  // ROLES & PERMISSIONS API
+  // ----------------------------------------------------
+  ipcMain.handle('roles:get-all', () => {
+    AuthorizationService.requirePermission('role.view');
+    const service = new RoleService(getDatabase());
+    return service.getRoles();
+  });
+
+  ipcMain.handle('roles:get-by-id', (_, id: number) => {
+    AuthorizationService.requirePermission('role.view');
+    const service = new RoleService(getDatabase());
+    return service.getRoleById(id);
+  });
+
+  ipcMain.handle('roles:get-all-permissions', () => {
+    AuthorizationService.requirePermission('role.view');
+    const service = new RoleService(getDatabase());
+    return service.getAllPermissions();
+  });
+
+  ipcMain.handle('roles:get-role-permissions', (_, roleId: number) => {
+    AuthorizationService.requirePermission('role.view');
+    const service = new RoleService(getDatabase());
+    return service.getRolePermissions(roleId);
+  });
+
+  ipcMain.handle('roles:create', (_, input: any) => {
+    AuthorizationService.requirePermission('role.create');
+    const session = SessionService.getSession();
+    const service = new RoleService(getDatabase());
+    return service.createRole(input, session?.userId);
+  });
+
+  ipcMain.handle('roles:update', (_, { id, input }: { id: number; input: any }) => {
+    AuthorizationService.requirePermission('role.update');
+    const session = SessionService.getSession();
+    const service = new RoleService(getDatabase());
+    return service.updateRole(id, input, session?.userId);
+  });
+
+  ipcMain.handle('roles:delete', (_, id: number) => {
+    AuthorizationService.requirePermission('role.delete');
+    const session = SessionService.getSession();
+    const service = new RoleService(getDatabase());
+    return service.deleteRole(id, session?.userId);
   });
 
   // ----------------------------------------------------

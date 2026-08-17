@@ -14,6 +14,8 @@ import { BankTab } from './components/BankTab';
 import { HistoryTab } from './components/HistoryTab';
 import { NotesTab } from './components/NotesTab';
 
+import { UserAccessCard } from './components/UserAccessCard';
+
 // Modal components
 import { EditPersonalModal } from './modals/EditPersonalModal';
 import { EditEmploymentModal } from './modals/EditEmploymentModal';
@@ -23,6 +25,8 @@ import { BankDetailsModal } from './modals/BankDetailsModal';
 import { UploadDocumentModal } from './modals/UploadDocumentModal';
 import { AddNoteModal } from './modals/AddNoteModal';
 import { PrintStaffProfileModal } from './modals/PrintStaffProfileModal';
+import { CreateStaffLoginModal } from './modals/CreateStaffLoginModal';
+import { ChangeStaffRoleModal } from './modals/ChangeStaffRoleModal';
 
 import {
   ArrowLeft,
@@ -99,6 +103,13 @@ export const StaffProfilePage: React.FC = () => {
     }
   };
 
+  const [roles, setRoles] = useState<any[]>([]);
+  const [isCreateLoginOpen, setIsCreateLoginOpen] = useState(false);
+  const [isChangeRoleOpen, setIsChangeRoleOpen] = useState(false);
+  const [isResetPasswordOpen, setIsResetPasswordOpen] = useState(false);
+  const [newPasswordInput, setNewPasswordInput] = useState('');
+  const [resetPasswordError, setResetPasswordError] = useState('');
+
   const fetchReferenceData = async () => {
     try {
       if (window.api?.department) {
@@ -112,6 +123,10 @@ export const StaffProfilePage: React.FC = () => {
       if (window.api?.staff) {
         const res = await window.api.staff.getAll({ limit: 100 });
         setAllStaff(res.staff || []);
+      }
+      if (window.api?.roles) {
+        const rList = await window.api.roles.getAll();
+        setRoles(rList || []);
       }
     } catch (err) {
       console.error('Failed to fetch reference data:', err);
@@ -204,6 +219,7 @@ export const StaffProfilePage: React.FC = () => {
     'Personal',
     'Employment',
     'Contact',
+    'Access & Login',
     'Emergency',
     'Documents',
     'Bank / Payroll',
@@ -339,6 +355,15 @@ export const StaffProfilePage: React.FC = () => {
         <ContactTab staff={staff} onEdit={() => setIsEditContactOpen(true)} />
       )}
 
+      {activeTab === 'Access & Login' && (
+        <UserAccessCard
+          staff={staff}
+          onCreateLogin={() => setIsCreateLoginOpen(true)}
+          onChangeRole={() => setIsChangeRoleOpen(true)}
+          onResetPassword={() => setIsResetPasswordOpen(true)}
+        />
+      )}
+
       {activeTab === 'Emergency' && (
         <EmergencyTab
           contacts={emergencyContacts}
@@ -442,6 +467,76 @@ export const StaffProfilePage: React.FC = () => {
         staff={staff}
       />
 
+      <CreateStaffLoginModal
+        isOpen={isCreateLoginOpen}
+        onClose={() => setIsCreateLoginOpen(false)}
+        onSuccess={fetchStaffData}
+        staff={staff}
+        roles={roles}
+      />
+
+      <ChangeStaffRoleModal
+        isOpen={isChangeRoleOpen}
+        onClose={() => setIsChangeRoleOpen(false)}
+        onSuccess={fetchStaffData}
+        staff={staff}
+        roles={roles}
+      />
+
+      {/* Admin Reset Password Modal */}
+      {isResetPasswordOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full border border-slate-200/80 p-6 space-y-4">
+            <h3 className="text-base font-bold text-slate-900">Reset User Account Password</h3>
+            <p className="text-xs text-slate-500">@{staff.username} — Set a new temporary password</p>
+
+            {resetPasswordError && (
+              <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-xs font-semibold text-rose-700">
+                {resetPasswordError}
+              </div>
+            )}
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">New Password *</label>
+              <input
+                type="password"
+                placeholder="At least 6 characters"
+                value={newPasswordInput}
+                onChange={(e) => setNewPasswordInput(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+              />
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <Button variant="outline" onClick={() => setIsResetPasswordOpen(false)}>
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                onClick={async () => {
+                  setResetPasswordError('');
+                  if (!newPasswordInput || newPasswordInput.length < 6) {
+                    setResetPasswordError('Password must be at least 6 characters.');
+                    return;
+                  }
+                  if (window.api?.users) {
+                    const res = await window.api.users.resetPassword(staff.user_id, newPasswordInput);
+                    if (res.success) {
+                      setIsResetPasswordOpen(false);
+                      setNewPasswordInput('');
+                    } else {
+                      setResetPasswordError(res.error || 'Failed to reset password.');
+                    }
+                  }
+                }}
+              >
+                Reset Password
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Deactivation Confirmation Modal */}
       {isDeactivateConfirmOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
@@ -457,7 +552,7 @@ export const StaffProfilePage: React.FC = () => {
             </div>
 
             <p className="text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100 leading-relaxed">
-              The staff master record will be preserved in inactive status. Historical records, attendance, and audit logs will continue to reference this employee.
+              The staff master record will be preserved in inactive status. If this employee has a linked user account, the login access will automatically be disabled.
             </p>
 
             {deactivateError && (

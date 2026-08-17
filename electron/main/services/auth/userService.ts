@@ -1,5 +1,6 @@
 import Database from 'better-sqlite3';
 import { UserRepository, UserRow } from '../../repositories/userRepository';
+import { StaffRepository } from '../../repositories/staffRepository';
 import { AuditRepository } from '../../repositories/auditRepository';
 import { PasswordService } from './passwordService';
 import log from '../../logger';
@@ -72,6 +73,39 @@ export class UserService {
     }
   }
 
+  async createStaffLogin(
+    staffId: number,
+    input: CreateUserInput,
+    actorUserId?: number
+  ): Promise<{ success: boolean; id?: number; error?: string }> {
+    const staffRepo = new StaffRepository(this.db);
+    const staff = staffRepo.getById(staffId);
+    if (!staff) {
+      return { success: false, error: 'Staff member record not found.' };
+    }
+
+    if (staff.user_id) {
+      return { success: false, error: 'Staff member already has an associated user account.' };
+    }
+
+    const userRes = await this.createUser(input, actorUserId);
+    if (!userRes.success || !userRes.id) {
+      return userRes;
+    }
+
+    staffRepo.update(staffId, { user_id: userRes.id });
+
+    this.auditRepo.log({
+      user_id: actorUserId,
+      action: 'ROLE_ASSIGNED',
+      entity_type: 'STAFF',
+      entity_id: staffId,
+      new_value: `Created login '${input.username}' for staff ${staff.staff_code}`,
+    });
+
+    return { success: true, id: userRes.id };
+  }
+
   updateUser(id: number, input: UpdateUserInput, actorUserId?: number): { success: boolean; error?: string } {
     const targetUser = this.userRepo.getById(id);
     if (!targetUser) {
@@ -93,7 +127,7 @@ export class UserService {
     if (updated) {
       this.auditRepo.log({
         user_id: actorUserId,
-        action: 'USER_UPDATED',
+        action: input.role_id !== undefined ? 'ROLE_CHANGED' : 'USER_UPDATED',
         entity_type: 'USER',
         entity_id: id,
         new_value: JSON.stringify(input),

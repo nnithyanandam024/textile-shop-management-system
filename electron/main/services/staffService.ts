@@ -10,6 +10,7 @@ import { StaffHistoryRepository } from '../repositories/staffHistoryRepository';
 import { StaffEmergencyRepository } from '../repositories/staffEmergencyRepository';
 import { StaffBankRepository } from '../repositories/staffBankRepository';
 import { StaffDocumentRepository } from '../repositories/staffDocumentRepository';
+import { UserRepository } from '../repositories/userRepository';
 import log from '../logger';
 
 export interface CreateStaffInput {
@@ -372,6 +373,12 @@ export class StaffService {
 
     try {
       this.staffRepo.updateStatus(id, 'INACTIVE');
+
+      // If staff has associated user account, disable user account as well
+      if (existing.user_id) {
+        const userRepo = new UserRepository(this.db);
+        userRepo.update(existing.user_id, { is_active: 0 });
+      }
 
       this.auditRepo.log({
         user_id: actorUserId,

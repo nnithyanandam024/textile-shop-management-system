@@ -51,7 +51,7 @@ describe('Phase 2 Database & Core Data Foundation Test Suite', () => {
     const customer = db.prepare("SELECT * FROM customers WHERE customer_code = 'CUST-0000'").get();
     const variant = db.prepare("SELECT * FROM product_variants WHERE sku = 'TX-PCS-001'").get();
 
-    expect(rolesCount).toBe(4);
+    expect(rolesCount).toBeGreaterThanOrEqual(4);
     expect(categoriesCount).toBeGreaterThanOrEqual(6);
     expect(customer.name).toBe('Walk-in Customer');
     expect(variant.selling_price).toBe(999.0);

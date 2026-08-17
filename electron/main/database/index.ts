@@ -683,6 +683,97 @@ function runMigrations(db: Database.Database) {
           SELECT 2, id FROM permissions WHERE module = 'Staff';
         `);
       }
+    },
+    {
+      version: 5,
+      name: 'staff_module_rbac_and_access_control',
+      up: (database: Database.Database) => {
+        // Safe column additions to roles table
+        try { database.exec("ALTER TABLE roles ADD COLUMN is_system_role INTEGER DEFAULT 0;"); } catch {}
+        try { database.exec("ALTER TABLE roles ADD COLUMN status TEXT DEFAULT 'ACTIVE';"); } catch {}
+        try { database.exec("ALTER TABLE roles ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP;"); } catch {}
+
+        database.exec(`
+          -- Seed / Ensure System Roles
+          INSERT OR IGNORE INTO roles (id, name, description, is_system_role, status) VALUES
+            (1, 'Owner', 'Full system access and administrative privileges', 1, 'ACTIVE'),
+            (2, 'Manager', 'Access to sales, inventory, purchases, reporting, staff view', 1, 'ACTIVE'),
+            (3, 'Cashier', 'Access to POS billing terminal and customer registry', 1, 'ACTIVE'),
+            (4, 'Inventory Staff', 'Access to stock movements and product management', 1, 'ACTIVE'),
+            (5, 'Accountant', 'Access to financial reports, expenses, payables, staff bank details', 1, 'ACTIVE'),
+            (6, 'HR Staff', 'Access to staff master, documents, attendance, leave, performance', 1, 'ACTIVE');
+
+          UPDATE roles SET is_system_role = 1 WHERE id IN (1, 2, 3, 4, 5, 6);
+
+          -- Seed Granular Permissions
+          INSERT OR IGNORE INTO permissions (code, module, description) VALUES
+            ('staff.export', 'Staff', 'Export staff list and data'),
+            ('staff.print', 'Staff', 'Print staff profile documents'),
+            ('staff.bank.update', 'Staff', 'Update sensitive staff bank setup'),
+            ('staff.employment.view', 'Staff', 'View staff employment details'),
+            ('staff.employment.update', 'Staff', 'Update staff employment details'),
+            ('staff.employment.history.create', 'Staff', 'Record staff employment history changes'),
+            ('user.view', 'Users', 'View user accounts'),
+            ('user.create', 'Users', 'Create new login user account for staff'),
+            ('user.update', 'Users', 'Update user display name and status'),
+            ('user.disable', 'Users', 'Disable or lock user login access'),
+            ('user.reset_password', 'Users', 'Reset user account password'),
+            ('role.view', 'Roles', 'View roles and permission matrices'),
+            ('role.create', 'Roles', 'Create custom roles'),
+            ('role.update', 'Roles', 'Edit role name, description, and permissions'),
+            ('role.delete', 'Roles', 'Delete custom roles'),
+            ('role.assign', 'Roles', 'Assign roles to staff user accounts'),
+            ('pos.view', 'POS', 'View POS terminal interface'),
+            ('pos.create', 'POS', 'Create POS checkout sales'),
+            ('inventory.manage', 'Inventory', 'Manage stock inward and adjustments'),
+            ('customers.manage', 'Customers', 'Create and edit customer records'),
+            ('suppliers.manage', 'Suppliers', 'Create and edit supplier records'),
+            ('purchases.view', 'Purchases', 'View purchase records'),
+            ('purchases.manage', 'Purchases', 'Create purchase orders'),
+            ('returns.view', 'Returns', 'View return and exchange history'),
+            ('returns.create', 'Returns', 'Process customer returns and exchanges'),
+            ('expenses.view', 'Expenses', 'View business expense entries'),
+            ('expenses.manage', 'Expenses', 'Create and manage expense entries'),
+            ('settings.manage', 'Settings', 'Update system settings');
+
+          -- Map Role Permissions for System Roles
+          -- 1. Owner (Role 1): All Permissions
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 1, id FROM permissions;
+
+          -- 2. Manager (Role 2)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 2, id FROM permissions WHERE code NOT IN (
+            'role.create', 'role.update', 'role.delete', 'user.reset_password', 'settings.manage', 'backup.restore'
+          );
+
+          -- 3. Cashier (Role 3)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 3, id FROM permissions WHERE code IN (
+            'dashboard.view', 'pos.view', 'pos.create', 'billing.create', 'sales.view',
+            'customers.view', 'customers.manage', 'products.view', 'inventory.view', 'returns.create', 'staff.view'
+          );
+
+          -- 4. Inventory Staff (Role 4)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 4, id FROM permissions WHERE code IN (
+            'dashboard.view', 'products.view', 'products.manage', 'inventory.view', 'inventory.manage',
+            'purchases.view', 'purchases.manage', 'suppliers.view', 'suppliers.manage'
+          );
+
+          -- 5. Accountant (Role 5)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 5, id FROM permissions WHERE code IN (
+            'dashboard.view', 'reports.view', 'reports.export', 'sales.view', 'purchases.view',
+            'expenses.view', 'expenses.manage', 'customers.view', 'suppliers.view',
+            'staff.bank.view', 'staff.bank.update', 'staff.view'
+          );
+
+          -- 6. HR Staff (Role 6)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 6, id FROM permissions WHERE module IN ('Staff', 'Users') AND code NOT IN ('user.reset_password');
+        `);
+      }
     }
   ];
 

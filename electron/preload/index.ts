@@ -111,6 +111,21 @@ export interface ElectronAPI {
     getOverrides: (startDate: string, endDate: string) => Promise<any[]>;
     resolveDate: (staffId: number, dateStr: string) => Promise<any>;
   };
+  leave: {
+    getTypes: (includeInactive?: boolean) => Promise<any[]>;
+    createType: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    updateType: (id: number, input: any) => Promise<{ success: boolean; error?: string }>;
+    getBalances: (staffId: number, year?: number) => Promise<any[]>;
+    adjustBalance: (input: any) => Promise<{ success: boolean; error?: string }>;
+    getRequests: (filters?: any) => Promise<any[]>;
+    apply: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    approve: (requestId: number) => Promise<{ success: boolean; error?: string }>;
+    reject: (requestId: number, rejectionReason: string) => Promise<{ success: boolean; error?: string }>;
+    cancel: (requestId: number) => Promise<{ success: boolean; error?: string }>;
+    getHolidays: (includeInactive?: boolean) => Promise<any[]>;
+    createHoliday: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    deleteHoliday: (id: number) => Promise<{ success: boolean; error?: string }>;
+  };
   products: {
     getAll: () => Promise<any[]>;
     create: (product: any) => Promise<{ success: boolean; id?: number; error?: string }>;
@@ -299,6 +314,21 @@ const api: ElectronAPI = {
     deleteOverride: (id) => ipcRenderer.invoke('shift:delete-override', id),
     getOverrides: (startDate, endDate) => ipcRenderer.invoke('shift:get-overrides', { startDate, endDate }),
     resolveDate: (staffId, dateStr) => ipcRenderer.invoke('shift:resolve-date', { staffId, dateStr }),
+  },
+  leave: {
+    getTypes: (includeInactive) => ipcRenderer.invoke('leave:get-types', includeInactive),
+    createType: (input) => ipcRenderer.invoke('leave:create-type', input),
+    updateType: (id, input) => ipcRenderer.invoke('leave:update-type', { id, input }),
+    getBalances: (staffId, year) => ipcRenderer.invoke('leave:get-balances', { staffId, year }),
+    adjustBalance: (input) => ipcRenderer.invoke('leave:adjust-balance', input),
+    getRequests: (filters) => ipcRenderer.invoke('leave:get-requests', filters),
+    apply: (input) => ipcRenderer.invoke('leave:apply', input),
+    approve: (requestId) => ipcRenderer.invoke('leave:approve', requestId),
+    reject: (requestId, rejectionReason) => ipcRenderer.invoke('leave:reject', { requestId, rejectionReason }),
+    cancel: (requestId) => ipcRenderer.invoke('leave:cancel', requestId),
+    getHolidays: (includeInactive) => ipcRenderer.invoke('leave:get-holidays', includeInactive),
+    createHoliday: (input) => ipcRenderer.invoke('leave:create-holiday', input),
+    deleteHoliday: (id) => ipcRenderer.invoke('leave:delete-holiday', id),
   },
   products: {
     getAll: () => ipcRenderer.invoke('products:get-all'),

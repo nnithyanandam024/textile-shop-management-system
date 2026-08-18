@@ -20,6 +20,7 @@ import {
   ShieldCheck,
   CalendarCheck,
   Clock,
+  Calendar,
 } from 'lucide-react';
 import { useAuth } from '../../features/auth/AuthContext';
 
@@ -49,6 +50,7 @@ const staffNavItems: NavItem[] = [
   { name: 'Designations', path: '/staff/designations', icon: BadgeCheck, permission: 'staff.organization' },
   { name: 'Attendance', path: '/staff/attendance', icon: CalendarCheck, permission: 'attendance.view' },
   { name: 'Shifts', path: '/staff/shifts', icon: Clock, permission: 'shift.view' },
+  { name: 'Leave', path: '/staff/leave', icon: Calendar, permission: 'leave.view' },
   { name: 'Roles & Access', path: '/roles', icon: ShieldCheck, permission: 'role.view' },
 ];
 

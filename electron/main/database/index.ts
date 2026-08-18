@@ -981,6 +981,143 @@ function runMigrations(db: Database.Database) {
           SELECT 6, id FROM permissions WHERE module = 'Shifts';
         `);
       }
+    },
+    {
+      version: 8,
+      name: 'staff_module_leave_system',
+      up: (database: Database.Database) => {
+        database.exec(`
+          -- 1. Leave Types Table
+          CREATE TABLE IF NOT EXISTS leave_types (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            leave_code TEXT NOT NULL UNIQUE,
+            name TEXT NOT NULL,
+            description TEXT,
+            paid INTEGER DEFAULT 1,
+            requires_approval INTEGER DEFAULT 1,
+            requires_document INTEGER DEFAULT 0,
+            annual_allocation INTEGER DEFAULT 12,
+            carry_forward_allowed INTEGER DEFAULT 0,
+            max_carry_forward INTEGER DEFAULT 0,
+            max_consecutive_days INTEGER DEFAULT 5,
+            status TEXT DEFAULT 'ACTIVE',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 2. Leave Balances Table
+          CREATE TABLE IF NOT EXISTS leave_balances (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            leave_type_id INTEGER NOT NULL REFERENCES leave_types(id),
+            year INTEGER NOT NULL,
+            allocated_days REAL DEFAULT 0,
+            carry_forward_days REAL DEFAULT 0,
+            used_days REAL DEFAULT 0,
+            adjustment_days REAL DEFAULT 0,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE(staff_id, leave_type_id, year)
+          );
+
+          -- 3. Leave Requests Table
+          CREATE TABLE IF NOT EXISTS leave_requests (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            leave_type_id INTEGER NOT NULL REFERENCES leave_types(id),
+            start_date TEXT NOT NULL,
+            end_date TEXT NOT NULL,
+            duration_days REAL NOT NULL,
+            duration_type TEXT DEFAULT 'FULL_DAY',
+            session TEXT,
+            reason TEXT NOT NULL,
+            status TEXT DEFAULT 'PENDING',
+            attachment_path TEXT,
+            requested_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            approved_by INTEGER,
+            approved_at DATETIME,
+            rejection_reason TEXT,
+            cancelled_by INTEGER,
+            cancelled_at DATETIME,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 4. Holidays Table
+          CREATE TABLE IF NOT EXISTS holidays (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            holiday_date TEXT NOT NULL UNIQUE,
+            type TEXT DEFAULT 'PUBLIC',
+            description TEXT,
+            status TEXT DEFAULT 'ACTIVE',
+            created_by INTEGER,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 5. Leave Balance Adjustments Table
+          CREATE TABLE IF NOT EXISTS leave_balance_adjustments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            leave_type_id INTEGER NOT NULL REFERENCES leave_types(id),
+            year INTEGER NOT NULL,
+            adjustment_days REAL NOT NULL,
+            reason TEXT NOT NULL,
+            created_by INTEGER,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- Add leave_request_id column to attendance table
+          ALTER TABLE attendance ADD COLUMN leave_request_id INTEGER REFERENCES leave_requests(id);
+
+          -- Seed Default Leave Types
+          INSERT OR IGNORE INTO leave_types (leave_code, name, description, paid, annual_allocation, carry_forward_allowed, max_carry_forward, max_consecutive_days, status) VALUES
+            ('CL', 'Casual Leave', 'Casual personal time off', 1, 12, 0, 0, 3, 'ACTIVE'),
+            ('SL', 'Sick Leave', 'Medical or health related leave', 1, 10, 0, 0, 5, 'ACTIVE'),
+            ('EL', 'Earned Leave', 'Earned annual paid leave', 1, 15, 1, 5, 10, 'ACTIVE'),
+            ('UL', 'Unpaid Leave', 'Loss of pay leave without fixed quota', 0, 0, 0, 0, 30, 'ACTIVE');
+
+          -- Seed 2026 Sample Holidays
+          INSERT OR IGNORE INTO holidays (name, holiday_date, type, description) VALUES
+            ('Republic Day', '2026-01-26', 'PUBLIC', 'National Holiday'),
+            ('Independence Day', '2026-08-15', 'PUBLIC', 'National Holiday'),
+            ('Gandhi Jayanti', '2026-10-02', 'PUBLIC', 'National Holiday'),
+            ('Diwali', '2026-11-01', 'SHOP', 'Festival Celebration'),
+            ('Christmas', '2026-12-25', 'PUBLIC', 'Festival Celebration');
+
+          -- Seed Leave Permissions
+          INSERT OR IGNORE INTO permissions (code, module, description) VALUES
+            ('leave.view', 'Leave', 'View leave requests, balances and calendars'),
+            ('leave.create', 'Leave', 'Submit leave applications'),
+            ('leave.update', 'Leave', 'Edit pending leave requests'),
+            ('leave.approve', 'Leave', 'Approve pending leave requests'),
+            ('leave.reject', 'Leave', 'Reject pending leave requests'),
+            ('leave.cancel', 'Leave', 'Cancel approved leave requests'),
+            ('leave.withdraw', 'Leave', 'Withdraw pending leave requests'),
+            ('leave.export', 'Leave', 'Export leave reports and summaries'),
+            ('leave.manage_types', 'Leave', 'Create and configure leave types'),
+            ('leave.manage_balances', 'Leave', 'Adjust employee leave balances'),
+            ('leave.manage_holidays', 'Leave', 'Manage shop holiday calendar');
+
+          -- Map Leave Permissions to System Roles
+          -- 1. Owner (Role 1)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 1, id FROM permissions WHERE module = 'Leave';
+
+          -- 2. Manager (Role 2)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 2, id FROM permissions WHERE module = 'Leave';
+
+          -- 3. Cashier (Role 3)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 3, id FROM permissions WHERE code IN ('leave.view', 'leave.create', 'leave.withdraw');
+
+          -- 6. HR Staff (Role 6)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 6, id FROM permissions WHERE module = 'Leave';
+        `);
+      }
     }
   ];
 

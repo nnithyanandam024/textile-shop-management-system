@@ -33,6 +33,7 @@ import { SessionService } from '../services/auth/sessionService';
 import { registerStaffHandlers } from './staffHandler';
 import { registerAttendanceHandlers } from './attendanceHandler';
 import { registerShiftHandlers } from './shiftHandler';
+import { registerLeaveHandlers } from './leaveHandler';
 import log from '../logger';
 
 export function registerIpcHandlers() {
@@ -40,6 +41,7 @@ export function registerIpcHandlers() {
   registerStaffHandlers(db);
   registerAttendanceHandlers(db);
   registerShiftHandlers(db);
+  registerLeaveHandlers(db);
 
   // App Info
   ipcMain.handle('app:get-version', () => app.getVersion() || '0.1.0');

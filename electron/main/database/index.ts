@@ -1118,6 +1118,160 @@ function runMigrations(db: Database.Database) {
           SELECT 6, id FROM permissions WHERE module = 'Leave';
         `);
       }
+    },
+    {
+      version: 9,
+      name: 'staff_module_payroll_system',
+      up: (database: Database.Database) => {
+        database.exec(`
+          -- 1. Salary Structures Table
+          CREATE TABLE IF NOT EXISTS salary_structures (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            effective_from TEXT NOT NULL,
+            effective_to TEXT,
+            pay_frequency TEXT DEFAULT 'MONTHLY',
+            basic_salary REAL NOT NULL DEFAULT 0,
+            gross_salary REAL NOT NULL DEFAULT 0,
+            status TEXT DEFAULT 'ACTIVE',
+            created_by INTEGER,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 2. Salary Components Master Table
+          CREATE TABLE IF NOT EXISTS salary_components (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            code TEXT NOT NULL UNIQUE,
+            name TEXT NOT NULL,
+            type TEXT NOT NULL,
+            calculation_method TEXT DEFAULT 'FIXED',
+            default_value REAL DEFAULT 0,
+            status TEXT DEFAULT 'ACTIVE',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 3. Salary Structure Components Mapping Table
+          CREATE TABLE IF NOT EXISTS salary_structure_components (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            salary_structure_id INTEGER NOT NULL REFERENCES salary_structures(id) ON DELETE CASCADE,
+            component_id INTEGER NOT NULL REFERENCES salary_components(id),
+            calculation_method TEXT DEFAULT 'FIXED',
+            value REAL NOT NULL DEFAULT 0,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 4. Payroll Periods Table
+          CREATE TABLE IF NOT EXISTS payroll_periods (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            year INTEGER NOT NULL,
+            month INTEGER NOT NULL,
+            start_date TEXT NOT NULL,
+            end_date TEXT NOT NULL,
+            total_working_days INTEGER DEFAULT 26,
+            status TEXT DEFAULT 'DRAFT',
+            processed_at DATETIME,
+            approved_by INTEGER,
+            approved_at DATETIME,
+            locked_at DATETIME,
+            created_by INTEGER,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 5. Salary Advances Table
+          CREATE TABLE IF NOT EXISTS salary_advances (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            amount REAL NOT NULL,
+            advance_date TEXT NOT NULL,
+            reason TEXT NOT NULL,
+            monthly_installment REAL NOT NULL,
+            remaining_amount REAL NOT NULL,
+            status TEXT DEFAULT 'ACTIVE',
+            approved_by INTEGER,
+            created_by INTEGER,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 6. Payroll Snapshot Records Table
+          CREATE TABLE IF NOT EXISTS payroll_records (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            payroll_period_id INTEGER NOT NULL REFERENCES payroll_periods(id) ON DELETE CASCADE,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            basic_salary REAL NOT NULL DEFAULT 0,
+            gross_earnings REAL NOT NULL DEFAULT 0,
+            overtime_hours REAL DEFAULT 0,
+            overtime_amount REAL DEFAULT 0,
+            working_days INTEGER DEFAULT 0,
+            present_days REAL DEFAULT 0,
+            paid_leave_days REAL DEFAULT 0,
+            unpaid_leave_days REAL DEFAULT 0,
+            unpaid_leave_deduction REAL DEFAULT 0,
+            advance_deduction REAL DEFAULT 0,
+            other_deductions REAL DEFAULT 0,
+            total_deductions REAL DEFAULT 0,
+            net_salary REAL NOT NULL DEFAULT 0,
+            status TEXT DEFAULT 'DRAFT',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE(payroll_period_id, staff_id)
+          );
+
+          -- 7. Payroll Line Items Table
+          CREATE TABLE IF NOT EXISTS payroll_line_items (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            payroll_record_id INTEGER NOT NULL REFERENCES payroll_records(id) ON DELETE CASCADE,
+            component_code TEXT NOT NULL,
+            component_name TEXT NOT NULL,
+            type TEXT NOT NULL,
+            amount REAL NOT NULL,
+            calculation_source TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- Seed Default Salary Components
+          INSERT OR IGNORE INTO salary_components (code, name, type, calculation_method, default_value) VALUES
+            ('BASIC', 'Basic Salary', 'EARNING', 'FIXED', 0),
+            ('HRA', 'House Rent Allowance', 'EARNING', 'PERCENTAGE_OF_BASIC', 20),
+            ('TRANSPORT', 'Transport Allowance', 'EARNING', 'FIXED', 1000),
+            ('SPECIAL', 'Special Allowance', 'EARNING', 'FIXED', 0),
+            ('OVERTIME', 'Approved Overtime Pay', 'EARNING', 'PER_HOUR', 0),
+            ('UNPAID_LEAVE', 'Unpaid Leave Deduction', 'DEDUCTION', 'PER_DAY', 0),
+            ('ADVANCE', 'Salary Advance Recovery', 'DEDUCTION', 'FIXED', 0),
+            ('OTHER_DEDUCTION', 'Other Manual Deduction', 'DEDUCTION', 'FIXED', 0);
+
+          -- Seed Payroll Permissions
+          INSERT OR IGNORE INTO permissions (code, module, description) VALUES
+            ('payroll.view', 'Payroll', 'View payroll dashboard, periods, records and payslips'),
+            ('payroll.create', 'Payroll', 'Create new monthly payroll periods'),
+            ('payroll.calculate', 'Payroll', 'Run deterministic payroll calculations'),
+            ('payroll.update', 'Payroll', 'Edit draft payroll records'),
+            ('payroll.approve', 'Payroll', 'Approve calculated payroll periods'),
+            ('payroll.lock', 'Payroll', 'Lock finalized payroll periods'),
+            ('payroll.reopen', 'Payroll', 'Reopen locked payroll periods (Owner only)'),
+            ('payroll.export', 'Payroll', 'Export payroll summaries and bank transfer sheets'),
+            ('payroll.print', 'Payroll', 'Print employee payslips'),
+            ('payroll.manage_salary', 'Payroll', 'Create and revise staff salary structures'),
+            ('payroll.manage_advances', 'Payroll', 'Issue and manage salary advances');
+
+          -- Map Payroll Permissions to System Roles
+          -- 1. Owner (Role 1)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 1, id FROM permissions WHERE module = 'Payroll';
+
+          -- 2. Manager (Role 2)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 2, id FROM permissions WHERE module = 'Payroll' AND code != 'payroll.reopen';
+
+          -- 6. HR Staff (Role 6)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 6, id FROM permissions WHERE module = 'Payroll' AND code NOT IN ('payroll.approve', 'payroll.lock', 'payroll.reopen');
+        `);
+      }
     }
   ];
 

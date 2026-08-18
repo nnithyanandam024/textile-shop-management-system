@@ -126,6 +126,26 @@ export interface ElectronAPI {
     createHoliday: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
     deleteHoliday: (id: number) => Promise<{ success: boolean; error?: string }>;
   };
+  payroll: {
+    getPeriods: () => Promise<any[]>;
+    getPeriodById: (id: number) => Promise<any>;
+    createPeriod: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    calculatePeriod: (periodId: number) => Promise<{ success: boolean; recordCount?: number; error?: string }>;
+    approvePeriod: (periodId: number) => Promise<{ success: boolean; error?: string }>;
+    lockPeriod: (periodId: number) => Promise<{ success: boolean; error?: string }>;
+    getRecords: (periodId: number) => Promise<any[]>;
+    getRecordById: (recordId: number) => Promise<any>;
+    getStaffHistory: (staffId: number) => Promise<any[]>;
+  };
+  salary: {
+    getStructure: (staffId: number, dateStr?: string) => Promise<any>;
+    assignStructure: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    getHistory: (staffId: number) => Promise<any[]>;
+  };
+  advance: {
+    getAll: (filters?: any) => Promise<any[]>;
+    issue: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+  };
   products: {
     getAll: () => Promise<any[]>;
     create: (product: any) => Promise<{ success: boolean; id?: number; error?: string }>;
@@ -329,6 +349,26 @@ const api: ElectronAPI = {
     getHolidays: (includeInactive) => ipcRenderer.invoke('leave:get-holidays', includeInactive),
     createHoliday: (input) => ipcRenderer.invoke('leave:create-holiday', input),
     deleteHoliday: (id) => ipcRenderer.invoke('leave:delete-holiday', id),
+  },
+  payroll: {
+    getPeriods: () => ipcRenderer.invoke('payroll:get-periods'),
+    getPeriodById: (id) => ipcRenderer.invoke('payroll:get-period-by-id', id),
+    createPeriod: (input) => ipcRenderer.invoke('payroll:create-period', input),
+    calculatePeriod: (periodId) => ipcRenderer.invoke('payroll:calculate-period', periodId),
+    approvePeriod: (periodId) => ipcRenderer.invoke('payroll:approve-period', periodId),
+    lockPeriod: (periodId) => ipcRenderer.invoke('payroll:lock-period', periodId),
+    getRecords: (periodId) => ipcRenderer.invoke('payroll:get-records', periodId),
+    getRecordById: (recordId) => ipcRenderer.invoke('payroll:get-record-by-id', recordId),
+    getStaffHistory: (staffId) => ipcRenderer.invoke('payroll:get-staff-history', staffId),
+  },
+  salary: {
+    getStructure: (staffId, dateStr) => ipcRenderer.invoke('salary:get-structure', { staffId, dateStr }),
+    assignStructure: (input) => ipcRenderer.invoke('salary:assign-structure', input),
+    getHistory: (staffId) => ipcRenderer.invoke('salary:get-history', staffId),
+  },
+  advance: {
+    getAll: (filters) => ipcRenderer.invoke('advance:get-all', filters),
+    issue: (input) => ipcRenderer.invoke('advance:issue', input),
   },
   products: {
     getAll: () => ipcRenderer.invoke('products:get-all'),

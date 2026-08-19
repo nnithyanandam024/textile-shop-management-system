@@ -176,6 +176,16 @@ export interface ElectronAPI {
     getExpiring: (thresholdDays?: number) => Promise<any[]>;
     getCompliance: (staffId: number) => Promise<{ totalRequired: number; completedCount: number; complianceScore: number; missingCategories: string[] }>;
   };
+  communication: {
+    getMyNotifications: (filters?: any) => Promise<any[]>;
+    getUnreadCount: () => Promise<number>;
+    markRead: (id: number) => Promise<{ success: boolean }>;
+    markAllRead: () => Promise<{ success: boolean }>;
+    getAnnouncements: () => Promise<any[]>;
+    createAnnouncement: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    getMyMessages: () => Promise<any[]>;
+    sendMessage: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+  };
   products: {
     getAll: () => Promise<any[]>;
     create: (product: any) => Promise<{ success: boolean; id?: number; error?: string }>;
@@ -429,6 +439,16 @@ const api: ElectronAPI = {
     replace: (input) => ipcRenderer.invoke('documents:replace', input),
     getExpiring: (thresholdDays) => ipcRenderer.invoke('documents:get-expiring', thresholdDays),
     getCompliance: (staffId) => ipcRenderer.invoke('documents:get-compliance', staffId),
+  },
+  communication: {
+    getMyNotifications: (filters) => ipcRenderer.invoke('notifications:get-my', filters),
+    getUnreadCount: () => ipcRenderer.invoke('notifications:get-unread-count'),
+    markRead: (id) => ipcRenderer.invoke('notifications:mark-read', id),
+    markAllRead: () => ipcRenderer.invoke('notifications:mark-all-read'),
+    getAnnouncements: () => ipcRenderer.invoke('announcements:get-all'),
+    createAnnouncement: (input) => ipcRenderer.invoke('announcements:create', input),
+    getMyMessages: () => ipcRenderer.invoke('messages:get-my'),
+    sendMessage: (input) => ipcRenderer.invoke('messages:send', input),
   },
   products: {
     getAll: () => ipcRenderer.invoke('products:get-all'),

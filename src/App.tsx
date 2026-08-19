@@ -34,6 +34,7 @@ import { LeaveListPage } from './features/leave/LeaveListPage';
 import { PayrollPage } from './features/payroll/PayrollPage';
 import { PerformancePage } from './features/performance/PerformancePage';
 import { DocumentsPage } from './features/documents/DocumentsPage';
+import { CommunicationPage } from './features/communication/CommunicationPage';
 
 const MainAppRouter: React.FC = () => {
   const { currentUser, isLoading, isLocked, setupRequired } = useAuth();
@@ -82,6 +83,7 @@ const MainAppRouter: React.FC = () => {
           <Route path="/staff/payroll" element={<ProtectedRoute permission="payroll.view"><PayrollPage /></ProtectedRoute>} />
           <Route path="/staff/performance" element={<ProtectedRoute permission="performance.view"><PerformancePage /></ProtectedRoute>} />
           <Route path="/staff/documents" element={<ProtectedRoute permission="documents.view"><DocumentsPage /></ProtectedRoute>} />
+          <Route path="/staff/communication" element={<ProtectedRoute permission="communication.view"><CommunicationPage /></ProtectedRoute>} />
           <Route path="/roles" element={<ProtectedRoute permission="role.view"><RoleListPage /></ProtectedRoute>} />
           <Route path="/users" element={<ProtectedRoute permission="users.view"><UsersPage /></ProtectedRoute>} />
           <Route path="/backup" element={<ProtectedRoute permission="backup.create"><BackupPage /></ProtectedRoute>} />

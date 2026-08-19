@@ -1610,6 +1610,124 @@ function runMigrations(db: Database.Database) {
           SELECT 6, id FROM permissions WHERE module = 'Documents';
         `);
       }
+    },
+    {
+      version: 12,
+      name: 'staff_module_communication_system',
+      up: (database: Database.Database) => {
+        database.exec(`
+          -- 1. Notifications Table
+          CREATE TABLE IF NOT EXISTS notifications (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            recipient_user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+            recipient_staff_id INTEGER REFERENCES staff(id) ON DELETE CASCADE,
+            type TEXT NOT NULL,
+            title TEXT NOT NULL,
+            message TEXT NOT NULL,
+            priority TEXT DEFAULT 'NORMAL',
+            reference_type TEXT,
+            reference_id INTEGER,
+            is_read INTEGER DEFAULT 0,
+            read_at DATETIME,
+            expires_at DATETIME,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 2. Announcements Table
+          CREATE TABLE IF NOT EXISTS announcements (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            content TEXT NOT NULL,
+            priority TEXT DEFAULT 'NORMAL',
+            target_type TEXT DEFAULT 'ALL_STAFF',
+            target_id INTEGER,
+            start_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            expires_at DATETIME,
+            status TEXT DEFAULT 'PUBLISHED',
+            created_by INTEGER REFERENCES users(id),
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 3. Staff Messages Table
+          CREATE TABLE IF NOT EXISTS staff_messages (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            sender_user_id INTEGER NOT NULL REFERENCES users(id),
+            recipient_user_id INTEGER REFERENCES users(id),
+            recipient_staff_id INTEGER REFERENCES staff(id),
+            subject TEXT NOT NULL,
+            message TEXT NOT NULL,
+            priority TEXT DEFAULT 'NORMAL',
+            is_read INTEGER DEFAULT 0,
+            read_at DATETIME,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 4. Notification Preferences Table
+          CREATE TABLE IF NOT EXISTS notification_preferences (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+            notification_type TEXT NOT NULL,
+            in_app_enabled INTEGER DEFAULT 1,
+            desktop_enabled INTEGER DEFAULT 1,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE(user_id, notification_type)
+          );
+
+          -- 5. Scheduled Messages Table
+          CREATE TABLE IF NOT EXISTS scheduled_messages (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            content TEXT NOT NULL,
+            target_type TEXT DEFAULT 'ALL_STAFF',
+            target_id INTEGER,
+            scheduled_at DATETIME NOT NULL,
+            status TEXT DEFAULT 'SCHEDULED',
+            created_by INTEGER REFERENCES users(id),
+            published_at DATETIME,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 6. Communication Audit Logs Table
+          CREATE TABLE IF NOT EXISTS communication_audit_logs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER REFERENCES users(id),
+            action TEXT NOT NULL,
+            entity_type TEXT NOT NULL,
+            entity_id INTEGER,
+            details TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- Seed Communication Permissions
+          INSERT OR IGNORE INTO permissions (code, module, description) VALUES
+            ('communication.view', 'Communication', 'View notification center, announcements & message inbox'),
+            ('communication.send', 'Communication', 'Send direct messages to employees'),
+            ('communication.send_announcement', 'Communication', 'Publish company-wide or department announcements'),
+            ('communication.schedule', 'Communication', 'Schedule future communications & meeting alerts'),
+            ('communication.manage', 'Communication', 'Manage communication system policies & preferences'),
+            ('communication.view_history', 'Communication', 'View notification delivery logs & history'),
+            ('communication.export', 'Communication', 'Export communication analytics & delivery reports');
+
+          -- Map Communication Permissions to System Roles
+          -- 1. Owner (Role 1)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 1, id FROM permissions WHERE module = 'Communication';
+
+          -- 2. Manager (Role 2)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 2, id FROM permissions WHERE module = 'Communication';
+
+          -- 3. Cashier (Role 3)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 3, id FROM permissions WHERE code IN ('communication.view', 'communication.send');
+
+          -- 6. HR Staff (Role 6)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 6, id FROM permissions WHERE module = 'Communication';
+        `);
+      }
     }
   ];
 

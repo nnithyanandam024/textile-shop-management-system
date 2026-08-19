@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Search, Bell, History, Lock, LogOut, KeyRound, ChevronDown } from 'lucide-react';
+import { Search, History, Lock, LogOut, KeyRound, ChevronDown } from 'lucide-react';
 import { useAuth } from '../../features/auth/AuthContext';
 import { ChangePasswordModal } from '../../features/auth/ChangePasswordModal';
+import { NotificationBell } from './NotificationBell';
 
 export const Header: React.FC = () => {
   const { currentUser, lockScreen, logout } = useAuth();
@@ -33,13 +34,7 @@ export const Header: React.FC = () => {
         </button>
 
         {/* Notifications Bell */}
-        <button
-          className="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-xl transition-all border border-transparent hover:border-slate-200 relative"
-          title="Notifications"
-        >
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#2818cf] rounded-full ring-2 ring-white" />
-        </button>
+        <NotificationBell />
 
         {/* Vertical Divider */}
         <div className="h-6 w-px bg-slate-200 mx-1" />

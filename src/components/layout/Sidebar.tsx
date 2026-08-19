@@ -24,6 +24,7 @@ import {
   DollarSign,
   Award,
   FileText,
+  Bell,
 } from 'lucide-react';
 import { useAuth } from '../../features/auth/AuthContext';
 
@@ -57,6 +58,7 @@ const staffNavItems: NavItem[] = [
   { name: 'Payroll', path: '/staff/payroll', icon: DollarSign, permission: 'payroll.view' },
   { name: 'Performance', path: '/staff/performance', icon: Award, permission: 'performance.view' },
   { name: 'Documents', path: '/staff/documents', icon: FileText, permission: 'documents.view' },
+  { name: 'Communication', path: '/staff/communication', icon: Bell, permission: 'communication.view' },
   { name: 'Roles & Access', path: '/roles', icon: ShieldCheck, permission: 'role.view' },
 ];
 

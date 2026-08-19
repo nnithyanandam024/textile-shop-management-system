@@ -5,6 +5,7 @@ export interface AuthUserSession {
   roleId: number;
   roleName: string;
   permissions: string[];
+  staffId?: number;
 }
 
 export class SessionService {

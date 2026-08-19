@@ -1471,6 +1471,145 @@ function runMigrations(db: Database.Database) {
           SELECT 6, id FROM permissions WHERE module = 'Performance';
         `);
       }
+    },
+    {
+      version: 11,
+      name: 'staff_module_document_system',
+      up: (database: Database.Database) => {
+        database.exec(`
+          -- 1. Document Categories Table
+          CREATE TABLE IF NOT EXISTS document_categories (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            code TEXT NOT NULL UNIQUE,
+            description TEXT,
+            requires_expiry INTEGER DEFAULT 0,
+            requires_verification INTEGER DEFAULT 1,
+            allowed_file_types TEXT DEFAULT 'PDF,JPG,JPEG,PNG,WEBP',
+            max_file_size_mb REAL DEFAULT 10,
+            status TEXT DEFAULT 'ACTIVE',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 2. Staff Documents Table
+          CREATE TABLE IF NOT EXISTS staff_documents (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            category_id INTEGER REFERENCES document_categories(id),
+            document_name TEXT,
+            document_number TEXT,
+            issue_date TEXT,
+            expiry_date TEXT,
+            file_path TEXT NOT NULL,
+            file_name TEXT NOT NULL,
+            file_size INTEGER NOT NULL,
+            mime_type TEXT NOT NULL,
+            version INTEGER DEFAULT 1,
+            status TEXT DEFAULT 'ACTIVE',
+            verification_status TEXT DEFAULT 'PENDING',
+            uploaded_by INTEGER,
+            verified_by INTEGER,
+            verified_at DATETIME,
+            rejection_reason TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+        `);
+
+        // Check and alter existing staff_documents table from Migration v4
+        const cols = database.prepare("PRAGMA table_info(staff_documents)").all() as Array<{ name: string }>;
+        const colNames = cols.map((c) => c.name);
+
+        if (!colNames.includes('category_id')) database.exec("ALTER TABLE staff_documents ADD COLUMN category_id INTEGER REFERENCES document_categories(id);");
+        if (!colNames.includes('document_name')) database.exec("ALTER TABLE staff_documents ADD COLUMN document_name TEXT;");
+        if (!colNames.includes('document_number')) database.exec("ALTER TABLE staff_documents ADD COLUMN document_number TEXT;");
+        if (!colNames.includes('issue_date')) database.exec("ALTER TABLE staff_documents ADD COLUMN issue_date TEXT;");
+        if (!colNames.includes('expiry_date')) database.exec("ALTER TABLE staff_documents ADD COLUMN expiry_date TEXT;");
+        if (!colNames.includes('version')) database.exec("ALTER TABLE staff_documents ADD COLUMN version INTEGER DEFAULT 1;");
+        if (!colNames.includes('status')) database.exec("ALTER TABLE staff_documents ADD COLUMN status TEXT DEFAULT 'ACTIVE';");
+        if (!colNames.includes('rejection_reason')) database.exec("ALTER TABLE staff_documents ADD COLUMN rejection_reason TEXT;");
+
+        database.exec(`
+
+          -- 3. Staff Document Versions Table
+          CREATE TABLE IF NOT EXISTS staff_document_versions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_document_id INTEGER NOT NULL REFERENCES staff_documents(id) ON DELETE CASCADE,
+            version INTEGER NOT NULL,
+            file_path TEXT NOT NULL,
+            file_name TEXT NOT NULL,
+            file_size INTEGER NOT NULL,
+            uploaded_by INTEGER,
+            upload_reason TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 4. Required Staff Documents Table
+          CREATE TABLE IF NOT EXISTS required_staff_documents (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            category_id INTEGER NOT NULL REFERENCES document_categories(id),
+            department_id INTEGER REFERENCES departments(id),
+            designation_id INTEGER REFERENCES designations(id),
+            is_required INTEGER DEFAULT 1,
+            status TEXT DEFAULT 'ACTIVE',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 5. Document Access Logs Table
+          CREATE TABLE IF NOT EXISTS document_access_logs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            document_id INTEGER NOT NULL REFERENCES staff_documents(id) ON DELETE CASCADE,
+            user_id INTEGER,
+            action TEXT NOT NULL,
+            device_info TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- Seed Default Document Categories
+          INSERT OR IGNORE INTO document_categories (code, name, description, requires_expiry, requires_verification) VALUES
+            ('GOVT_ID', 'Government Issued ID', 'National ID, Aadhaar, Passport, or Voter ID', 1, 1),
+            ('ADDRESS_PROOF', 'Address Proof', 'Utility bill, rental agreement, or ration card', 0, 1),
+            ('CONTRACT', 'Employment Contract', 'Signed employee agreement & offer letter', 1, 1),
+            ('EDUCATION', 'Education Certificate', 'Degree diploma or skill certificate', 0, 1),
+            ('BANK_PROOF', 'Bank Account Proof', 'Passbook copy or cancelled cheque', 0, 1),
+            ('OTHER', 'Other Document', 'Reference or miscellaneous compliance document', 0, 1);
+
+          -- Seed Default Required Documents (for onboarding compliance)
+          INSERT OR IGNORE INTO required_staff_documents (category_id, is_required)
+          SELECT id, 1 FROM document_categories WHERE code IN ('GOVT_ID', 'ADDRESS_PROOF', 'CONTRACT', 'BANK_PROOF');
+
+          -- Seed Document Permissions
+          INSERT OR IGNORE INTO permissions (code, module, description) VALUES
+            ('documents.view', 'Documents', 'View document dashboard, staff documents and compliance status'),
+            ('documents.upload', 'Documents', 'Upload new employee compliance documents'),
+            ('documents.download', 'Documents', 'Download and view original document files'),
+            ('documents.verify', 'Documents', 'Verify uploaded staff compliance documents'),
+            ('documents.reject', 'Documents', 'Reject invalid staff documents with mandatory reason'),
+            ('documents.replace', 'Documents', 'Upload new document versions to replace existing ones'),
+            ('documents.archive', 'Documents', 'Archive or soft delete staff documents'),
+            ('documents.manage_categories', 'Documents', 'Configure document category policies & file limits'),
+            ('documents.manage_requirements', 'Documents', 'Define mandatory onboarding documents per department'),
+            ('documents.view_reports', 'Documents', 'View document compliance analytics & expiry reports');
+
+          -- Map Document Permissions to System Roles
+          -- 1. Owner (Role 1)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 1, id FROM permissions WHERE module = 'Documents';
+
+          -- 2. Manager (Role 2)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 2, id FROM permissions WHERE module = 'Documents';
+
+          -- 3. Cashier (Role 3)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 3, id FROM permissions WHERE code IN ('documents.view', 'documents.upload');
+
+          -- 6. HR Staff (Role 6)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 6, id FROM permissions WHERE module = 'Documents';
+        `);
+      }
     }
   ];
 

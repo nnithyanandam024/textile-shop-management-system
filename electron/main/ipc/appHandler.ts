@@ -36,6 +36,7 @@ import { registerShiftHandlers } from './shiftHandler';
 import { registerLeaveHandlers } from './leaveHandler';
 import { registerPayrollHandlers } from './payrollHandler';
 import { registerPerformanceHandlers } from './performanceHandler';
+import { registerDocumentHandlers } from './documentHandler';
 import log from '../logger';
 
 export function registerIpcHandlers() {
@@ -46,6 +47,7 @@ export function registerIpcHandlers() {
   registerLeaveHandlers(db);
   registerPayrollHandlers(db);
   registerPerformanceHandlers(db);
+  registerDocumentHandlers(db);
 
   // App Info
   ipcMain.handle('app:get-version', () => app.getVersion() || '0.1.0');

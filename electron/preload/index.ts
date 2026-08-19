@@ -164,6 +164,18 @@ export interface ElectronAPI {
     approveAppraisal: (appraisalId: number) => Promise<{ success: boolean; error?: string }>;
     getHistory: (staffId: number) => Promise<any[]>;
   };
+  documents: {
+    getCategories: () => Promise<any[]>;
+    getAll: (filters?: any) => Promise<any[]>;
+    getById: (id: number) => Promise<any>;
+    upload: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    readBase64: (documentId: number) => Promise<{ success: boolean; base64?: string; mimeType?: string; error?: string }>;
+    verify: (documentId: number) => Promise<{ success: boolean; error?: string }>;
+    reject: (input: { documentId: number; reason: string }) => Promise<{ success: boolean; error?: string }>;
+    replace: (input: { documentId: number; fileName: string; buffer: Buffer; reason?: string }) => Promise<{ success: boolean; error?: string }>;
+    getExpiring: (thresholdDays?: number) => Promise<any[]>;
+    getCompliance: (staffId: number) => Promise<{ totalRequired: number; completedCount: number; complianceScore: number; missingCategories: string[] }>;
+  };
   products: {
     getAll: () => Promise<any[]>;
     create: (product: any) => Promise<{ success: boolean; id?: number; error?: string }>;
@@ -405,6 +417,18 @@ const api: ElectronAPI = {
     submitAppraisal: (input) => ipcRenderer.invoke('performance:submit-appraisal', input),
     approveAppraisal: (appraisalId) => ipcRenderer.invoke('performance:approve-appraisal', appraisalId),
     getHistory: (staffId) => ipcRenderer.invoke('performance:get-history', staffId),
+  },
+  documents: {
+    getCategories: () => ipcRenderer.invoke('documents:get-categories'),
+    getAll: (filters) => ipcRenderer.invoke('documents:get-all', filters),
+    getById: (id) => ipcRenderer.invoke('documents:get-by-id', id),
+    upload: (input) => ipcRenderer.invoke('documents:upload', input),
+    readBase64: (documentId) => ipcRenderer.invoke('documents:read-base64', documentId),
+    verify: (documentId) => ipcRenderer.invoke('documents:verify', documentId),
+    reject: (input) => ipcRenderer.invoke('documents:reject', input),
+    replace: (input) => ipcRenderer.invoke('documents:replace', input),
+    getExpiring: (thresholdDays) => ipcRenderer.invoke('documents:get-expiring', thresholdDays),
+    getCompliance: (staffId) => ipcRenderer.invoke('documents:get-compliance', staffId),
   },
   products: {
     getAll: () => ipcRenderer.invoke('products:get-all'),

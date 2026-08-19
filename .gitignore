@@ -16,6 +16,7 @@ build
 *.db-wal
 *.sqlite
 Backups/
+temp_storage/
 
 # Environment files
 .env

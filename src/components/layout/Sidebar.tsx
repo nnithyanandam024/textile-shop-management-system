@@ -25,6 +25,8 @@ import {
   Award,
   FileText,
   Bell,
+  Home,
+  User,
 } from 'lucide-react';
 import { useAuth } from '../../features/auth/AuthContext';
 
@@ -46,6 +48,18 @@ const mainNavItems: NavItem[] = [
   { name: 'Purchases', path: '/purchases', icon: Building2, permission: 'purchases.view' },
   { name: 'Returns', path: '/returns', icon: RotateCcw, permission: 'returns.create' },
   { name: 'Reports', path: '/reports', icon: BarChart3, permission: 'reports.view' },
+];
+
+const selfServiceNavItems: NavItem[] = [
+  { name: 'My Workspace', path: '/self-service/dashboard', icon: Home, permission: 'self.profile.view' },
+  { name: 'My Profile', path: '/self-service/profile', icon: User, permission: 'self.profile.view' },
+  { name: 'My Attendance', path: '/self-service/attendance', icon: CalendarCheck, permission: 'self.attendance.view' },
+  { name: 'My Shifts', path: '/self-service/shifts', icon: Clock, permission: 'self.shift.view' },
+  { name: 'My Leave', path: '/self-service/leave', icon: Calendar, permission: 'self.leave.view' },
+  { name: 'My Payroll', path: '/self-service/payroll', icon: DollarSign, permission: 'self.payroll.view' },
+  { name: 'My Documents', path: '/self-service/documents', icon: FileText, permission: 'self.documents.view' },
+  { name: 'My Performance', path: '/self-service/performance', icon: Award, permission: 'self.performance.view' },
+  { name: 'My Settings', path: '/self-service/settings', icon: Settings, permission: 'self.settings.manage' },
 ];
 
 const staffNavItems: NavItem[] = [
@@ -75,6 +89,7 @@ export const Sidebar: React.FC = () => {
     items.filter((item) => !item.permission || hasPermission(item.permission));
 
   const filteredMain = filterItems(mainNavItems);
+  const filteredSelfService = filterItems(selfServiceNavItems);
   const filteredStaff = filterItems(staffNavItems);
   const filteredSystem = filterItems(systemNavItems);
 
@@ -95,6 +110,30 @@ export const Sidebar: React.FC = () => {
 
       {/* Navigation Links */}
       <nav className="flex-1 overflow-y-auto p-4 space-y-1.5 custom-scrollbar">
+        {filteredSelfService.length > 0 && (
+          <>
+            <div className="pb-1 px-3.5">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">My Workspace</p>
+            </div>
+            {filteredSelfService.map((item) => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+                    isActive
+                      ? 'bg-indigo-50/80 text-[#2818cf] shadow-sm border border-indigo-100/80'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  }`
+                }
+              >
+                <item.icon className="w-4 h-4 shrink-0" />
+                <span className="truncate">{item.name}</span>
+              </NavLink>
+            ))}
+          </>
+        )}
+
         {filteredMain.map((item) => (
           <NavLink
             key={item.path}

@@ -1728,6 +1728,80 @@ function runMigrations(db: Database.Database) {
           SELECT 6, id FROM permissions WHERE module = 'Communication';
         `);
       }
+    },
+    {
+      version: 13,
+      name: 'staff_module_self_service_portal',
+      up: (database: Database.Database) => {
+        database.exec(`
+          -- 1. Profile Change Requests Table
+          CREATE TABLE IF NOT EXISTS staff_profile_change_requests (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            field_name TEXT NOT NULL,
+            old_value TEXT,
+            new_value TEXT NOT NULL,
+            reason TEXT NOT NULL,
+            status TEXT DEFAULT 'PENDING',
+            reviewed_by INTEGER REFERENCES users(id),
+            reviewed_at DATETIME,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 2. Attendance Correction Requests Table
+          CREATE TABLE IF NOT EXISTS attendance_correction_requests (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            attendance_id INTEGER REFERENCES attendance(id) ON DELETE SET NULL,
+            date TEXT NOT NULL,
+            requested_check_in TEXT,
+            requested_check_out TEXT,
+            reason TEXT NOT NULL,
+            status TEXT DEFAULT 'PENDING',
+            reviewed_by INTEGER REFERENCES users(id),
+            reviewed_at DATETIME,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- Seed Self-Service Permissions
+          INSERT OR IGNORE INTO permissions (code, module, description) VALUES
+            ('self.profile.view', 'SelfService', 'View personal employee profile'),
+            ('self.profile.edit', 'SelfService', 'Edit allowed personal contact details'),
+            ('self.profile.request_change', 'SelfService', 'Request change to protected employment profile fields'),
+            ('self.attendance.view', 'SelfService', 'View personal attendance history and calendar'),
+            ('self.attendance.request_correction', 'SelfService', 'Submit attendance check-in/out correction request'),
+            ('self.shift.view', 'SelfService', 'View personal shift schedules and work hours'),
+            ('self.leave.view', 'SelfService', 'View personal leave balances and request history'),
+            ('self.leave.apply', 'SelfService', 'Submit new leave request'),
+            ('self.leave.cancel', 'SelfService', 'Cancel pending personal leave request'),
+            ('self.payroll.view', 'SelfService', 'View personal salary history and download payslips'),
+            ('self.documents.view', 'SelfService', 'View personal compliance documents and status'),
+            ('self.documents.upload', 'SelfService', 'Upload missing or replacement compliance documents'),
+            ('self.performance.view', 'SelfService', 'View personal performance scorecards and targets'),
+            ('self.performance.self_review', 'SelfService', 'Submit personal self-review evaluation'),
+            ('self.notifications.view', 'SelfService', 'View personal notifications feed'),
+            ('self.messages.view', 'SelfService', 'View direct messages inbox'),
+            ('self.messages.send', 'SelfService', 'Send direct message to manager or HR'),
+            ('self.settings.manage', 'SelfService', 'Manage personal account password and alert preferences');
+
+          -- Map Self-Service Permissions to System Roles
+          -- 1. Owner (Role 1)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 1, id FROM permissions WHERE module = 'SelfService';
+
+          -- 2. Manager (Role 2)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 2, id FROM permissions WHERE module = 'SelfService';
+
+          -- 3. Cashier (Role 3)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 3, id FROM permissions WHERE module = 'SelfService';
+
+          -- 6. HR Staff (Role 6)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 6, id FROM permissions WHERE module = 'SelfService';
+        `);
+      }
     }
   ];
 

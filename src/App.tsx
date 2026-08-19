@@ -35,6 +35,15 @@ import { PayrollPage } from './features/payroll/PayrollPage';
 import { PerformancePage } from './features/performance/PerformancePage';
 import { DocumentsPage } from './features/documents/DocumentsPage';
 import { CommunicationPage } from './features/communication/CommunicationPage';
+import { StaffDashboardPage } from './features/staff-self-service/pages/StaffDashboardPage';
+import { MyProfilePage } from './features/staff-self-service/pages/MyProfilePage';
+import { MyAttendancePage } from './features/staff-self-service/pages/MyAttendancePage';
+import { MyShiftsPage } from './features/staff-self-service/pages/MyShiftsPage';
+import { MyLeavePage } from './features/staff-self-service/pages/MyLeavePage';
+import { MyPayrollPage } from './features/staff-self-service/pages/MyPayrollPage';
+import { MyDocumentsPage } from './features/staff-self-service/pages/MyDocumentsPage';
+import { MyPerformancePage } from './features/staff-self-service/pages/MyPerformancePage';
+import { MySettingsPage } from './features/staff-self-service/pages/MySettingsPage';
 
 const MainAppRouter: React.FC = () => {
   const { currentUser, isLoading, isLocked, setupRequired } = useAuth();
@@ -73,6 +82,19 @@ const MainAppRouter: React.FC = () => {
           <Route path="/purchases" element={<ProtectedRoute permission="purchases.view"><PurchasesPage /></ProtectedRoute>} />
           <Route path="/returns" element={<ProtectedRoute permission="returns.create"><ReturnsPage /></ProtectedRoute>} />
           <Route path="/reports" element={<ProtectedRoute permission="reports.view"><ReportsPage /></ProtectedRoute>} />
+
+          {/* Self-Service Portal Routes */}
+          <Route path="/self-service/dashboard" element={<ProtectedRoute permission="self.profile.view"><StaffDashboardPage /></ProtectedRoute>} />
+          <Route path="/self-service/profile" element={<ProtectedRoute permission="self.profile.view"><MyProfilePage /></ProtectedRoute>} />
+          <Route path="/self-service/attendance" element={<ProtectedRoute permission="self.attendance.view"><MyAttendancePage /></ProtectedRoute>} />
+          <Route path="/self-service/shifts" element={<ProtectedRoute permission="self.shift.view"><MyShiftsPage /></ProtectedRoute>} />
+          <Route path="/self-service/leave" element={<ProtectedRoute permission="self.leave.view"><MyLeavePage /></ProtectedRoute>} />
+          <Route path="/self-service/payroll" element={<ProtectedRoute permission="self.payroll.view"><MyPayrollPage /></ProtectedRoute>} />
+          <Route path="/self-service/documents" element={<ProtectedRoute permission="self.documents.view"><MyDocumentsPage /></ProtectedRoute>} />
+          <Route path="/self-service/performance" element={<ProtectedRoute permission="self.performance.view"><MyPerformancePage /></ProtectedRoute>} />
+          <Route path="/self-service/notifications" element={<ProtectedRoute permission="self.notifications.view"><CommunicationPage /></ProtectedRoute>} />
+          <Route path="/self-service/settings" element={<ProtectedRoute permission="self.settings.manage"><MySettingsPage /></ProtectedRoute>} />
+
           <Route path="/staff" element={<ProtectedRoute permission="staff.view"><StaffListPage /></ProtectedRoute>} />
           <Route path="/staff/profile/:id" element={<ProtectedRoute permission="staff.view"><StaffProfilePage /></ProtectedRoute>} />
           <Route path="/staff/departments" element={<ProtectedRoute permission="staff.organization"><DepartmentListPage /></ProtectedRoute>} />

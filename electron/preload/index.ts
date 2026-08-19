@@ -186,6 +186,21 @@ export interface ElectronAPI {
     getMyMessages: () => Promise<any[]>;
     sendMessage: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
   };
+  selfService: {
+    getDashboard: () => Promise<any>;
+    getProfile: () => Promise<any>;
+    updateProfile: (fields: any) => Promise<{ success: boolean; error?: string }>;
+    requestProfileChange: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    getProfileChangeRequests: () => Promise<any[]>;
+    getAttendance: (month?: string, year?: number) => Promise<any[]>;
+    requestAttendanceCorrection: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    getLeave: () => Promise<{ balances: any[]; requests: any[] }>;
+    applyLeave: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    cancelLeave: (leaveRequestId: number) => Promise<{ success: boolean; error?: string }>;
+    getPayroll: () => Promise<any[]>;
+    getDocuments: () => Promise<{ documents: any[]; compliance: any }>;
+    getPerformance: () => Promise<{ scorecards: any[]; goals: any[] }>;
+  };
   products: {
     getAll: () => Promise<any[]>;
     create: (product: any) => Promise<{ success: boolean; id?: number; error?: string }>;
@@ -449,6 +464,21 @@ const api: ElectronAPI = {
     createAnnouncement: (input) => ipcRenderer.invoke('announcements:create', input),
     getMyMessages: () => ipcRenderer.invoke('messages:get-my'),
     sendMessage: (input) => ipcRenderer.invoke('messages:send', input),
+  },
+  selfService: {
+    getDashboard: () => ipcRenderer.invoke('self-service:get-dashboard'),
+    getProfile: () => ipcRenderer.invoke('self-service:get-profile'),
+    updateProfile: (fields) => ipcRenderer.invoke('self-service:update-profile', fields),
+    requestProfileChange: (input) => ipcRenderer.invoke('self-service:request-profile-change', input),
+    getProfileChangeRequests: () => ipcRenderer.invoke('self-service:get-profile-change-requests'),
+    getAttendance: (month, year) => ipcRenderer.invoke('self-service:get-attendance', month, year),
+    requestAttendanceCorrection: (input) => ipcRenderer.invoke('self-service:request-attendance-correction', input),
+    getLeave: () => ipcRenderer.invoke('self-service:get-leave'),
+    applyLeave: (input) => ipcRenderer.invoke('self-service:apply-leave', input),
+    cancelLeave: (leaveRequestId) => ipcRenderer.invoke('self-service:cancel-leave', leaveRequestId),
+    getPayroll: () => ipcRenderer.invoke('self-service:get-payroll'),
+    getDocuments: () => ipcRenderer.invoke('self-service:get-documents'),
+    getPerformance: () => ipcRenderer.invoke('self-service:get-performance'),
   },
   products: {
     getAll: () => ipcRenderer.invoke('products:get-all'),

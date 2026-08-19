@@ -146,6 +146,24 @@ export interface ElectronAPI {
     getAll: (filters?: any) => Promise<any[]>;
     issue: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
   };
+  performance: {
+    getCycles: () => Promise<any[]>;
+    createCycle: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    getGoals: (filters?: any) => Promise<any[]>;
+    createGoal: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    updateGoal: (input: { goalId: number; currentValue: number; status?: string }) => Promise<{ success: boolean; error?: string }>;
+    getKPIs: () => Promise<any[]>;
+    createKPI: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    assignKPIs: (input: { staffId: number; cycleId: number; kpis: any[] }) => Promise<{ success: boolean; error?: string }>;
+    getReviews: (filters?: any) => Promise<any[]>;
+    getReviewById: (id: number) => Promise<any>;
+    submitSelfReview: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    submitManagerReview: (input: any) => Promise<{ success: boolean; id?: number; overall_score?: number; rating?: string; error?: string }>;
+    getAppraisals: (filters?: any) => Promise<any[]>;
+    submitAppraisal: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
+    approveAppraisal: (appraisalId: number) => Promise<{ success: boolean; error?: string }>;
+    getHistory: (staffId: number) => Promise<any[]>;
+  };
   products: {
     getAll: () => Promise<any[]>;
     create: (product: any) => Promise<{ success: boolean; id?: number; error?: string }>;
@@ -369,6 +387,24 @@ const api: ElectronAPI = {
   advance: {
     getAll: (filters) => ipcRenderer.invoke('advance:get-all', filters),
     issue: (input) => ipcRenderer.invoke('advance:issue', input),
+  },
+  performance: {
+    getCycles: () => ipcRenderer.invoke('performance:get-cycles'),
+    createCycle: (input) => ipcRenderer.invoke('performance:create-cycle', input),
+    getGoals: (filters) => ipcRenderer.invoke('performance:get-goals', filters),
+    createGoal: (input) => ipcRenderer.invoke('performance:create-goal', input),
+    updateGoal: (input) => ipcRenderer.invoke('performance:update-goal', input),
+    getKPIs: () => ipcRenderer.invoke('performance:get-kpis'),
+    createKPI: (input) => ipcRenderer.invoke('performance:create-kpi', input),
+    assignKPIs: (input) => ipcRenderer.invoke('performance:assign-kpis', input),
+    getReviews: (filters) => ipcRenderer.invoke('performance:get-reviews', filters),
+    getReviewById: (id) => ipcRenderer.invoke('performance:get-review-by-id', id),
+    submitSelfReview: (input) => ipcRenderer.invoke('performance:submit-self-review', input),
+    submitManagerReview: (input) => ipcRenderer.invoke('performance:submit-manager-review', input),
+    getAppraisals: (filters) => ipcRenderer.invoke('performance:get-appraisals', filters),
+    submitAppraisal: (input) => ipcRenderer.invoke('performance:submit-appraisal', input),
+    approveAppraisal: (appraisalId) => ipcRenderer.invoke('performance:approve-appraisal', appraisalId),
+    getHistory: (staffId) => ipcRenderer.invoke('performance:get-history', staffId),
   },
   products: {
     getAll: () => ipcRenderer.invoke('products:get-all'),

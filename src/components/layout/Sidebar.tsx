@@ -22,6 +22,7 @@ import {
   Clock,
   Calendar,
   DollarSign,
+  Award,
 } from 'lucide-react';
 import { useAuth } from '../../features/auth/AuthContext';
 
@@ -53,6 +54,7 @@ const staffNavItems: NavItem[] = [
   { name: 'Shifts', path: '/staff/shifts', icon: Clock, permission: 'shift.view' },
   { name: 'Leave', path: '/staff/leave', icon: Calendar, permission: 'leave.view' },
   { name: 'Payroll', path: '/staff/payroll', icon: DollarSign, permission: 'payroll.view' },
+  { name: 'Performance', path: '/staff/performance', icon: Award, permission: 'performance.view' },
   { name: 'Roles & Access', path: '/roles', icon: ShieldCheck, permission: 'role.view' },
 ];
 

@@ -32,6 +32,7 @@ import { AttendancePage } from './features/attendance/AttendancePage';
 import { ShiftListPage } from './features/shifts/ShiftListPage';
 import { LeaveListPage } from './features/leave/LeaveListPage';
 import { PayrollPage } from './features/payroll/PayrollPage';
+import { PerformancePage } from './features/performance/PerformancePage';
 
 const MainAppRouter: React.FC = () => {
   const { currentUser, isLoading, isLocked, setupRequired } = useAuth();
@@ -78,6 +79,7 @@ const MainAppRouter: React.FC = () => {
           <Route path="/staff/shifts" element={<ProtectedRoute permission="shift.view"><ShiftListPage /></ProtectedRoute>} />
           <Route path="/staff/leave" element={<ProtectedRoute permission="leave.view"><LeaveListPage /></ProtectedRoute>} />
           <Route path="/staff/payroll" element={<ProtectedRoute permission="payroll.view"><PayrollPage /></ProtectedRoute>} />
+          <Route path="/staff/performance" element={<ProtectedRoute permission="performance.view"><PerformancePage /></ProtectedRoute>} />
           <Route path="/roles" element={<ProtectedRoute permission="role.view"><RoleListPage /></ProtectedRoute>} />
           <Route path="/users" element={<ProtectedRoute permission="users.view"><UsersPage /></ProtectedRoute>} />
           <Route path="/backup" element={<ProtectedRoute permission="backup.create"><BackupPage /></ProtectedRoute>} />

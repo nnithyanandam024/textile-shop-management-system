@@ -1272,6 +1272,205 @@ function runMigrations(db: Database.Database) {
           SELECT 6, id FROM permissions WHERE module = 'Payroll' AND code NOT IN ('payroll.approve', 'payroll.lock', 'payroll.reopen');
         `);
       }
+    },
+    {
+      version: 10,
+      name: 'staff_module_performance_system',
+      up: (database: Database.Database) => {
+        database.exec(`
+          -- 1. Appraisal Cycles Table
+          CREATE TABLE IF NOT EXISTS appraisal_cycles (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            type TEXT DEFAULT 'QUARTERLY',
+            start_date TEXT NOT NULL,
+            end_date TEXT NOT NULL,
+            status TEXT DEFAULT 'OPEN',
+            created_by INTEGER,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 2. Performance Goals Table
+          CREATE TABLE IF NOT EXISTS performance_goals (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            cycle_id INTEGER REFERENCES appraisal_cycles(id),
+            title TEXT NOT NULL,
+            description TEXT,
+            category TEXT DEFAULT 'SALES',
+            target_value REAL DEFAULT 100,
+            current_value REAL DEFAULT 0,
+            unit TEXT DEFAULT '₹',
+            weight REAL DEFAULT 20,
+            priority TEXT DEFAULT 'MEDIUM',
+            start_date TEXT,
+            due_date TEXT,
+            status TEXT DEFAULT 'IN_PROGRESS',
+            created_by INTEGER,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 3. Performance KPIs Table
+          CREATE TABLE IF NOT EXISTS performance_kpis (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            code TEXT NOT NULL UNIQUE,
+            name TEXT NOT NULL,
+            description TEXT,
+            category TEXT NOT NULL,
+            measurement_type TEXT DEFAULT 'PERCENTAGE',
+            default_target REAL DEFAULT 100,
+            unit TEXT DEFAULT '%',
+            weight REAL DEFAULT 25,
+            direction TEXT DEFAULT 'HIGHER_IS_BETTER',
+            status TEXT DEFAULT 'ACTIVE',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 4. Staff Performance KPIs Mapping Table
+          CREATE TABLE IF NOT EXISTS staff_performance_kpis (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            kpi_id INTEGER NOT NULL REFERENCES performance_kpis(id),
+            cycle_id INTEGER NOT NULL REFERENCES appraisal_cycles(id),
+            target REAL NOT NULL,
+            actual_result REAL DEFAULT 0,
+            weight REAL DEFAULT 25,
+            score_achievement REAL DEFAULT 0,
+            status TEXT DEFAULT 'ACTIVE',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE(staff_id, kpi_id, cycle_id)
+          );
+
+          -- 5. Rating Scales Table
+          CREATE TABLE IF NOT EXISTS performance_rating_scales (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            min_score REAL NOT NULL,
+            max_score REAL NOT NULL,
+            label TEXT NOT NULL,
+            description TEXT,
+            status TEXT DEFAULT 'ACTIVE',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 6. Performance Reviews Table
+          CREATE TABLE IF NOT EXISTS performance_reviews (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            cycle_id INTEGER NOT NULL REFERENCES appraisal_cycles(id),
+            reviewer_id INTEGER,
+            review_type TEXT DEFAULT 'MANAGER_REVIEW',
+            status TEXT DEFAULT 'MANAGER_REVIEW_PENDING',
+            overall_score REAL DEFAULT 0,
+            overall_rating TEXT,
+            strengths TEXT,
+            areas_for_improvement TEXT,
+            comments TEXT,
+            submitted_at DATETIME,
+            approved_at DATETIME,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE(staff_id, cycle_id, review_type)
+          );
+
+          -- 7. Employee Self Reviews Table
+          CREATE TABLE IF NOT EXISTS performance_self_reviews (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            review_id INTEGER NOT NULL REFERENCES performance_reviews(id) ON DELETE CASCADE,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            achievements TEXT,
+            challenges TEXT,
+            training_needs TEXT,
+            employee_comments TEXT,
+            submitted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 8. Appraisals Table
+          CREATE TABLE IF NOT EXISTS appraisals (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            cycle_id INTEGER NOT NULL REFERENCES appraisal_cycles(id),
+            review_id INTEGER REFERENCES performance_reviews(id),
+            current_salary REAL DEFAULT 0,
+            recommended_increment_type TEXT DEFAULT 'PERCENTAGE',
+            recommended_increment_value REAL DEFAULT 0,
+            recommended_incentive REAL DEFAULT 0,
+            reason TEXT,
+            status TEXT DEFAULT 'PENDING_APPROVAL',
+            approved_by INTEGER,
+            approved_at DATETIME,
+            effective_from TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 9. Performance Incentives Table
+          CREATE TABLE IF NOT EXISTS performance_incentives (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            cycle_id INTEGER NOT NULL REFERENCES appraisal_cycles(id),
+            appraisal_id INTEGER REFERENCES appraisals(id),
+            amount REAL NOT NULL,
+            reason TEXT NOT NULL,
+            status TEXT DEFAULT 'APPROVED',
+            approved_by INTEGER,
+            approved_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- Seed Default KPIs
+          INSERT OR IGNORE INTO performance_kpis (code, name, description, category, measurement_type, default_target, unit, weight, direction) VALUES
+            ('SALES_VOL', 'Monthly Sales Target', 'Monthly net sales volume target', 'SALES', 'CURRENCY', 500000, '₹', 40, 'HIGHER_IS_BETTER'),
+            ('ATTENDANCE_PCT', 'Monthly Attendance Rate', 'Monthly present days percentage', 'ATTENDANCE', 'PERCENTAGE', 95, '%', 20, 'HIGHER_IS_BETTER'),
+            ('PUNCTUALITY', 'On-Time Punctuality Rate', 'Check-in on-time percentage without late arrivals', 'ATTENDANCE', 'PERCENTAGE', 90, '%', 15, 'HIGHER_IS_BETTER'),
+            ('CUST_SATISFACTION', 'Customer Satisfaction Rating', 'Store customer service satisfaction score', 'CUSTOMER_SERVICE', 'PERCENTAGE', 90, '%', 25, 'HIGHER_IS_BETTER');
+
+          -- Seed Default Rating Scales
+          INSERT OR IGNORE INTO performance_rating_scales (name, min_score, max_score, label, description) VALUES
+            ('Excellent', 90.0, 100.0, 'Excellent', 'Exceeds all expectations consistently'),
+            ('Very Good', 80.0, 89.99, 'Very Good', 'Meets and frequently exceeds expectations'),
+            ('Good', 70.0, 79.99, 'Good', 'Meets essential performance expectations'),
+            ('Needs Improvement', 60.0, 69.99, 'Needs Improvement', 'Performance below expected standards'),
+            ('Unsatisfactory', 0.0, 59.99, 'Unsatisfactory', 'Unacceptable performance level requiring support');
+
+          -- Seed Performance Permissions
+          INSERT OR IGNORE INTO permissions (code, module, description) VALUES
+            ('performance.view', 'Performance', 'View performance dashboard, goals, reviews and scorecards'),
+            ('performance.create', 'Performance', 'Create appraisal cycles and evaluation metrics'),
+            ('performance.manage_goals', 'Performance', 'Create and update employee performance goals'),
+            ('performance.manage_kpis', 'Performance', 'Create and assign KPIs to staff members'),
+            ('performance.review', 'Performance', 'Conduct manager performance evaluations'),
+            ('performance.submit_review', 'Performance', 'Submit employee self-evaluation reviews'),
+            ('performance.approve', 'Performance', 'Approve submitted performance reviews'),
+            ('performance.manage_appraisal', 'Performance', 'Create appraisal increment & incentive recommendations'),
+            ('performance.approve_appraisal', 'Performance', 'Approve final salary increment & incentive appraisals'),
+            ('performance.export', 'Performance', 'Export performance evaluation reports'),
+            ('performance.view_reports', 'Performance', 'View performance & appraisal analytics');
+
+          -- Map Performance Permissions to System Roles
+          -- 1. Owner (Role 1)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 1, id FROM permissions WHERE module = 'Performance';
+
+          -- 2. Manager (Role 2)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 2, id FROM permissions WHERE module = 'Performance';
+
+          -- 3. Cashier (Role 3)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 3, id FROM permissions WHERE code IN ('performance.view', 'performance.submit_review');
+
+          -- 6. HR Staff (Role 6)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 6, id FROM permissions WHERE module = 'Performance';
+        `);
+      }
     }
   ];
 

@@ -44,6 +44,10 @@ import { MyPayrollPage } from './features/staff-self-service/pages/MyPayrollPage
 import { MyDocumentsPage } from './features/staff-self-service/pages/MyDocumentsPage';
 import { MyPerformancePage } from './features/staff-self-service/pages/MyPerformancePage';
 import { MySettingsPage } from './features/staff-self-service/pages/MySettingsPage';
+import { StaffAuthProvider } from './features/staff-portal/context/StaffAuthContext';
+import { StaffLogin } from './features/staff-portal/pages/StaffLogin';
+import { StaffDashboard } from './features/staff-portal/pages/StaffDashboard';
+import { StaffProtectedRoute } from './features/staff-portal/components/StaffProtectedRoute';
 
 const MainAppRouter: React.FC = () => {
   const { currentUser, isLoading, isLocked, setupRequired } = useAuth();
@@ -61,60 +65,79 @@ const MainAppRouter: React.FC = () => {
     return <SetupWizard />;
   }
 
-  if (!currentUser) {
-    return <LoginPage />;
-  }
-
   return (
-    <>
-      {isLocked && <LockScreenModal />}
-      <AppShell>
-        <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/dashboard" element={<ProtectedRoute permission="dashboard.view"><DashboardPage /></ProtectedRoute>} />
-          <Route path="/products" element={<ProtectedRoute permission="products.view"><ProductsPage /></ProtectedRoute>} />
-          <Route path="/categories" element={<ProtectedRoute permission="products.manage"><CategoriesPage /></ProtectedRoute>} />
-          <Route path="/inventory" element={<ProtectedRoute permission="inventory.view"><InventoryPage /></ProtectedRoute>} />
-          <Route path="/billing" element={<ProtectedRoute permission="billing.create"><PosPage /></ProtectedRoute>} />
-          <Route path="/sales" element={<ProtectedRoute permission="sales.view"><SalesHistoryPage /></ProtectedRoute>} />
-          <Route path="/customers" element={<ProtectedRoute permission="customers.view"><CustomersPage /></ProtectedRoute>} />
-          <Route path="/suppliers" element={<ProtectedRoute permission="suppliers.view"><SuppliersPage /></ProtectedRoute>} />
-          <Route path="/purchases" element={<ProtectedRoute permission="purchases.view"><PurchasesPage /></ProtectedRoute>} />
-          <Route path="/returns" element={<ProtectedRoute permission="returns.create"><ReturnsPage /></ProtectedRoute>} />
-          <Route path="/reports" element={<ProtectedRoute permission="reports.view"><ReportsPage /></ProtectedRoute>} />
+    <Routes>
+      {/* Dedicated Staff Portal Routes */}
+      <Route path="/staff/login" element={<StaffLogin />} />
+      <Route
+        path="/staff/dashboard"
+        element={
+          <StaffProtectedRoute>
+            <StaffDashboard />
+          </StaffProtectedRoute>
+        }
+      />
 
-          {/* Self-Service Portal Routes */}
-          <Route path="/self-service/dashboard" element={<ProtectedRoute permission="self.profile.view"><StaffDashboardPage /></ProtectedRoute>} />
-          <Route path="/self-service/profile" element={<ProtectedRoute permission="self.profile.view"><MyProfilePage /></ProtectedRoute>} />
-          <Route path="/self-service/attendance" element={<ProtectedRoute permission="self.attendance.view"><MyAttendancePage /></ProtectedRoute>} />
-          <Route path="/self-service/shifts" element={<ProtectedRoute permission="self.shift.view"><MyShiftsPage /></ProtectedRoute>} />
-          <Route path="/self-service/leave" element={<ProtectedRoute permission="self.leave.view"><MyLeavePage /></ProtectedRoute>} />
-          <Route path="/self-service/payroll" element={<ProtectedRoute permission="self.payroll.view"><MyPayrollPage /></ProtectedRoute>} />
-          <Route path="/self-service/documents" element={<ProtectedRoute permission="self.documents.view"><MyDocumentsPage /></ProtectedRoute>} />
-          <Route path="/self-service/performance" element={<ProtectedRoute permission="self.performance.view"><MyPerformancePage /></ProtectedRoute>} />
-          <Route path="/self-service/notifications" element={<ProtectedRoute permission="self.notifications.view"><CommunicationPage /></ProtectedRoute>} />
-          <Route path="/self-service/settings" element={<ProtectedRoute permission="self.settings.manage"><MySettingsPage /></ProtectedRoute>} />
+      {/* Main Administrative / Store App Routes */}
+      <Route
+        path="/*"
+        element={
+          !currentUser ? (
+            <LoginPage />
+          ) : (
+            <>
+              {isLocked && <LockScreenModal />}
+              <AppShell>
+                <Routes>
+                  <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                  <Route path="/dashboard" element={<ProtectedRoute permission="dashboard.view"><DashboardPage /></ProtectedRoute>} />
+                  <Route path="/products" element={<ProtectedRoute permission="products.view"><ProductsPage /></ProtectedRoute>} />
+                  <Route path="/categories" element={<ProtectedRoute permission="products.manage"><CategoriesPage /></ProtectedRoute>} />
+                  <Route path="/inventory" element={<ProtectedRoute permission="inventory.view"><InventoryPage /></ProtectedRoute>} />
+                  <Route path="/billing" element={<ProtectedRoute permission="billing.create"><PosPage /></ProtectedRoute>} />
+                  <Route path="/sales" element={<ProtectedRoute permission="sales.view"><SalesHistoryPage /></ProtectedRoute>} />
+                  <Route path="/customers" element={<ProtectedRoute permission="customers.view"><CustomersPage /></ProtectedRoute>} />
+                  <Route path="/suppliers" element={<ProtectedRoute permission="suppliers.view"><SuppliersPage /></ProtectedRoute>} />
+                  <Route path="/purchases" element={<ProtectedRoute permission="purchases.view"><PurchasesPage /></ProtectedRoute>} />
+                  <Route path="/returns" element={<ProtectedRoute permission="returns.create"><ReturnsPage /></ProtectedRoute>} />
+                  <Route path="/reports" element={<ProtectedRoute permission="reports.view"><ReportsPage /></ProtectedRoute>} />
 
-          <Route path="/staff" element={<ProtectedRoute permission="staff.view"><StaffListPage /></ProtectedRoute>} />
-          <Route path="/staff/profile/:id" element={<ProtectedRoute permission="staff.view"><StaffProfilePage /></ProtectedRoute>} />
-          <Route path="/staff/departments" element={<ProtectedRoute permission="staff.organization"><DepartmentListPage /></ProtectedRoute>} />
-          <Route path="/staff/designations" element={<ProtectedRoute permission="staff.organization"><DesignationListPage /></ProtectedRoute>} />
-          <Route path="/staff/attendance" element={<ProtectedRoute permission="attendance.view"><AttendancePage /></ProtectedRoute>} />
-          <Route path="/staff/shifts" element={<ProtectedRoute permission="shift.view"><ShiftListPage /></ProtectedRoute>} />
-          <Route path="/staff/leave" element={<ProtectedRoute permission="leave.view"><LeaveListPage /></ProtectedRoute>} />
-          <Route path="/staff/payroll" element={<ProtectedRoute permission="payroll.view"><PayrollPage /></ProtectedRoute>} />
-          <Route path="/staff/performance" element={<ProtectedRoute permission="performance.view"><PerformancePage /></ProtectedRoute>} />
-          <Route path="/staff/documents" element={<ProtectedRoute permission="documents.view"><DocumentsPage /></ProtectedRoute>} />
-          <Route path="/staff/communication" element={<ProtectedRoute permission="communication.view"><CommunicationPage /></ProtectedRoute>} />
-          <Route path="/roles" element={<ProtectedRoute permission="role.view"><RoleListPage /></ProtectedRoute>} />
-          <Route path="/users" element={<ProtectedRoute permission="users.view"><UsersPage /></ProtectedRoute>} />
-          <Route path="/backup" element={<ProtectedRoute permission="backup.create"><BackupPage /></ProtectedRoute>} />
-          <Route path="/health" element={<ProtectedRoute permission="settings.view"><SystemHealthPage /></ProtectedRoute>} />
-          <Route path="/settings" element={<ProtectedRoute permission="settings.view"><SettingsPage /></ProtectedRoute>} />
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
-      </AppShell>
-    </>
+                  {/* Self-Service Portal Routes */}
+                  <Route path="/self-service/dashboard" element={<ProtectedRoute permission="self.profile.view"><StaffDashboardPage /></ProtectedRoute>} />
+                  <Route path="/self-service/profile" element={<ProtectedRoute permission="self.profile.view"><MyProfilePage /></ProtectedRoute>} />
+                  <Route path="/self-service/attendance" element={<ProtectedRoute permission="self.attendance.view"><MyAttendancePage /></ProtectedRoute>} />
+                  <Route path="/self-service/shifts" element={<ProtectedRoute permission="self.shift.view"><MyShiftsPage /></ProtectedRoute>} />
+                  <Route path="/self-service/leave" element={<ProtectedRoute permission="self.leave.view"><MyLeavePage /></ProtectedRoute>} />
+                  <Route path="/self-service/payroll" element={<ProtectedRoute permission="self.payroll.view"><MyPayrollPage /></ProtectedRoute>} />
+                  <Route path="/self-service/documents" element={<ProtectedRoute permission="self.documents.view"><MyDocumentsPage /></ProtectedRoute>} />
+                  <Route path="/self-service/performance" element={<ProtectedRoute permission="self.performance.view"><MyPerformancePage /></ProtectedRoute>} />
+                  <Route path="/self-service/notifications" element={<ProtectedRoute permission="self.notifications.view"><CommunicationPage /></ProtectedRoute>} />
+                  <Route path="/self-service/settings" element={<ProtectedRoute permission="self.settings.manage"><MySettingsPage /></ProtectedRoute>} />
+
+                  <Route path="/staff" element={<ProtectedRoute permission="staff.view"><StaffListPage /></ProtectedRoute>} />
+                  <Route path="/staff/profile/:id" element={<ProtectedRoute permission="staff.view"><StaffProfilePage /></ProtectedRoute>} />
+                  <Route path="/staff/departments" element={<ProtectedRoute permission="staff.organization"><DepartmentListPage /></ProtectedRoute>} />
+                  <Route path="/staff/designations" element={<ProtectedRoute permission="staff.organization"><DesignationListPage /></ProtectedRoute>} />
+                  <Route path="/staff/attendance" element={<ProtectedRoute permission="attendance.view"><AttendancePage /></ProtectedRoute>} />
+                  <Route path="/staff/shifts" element={<ProtectedRoute permission="shift.view"><ShiftListPage /></ProtectedRoute>} />
+                  <Route path="/staff/leave" element={<ProtectedRoute permission="leave.view"><LeaveListPage /></ProtectedRoute>} />
+                  <Route path="/staff/payroll" element={<ProtectedRoute permission="payroll.view"><PayrollPage /></ProtectedRoute>} />
+                  <Route path="/staff/performance" element={<ProtectedRoute permission="performance.view"><PerformancePage /></ProtectedRoute>} />
+                  <Route path="/staff/documents" element={<ProtectedRoute permission="documents.view"><DocumentsPage /></ProtectedRoute>} />
+                  <Route path="/staff/communication" element={<ProtectedRoute permission="communication.view"><CommunicationPage /></ProtectedRoute>} />
+                  <Route path="/roles" element={<ProtectedRoute permission="role.view"><RoleListPage /></ProtectedRoute>} />
+                  <Route path="/users" element={<ProtectedRoute permission="users.view"><UsersPage /></ProtectedRoute>} />
+                  <Route path="/backup" element={<ProtectedRoute permission="backup.create"><BackupPage /></ProtectedRoute>} />
+                  <Route path="/health" element={<ProtectedRoute permission="settings.view"><SystemHealthPage /></ProtectedRoute>} />
+                  <Route path="/settings" element={<ProtectedRoute permission="settings.view"><SettingsPage /></ProtectedRoute>} />
+                  <Route path="*" element={<Navigate to="/dashboard" replace />} />
+                </Routes>
+              </AppShell>
+            </>
+          )
+        }
+      />
+    </Routes>
   );
 };
 
@@ -122,7 +145,9 @@ export function App() {
   return (
     <HashRouter>
       <AuthProvider>
-        <MainAppRouter />
+        <StaffAuthProvider>
+          <MainAppRouter />
+        </StaffAuthProvider>
       </AuthProvider>
     </HashRouter>
   );

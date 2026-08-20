@@ -68,6 +68,11 @@ export interface ElectronAPI {
     getCurrentUser: () => Promise<AuthUser | null>;
     changePassword: (currentPassword: string, newPassword: string) => Promise<{ success: boolean; error?: string }>;
   };
+  staffAuth: {
+    login: (input: { employeeId: string; password: string; rememberMe?: boolean }) => Promise<{ success: boolean; user?: any; error?: string }>;
+    logout: () => Promise<{ success: boolean }>;
+    getCurrentStaffUser: () => Promise<any | null>;
+  };
   users: {
     getAll: () => Promise<any[]>;
     create: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
@@ -346,6 +351,11 @@ const api: ElectronAPI = {
     logout: () => ipcRenderer.invoke('auth:logout'),
     getCurrentUser: () => ipcRenderer.invoke('auth:get-current-user'),
     changePassword: (currentPassword, newPassword) => ipcRenderer.invoke('auth:change-password', { currentPassword, newPassword }),
+  },
+  staffAuth: {
+    login: (input) => ipcRenderer.invoke('staff-auth:login', input),
+    logout: () => ipcRenderer.invoke('staff-auth:logout'),
+    getCurrentStaffUser: () => ipcRenderer.invoke('staff-auth:get-current-user'),
   },
   users: {
     getAll: () => ipcRenderer.invoke('users:get-all'),

@@ -39,6 +39,7 @@ import { registerPerformanceHandlers } from './performanceHandler';
 import { registerDocumentHandlers } from './documentHandler';
 import { registerCommunicationHandlers } from './communicationHandler';
 import { registerSelfServiceHandlers } from './selfServiceHandler';
+import { registerStaffAuthHandlers } from './staffAuthHandler';
 import log from '../logger';
 
 export function registerIpcHandlers() {
@@ -52,6 +53,7 @@ export function registerIpcHandlers() {
   registerDocumentHandlers(db);
   registerCommunicationHandlers(db);
   registerSelfServiceHandlers(db);
+  registerStaffAuthHandlers(db);
 
   // App Info
   ipcMain.handle('app:get-version', () => app.getVersion() || '0.1.0');

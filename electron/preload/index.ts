@@ -73,6 +73,9 @@ export interface ElectronAPI {
     logout: () => Promise<{ success: boolean }>;
     getCurrentStaffUser: () => Promise<any | null>;
   };
+  staffDashboard: {
+    getDashboardSummary: () => Promise<{ success: boolean; data?: any; error?: string }>;
+  };
   users: {
     getAll: () => Promise<any[]>;
     create: (input: any) => Promise<{ success: boolean; id?: number; error?: string }>;
@@ -356,6 +359,9 @@ const api: ElectronAPI = {
     login: (input) => ipcRenderer.invoke('staff-auth:login', input),
     logout: () => ipcRenderer.invoke('staff-auth:logout'),
     getCurrentStaffUser: () => ipcRenderer.invoke('staff-auth:get-current-user'),
+  },
+  staffDashboard: {
+    getDashboardSummary: () => ipcRenderer.invoke('staff-dashboard:get-summary'),
   },
   users: {
     getAll: () => ipcRenderer.invoke('users:get-all'),

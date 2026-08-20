@@ -209,6 +209,19 @@ export interface ElectronAPI {
     getDocuments: () => Promise<{ documents: any[]; compliance: any }>;
     getPerformance: () => Promise<{ scorecards: any[]; goals: any[] }>;
   };
+  staffProfile: {
+    getMyProfile: () => Promise<{ success: boolean; data?: any; error?: string }>;
+    updateMyProfile: (fields: any) => Promise<{ success: boolean; message?: string; error?: string }>;
+    getEmergencyContacts: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    saveEmergencyContact: (input: any) => Promise<{ success: boolean; id?: number; message?: string; error?: string }>;
+    deleteEmergencyContact: (id: number) => Promise<{ success: boolean; message?: string; error?: string }>;
+    uploadPhoto: (dataUrl: string) => Promise<{ success: boolean; photoPath?: string; message?: string; error?: string }>;
+    removePhoto: () => Promise<{ success: boolean; message?: string; error?: string }>;
+    changePassword: (input: { currentPassword: string; newPassword: string }) => Promise<{ success: boolean; message?: string; error?: string }>;
+    getActivity: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    requestChange: (input: any) => Promise<{ success: boolean; id?: number; message?: string; error?: string }>;
+    getChangeRequests: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
+  };
   products: {
     getAll: () => Promise<any[]>;
     create: (product: any) => Promise<{ success: boolean; id?: number; error?: string }>;
@@ -495,6 +508,19 @@ const api: ElectronAPI = {
     getPayroll: () => ipcRenderer.invoke('self-service:get-payroll'),
     getDocuments: () => ipcRenderer.invoke('self-service:get-documents'),
     getPerformance: () => ipcRenderer.invoke('self-service:get-performance'),
+  },
+  staffProfile: {
+    getMyProfile: () => ipcRenderer.invoke('staff-profile:get-my-profile'),
+    updateMyProfile: (fields) => ipcRenderer.invoke('staff-profile:update-my-profile', fields),
+    getEmergencyContacts: () => ipcRenderer.invoke('staff-profile:get-emergency-contacts'),
+    saveEmergencyContact: (input) => ipcRenderer.invoke('staff-profile:save-emergency-contact', input),
+    deleteEmergencyContact: (id) => ipcRenderer.invoke('staff-profile:delete-emergency-contact', id),
+    uploadPhoto: (dataUrl) => ipcRenderer.invoke('staff-profile:upload-photo', dataUrl),
+    removePhoto: () => ipcRenderer.invoke('staff-profile:remove-photo'),
+    changePassword: (input) => ipcRenderer.invoke('staff-profile:change-password', input),
+    getActivity: () => ipcRenderer.invoke('staff-profile:get-activity'),
+    requestChange: (input) => ipcRenderer.invoke('staff-profile:request-change', input),
+    getChangeRequests: () => ipcRenderer.invoke('staff-profile:get-change-requests'),
   },
   products: {
     getAll: () => ipcRenderer.invoke('products:get-all'),

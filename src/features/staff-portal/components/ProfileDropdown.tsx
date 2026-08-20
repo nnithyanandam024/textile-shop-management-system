@@ -56,7 +56,7 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
         <button
           onClick={() => {
             onClose();
-            navigate('/self-service/profile');
+            navigate('/staff/profile');
           }}
           className="w-full px-4 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-slate-900 flex items-center gap-2.5 transition-colors"
         >

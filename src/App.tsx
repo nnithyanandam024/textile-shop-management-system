@@ -47,6 +47,7 @@ import { MySettingsPage } from './features/staff-self-service/pages/MySettingsPa
 import { StaffAuthProvider } from './features/staff-portal/context/StaffAuthContext';
 import { StaffLogin } from './features/staff-portal/pages/StaffLogin';
 import { StaffDashboard } from './features/staff-portal/pages/StaffDashboard';
+import { StaffProfile } from './features/staff-portal/pages/StaffProfile';
 import { StaffProtectedRoute } from './features/staff-portal/components/StaffProtectedRoute';
 
 const MainAppRouter: React.FC = () => {
@@ -74,6 +75,14 @@ const MainAppRouter: React.FC = () => {
         element={
           <StaffProtectedRoute>
             <StaffDashboard />
+          </StaffProtectedRoute>
+        }
+      />
+      <Route
+        path="/staff/profile"
+        element={
+          <StaffProtectedRoute>
+            <StaffProfile />
           </StaffProtectedRoute>
         }
       />

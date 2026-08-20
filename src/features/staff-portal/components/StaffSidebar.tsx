@@ -27,7 +27,7 @@ interface SidebarItem {
 
 const navItems: SidebarItem[] = [
   { name: 'Dashboard', path: '/staff/dashboard', icon: LayoutDashboard, isPhase1Active: true },
-  { name: 'My Profile', path: '/self-service/profile', icon: User, isPhase1Active: true },
+  { name: 'My Profile', path: '/staff/profile', icon: User, isPhase1Active: true },
   { name: 'Attendance', path: '/self-service/attendance', icon: CalendarCheck, isPhase1Active: true },
   { name: 'My Shifts', path: '/self-service/shifts', icon: Clock, isPhase1Active: true },
   { name: 'My Leave', path: '/self-service/leave', icon: Calendar, isPhase1Active: true },

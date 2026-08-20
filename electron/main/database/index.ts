@@ -1864,6 +1864,62 @@ function runMigrations(db: Database.Database) {
           );
         `);
       }
+    },
+    {
+      version: 16,
+      name: 'staff_module_payroll_enhancements',
+      up: (database: Database.Database) => {
+        database.exec(`
+          -- 1. Overtime Records Table
+          CREATE TABLE IF NOT EXISTS overtime_records (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            attendance_id INTEGER REFERENCES attendance(id) ON DELETE SET NULL,
+            date TEXT NOT NULL,
+            hours REAL NOT NULL,
+            rate REAL NOT NULL,
+            amount REAL NOT NULL,
+            status TEXT DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'APPROVED', 'REJECTED')),
+            approved_by INTEGER REFERENCES users(id),
+            approved_at DATETIME,
+            notes TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 2. Staff Incentives Table
+          CREATE TABLE IF NOT EXISTS staff_incentives (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            period_name TEXT NOT NULL,
+            incentive_type TEXT NOT NULL,
+            amount REAL NOT NULL,
+            target_achievement REAL,
+            reason TEXT,
+            status TEXT DEFAULT 'APPROVED' CHECK (status IN ('PENDING', 'APPROVED', 'REJECTED')),
+            approved_by INTEGER REFERENCES users(id),
+            approved_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 3. Payslips Metadata Table
+          CREATE TABLE IF NOT EXISTS payslips (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            payroll_record_id INTEGER NOT NULL REFERENCES payroll_records(id) ON DELETE CASCADE,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            period_name TEXT NOT NULL,
+            file_path TEXT,
+            generated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            status TEXT DEFAULT 'GENERATED' CHECK (status IN ('GENERATED', 'DELIVERED', 'VIEWED'))
+          );
+
+          -- Indexes for fast queries
+          CREATE INDEX IF NOT EXISTS idx_overtime_records_staff ON overtime_records(staff_id, date);
+          CREATE INDEX IF NOT EXISTS idx_staff_incentives_staff ON staff_incentives(staff_id, period_name);
+          CREATE INDEX IF NOT EXISTS idx_payslips_staff ON payslips(staff_id, payroll_record_id);
+        `);
+      }
     }
   ];
 

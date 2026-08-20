@@ -261,6 +261,16 @@ export interface ElectronAPI {
     getPermissions: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
     cancelPermission: (id: number) => Promise<{ success: boolean; message?: string; error?: string }>;
   };
+  staffPayroll: {
+    getCurrent: (periodId?: number) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getPeriods: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    getHistory: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    getDetails: (recordId: number) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getSalaryOverview: () => Promise<{ success: boolean; data?: any; error?: string }>;
+    getSalaryHistory: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    getOvertime: (monthStr?: string) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getIncentives: (periodName?: string) => Promise<{ success: boolean; data?: any; error?: string }>;
+  };
   products: {
     getAll: () => Promise<any[]>;
     create: (product: any) => Promise<{ success: boolean; id?: number; error?: string }>;
@@ -599,6 +609,16 @@ const api: ElectronAPI = {
     requestPermission: (input) => ipcRenderer.invoke('staff-leave:request-permission', input),
     getPermissions: () => ipcRenderer.invoke('staff-leave:get-permissions'),
     cancelPermission: (id) => ipcRenderer.invoke('staff-leave:cancel-permission', id),
+  },
+  staffPayroll: {
+    getCurrent: (periodId) => ipcRenderer.invoke('staff-payroll:get-current', periodId),
+    getPeriods: () => ipcRenderer.invoke('staff-payroll:get-periods'),
+    getHistory: () => ipcRenderer.invoke('staff-payroll:get-history'),
+    getDetails: (recordId) => ipcRenderer.invoke('staff-payroll:get-details', recordId),
+    getSalaryOverview: () => ipcRenderer.invoke('staff-payroll:get-salary-overview'),
+    getSalaryHistory: () => ipcRenderer.invoke('staff-payroll:get-salary-history'),
+    getOvertime: (monthStr) => ipcRenderer.invoke('staff-payroll:get-overtime', monthStr),
+    getIncentives: (periodName) => ipcRenderer.invoke('staff-payroll:get-incentives', periodName),
   },
   products: {
     getAll: () => ipcRenderer.invoke('products:get-all'),

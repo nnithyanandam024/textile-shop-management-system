@@ -45,6 +45,7 @@ import { registerStaffProfileHandlers } from './staffProfileHandler';
 import { registerStaffAttendanceHandlers } from './staffAttendanceHandler';
 import { registerStaffShiftHandlers } from './staffShiftHandler';
 import { registerStaffLeaveHandlers } from './staffLeaveHandler';
+import { registerStaffPayrollHandlers } from './staffPayrollHandler';
 import log from '../logger';
 
 export function registerIpcHandlers() {
@@ -64,6 +65,7 @@ export function registerIpcHandlers() {
   registerStaffAttendanceHandlers(db);
   registerStaffShiftHandlers(db);
   registerStaffLeaveHandlers(db);
+  registerStaffPayrollHandlers(db);
 
   // App Info
   ipcMain.handle('app:get-version', () => app.getVersion() || '0.1.0');

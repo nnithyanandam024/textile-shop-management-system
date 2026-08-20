@@ -234,6 +234,20 @@ export interface ElectronAPI {
     requestCorrection: (input: any) => Promise<{ success: boolean; id?: number; message?: string; error?: string }>;
     getCorrectionRequests: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
   };
+  staffShifts: {
+    getToday: () => Promise<{ success: boolean; data?: any; error?: string }>;
+    getWeekly: (weekStartDate?: string) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getMonthly: (monthStr?: string) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getUpcoming: (count?: number) => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    getDetails: (dateStr: string) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getHistory: (filter?: any) => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    requestChange: (input: any) => Promise<{ success: boolean; id?: number; message?: string; error?: string }>;
+    requestSwap: (input: any) => Promise<{ success: boolean; id?: number; message?: string; error?: string }>;
+    getRequests: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    cancelRequest: (id: number, type: 'CHANGE' | 'SWAP') => Promise<{ success: boolean; message?: string; error?: string }>;
+    getSwapCandidates: (dateStr: string) => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    getTemplates: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
+  };
   products: {
     getAll: () => Promise<any[]>;
     create: (product: any) => Promise<{ success: boolean; id?: number; error?: string }>;
@@ -545,6 +559,20 @@ const api: ElectronAPI = {
     getByDate: (dateStr) => ipcRenderer.invoke('staff-attendance:get-by-date', dateStr),
     requestCorrection: (input) => ipcRenderer.invoke('staff-attendance:request-correction', input),
     getCorrectionRequests: () => ipcRenderer.invoke('staff-attendance:get-correction-requests'),
+  },
+  staffShifts: {
+    getToday: () => ipcRenderer.invoke('staff-shifts:get-today'),
+    getWeekly: (weekStartDate) => ipcRenderer.invoke('staff-shifts:get-weekly', weekStartDate),
+    getMonthly: (monthStr) => ipcRenderer.invoke('staff-shifts:get-monthly', monthStr),
+    getUpcoming: (count) => ipcRenderer.invoke('staff-shifts:get-upcoming', count),
+    getDetails: (dateStr) => ipcRenderer.invoke('staff-shifts:get-details', dateStr),
+    getHistory: (filter) => ipcRenderer.invoke('staff-shifts:get-history', filter),
+    requestChange: (input) => ipcRenderer.invoke('staff-shifts:request-change', input),
+    requestSwap: (input) => ipcRenderer.invoke('staff-shifts:request-swap', input),
+    getRequests: () => ipcRenderer.invoke('staff-shifts:get-requests'),
+    cancelRequest: (id, type) => ipcRenderer.invoke('staff-shifts:cancel-request', id, type),
+    getSwapCandidates: (dateStr) => ipcRenderer.invoke('staff-shifts:get-swap-candidates', dateStr),
+    getTemplates: () => ipcRenderer.invoke('staff-shifts:get-templates'),
   },
   products: {
     getAll: () => ipcRenderer.invoke('products:get-all'),

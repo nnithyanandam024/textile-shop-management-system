@@ -1802,6 +1802,44 @@ function runMigrations(db: Database.Database) {
           SELECT 6, id FROM permissions WHERE module = 'SelfService';
         `);
       }
+    },
+    {
+      version: 14,
+      name: 'staff_module_shift_requests',
+      up: (database: Database.Database) => {
+        database.exec(`
+          -- 1. Shift Change Requests Table
+          CREATE TABLE IF NOT EXISTS shift_change_requests (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            target_date TEXT NOT NULL,
+            requested_shift_template_id INTEGER REFERENCES shift_templates(id),
+            is_requested_week_off INTEGER DEFAULT 0,
+            reason TEXT NOT NULL,
+            status TEXT DEFAULT 'PENDING',
+            reviewed_by INTEGER REFERENCES users(id),
+            review_comment TEXT,
+            reviewed_at DATETIME,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 2. Shift Swap Requests Table
+          CREATE TABLE IF NOT EXISTS shift_swap_requests (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            requester_staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            target_staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            shift_date TEXT NOT NULL,
+            reason TEXT NOT NULL,
+            status TEXT DEFAULT 'PENDING',
+            reviewed_by INTEGER REFERENCES users(id),
+            review_comment TEXT,
+            reviewed_at DATETIME,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+        `);
+      }
     }
   ];
 

@@ -64,7 +64,7 @@ export const UpcomingShifts: React.FC<UpcomingShiftsProps> = ({ shifts }) => {
 
       <div className="mt-5 pt-3 border-t border-slate-100">
         <button
-          onClick={() => navigate('/self-service/shifts')}
+          onClick={() => navigate('/staff/shifts')}
           className="w-full flex items-center justify-center gap-1.5 py-2 px-3 bg-slate-50 hover:bg-indigo-50/80 text-slate-700 hover:text-[#2818cf] border border-slate-200/80 hover:border-indigo-200 rounded-xl text-xs font-bold transition-all group"
         >
           <span>View All Shifts</span>

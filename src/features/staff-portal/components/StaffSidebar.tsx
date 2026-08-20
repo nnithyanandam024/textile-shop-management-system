@@ -29,7 +29,7 @@ const navItems: SidebarItem[] = [
   { name: 'Dashboard', path: '/staff/dashboard', icon: LayoutDashboard, isPhase1Active: true },
   { name: 'My Profile', path: '/staff/profile', icon: User, isPhase1Active: true },
   { name: 'Attendance', path: '/staff/attendance', icon: CalendarCheck, isPhase1Active: true },
-  { name: 'My Shifts', path: '/self-service/shifts', icon: Clock, isPhase1Active: true },
+  { name: 'My Shifts', path: '/staff/shifts', icon: Clock, isPhase1Active: true },
   { name: 'My Leave', path: '/self-service/leave', icon: Calendar, isPhase1Active: true },
   { name: 'My Payroll', path: '/self-service/payroll', icon: DollarSign, isPhase1Active: true },
   { name: 'Documents', path: '/self-service/documents', icon: FileText, isPhase1Active: true },

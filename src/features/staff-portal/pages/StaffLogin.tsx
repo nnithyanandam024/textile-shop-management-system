@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useStaffAuth } from '../hooks/useStaffAuth';
 import { staffAuthService } from '../services/staffAuthService';
+import { DemoCredentialsHelper } from '../../../components/ui/DemoCredentialsHelper';
 import { User, Lock, Eye, EyeOff, AlertCircle, Sparkles, HelpCircle } from 'lucide-react';
 
 export const StaffLogin: React.FC = () => {
@@ -202,6 +203,16 @@ export const StaffLogin: React.FC = () => {
               </button>
             </div>
           </form>
+
+          {/* Quick Demo Login Credentials Helper */}
+          <DemoCredentialsHelper
+            portalType="STAFF"
+            onSelect={(id, pw) => {
+              setEmployeeId(id);
+              setPassword(pw);
+              setError('');
+            }}
+          />
         </div>
 
         {/* Footer Note */}

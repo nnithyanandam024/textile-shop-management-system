@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from './AuthContext';
+import { DemoCredentialsHelper } from '../../components/ui/DemoCredentialsHelper';
 import { Lock, User, Eye, EyeOff, AlertCircle, Loader2 } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
@@ -121,8 +122,18 @@ export const LoginPage: React.FC = () => {
           </button>
         </form>
 
+        {/* Quick Demo Login Credentials Helper */}
+        <DemoCredentialsHelper
+          portalType="ADMIN"
+          onSelect={(uname, pw) => {
+            setUsername(uname);
+            setPassword(pw);
+            setError('');
+          }}
+        />
+
         {/* Footer info */}
-        <div className="mt-8 text-center text-xs text-slate-400 font-medium border-t border-slate-100 pt-4">
+        <div className="mt-6 text-center text-xs text-slate-400 font-medium border-t border-slate-100 pt-4">
           Texora Retail & POS Software • Version 0.1.0
         </div>
       </div>

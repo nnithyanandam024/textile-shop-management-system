@@ -248,6 +248,19 @@ export interface ElectronAPI {
     getSwapCandidates: (dateStr: string) => Promise<{ success: boolean; data?: any[]; error?: string }>;
     getTemplates: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
   };
+  staffLeave: {
+    getBalances: (year?: number) => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    getTypes: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    apply: (input: any) => Promise<{ success: boolean; id?: number; message?: string; error?: string }>;
+    getRequests: (filters?: any) => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    getDetails: (requestId: number) => Promise<{ success: boolean; data?: any; error?: string }>;
+    cancel: (requestId: number) => Promise<{ success: boolean; message?: string; error?: string }>;
+    getCalendar: (monthStr?: string) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getHistory: (year?: number) => Promise<{ success: boolean; data?: any; error?: string }>;
+    requestPermission: (input: any) => Promise<{ success: boolean; id?: number; message?: string; error?: string }>;
+    getPermissions: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    cancelPermission: (id: number) => Promise<{ success: boolean; message?: string; error?: string }>;
+  };
   products: {
     getAll: () => Promise<any[]>;
     create: (product: any) => Promise<{ success: boolean; id?: number; error?: string }>;
@@ -573,6 +586,19 @@ const api: ElectronAPI = {
     cancelRequest: (id, type) => ipcRenderer.invoke('staff-shifts:cancel-request', id, type),
     getSwapCandidates: (dateStr) => ipcRenderer.invoke('staff-shifts:get-swap-candidates', dateStr),
     getTemplates: () => ipcRenderer.invoke('staff-shifts:get-templates'),
+  },
+  staffLeave: {
+    getBalances: (year) => ipcRenderer.invoke('staff-leave:get-balances', year),
+    getTypes: () => ipcRenderer.invoke('staff-leave:get-types'),
+    apply: (input) => ipcRenderer.invoke('staff-leave:apply', input),
+    getRequests: (filters) => ipcRenderer.invoke('staff-leave:get-requests', filters),
+    getDetails: (requestId) => ipcRenderer.invoke('staff-leave:get-details', requestId),
+    cancel: (requestId) => ipcRenderer.invoke('staff-leave:cancel', requestId),
+    getCalendar: (monthStr) => ipcRenderer.invoke('staff-leave:get-calendar', monthStr),
+    getHistory: (year) => ipcRenderer.invoke('staff-leave:get-history', year),
+    requestPermission: (input) => ipcRenderer.invoke('staff-leave:request-permission', input),
+    getPermissions: () => ipcRenderer.invoke('staff-leave:get-permissions'),
+    cancelPermission: (id) => ipcRenderer.invoke('staff-leave:cancel-permission', id),
   },
   products: {
     getAll: () => ipcRenderer.invoke('products:get-all'),

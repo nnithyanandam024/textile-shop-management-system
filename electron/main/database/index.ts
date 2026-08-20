@@ -1840,6 +1840,30 @@ function runMigrations(db: Database.Database) {
           );
         `);
       }
+    },
+    {
+      version: 15,
+      name: 'staff_module_permission_requests',
+      up: (database: Database.Database) => {
+        database.exec(`
+          -- Permission Requests Table (Short duration permission hours)
+          CREATE TABLE IF NOT EXISTS permission_requests (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            request_date TEXT NOT NULL,
+            start_time TEXT NOT NULL,
+            end_time TEXT NOT NULL,
+            duration_minutes INTEGER NOT NULL,
+            reason TEXT NOT NULL,
+            status TEXT DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'APPROVED', 'REJECTED', 'CANCELLED')),
+            reviewed_by INTEGER REFERENCES users(id),
+            review_comment TEXT,
+            reviewed_at DATETIME,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+        `);
+      }
     }
   ];
 

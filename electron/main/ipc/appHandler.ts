@@ -42,6 +42,7 @@ import { registerSelfServiceHandlers } from './selfServiceHandler';
 import { registerStaffAuthHandlers } from './staffAuthHandler';
 import { registerStaffDashboardHandlers } from './staffDashboardHandler';
 import { registerStaffProfileHandlers } from './staffProfileHandler';
+import { registerStaffAttendanceHandlers } from './staffAttendanceHandler';
 import log from '../logger';
 
 export function registerIpcHandlers() {
@@ -58,6 +59,7 @@ export function registerIpcHandlers() {
   registerStaffAuthHandlers(db);
   registerStaffDashboardHandlers(db);
   registerStaffProfileHandlers(db);
+  registerStaffAttendanceHandlers(db);
 
   // App Info
   ipcMain.handle('app:get-version', () => app.getVersion() || '0.1.0');

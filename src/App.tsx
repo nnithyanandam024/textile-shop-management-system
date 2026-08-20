@@ -48,6 +48,7 @@ import { StaffAuthProvider } from './features/staff-portal/context/StaffAuthCont
 import { StaffLogin } from './features/staff-portal/pages/StaffLogin';
 import { StaffDashboard } from './features/staff-portal/pages/StaffDashboard';
 import { StaffProfile } from './features/staff-portal/pages/StaffProfile';
+import { StaffAttendance } from './features/staff-portal/pages/StaffAttendance';
 import { StaffProtectedRoute } from './features/staff-portal/components/StaffProtectedRoute';
 
 const MainAppRouter: React.FC = () => {
@@ -83,6 +84,14 @@ const MainAppRouter: React.FC = () => {
         element={
           <StaffProtectedRoute>
             <StaffProfile />
+          </StaffProtectedRoute>
+        }
+      />
+      <Route
+        path="/staff/attendance"
+        element={
+          <StaffProtectedRoute>
+            <StaffAttendance />
           </StaffProtectedRoute>
         }
       />

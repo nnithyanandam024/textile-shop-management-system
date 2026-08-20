@@ -222,6 +222,18 @@ export interface ElectronAPI {
     requestChange: (input: any) => Promise<{ success: boolean; id?: number; message?: string; error?: string }>;
     getChangeRequests: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
   };
+  staffAttendance: {
+    getToday: () => Promise<{ success: boolean; data?: any; error?: string }>;
+    checkIn: (customTime?: string) => Promise<{ success: boolean; data?: any; message?: string; error?: string }>;
+    checkOut: (customTime?: string) => Promise<{ success: boolean; data?: any; message?: string; error?: string }>;
+    startBreak: (customTime?: string) => Promise<{ success: boolean; data?: any; message?: string; error?: string }>;
+    endBreak: (customTime?: string) => Promise<{ success: boolean; data?: any; message?: string; error?: string }>;
+    getHistory: (filter?: any) => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    getMonthlySummary: (monthStr?: string) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getByDate: (dateStr: string) => Promise<{ success: boolean; data?: any; error?: string }>;
+    requestCorrection: (input: any) => Promise<{ success: boolean; id?: number; message?: string; error?: string }>;
+    getCorrectionRequests: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
+  };
   products: {
     getAll: () => Promise<any[]>;
     create: (product: any) => Promise<{ success: boolean; id?: number; error?: string }>;
@@ -521,6 +533,18 @@ const api: ElectronAPI = {
     getActivity: () => ipcRenderer.invoke('staff-profile:get-activity'),
     requestChange: (input) => ipcRenderer.invoke('staff-profile:request-change', input),
     getChangeRequests: () => ipcRenderer.invoke('staff-profile:get-change-requests'),
+  },
+  staffAttendance: {
+    getToday: () => ipcRenderer.invoke('staff-attendance:get-today'),
+    checkIn: (customTime) => ipcRenderer.invoke('staff-attendance:check-in', customTime),
+    checkOut: (customTime) => ipcRenderer.invoke('staff-attendance:check-out', customTime),
+    startBreak: (customTime) => ipcRenderer.invoke('staff-attendance:start-break', customTime),
+    endBreak: (customTime) => ipcRenderer.invoke('staff-attendance:end-break', customTime),
+    getHistory: (filter) => ipcRenderer.invoke('staff-attendance:get-history', filter),
+    getMonthlySummary: (monthStr) => ipcRenderer.invoke('staff-attendance:get-monthly-summary', monthStr),
+    getByDate: (dateStr) => ipcRenderer.invoke('staff-attendance:get-by-date', dateStr),
+    requestCorrection: (input) => ipcRenderer.invoke('staff-attendance:request-correction', input),
+    getCorrectionRequests: () => ipcRenderer.invoke('staff-attendance:get-correction-requests'),
   },
   products: {
     getAll: () => ipcRenderer.invoke('products:get-all'),

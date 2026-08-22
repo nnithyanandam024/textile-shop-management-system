@@ -154,7 +154,7 @@ export const DemoCredentialsHelper: React.FC<DemoCredentialsHelperProps> = ({
             Click any account below to auto-fill credentials:
           </p>
 
-          <div className="grid grid-cols-1 gap-1.5">
+          <div className="grid grid-cols-1 gap-1.5 max-h-52 overflow-y-auto pr-1">
             {activeAccounts.map((acc, index) => (
               <div
                 key={index}

@@ -122,7 +122,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         displayName: res.data.user.name,
         roleId: res.data.user.roleId || 1,
         roleName: res.data.user.role,
-        permissions: res.data.user.permissions,
+        permissions: res.data.user.permissions || res.data.permissions || ['*'],
       });
       setIsLocked(false);
       return { success: true };

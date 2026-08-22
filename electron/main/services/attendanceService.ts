@@ -111,7 +111,7 @@ export class AttendanceService {
     if (existing) {
       this.attRepo.update(existing.id, {
         check_in: checkInTime,
-        status: existing.status === 'ABSENT' ? (resolved.isWeekOff ? 'WEEK_OFF' : 'PRESENT') : existing.status,
+        status: 'PRESENT',
         late_minutes: lateMinutes,
         shift_template_id: shift.id,
         scheduled_start: shift.start_time,
@@ -122,7 +122,7 @@ export class AttendanceService {
       this.attRepo.create({
         staff_id: staffId,
         attendance_date: todayStr,
-        status: resolved.isWeekOff ? 'WEEK_OFF' : 'PRESENT',
+        status: 'PRESENT',
         check_in: checkInTime,
         late_minutes: lateMinutes,
         source: actorUserId ? 'ADMIN_ENTRY' : 'SELF_CHECK_IN',

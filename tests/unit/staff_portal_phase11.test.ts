@@ -11,7 +11,7 @@ import { StaffPOSService } from '../../electron/main/services/staffPOSService';
 import { SessionService } from '../../electron/main/services/auth/sessionService';
 
 describe('Staff Portal — Phase 11 Test Suite (Production, Reports & Final Integration)', () => {
-  const testDbPath = path.join(__dirname, '../../test_phase11.db');
+  const testDbPath = path.join(__dirname, '../.test_db/test_phase11.db');
   let db: Database.Database;
 
   let reportsService: StaffReportsService;

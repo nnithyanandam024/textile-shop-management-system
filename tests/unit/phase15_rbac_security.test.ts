@@ -15,7 +15,7 @@ import { SessionService } from '../../electron/main/services/auth/sessionService
 import { eventBus } from '../../electron/main/realtime/eventBus';
 
 describe('Phase 15 — Complete Role-Based Access Control (RBAC) & Security Test Suite', () => {
-  const testDbPath = path.join(__dirname, '../../test_phase15.db');
+  const testDbPath = path.join(__dirname, '../.test_db/test_phase15.db');
   let db: Database.Database;
 
   let posService: StaffPOSService;

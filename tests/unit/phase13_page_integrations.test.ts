@@ -32,7 +32,7 @@ import { StaffSettingsService } from '../../electron/main/services/staffSettings
 import { StaffNotificationCenterService } from '../../electron/main/services/staffNotificationCenterService';
 
 describe('Phase 13 — Complete API Integration for All Pages Test Suite', () => {
-  const testDbPath = path.join(__dirname, '../../test_phase13.db');
+  const testDbPath = path.join(__dirname, '../.test_db/test_phase13.db');
   let db: Database.Database;
 
   let dashboardService: StaffDashboardService;

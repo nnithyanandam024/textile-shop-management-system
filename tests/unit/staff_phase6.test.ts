@@ -21,7 +21,7 @@ describe('Staff Management System — Phase 6 Test Suite (Leave Management Syste
 
   beforeEach(() => {
     closeDatabase();
-    dbPath = path.join(__dirname, `../../test_staff_phase6_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
+    dbPath = path.join(__dirname, `../.test_db/test_staff_phase6_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
     db = initDatabase(dbPath);
     leaveService = new LeaveService(db);
     holidayService = new HolidayService(db);

@@ -19,7 +19,7 @@ describe('Staff Management System — Phase 8 Test Suite (Performance & Appraisa
 
   beforeEach(() => {
     closeDatabase();
-    dbPath = path.join(__dirname, `../../test_staff_phase8_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
+    dbPath = path.join(__dirname, `../.test_db/test_staff_phase8_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
     db = initDatabase(dbPath);
     perfService = new PerformanceService(db);
     staffService = new StaffService(db);

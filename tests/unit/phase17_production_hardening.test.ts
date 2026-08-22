@@ -10,8 +10,8 @@ import { BackupService } from '../../electron/main/services/backupService';
 import { SystemHealthService } from '../../electron/main/services/systemHealthService';
 
 describe('Phase 17 — Security Hardening, Performance & Production Readiness Test Suite', () => {
-  const testDbPath = path.join(__dirname, '../../test_phase17_hardening.db');
-  const testBackupDir = path.join(__dirname, '../../test_phase17_backups');
+  const testDbPath = path.join(__dirname, '../.test_db/test_phase17_hardening.db');
+  const testBackupDir = path.join(__dirname, '../.test_db/test_phase17_backups');
   let db: Database.Database;
 
   beforeAll(() => {
@@ -258,7 +258,7 @@ describe('Phase 17 — Security Hardening, Performance & Production Readiness Te
     expect(backupRes.success).toBe(true);
 
     // 2. Open fresh isolated restore database
-    const restoreDbPath = path.join(__dirname, '../../test_phase17_restored.db');
+    const restoreDbPath = path.join(__dirname, '../.test_db/test_phase17_restored.db');
     if (fs.existsSync(restoreDbPath)) fs.unlinkSync(restoreDbPath);
 
     fs.copyFileSync(backupRes.backupPath!, restoreDbPath);

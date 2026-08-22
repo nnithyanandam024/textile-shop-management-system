@@ -15,7 +15,7 @@ describe('Staff Portal — Phase 6 Test Suite (Staff Leave & Permission Manageme
   let staff2Id: number;
 
   beforeEach(() => {
-    dbPath = path.join(process.cwd(), `test_staff_phase6_${Date.now()}_${Math.random().toString(36).substring(7)}.db`);
+    dbPath = path.join(__dirname, `../.test_db/test_staff_phase6_${Date.now()}_${Math.random().toString(36).substring(7)}.db`);
     db = initDatabase(dbPath);
     leaveService = new StaffLeaveService(db);
 

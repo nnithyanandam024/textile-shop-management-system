@@ -22,7 +22,7 @@ describe('Staff Management System — Phase 3 Test Suite (Roles, Permissions & A
 
   beforeEach(() => {
     closeDatabase();
-    dbPath = path.join(__dirname, `../../test_staff_phase3_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
+    dbPath = path.join(__dirname, `../.test_db/test_staff_phase3_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
     db = initDatabase(dbPath);
     staffService = new StaffService(db);
     deptRepo = new DepartmentRepository(db);

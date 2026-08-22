@@ -11,7 +11,7 @@ describe('Staff Portal — Phase 10 Test Suite (Customer Management)', () => {
   let db: Database.Database;
   let customerService: StaffCustomerService;
   let posService: StaffPOSService;
-  const testDbPath = path.join(process.cwd(), 'test_staff_portal_phase10.db');
+  const testDbPath = path.join(__dirname, '../.test_db/test_staff_portal_phase10.db');
 
   let staff1Id: number;
   let user1Id: number;

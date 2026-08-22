@@ -16,7 +16,7 @@ describe('Staff Portal — Phase 4 Test Suite (Staff Attendance Management Syste
   let staff2Id: number;
 
   beforeEach(() => {
-    dbPath = path.join(process.cwd(), `test_staff_phase4_${Date.now()}_${Math.random().toString(36).substring(7)}.db`);
+    dbPath = path.join(__dirname, `../.test_db/test_staff_phase4_${Date.now()}_${Math.random().toString(36).substring(7)}.db`);
     db = initDatabase(dbPath);
     attendanceService = new StaffAttendanceService(db);
 

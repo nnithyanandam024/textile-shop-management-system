@@ -30,7 +30,7 @@ import { settingsApi } from '../../src/api/settingsApi';
 import { SessionService } from '../../electron/main/services/auth/sessionService';
 
 describe('Phase 12 — Complete API Integration Foundation Test Suite', () => {
-  const testDbPath = path.join(__dirname, '../../test_phase12.db');
+  const testDbPath = path.join(__dirname, '../.test_db/test_phase12.db');
   let db: Database.Database;
 
   // Mock localStorage for storage testing in node environment

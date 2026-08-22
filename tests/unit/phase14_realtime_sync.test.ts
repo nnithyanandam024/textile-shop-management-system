@@ -19,7 +19,7 @@ import { StaffNotificationCenterService } from '../../electron/main/services/sta
 import { SessionService } from '../../electron/main/services/auth/sessionService';
 
 describe('Phase 14 — Real-Time Synchronization & Live Updates Test Suite', () => {
-  const testDbPath = path.join(__dirname, '../../test_phase14.db');
+  const testDbPath = path.join(__dirname, '../.test_db/test_phase14.db');
   let db: Database.Database;
 
   let posService: StaffPOSService;

@@ -19,7 +19,7 @@ describe('Staff Portal — Phase 8 Test Suite (Staff Inventory & Product Operati
   let po1Id: number;
 
   beforeEach(() => {
-    dbPath = path.join(process.cwd(), `test_staff_phase8_${Date.now()}_${Math.random().toString(36).substring(7)}.db`);
+    dbPath = path.join(__dirname, `../.test_db/test_staff_phase8_${Date.now()}_${Math.random().toString(36).substring(7)}.db`);
     db = initDatabase(dbPath);
     inventoryService = new StaffInventoryService(db);
 

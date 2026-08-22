@@ -11,7 +11,7 @@ import { StockRepository } from '../../electron/main/repositories/stockRepositor
 import path from 'path';
 import fs from 'fs';
 
-const TEST_DB_PATH = path.join(__dirname, '../../test_phase6.db');
+const TEST_DB_PATH = path.join(__dirname, '../.test_db/test_phase6.db');
 
 describe('Phase 6 Customers, Suppliers & Purchase Management Test Suite', () => {
   let db: Database.Database;

@@ -269,7 +269,29 @@ export class StaffShiftService {
   getTodayShift(): StaffShiftItem {
     const staffId = this.getStaffIdOrThrow();
     const todayStr = getTodayDateStr();
-    return this.resolveShiftForStaffDate(staffId, todayStr);
+    const item = this.resolveShiftForStaffDate(staffId, todayStr);
+    if (item.status === 'WEEK_OFF') {
+      // If staff has an active assignment, provide their assigned shift details
+      const assignment = this.db.prepare(`
+        SELECT st.* FROM staff_shift_assignments s
+        JOIN shift_templates st ON s.shift_template_id = st.id
+        WHERE s.staff_id = ? AND ? BETWEEN s.effective_from AND COALESCE(s.effective_to, '9999-12-31')
+        ORDER BY s.id DESC LIMIT 1
+      `).get(staffId, todayStr) as any;
+      if (assignment) {
+        return {
+          ...item,
+          shiftName: assignment.name,
+          shiftCode: assignment.shift_code,
+          startTime: assignment.start_time,
+          endTime: assignment.end_time,
+          graceMinutes: assignment.grace_minutes ?? 15,
+          status: 'SCHEDULED',
+          isWeekOff: false,
+        };
+      }
+    }
+    return item;
   }
 
   // --- WEEKLY SCHEDULE ---

@@ -19,7 +19,7 @@ import { eventBus } from '../../electron/main/realtime/eventBus';
 import { ROLE_PERMISSION_TEMPLATES } from '../../src/auth/permissions';
 
 describe('Phase 16 — Complete End-to-End User Flow & Business Logic Test Suite', () => {
-  const testDbPath = path.join(__dirname, '../../test_e2e_phase16.db');
+  const testDbPath = path.join(__dirname, '../.test_db/test_e2e_phase16.db');
   let db: Database.Database;
 
   // Domain Services

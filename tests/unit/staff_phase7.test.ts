@@ -19,7 +19,7 @@ describe('Staff Management System — Phase 7 Test Suite (Payroll & Salary Manag
 
   beforeEach(() => {
     closeDatabase();
-    dbPath = path.join(__dirname, `../../test_staff_phase7_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
+    dbPath = path.join(__dirname, `../.test_db/test_staff_phase7_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
     db = initDatabase(dbPath);
     payrollService = new PayrollService(db);
     staffService = new StaffService(db);

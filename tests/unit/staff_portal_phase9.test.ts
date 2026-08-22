@@ -7,7 +7,7 @@ import path from 'path';
 import fs from 'fs';
 
 describe('Staff Portal — Phase 9 Test Suite (POS & Sales Operations)', () => {
-  const testDbPath = path.join(process.cwd(), 'test_staff_portal_phase9.db');
+  const testDbPath = path.join(__dirname, '../.test_db/test_staff_portal_phase9.db');
   let db: Database.Database;
   let service: StaffPOSService;
 

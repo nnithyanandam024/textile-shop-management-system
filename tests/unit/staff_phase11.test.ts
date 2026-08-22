@@ -18,7 +18,7 @@ describe('Staff Management System — Phase 11 Test Suite (Staff Self-Service Po
 
   beforeEach(() => {
     closeDatabase();
-    dbPath = path.join(__dirname, `../../test_staff_phase11_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
+    dbPath = path.join(__dirname, `../.test_db/test_staff_phase11_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
     db = initDatabase(dbPath);
     selfService = new SelfServiceService(db);
     staffRepo = new StaffRepository(db);

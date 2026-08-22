@@ -7,7 +7,7 @@ import { RestoreService } from '../../electron/main/services/restoreService';
 import path from 'path';
 import fs from 'fs';
 
-const TEST_DB_PATH = path.join(__dirname, '../../test_phase9.db');
+const TEST_DB_PATH = path.join(__dirname, '../.test_db/test_phase9.db');
 
 describe('Phase 9 Backup, Restore, Security Hardening & Data Recovery Test Suite', () => {
   let db: Database.Database;

@@ -10,7 +10,7 @@ import { StockRepository } from '../../electron/main/repositories/stockRepositor
 import path from 'path';
 import fs from 'fs';
 
-const TEST_DB_PATH = path.join(__dirname, '../../test_phase7.db');
+const TEST_DB_PATH = path.join(__dirname, '../.test_db/test_phase7.db');
 
 describe('Phase 7 Returns, Exchanges, Payments & Expense Management Test Suite', () => {
   let db: Database.Database;

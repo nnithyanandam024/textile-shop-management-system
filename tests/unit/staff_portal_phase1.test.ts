@@ -22,7 +22,7 @@ describe('Staff Portal — Phase 1 Test Suite (Staff Login & Authentication Foun
   beforeEach(async () => {
     closeDatabase();
     SessionService.clearSession();
-    dbPath = path.join(__dirname, `../../test_staff_portal_p1_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
+    dbPath = path.join(__dirname, `../.test_db/test_staff_portal_p1_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
     db = initDatabase(dbPath);
     staffAuthService = new StaffAuthService(db);
     staffRepo = new StaffRepository(db);

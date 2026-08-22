@@ -16,7 +16,7 @@ describe('Staff Portal — Phase 5 Test Suite (Staff Shift & Work Schedule Manag
   let staff2Id: number;
 
   beforeEach(() => {
-    dbPath = path.join(process.cwd(), `test_staff_phase5_${Date.now()}_${Math.random().toString(36).substring(7)}.db`);
+    dbPath = path.join(__dirname, `../.test_db/test_staff_phase5_${Date.now()}_${Math.random().toString(36).substring(7)}.db`);
     db = initDatabase(dbPath);
     shiftService = new StaffShiftService(db);
 

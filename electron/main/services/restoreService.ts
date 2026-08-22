@@ -43,12 +43,12 @@ export class RestoreService {
       } catch (copyErr: any) {
         log.error('Failed to copy backup file over live database:', copyErr);
         // Re-open original database
-        initDatabase();
+        initDatabase(liveDbPath);
         return { success: false, error: `File copy failed: ${copyErr.message}` };
       }
 
       // 5. Reinitialize Database Connection & Perform Post-Restore Integrity Check
-      const newDb = initDatabase();
+      const newDb = initDatabase(liveDbPath);
       const integrity = BackupService.checkIntegrity(newDb);
 
       if (!integrity.healthy || !integrity.foreignKeysOk) {
@@ -57,7 +57,7 @@ export class RestoreService {
 
         // 6. AUTOMATIC ROLLBACK TO EMERGENCY BACKUP
         fs.copyFileSync(emergencyBackupPath, liveDbPath);
-        initDatabase();
+        initDatabase(liveDbPath);
 
         return {
           success: false,

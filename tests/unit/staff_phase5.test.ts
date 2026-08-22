@@ -8,6 +8,7 @@ import { AttendanceService } from '../../electron/main/services/attendanceServic
 import { StaffService } from '../../electron/main/services/staffService';
 import { DepartmentRepository } from '../../electron/main/repositories/departmentRepository';
 import { DesignationRepository } from '../../electron/main/repositories/designationRepository';
+import { getTodayDateStr } from '../../electron/main/services/attendanceService';
 
 describe('Staff Management System — Phase 5 Test Suite (Shift & Work Schedule Management)', () => {
   let db: Database.Database;
@@ -21,7 +22,7 @@ describe('Staff Management System — Phase 5 Test Suite (Shift & Work Schedule 
 
   beforeEach(() => {
     closeDatabase();
-    dbPath = path.join(__dirname, `../../test_staff_phase5_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
+    dbPath = path.join(__dirname, `../.test_db/test_staff_phase5_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
     db = initDatabase(dbPath);
     shiftService = new ShiftService(db);
     attendanceService = new AttendanceService(db);
@@ -150,7 +151,7 @@ describe('Staff Management System — Phase 5 Test Suite (Shift & Work Schedule 
     // Check in at 08:20 AM => Late by 20 minutes against Morning 08:00 start
     attendanceService.checkIn(testStaffId, '08:20');
 
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = getTodayDateStr();
     const daily = attendanceService.getDailyAttendanceList(todayStr);
     const record = daily.list.find((r) => r.staff_id === testStaffId)!;
 
@@ -168,7 +169,7 @@ describe('Staff Management System — Phase 5 Test Suite (Shift & Work Schedule 
       effective_from: '2026-01-01',
     });
 
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = getTodayDateStr();
     attendanceService.checkIn(testStaffId, '09:00');
 
     // Check out at 20:00 PM (11 hours = 660 mins gross => Worked 660 mins, Scheduled 480 mins => 180 mins OT)

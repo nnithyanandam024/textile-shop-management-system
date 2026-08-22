@@ -261,7 +261,8 @@ export class ShiftService {
     }
 
     // 2. Daily Weekly Schedule
-    const dateObj = new Date(dateStr);
+    const [y, m, d] = dateStr.split('-').map(Number);
+    const dateObj = new Date(y, m - 1, d);
     const dayOfWeek = dateObj.getDay(); // 0=Sunday, 6=Saturday
     const weeklySched = this.shiftRepo.getWeeklySchedule(staffId, dateStr);
     const daySched = weeklySched.find((s) => s.day_of_week === dayOfWeek);
@@ -290,7 +291,6 @@ export class ShiftService {
     if (assignment) {
       const t = this.shiftRepo.getTemplateById(assignment.shift_template_id);
       if (t) {
-        // Sunday default week-off if dayOfWeek === 0
         const isSun = dayOfWeek === 0;
         return {
           template: t,

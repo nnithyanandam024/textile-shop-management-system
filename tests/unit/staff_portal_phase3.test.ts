@@ -15,7 +15,7 @@ describe('Staff Portal — Phase 3 Test Suite (My Profile & Personal Information
   let staff2Id: number;
 
   beforeEach(() => {
-    dbPath = path.join(process.cwd(), `test_staff_phase3_${Date.now()}_${Math.random().toString(36).substring(7)}.db`);
+    dbPath = path.join(__dirname, `../.test_db/test_staff_phase3_${Date.now()}_${Math.random().toString(36).substring(7)}.db`);
     db = initDatabase(dbPath);
     profileService = new StaffProfileService(db);
 

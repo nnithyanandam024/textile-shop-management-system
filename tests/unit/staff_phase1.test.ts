@@ -20,7 +20,7 @@ describe('Staff Management System — Phase 1 Test Suite', () => {
 
   beforeEach(() => {
     closeDatabase();
-    dbPath = path.join(__dirname, `../../test_staff_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
+    dbPath = path.join(__dirname, `../.test_db/test_staff_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
     db = initDatabase(dbPath);
     deptRepo = new DepartmentRepository(db);
     deptService = new DepartmentService(db);

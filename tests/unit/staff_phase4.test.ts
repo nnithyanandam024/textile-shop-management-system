@@ -19,7 +19,7 @@ describe('Staff Management System — Phase 4 Test Suite (Attendance Management)
 
   beforeEach(() => {
     closeDatabase();
-    dbPath = path.join(__dirname, `../../test_staff_phase4_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
+    dbPath = path.join(__dirname, `../.test_db/test_staff_phase4_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
     db = initDatabase(dbPath);
     attendanceService = new AttendanceService(db);
     staffService = new StaffService(db);

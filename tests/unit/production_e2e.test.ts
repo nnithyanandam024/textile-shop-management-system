@@ -18,7 +18,7 @@ import { ReportService } from '../../electron/main/services/reportService';
 import { BackupService } from '../../electron/main/services/backupService';
 import { RestoreService } from '../../electron/main/services/restoreService';
 
-const E2E_DB_PATH = path.join(__dirname, '../../test_production_e2e.db');
+const E2E_DB_PATH = path.join(__dirname, '../.test_db/test_production_e2e.db');
 
 describe('Phase 10 — 25-Step End-to-End Real-Shop Business Simulation Suite', () => {
   let db: Database.Database;

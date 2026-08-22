@@ -18,7 +18,7 @@ describe('Staff Management System — Phase 10 Test Suite (Communication & Notif
 
   beforeEach(() => {
     closeDatabase();
-    dbPath = path.join(__dirname, `../../test_staff_phase10_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
+    dbPath = path.join(__dirname, `../.test_db/test_staff_phase10_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
     db = initDatabase(dbPath);
     commService = new CommunicationService(db);
     dispatcher = new NotificationDispatcher(db);

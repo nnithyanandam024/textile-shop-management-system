@@ -1,5 +1,6 @@
 import Database from 'better-sqlite3';
 import { SessionService } from './auth/sessionService';
+import { getTodayDateStr } from './attendanceService';
 
 export interface DashboardSummaryData {
   staff: {
@@ -81,7 +82,7 @@ export class StaffDashboardService {
       throw new Error('ACCESS DENIED: No active staff session detected.');
     }
 
-    const todayStr = new Date().toISOString().slice(0, 10);
+    const todayStr = getTodayDateStr();
 
     // 1. Staff Record
     const staff = this.db.prepare(`
@@ -144,12 +145,12 @@ export class StaffDashboardService {
 
     // Check Day Off schedule
     const dayOfWeek = new Date().getDay(); // 0=Sunday
-    const isScheduledOff = dayOfWeek === 0; // Default Sunday off
+    const isScheduledOff = !shiftAssignment && dayOfWeek === 0; // Sunday off if no explicit assignment
 
     const todayShift = {
-      hasShift: !!shiftAssignment && !isScheduledOff,
+      hasShift: !!shiftAssignment,
       isDayOff: isScheduledOff,
-      name: isScheduledOff ? 'Day Off' : (shiftAssignment?.shift_name || 'Morning Shift'),
+      name: shiftAssignment?.shift_name || (isScheduledOff ? 'Day Off' : 'Morning Shift'),
       startTime: shiftAssignment?.start_time || '09:00',
       endTime: shiftAssignment?.end_time || '18:00',
       timeRange: isScheduledOff ? 'No Shift Scheduled' : `${shiftAssignment?.start_time || '09:00 AM'} – ${shiftAssignment?.end_time || '06:00 PM'}`,

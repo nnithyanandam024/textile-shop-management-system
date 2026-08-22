@@ -15,6 +15,9 @@ build
 *.db-shm
 *.db-wal
 *.sqlite
+test_*.db*
+tests/.test_db/
+temp_test_databases/
 Backups/
 temp_storage/
 

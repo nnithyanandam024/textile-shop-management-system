@@ -11,7 +11,7 @@ import { ProductRepository } from '../../electron/main/repositories/productRepos
 import path from 'path';
 import fs from 'fs';
 
-const TEST_DB_PATH = path.join(__dirname, '../../test_phase8.db');
+const TEST_DB_PATH = path.join(__dirname, '../.test_db/test_phase8.db');
 
 describe('Phase 8 Dashboard, Reports & Business Analytics Test Suite', () => {
   let db: Database.Database;

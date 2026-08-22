@@ -6,6 +6,7 @@ import { initDatabase, closeDatabase } from '../../electron/main/database';
 import { StaffDashboardService } from '../../electron/main/services/staffDashboardService';
 import { StaffRepository } from '../../electron/main/repositories/staffRepository';
 import { SessionService, AuthUserSession } from '../../electron/main/services/auth/sessionService';
+import { getTodayDateStr } from '../../electron/main/services/attendanceService';
 
 describe('Staff Portal — Phase 2 Test Suite (Staff Dashboard Today View & Personal Summary)', () => {
   let db: Database.Database;
@@ -18,7 +19,7 @@ describe('Staff Portal — Phase 2 Test Suite (Staff Dashboard Today View & Pers
   beforeEach(async () => {
     closeDatabase();
     SessionService.clearSession();
-    dbPath = path.join(__dirname, `../../test_staff_portal_p2_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
+    dbPath = path.join(__dirname, `../.test_db/test_staff_portal_p2_${Date.now()}_${Math.floor(Math.random() * 10000)}.db`);
     db = initDatabase(dbPath);
     dashboardService = new StaffDashboardService(db);
     staffRepo = new StaffRepository(db);
@@ -138,7 +139,7 @@ describe('Staff Portal — Phase 2 Test Suite (Staff Dashboard Today View & Pers
     };
     SessionService.setSession(session);
 
-    const todayStr = new Date().toISOString().slice(0, 10);
+    const todayStr = getTodayDateStr();
 
     // Initial state: Not Checked In
     const summary1 = dashboardService.getDashboardSummary();

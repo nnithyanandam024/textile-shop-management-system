@@ -300,6 +300,19 @@ export interface ElectronAPI {
     getInvoice: (saleId: number) => Promise<{ success: boolean; data?: any; error?: string }>;
     createReturn: (input: any) => Promise<{ success: boolean; returnId?: number; returnNumber?: string; refundAmount?: number; message?: string; error?: string }>;
   };
+  staffCustomer: {
+    search: (query?: string, filters?: any) => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    getDetails: (customerId: number) => Promise<{ success: boolean; data?: any; error?: string }>;
+    create: (input: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    update: (customerId: number, input: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    purchases: (customerId: number) => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    returns: (customerId: number) => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    loyalty: (customerId: number) => Promise<{ success: boolean; data?: any; error?: string }>;
+    adjustLoyalty: (customerId: number, points: number, type: any, description: string) => Promise<{ success: boolean; data?: any; error?: string }>;
+    addNote: (customerId: number, note: string) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getNotes: (customerId: number) => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    updatePreferences: (customerId: number, preferences: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+  };
   products: {
     getAll: () => Promise<any[]>;
     create: (product: any) => Promise<{ success: boolean; id?: number; error?: string }>;
@@ -677,6 +690,19 @@ const api: ElectronAPI = {
     getMySales: (filters) => ipcRenderer.invoke('staff-pos:get-my-sales', filters),
     getInvoice: (saleId) => ipcRenderer.invoke('staff-pos:get-invoice', saleId),
     createReturn: (input) => ipcRenderer.invoke('staff-pos:create-return', input),
+  },
+  staffCustomer: {
+    search: (query, filters) => ipcRenderer.invoke('staff-customer:search', query, filters),
+    getDetails: (customerId) => ipcRenderer.invoke('staff-customer:get-details', customerId),
+    create: (input) => ipcRenderer.invoke('staff-customer:create', input),
+    update: (customerId, input) => ipcRenderer.invoke('staff-customer:update', customerId, input),
+    purchases: (customerId) => ipcRenderer.invoke('staff-customer:purchases', customerId),
+    returns: (customerId) => ipcRenderer.invoke('staff-customer:returns', customerId),
+    loyalty: (customerId) => ipcRenderer.invoke('staff-customer:loyalty', customerId),
+    adjustLoyalty: (customerId, points, type, description) => ipcRenderer.invoke('staff-customer:adjust-loyalty', customerId, points, type, description),
+    addNote: (customerId, note) => ipcRenderer.invoke('staff-customer:add-note', customerId, note),
+    getNotes: (customerId) => ipcRenderer.invoke('staff-customer:get-notes', customerId),
+    updatePreferences: (customerId, preferences) => ipcRenderer.invoke('staff-customer:update-preferences', customerId, preferences),
   },
   products: {
     getAll: () => ipcRenderer.invoke('products:get-all'),

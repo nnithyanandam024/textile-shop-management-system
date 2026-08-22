@@ -16,6 +16,7 @@ describe('Staff Portal — Phase 9 Test Suite (POS & Sales Operations)', () => {
   let user1Id: number;
   let user2Id: number;
   let supervisorUserId: number;
+  let supervisorRoleId: number;
   let supervisorStaffId: number;
 
   let variant1Id: number;
@@ -34,7 +35,6 @@ describe('Staff Portal — Phase 9 Test Suite (POS & Sales Operations)', () => {
     service = new StaffPOSService(db);
 
     // Setup Roles
-    let supervisorRoleId: number;
     const existingSup = db.prepare("SELECT id FROM roles WHERE name = 'SUPERVISOR'").get() as { id: number } | undefined;
     if (existingSup) {
       supervisorRoleId = existingSup.id;

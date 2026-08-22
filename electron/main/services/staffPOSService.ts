@@ -524,7 +524,35 @@ export class StaffPOSService {
         payStmt.run(saleId, p.method, p.amount, p.referenceNumber || null, changeAmount > 0 ? `Tendered ₹${p.amount}` : null);
       }
 
-      // 6. Audit Log
+      // 6. Automatically accrue Loyalty Points (1 pt per ₹100)
+      const pointsEarned = Math.floor(totals.totalAmount / 100);
+      if (pointsEarned > 0 && input.customerId) {
+        let acc = this.db.prepare('SELECT * FROM loyalty_accounts WHERE customer_id = ?').get(input.customerId) as any;
+        if (!acc) {
+          this.db.prepare(`INSERT OR IGNORE INTO loyalty_accounts (customer_id, points_balance, lifetime_points, tier) VALUES (?, 0, 0, 'BRONZE')`).run(input.customerId);
+          acc = { points_balance: 0, lifetime_points: 0, tier: 'BRONZE' };
+        }
+        const newBal = (acc.points_balance || 0) + pointsEarned;
+        const newLife = (acc.lifetime_points || 0) + pointsEarned;
+        let newTier: 'BRONZE' | 'SILVER' | 'GOLD' | 'PLATINUM' = 'BRONZE';
+        if (newLife >= 5000) newTier = 'PLATINUM';
+        else if (newLife >= 2000) newTier = 'GOLD';
+        else if (newLife >= 500) newTier = 'SILVER';
+
+        this.db.prepare(`
+          UPDATE loyalty_accounts
+          SET points_balance = ?, lifetime_points = ?, tier = ?, updated_at = CURRENT_TIMESTAMP
+          WHERE customer_id = ?
+        `).run(newBal, newLife, newTier, input.customerId);
+
+        this.db.prepare(`
+          INSERT INTO loyalty_transactions (
+            customer_id, type, points, reference_type, reference_id, description, created_by
+          ) VALUES (?, 'EARN', ?, 'SALE', ?, ?, ?)
+        `).run(input.customerId, pointsEarned, saleId, `Earned ${pointsEarned} pts from Invoice ${invoiceNumber}`, session?.userId || null);
+      }
+
+      // 7. Audit Log
       this.auditRepo.log({
         user_id: session?.userId,
         action: 'SALE_COMPLETED',

@@ -2043,6 +2043,68 @@ function runMigrations(db: Database.Database) {
           CREATE INDEX IF NOT EXISTS idx_sale_items_variant ON sale_items(product_variant_id, sale_id);
         `);
       }
+    },
+    {
+      version: 19,
+      name: 'staff_module_customer_management_and_loyalty',
+      up: (database: Database.Database) => {
+        database.exec(`
+          -- 1. Customer Preferences (Textile retail shopping habits)
+          CREATE TABLE IF NOT EXISTS customer_preferences (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            customer_id INTEGER NOT NULL UNIQUE REFERENCES customers(id) ON DELETE CASCADE,
+            preferred_categories TEXT,
+            preferred_colors TEXT,
+            preferred_sizes TEXT,
+            preferred_brands TEXT,
+            shopping_preferences TEXT,
+            dob TEXT,
+            anniversary TEXT,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 2. Loyalty Accounts (Customer rewards & tier status)
+          CREATE TABLE IF NOT EXISTS loyalty_accounts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            customer_id INTEGER NOT NULL UNIQUE REFERENCES customers(id) ON DELETE CASCADE,
+            points_balance INTEGER NOT NULL DEFAULT 0 CHECK (points_balance >= 0),
+            lifetime_points INTEGER NOT NULL DEFAULT 0 CHECK (lifetime_points >= 0),
+            tier TEXT DEFAULT 'BRONZE' CHECK (tier IN ('BRONZE', 'SILVER', 'GOLD', 'PLATINUM')),
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 3. Loyalty Transactions (Earn, Redeem, Adjust audit trail)
+          CREATE TABLE IF NOT EXISTS loyalty_transactions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            customer_id INTEGER NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
+            type TEXT NOT NULL CHECK (type IN ('EARN', 'REDEEM', 'ADJUST', 'EXPIRE')),
+            points INTEGER NOT NULL,
+            reference_type TEXT,
+            reference_id INTEGER,
+            description TEXT NOT NULL,
+            created_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 4. Customer Notes (Timeline of staff notes and remarks)
+          CREATE TABLE IF NOT EXISTS customer_notes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            customer_id INTEGER NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
+            note TEXT NOT NULL,
+            created_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+            author_name TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- Indexes for Customer Management speed
+          CREATE INDEX IF NOT EXISTS idx_customer_preferences_cust ON customer_preferences(customer_id);
+          CREATE INDEX IF NOT EXISTS idx_loyalty_accounts_cust ON loyalty_accounts(customer_id);
+          CREATE INDEX IF NOT EXISTS idx_loyalty_tx_cust ON loyalty_transactions(customer_id);
+          CREATE INDEX IF NOT EXISTS idx_customer_notes_cust ON customer_notes(customer_id);
+          CREATE INDEX IF NOT EXISTS idx_customers_phone ON customers(phone);
+        `);
+      }
     }
   ];
 

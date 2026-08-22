@@ -592,10 +592,10 @@ export class StaffPOSService {
       ref,
       input.customerId || null,
       JSON.stringify(input.cartData),
-      input.subtotal,
-      input.discountAmount,
-      input.taxAmount,
-      input.totalAmount
+      input.subtotal || 0,
+      input.discountAmount || 0,
+      input.taxAmount || 0,
+      input.totalAmount || 0
     );
 
     return {

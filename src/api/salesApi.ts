@@ -54,7 +54,21 @@ export const salesApi = {
       try {
         const res = await window.api.staffPOS.completeSale(saleData);
         if (res.success && res.data) {
-          return { success: true, data: res.data, message: 'Sale completed successfully.' };
+          const invoice: SaleInvoice = {
+            id: res.data.id,
+            invoiceNumber: res.data.invoiceNumber,
+            saleDate: res.data.saleDate,
+            customerName: res.data.customerName,
+            customerId: res.data.customerId,
+            subtotal: res.data.subtotal,
+            discount: res.data.discountAmount || 0,
+            tax: res.data.taxAmount || 0,
+            total: res.data.totalAmount ?? res.data.total ?? 0,
+            paymentMethod: res.data.paymentMethod,
+            itemsCount: res.data.items?.length || 0,
+            items: res.data.items,
+          };
+          return { success: true, data: invoice, message: 'Sale completed successfully.' };
         }
         return { success: false, error: { code: 'VALIDATION_ERROR', message: res.error || 'Sale failed.' } };
       } catch (err: any) {

@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { authApi } from '../../api/authApi';
+import { StorageManager, UserSessionData } from '../../utils/storage';
 
 export interface AuthUser {
   userId: number;
@@ -25,7 +27,20 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(() => {
+    const saved = StorageManager.getCurrentUser();
+    if (saved && StorageManager.isAuthenticated()) {
+      return {
+        userId: Number(saved.id) || 1,
+        username: saved.username,
+        displayName: saved.name,
+        roleId: saved.roleId || 1,
+        roleName: saved.role,
+        permissions: saved.permissions || [],
+      };
+    }
+    return null;
+  });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isLocked, setIsLocked] = useState<boolean>(false);
   const [setupRequired, setSetupRequired] = useState<boolean>(false);
@@ -39,11 +54,31 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
         if (!setupRes.setupRequired) {
           const user = await window.api.auth.getCurrentUser();
-          setCurrentUser(user);
+          if (user) {
+            setCurrentUser(user);
+            const userSession: UserSessionData = {
+              id: user.userId,
+              username: user.username,
+              name: user.displayName,
+              role: user.roleName,
+              roleId: user.roleId,
+              permissions: user.permissions,
+            };
+            StorageManager.setCurrentUser(userSession);
+          }
         }
       } else {
-        // Web Browser Fallback (when opened directly in Chrome browser at http://localhost:5173)
-        console.warn('Electron IPC API not detected. Web Browser fallback active.');
+        const res = await authApi.getCurrentUser();
+        if (res.success && res.data) {
+          setCurrentUser({
+            userId: Number(res.data.id) || 1,
+            username: res.data.username,
+            displayName: res.data.name,
+            roleId: res.data.roleId || 1,
+            roleName: res.data.role,
+            permissions: res.data.permissions || [],
+          });
+        }
         setSetupRequired(false);
       }
     } catch (err) {
@@ -58,34 +93,48 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, []);
 
   const login = async (username: string, password: string) => {
-    if (!window.api || !window.api.auth) {
-      // Browser Demo Fallback
-      console.info(`[Browser Mock Auth] Logging in user: ${username}`);
-      const mockUser: AuthUser = {
-        userId: 1,
-        username: username || 'admin',
-        displayName: username === 'admin' ? 'Store Administrator' : username,
-        roleId: 1,
-        roleName: 'Owner',
-        permissions: ['*'],
-      };
-      setCurrentUser(mockUser);
-      setIsLocked(false);
-      return { success: true };
+    if (window.api && window.api.auth) {
+      const res = await window.api.auth.login(username, password);
+      if (res.success && res.user) {
+        setCurrentUser(res.user);
+        const userSession: UserSessionData = {
+          id: res.user.userId,
+          username: res.user.username,
+          name: res.user.displayName,
+          role: res.user.roleName,
+          roleId: res.user.roleId,
+          permissions: res.user.permissions,
+        };
+        StorageManager.setToken(`texora_token_${Date.now()}`);
+        StorageManager.setCurrentUser(userSession);
+        setIsLocked(false);
+        return { success: true };
+      }
+      return { success: false, error: res.error || 'Login failed.' };
     }
 
-    const res = await window.api.auth.login(username, password);
-    if (res.success && res.user) {
-      setCurrentUser(res.user);
+    const res = await authApi.login({ username, password });
+    if (res.success && res.data) {
+      setCurrentUser({
+        userId: Number(res.data.user.id) || 1,
+        username: res.data.user.username,
+        displayName: res.data.user.name,
+        roleId: res.data.user.roleId || 1,
+        roleName: res.data.user.role,
+        permissions: res.data.user.permissions,
+      });
       setIsLocked(false);
       return { success: true };
     }
-    return { success: false, error: res.error || 'Login failed.' };
+    return { success: false, error: res.error?.message || 'Login failed.' };
   };
 
   const logout = async () => {
+    await authApi.logout();
     if (window.api && window.api.auth) {
-      await window.api.auth.logout();
+      try {
+        await window.api.auth.logout();
+      } catch {}
     }
     setCurrentUser(null);
     setIsLocked(false);

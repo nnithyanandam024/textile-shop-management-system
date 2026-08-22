@@ -461,8 +461,8 @@ export class StaffAttendanceService {
              st.name as shift_name, st.start_time as scheduled_start, st.end_time as scheduled_end,
              cr.status as correction_status
       FROM attendance a
-      LEFT JOIN shift_rosters sr ON a.staff_id = sr.staff_id AND a.attendance_date = sr.date
-      LEFT JOIN shift_templates st ON sr.shift_template_id = st.id
+      LEFT JOIN staff_shift_assignments ssa ON a.staff_id = ssa.staff_id
+      LEFT JOIN shift_templates st ON ssa.shift_template_id = st.id
       LEFT JOIN attendance_correction_requests cr ON a.id = cr.attendance_id
       WHERE a.staff_id = ?
     `;
@@ -588,8 +588,8 @@ export class StaffAttendanceService {
              st.name as shift_name, st.start_time as scheduled_start, st.end_time as scheduled_end,
              cr.status as correction_status
       FROM attendance a
-      LEFT JOIN shift_rosters sr ON a.staff_id = sr.staff_id AND a.attendance_date = sr.date
-      LEFT JOIN shift_templates st ON sr.shift_template_id = st.id
+      LEFT JOIN staff_shift_assignments ssa ON a.staff_id = ssa.staff_id
+      LEFT JOIN shift_templates st ON ssa.shift_template_id = st.id
       LEFT JOIN attendance_correction_requests cr ON a.id = cr.attendance_id
       WHERE a.staff_id = ? AND a.attendance_date = ?
     `).get(staffId, dateStr) as any;

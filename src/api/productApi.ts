@@ -41,6 +41,14 @@ export const productApi = {
    * Lookup variant by barcode / SKU
    */
   async getProductVariant(skuOrBarcode: string): Promise<ApiResponse<ProductSummary>> {
+    if (typeof window !== 'undefined' && window.api?.staffPOS?.getByBarcode) {
+      try {
+        const res: any = await window.api.staffPOS.getByBarcode(skuOrBarcode);
+        if (res?.success && res?.data) return { success: true, data: res.data };
+        if (res?.data) return { success: true, data: res.data };
+        if (res && !res.error && res.sku) return { success: true, data: res };
+      } catch {}
+    }
     if (typeof window !== 'undefined' && window.api?.variants?.getByBarcode) {
       try {
         const res = await window.api.variants.getByBarcode(skuOrBarcode);

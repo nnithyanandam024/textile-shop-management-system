@@ -28,7 +28,8 @@ export const inventoryApi = {
           lowStockOnly: filters?.lowStockOnly,
         });
         if (res.success && res.data) {
-          return { success: true, data: res.data };
+          const items = Array.isArray(res.data) ? res.data : (res.data.items || []);
+          return { success: true, data: items };
         }
       } catch {}
     }
@@ -43,7 +44,13 @@ export const inventoryApi = {
       try {
         const res = await window.api.staffInventory.getProduct(variantId);
         if (res.success && res.data) {
-          return { success: true, data: { currentStock: res.data.current_stock || 0, minimumStock: res.data.minimum_stock || 0 } };
+          return {
+            success: true,
+            data: {
+              currentStock: res.data.currentStock ?? res.data.current_stock ?? 0,
+              minimumStock: res.data.minimumStock ?? res.data.minimum_stock ?? 0,
+            },
+          };
         }
       } catch {}
     }
@@ -87,9 +94,10 @@ export const inventoryApi = {
     if (typeof window !== 'undefined' && window.api?.staffInventory?.submitCount) {
       try {
         const res = await window.api.staffInventory.submitCount({
-          productVariantId: input.variantId,
-          physicalCount: input.physicalCount,
-          notes: input.notes,
+          product_variant_id: input.variantId,
+          physical_quantity: input.physicalCount,
+          reason: input.notes || 'Routine physical stock audit count',
+          location_name: 'Main Shop',
         });
         if (res.success) {
           return { success: true, data: res, message: res.message || 'Stock count recorded.' };
@@ -102,10 +110,17 @@ export const inventoryApi = {
   /**
    * Submit stock transfer request between store sections
    */
-  async createTransferRequest(input: { sourceLocation: string; destinationLocation: string; items: any[]; reason?: string }): Promise<ApiResponse<any>> {
+  async createTransferRequest(input: { sourceLocation: string; destinationLocation: string; items: any[]; reason?: string; variantId?: number; quantity?: number }): Promise<ApiResponse<any>> {
     if (typeof window !== 'undefined' && window.api?.staffInventory?.createTransfer) {
       try {
-        const res = await window.api.staffInventory.createTransfer(input);
+        const firstItem = input.items && input.items.length > 0 ? input.items[0] : null;
+        const res = await window.api.staffInventory.createTransfer({
+          product_variant_id: input.variantId || firstItem?.variantId || 1,
+          from_location: input.sourceLocation,
+          to_location: input.destinationLocation,
+          quantity: input.quantity || firstItem?.quantity || 1,
+          reason: input.reason || 'Store replenishment request',
+        });
         if (res.success) {
           return { success: true, data: res, message: res.message || 'Transfer request submitted.' };
         }

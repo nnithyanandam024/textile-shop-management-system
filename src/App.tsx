@@ -52,6 +52,7 @@ import { StaffAttendance } from './features/staff-portal/pages/StaffAttendance';
 import { StaffShifts } from './features/staff-portal/pages/StaffShifts';
 import { StaffLeave } from './features/staff-portal/pages/StaffLeave';
 import { StaffPayroll } from './features/staff-portal/pages/StaffPayroll';
+import { StaffInventory } from './features/staff-portal/pages/StaffInventory';
 import { StaffProtectedRoute } from './features/staff-portal/components/StaffProtectedRoute';
 
 const MainAppRouter: React.FC = () => {
@@ -119,6 +120,14 @@ const MainAppRouter: React.FC = () => {
         element={
           <StaffProtectedRoute>
             <StaffPayroll />
+          </StaffProtectedRoute>
+        }
+      />
+      <Route
+        path="/staff/inventory"
+        element={
+          <StaffProtectedRoute>
+            <StaffInventory />
           </StaffProtectedRoute>
         }
       />

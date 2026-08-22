@@ -271,6 +271,19 @@ export interface ElectronAPI {
     getOvertime: (monthStr?: string) => Promise<{ success: boolean; data?: any; error?: string }>;
     getIncentives: (periodName?: string) => Promise<{ success: boolean; data?: any; error?: string }>;
   };
+  staffInventory: {
+    searchProducts: (query?: string, filters?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getProduct: (variantId: number) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getLowStock: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    getTasks: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    submitCount: (input: any) => Promise<{ success: boolean; id?: number; difference?: number; message?: string; error?: string }>;
+    createTransfer: (input: any) => Promise<{ success: boolean; id?: number; message?: string; error?: string }>;
+    getTransfers: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    getPoReceiving: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    submitReceiving: (input: any) => Promise<{ success: boolean; id?: number; message?: string; error?: string }>;
+    getHistory: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    getMetrics: () => Promise<{ success: boolean; data?: any; error?: string }>;
+  };
   products: {
     getAll: () => Promise<any[]>;
     create: (product: any) => Promise<{ success: boolean; id?: number; error?: string }>;
@@ -619,6 +632,19 @@ const api: ElectronAPI = {
     getSalaryHistory: () => ipcRenderer.invoke('staff-payroll:get-salary-history'),
     getOvertime: (monthStr) => ipcRenderer.invoke('staff-payroll:get-overtime', monthStr),
     getIncentives: (periodName) => ipcRenderer.invoke('staff-payroll:get-incentives', periodName),
+  },
+  staffInventory: {
+    searchProducts: (query, filters) => ipcRenderer.invoke('staff-inventory:search-products', query, filters),
+    getProduct: (variantId) => ipcRenderer.invoke('staff-inventory:get-product', variantId),
+    getLowStock: () => ipcRenderer.invoke('staff-inventory:get-low-stock'),
+    getTasks: () => ipcRenderer.invoke('staff-inventory:get-tasks'),
+    submitCount: (input) => ipcRenderer.invoke('staff-inventory:submit-count', input),
+    createTransfer: (input) => ipcRenderer.invoke('staff-inventory:create-transfer', input),
+    getTransfers: () => ipcRenderer.invoke('staff-inventory:get-transfers'),
+    getPoReceiving: () => ipcRenderer.invoke('staff-inventory:get-po-receiving'),
+    submitReceiving: (input) => ipcRenderer.invoke('staff-inventory:submit-receiving', input),
+    getHistory: () => ipcRenderer.invoke('staff-inventory:get-history'),
+    getMetrics: () => ipcRenderer.invoke('staff-inventory:get-metrics'),
   },
   products: {
     getAll: () => ipcRenderer.invoke('products:get-all'),

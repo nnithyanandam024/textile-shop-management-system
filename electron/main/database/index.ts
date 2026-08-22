@@ -1920,6 +1920,92 @@ function runMigrations(db: Database.Database) {
           CREATE INDEX IF NOT EXISTS idx_payslips_staff ON payslips(staff_id, payroll_record_id);
         `);
       }
+    },
+    {
+      version: 17,
+      name: 'staff_module_inventory_operations',
+      up: (database: Database.Database) => {
+        database.exec(`
+          -- 1. Stock Counts Table
+          CREATE TABLE IF NOT EXISTS stock_counts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            product_variant_id INTEGER NOT NULL REFERENCES product_variants(id) ON DELETE CASCADE,
+            location_name TEXT DEFAULT 'Main Store',
+            system_quantity INTEGER NOT NULL,
+            physical_quantity INTEGER NOT NULL,
+            difference INTEGER NOT NULL,
+            reason TEXT NOT NULL,
+            status TEXT DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'APPROVED', 'REJECTED')),
+            reviewed_by INTEGER REFERENCES users(id),
+            review_comment TEXT,
+            reviewed_at DATETIME,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 2. Stock Transfer Requests Table
+          CREATE TABLE IF NOT EXISTS stock_transfer_requests (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            product_variant_id INTEGER NOT NULL REFERENCES product_variants(id) ON DELETE CASCADE,
+            from_location TEXT NOT NULL,
+            to_location TEXT NOT NULL,
+            quantity INTEGER NOT NULL,
+            reason TEXT NOT NULL,
+            status TEXT DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'APPROVED', 'IN_TRANSIT', 'RECEIVED', 'REJECTED', 'CANCELLED')),
+            reviewed_by INTEGER REFERENCES users(id),
+            review_comment TEXT,
+            reviewed_at DATETIME,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 3. Stock Receiving Records Table (PO Receiving)
+          CREATE TABLE IF NOT EXISTS stock_receiving_records (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            purchase_id INTEGER NOT NULL REFERENCES purchases(id) ON DELETE CASCADE,
+            notes TEXT,
+            status TEXT DEFAULT 'PENDING_VERIFICATION' CHECK (status IN ('PENDING_VERIFICATION', 'VERIFIED', 'REJECTED')),
+            reviewed_by INTEGER REFERENCES users(id),
+            review_comment TEXT,
+            reviewed_at DATETIME,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 4. Stock Receiving Items Discrepancy Breakdown
+          CREATE TABLE IF NOT EXISTS stock_receiving_items (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            receiving_record_id INTEGER NOT NULL REFERENCES stock_receiving_records(id) ON DELETE CASCADE,
+            product_variant_id INTEGER NOT NULL REFERENCES product_variants(id) ON DELETE CASCADE,
+            ordered_quantity INTEGER NOT NULL,
+            received_quantity INTEGER NOT NULL,
+            difference INTEGER NOT NULL,
+            notes TEXT
+          );
+
+          -- 5. Staff Assigned Inventory Tasks Table
+          CREATE TABLE IF NOT EXISTS inventory_tasks (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            task_type TEXT NOT NULL CHECK (task_type IN ('STOCK_COUNT', 'STOCK_RECEIVING', 'TRANSFER_DISPATCH', 'REORDER_CHECK')),
+            title TEXT NOT NULL,
+            description TEXT,
+            due_date TEXT,
+            status TEXT DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED')),
+            reference_id INTEGER,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- Indexes for fast inventory operations
+          CREATE INDEX IF NOT EXISTS idx_stock_counts_staff ON stock_counts(staff_id, product_variant_id);
+          CREATE INDEX IF NOT EXISTS idx_transfer_requests_staff ON stock_transfer_requests(staff_id, product_variant_id);
+          CREATE INDEX IF NOT EXISTS idx_inventory_tasks_staff ON inventory_tasks(staff_id, status);
+        `);
+      }
     }
   ];
 

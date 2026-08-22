@@ -40,9 +40,13 @@ export function initDatabase(customDbPath?: string): Database.Database {
   try {
     const instance = new Database(dbPath, { verbose: (msg) => log.debug(`[SQL] ${msg}`) });
 
-    // Enable WAL mode & Foreign Keys
+    // Enable WAL mode, Foreign Keys & Performance PRAGMAs
     instance.pragma('journal_mode = WAL');
     instance.pragma('foreign_keys = ON');
+    instance.pragma('synchronous = NORMAL');
+    instance.pragma('cache_size = -64000'); // 64MB Cache
+    instance.pragma('busy_timeout = 5000'); // 5s Busy Timeout
+    instance.pragma('mmap_size = 268435456'); // 256MB MMAP
 
     runMigrations(instance);
 
@@ -2147,6 +2151,24 @@ function runMigrations(db: Database.Database) {
           -- Indexes for Settings & Preferences
           CREATE INDEX IF NOT EXISTS idx_staff_preferences_staff ON staff_preferences(staff_id);
           CREATE INDEX IF NOT EXISTS idx_printer_configs_type ON printer_configs(printer_type);
+        `);
+      }
+    },
+    {
+      version: 21,
+      name: 'production_performance_indexes',
+      up: (database: Database.Database) => {
+        database.exec(`
+          -- Core Performance Indexes for Enterprise Scale & Speed
+          CREATE INDEX IF NOT EXISTS idx_product_variants_sku_barcode ON product_variants(sku, barcode);
+          CREATE INDEX IF NOT EXISTS idx_product_variants_current_stock ON product_variants(current_stock);
+          CREATE INDEX IF NOT EXISTS idx_sales_customer_date ON sales(customer_id, sale_date);
+          CREATE INDEX IF NOT EXISTS idx_sales_created_by_status ON sales(created_by, status);
+          CREATE INDEX IF NOT EXISTS idx_sale_items_variant ON sale_items(product_variant_id);
+          CREATE INDEX IF NOT EXISTS idx_attendance_staff_date ON attendance(staff_id, attendance_date);
+          CREATE INDEX IF NOT EXISTS idx_leave_requests_staff_status ON leave_requests(staff_id, status);
+          CREATE INDEX IF NOT EXISTS idx_audit_logs_action_ts ON audit_logs(action, timestamp);
+          CREATE INDEX IF NOT EXISTS idx_stock_tx_variant_created ON stock_transactions(product_variant_id, created_at);
         `);
       }
     }

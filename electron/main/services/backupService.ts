@@ -53,14 +53,20 @@ export class BackupService {
     return hashSum.digest('hex');
   }
 
-  static async createBackup(customBackupName?: string, isEmergency: boolean = false): Promise<{ success: boolean; backupPath?: string; sha256?: string; error?: string }> {
+  static async createBackup(
+    customBackupName?: string,
+    isEmergency: boolean = false,
+    dbInstance?: Database.Database,
+    customBackupDir?: string
+  ): Promise<{ success: boolean; backupPath?: string; sha256?: string; error?: string }> {
     try {
-      const dbPath = getDatabasePath();
+      const db = dbInstance || getDatabase();
+      const dbPath = db.name || getDatabasePath();
       if (!fs.existsSync(dbPath)) {
         return { success: false, error: 'Database file does not exist.' };
       }
 
-      const backupDir = getBackupDirectoryPath();
+      const backupDir = customBackupDir || getBackupDirectoryPath();
       if (!fs.existsSync(backupDir)) {
         fs.mkdirSync(backupDir, { recursive: true });
       }
@@ -72,7 +78,6 @@ export class BackupService {
 
       log.info(`Creating SQLite backup at: ${targetPath}`);
 
-      const db = getDatabase();
       await db.backup(targetPath);
 
       // Verify backup file integrity
@@ -85,7 +90,7 @@ export class BackupService {
       }
 
       // Rotate backups (keep latest 10)
-      this.rotateBackups(10);
+      this.rotateBackups(10, backupDir);
 
       log.info(`Backup ${filename} created and verified (SHA256: ${sha256.substring(0, 12)}...)`);
       return { success: true, backupPath: targetPath, sha256 };
@@ -112,9 +117,9 @@ export class BackupService {
     }
   }
 
-  static getBackupsList(): BackupMetadata[] {
+  static getBackupsList(customBackupDir?: string): BackupMetadata[] {
     try {
-      const backupDir = getBackupDirectoryPath();
+      const backupDir = customBackupDir || getBackupDirectoryPath();
       if (!fs.existsSync(backupDir)) return [];
 
       const files = fs.readdirSync(backupDir).filter((f) => f.endsWith('.db'));
@@ -144,9 +149,11 @@ export class BackupService {
     }
   }
 
-  static rotateBackups(retentionCount: number = 10) {
+  static rotateBackups(retentionCount: number = 10, customBackupDir?: string) {
     try {
-      const backupDir = getBackupDirectoryPath();
+      const backupDir = customBackupDir || getBackupDirectoryPath();
+      if (!fs.existsSync(backupDir)) return;
+
       const files = fs.readdirSync(backupDir).filter((f) => f.endsWith('.db') && !f.startsWith('emergency_'));
       files.sort((a, b) => fs.statSync(path.join(backupDir, b)).mtimeMs - fs.statSync(path.join(backupDir, a)).mtimeMs);
 
@@ -178,9 +185,9 @@ export class BackupService {
     }
   }
 
-  static deleteBackup(filename: string): { success: boolean; error?: string } {
+  static deleteBackup(filename: string, customBackupDir?: string): { success: boolean; error?: string } {
     try {
-      const backupDir = getBackupDirectoryPath();
+      const backupDir = customBackupDir || getBackupDirectoryPath();
       const targetPath = path.join(backupDir, filename);
       if (fs.existsSync(targetPath)) {
         fs.unlinkSync(targetPath);
@@ -191,13 +198,13 @@ export class BackupService {
     }
   }
 
-  static getHealthCheck(): HealthCheckResult {
+  static getHealthCheck(dbInstance?: Database.Database): HealthCheckResult {
     try {
-      const dbPath = getDatabasePath();
+      const db = dbInstance || getDatabase();
+      const dbPath = db.name || getDatabasePath();
       const backupDir = getBackupDirectoryPath();
-      const stats = fs.statSync(dbPath);
+      const stats = fs.existsSync(dbPath) ? fs.statSync(dbPath) : { size: 0 };
 
-      const db = getDatabase();
       const tablesRow = db.prepare("SELECT COUNT(*) as count FROM sqlite_master WHERE type='table'").get() as { count: number };
       const settingsRow = db.prepare("SELECT COUNT(*) as count FROM settings").get() as { count: number };
 

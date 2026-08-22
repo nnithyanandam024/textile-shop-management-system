@@ -3,6 +3,7 @@ import path from 'path';
 import { setupLogger } from './logger';
 import { initDatabase, closeDatabase } from './database';
 import { registerIpcHandlers } from './ipc/appHandler';
+import { envConfig } from './config/env';
 
 const log = setupLogger();
 
@@ -12,7 +13,7 @@ const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    title: 'Textile Shop Management System',
+    title: envConfig.appName || 'Textile Shop Management System',
     width: 1366,
     height: 768,
     minWidth: 1024,
@@ -24,6 +25,8 @@ function createWindow() {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: false,
+      webSecurity: true,
+      allowRunningInsecureContent: false,
     },
   });
 
@@ -33,7 +36,20 @@ function createWindow() {
     log.info('Main Window displayed successfully');
   });
 
-  // Handle external links opening in browser
+  // Prevent navigation to unapproved external pages
+  mainWindow.webContents.on('will-navigate', (event, navigationUrl) => {
+    const parsedUrl = new URL(navigationUrl);
+    if (isDev && parsedUrl.host === 'localhost:5173') {
+      return;
+    }
+    if (navigationUrl.startsWith('file://')) {
+      return;
+    }
+    event.preventDefault();
+    log.warn(`Blocked untrusted in-app navigation to: ${navigationUrl}`);
+  });
+
+  // Handle external links opening in system browser
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith('https:') || url.startsWith('http:')) {
       shell.openExternal(url);
@@ -48,7 +64,7 @@ function createWindow() {
     mainWindow.loadURL(devServerUrl).catch((err) => {
       log.error('Failed to load dev server URL:', err);
     });
-    // Open DevTools in dev mode
+    // Open DevTools in dev mode only
     mainWindow.webContents.openDevTools({ mode: 'detach' });
   } else {
     const indexPath = path.join(__dirname, '../../dist/index.html');

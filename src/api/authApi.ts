@@ -257,12 +257,12 @@ export const authApi = {
     // 3. Seamless Browser Demo Mode Fallback
     const rawKey = (credentials.username || credentials.employeeCode || 'admin').trim().toLowerCase();
     const matchedAccount = DEMO_ACCOUNTS_MAP[rawKey] || {
-      id: 1,
-      username: credentials.username || 'admin',
-      name: (credentials.username || 'Store User').toUpperCase(),
-      role: 'Owner',
-      roleId: 1,
-      permissions: ['*'],
+      id: 99,
+      username: credentials.username || 'staff',
+      name: (credentials.username || 'Store Staff').toUpperCase(),
+      role: 'Cashier',
+      roleId: 3,
+      permissions: ['dashboard.view', 'billing.create', 'sales.view', 'customers.view', 'products.view', 'inventory.view', 'returns.create'],
     };
 
     const token = `texora_demo_${Date.now()}_${matchedAccount.id}`;

@@ -71,12 +71,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       } else {
         const res = await authApi.getCurrentUser();
         if (res.success && res.data) {
+          const uRole = res.data.role || 'Cashier';
+          const uRoleId = res.data.roleId || (uRole === 'Owner' ? 1 : 3);
           setCurrentUser({
             userId: Number(res.data.id) || 1,
             username: res.data.username,
             displayName: res.data.name,
-            roleId: res.data.roleId || 1,
-            roleName: res.data.role,
+            roleId: uRoleId,
+            roleName: uRole,
             permissions: res.data.permissions || [],
           });
         }
@@ -116,13 +118,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const res = await authApi.login({ username, password });
     if (res.success && res.data) {
+      const uRole = res.data.user.role || 'Cashier';
+      const uRoleId = res.data.user.roleId || (uRole === 'Owner' ? 1 : 3);
+      const uPerms = res.data.user.permissions || res.data.permissions || (uRole === 'Owner' ? ['*'] : []);
       setCurrentUser({
         userId: Number(res.data.user.id) || 1,
         username: res.data.user.username,
         displayName: res.data.user.name,
-        roleId: res.data.user.roleId || 1,
-        roleName: res.data.user.role,
-        permissions: res.data.user.permissions || res.data.permissions || ['*'],
+        roleId: uRoleId,
+        roleName: uRole,
+        permissions: uPerms,
       });
       setIsLocked(false);
       return { success: true };

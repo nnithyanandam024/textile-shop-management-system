@@ -42,8 +42,7 @@ interface NavItem {
 
 interface NavSection {
   id: string;
-  title: string;
-  icon?: React.ElementType;
+  title?: string;
   items: NavItem[];
 }
 
@@ -51,121 +50,85 @@ export const Sidebar: React.FC = () => {
   const { currentUser, hasPermission } = useAuth();
 
   const roleName = (currentUser?.roleName || '').toLowerCase();
-  const isOwnerOrManager =
+  const isOwner =
     currentUser?.roleId === 1 ||
     roleName.includes('owner') ||
-    roleName.includes('manager') ||
     roleName.includes('admin') ||
-    hasPermission('*');
+    roleName.includes('super');
 
-  const isCashier = !isOwnerOrManager && (roleName.includes('cashier') || roleName.includes('sales'));
-  const isInventory = !isOwnerOrManager && roleName.includes('inventory');
-  const isHR = !isOwnerOrManager && (roleName.includes('hr') || roleName.includes('account'));
-
-  // --- Section 1: Executive Overview ---
-  const overviewNavItems: NavItem[] = [
-    { name: 'Executive Dashboard', path: '/dashboard', icon: LayoutDashboard, permission: 'dashboard.view' },
-    { name: 'Reports & Analytics', path: '/reports', icon: BarChart3, permission: 'reports.view' },
-  ];
-
-  // --- Section 2: Sales & Counter Operations ---
-  const billingNavItems: NavItem[] = [
-    { name: 'POS Billing Counter', path: '/billing', icon: ShoppingCart, permission: 'billing.create' },
+  // --- Section 1: Main Store Operations ---
+  const mainNavItems: NavItem[] = [
+    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, permission: 'dashboard.view' },
+    { name: 'POS Billing', path: '/billing', icon: ShoppingCart, permission: 'billing.create' },
     { name: 'Sales History', path: '/sales', icon: Receipt, permission: 'sales.view' },
-    { name: 'Sales Returns', path: '/returns', icon: RotateCcw, permission: 'returns.create' },
-    { name: 'Customers & Loyalty', path: '/customers', icon: Users, permission: 'customers.view' },
-  ];
-
-  // --- Section 3: Catalog & Inventory ---
-  const inventoryNavItems: NavItem[] = [
-    { name: 'Stock Ledger & Inventory', path: '/inventory', icon: Boxes, permission: 'inventory.view' },
-    { name: 'Products & Barcodes', path: '/products', icon: Package, permission: 'products.view' },
+    { name: 'Customers', path: '/customers', icon: Users, permission: 'customers.view' },
+    { name: 'Products', path: '/products', icon: Package, permission: 'products.view' },
     { name: 'Categories & Brands', path: '/categories', icon: Layers, permission: 'products.manage' },
-    { name: 'Purchase Orders (GRN)', path: '/purchases', icon: Building2, permission: 'purchases.view' },
-    { name: 'Suppliers Directory', path: '/suppliers', icon: Truck, permission: 'suppliers.view' },
+    { name: 'Inventory', path: '/inventory', icon: Boxes, permission: 'inventory.view' },
+    { name: 'Suppliers', path: '/suppliers', icon: Truck, permission: 'suppliers.view' },
+    { name: 'Purchases (GRN)', path: '/purchases', icon: Building2, permission: 'purchases.view' },
+    { name: 'Sales Returns', path: '/returns', icon: RotateCcw, permission: 'returns.create' },
+    { name: 'Reports', path: '/reports', icon: BarChart3, permission: 'reports.view' },
   ];
 
-  // --- Section 4: Staff & HR Governance ---
+  // --- Section 2: Staff & HR Governance ---
   const staffNavItems: NavItem[] = [
     { name: 'Staff Directory', path: '/staff', icon: Users2, permission: 'staff.view' },
-    { name: 'Daily Attendance', path: '/staff/attendance', icon: CalendarCheck, permission: 'attendance.view' },
-    { name: 'Shift Rosters', path: '/staff/shifts', icon: Clock, permission: 'shift.view' },
+    { name: 'Attendance', path: '/staff/attendance', icon: CalendarCheck, permission: 'attendance.view' },
+    { name: 'Shifts', path: '/staff/shifts', icon: Clock, permission: 'shift.view' },
     { name: 'Leave Approvals', path: '/staff/leave', icon: Calendar, permission: 'leave.view' },
     { name: 'Payroll & Salaries', path: '/staff/payroll', icon: DollarSign, permission: 'payroll.view' },
     { name: 'Departments', path: '/staff/departments', icon: Briefcase, permission: 'staff.organization' },
     { name: 'Designations', path: '/staff/designations', icon: BadgeCheck, permission: 'staff.organization' },
     { name: 'Staff Documents', path: '/staff/documents', icon: FileText, permission: 'documents.view' },
-    { name: 'Staff Notice Board', path: '/staff/communication', icon: Bell, permission: 'communication.view' },
+    { name: 'Notice Board', path: '/staff/communication', icon: Bell, permission: 'communication.view' },
     { name: 'Performance KPIs', path: '/staff/performance', icon: Award, permission: 'performance.view' },
   ];
 
-  // --- Section 5: System Administration ---
+  // --- Section 3: System Administration ---
   const systemNavItems: NavItem[] = [
-    { name: 'Roles & Permissions', path: '/roles', icon: ShieldCheck, permission: 'role.view' },
+    { name: 'Roles & Access', path: '/roles', icon: ShieldCheck, permission: 'role.view' },
     { name: 'Users & Accounts', path: '/users', icon: UserCheck, permission: 'users.view' },
     { name: 'Backup & Restore', path: '/backup', icon: Database, permission: 'backup.create' },
-    { name: 'System Diagnostics', path: '/health', icon: Activity, permission: 'settings.view' },
-    { name: 'Store Settings', path: '/settings', icon: Settings, permission: 'settings.view' },
+    { name: 'System Health', path: '/health', icon: Activity, permission: 'settings.view' },
+    { name: 'Settings', path: '/settings', icon: Settings, permission: 'settings.view' },
   ];
 
-  // --- Section 6: Employee Self-Service Workspace ---
+  // --- Section 4: Employee Self-Service (for staff employees only) ---
   const selfServiceNavItems: NavItem[] = [
     { name: 'My Workspace', path: '/self-service/dashboard', icon: Home, permission: 'self.profile.view' },
+    { name: 'My Profile', path: '/self-service/profile', icon: User, permission: 'self.profile.view' },
     { name: 'My Attendance', path: '/self-service/attendance', icon: CalendarCheck, permission: 'self.attendance.view' },
     { name: 'My Shifts', path: '/self-service/shifts', icon: Clock, permission: 'self.shift.view' },
     { name: 'My Leave', path: '/self-service/leave', icon: Calendar, permission: 'self.leave.view' },
     { name: 'My Payslips', path: '/self-service/payroll', icon: DollarSign, permission: 'self.payroll.view' },
-    { name: 'My Profile', path: '/self-service/profile', icon: User, permission: 'self.profile.view' },
     { name: 'My Documents', path: '/self-service/documents', icon: FileText, permission: 'self.documents.view' },
   ];
 
   const filterItems = (items: NavItem[]) =>
     items.filter((item) => !item.permission || hasPermission(item.permission));
 
-  // Determine sections based on Role Priority
-  const allSections: NavSection[] = [
-    { id: 'overview', title: 'Executive Overview', items: filterItems(overviewNavItems) },
-    { id: 'billing', title: 'Sales & Billing', items: filterItems(billingNavItems) },
-    { id: 'inventory', title: 'Catalog & Inventory', items: filterItems(inventoryNavItems) },
-    { id: 'staff', title: 'Staff Management', items: filterItems(staffNavItems) },
-    { id: 'system', title: 'System Administration', items: filterItems(systemNavItems) },
-    { id: 'self_service', title: 'My Workspace', items: filterItems(selfServiceNavItems) },
+  const filteredMain = filterItems(mainNavItems);
+  const filteredStaff = filterItems(staffNavItems);
+  const filteredSystem = isOwner
+    ? systemNavItems // Owner has full access to all system tools
+    : filterItems(systemNavItems);
+  const filteredSelfService = !isOwner ? filterItems(selfServiceNavItems) : [];
+
+  const sections: NavSection[] = [
+    ...(filteredSelfService.length > 0
+      ? [{ id: 'self_service', title: 'My Workspace', items: filteredSelfService }]
+      : []),
+    ...(filteredMain.length > 0
+      ? [{ id: 'main', items: filteredMain }]
+      : []),
+    ...(filteredStaff.length > 0
+      ? [{ id: 'staff', title: 'Staff Management', items: filteredStaff }]
+      : []),
+    ...(filteredSystem.length > 0
+      ? [{ id: 'system', title: 'System', items: filteredSystem }]
+      : []),
   ];
-
-  // Order sections according to active role workflow
-  let orderedSections: NavSection[] = [];
-
-  if (isCashier) {
-    orderedSections = [
-      allSections.find((s) => s.id === 'billing')!,
-      allSections.find((s) => s.id === 'self_service')!,
-      allSections.find((s) => s.id === 'inventory')!,
-      allSections.find((s) => s.id === 'staff')!,
-      allSections.find((s) => s.id === 'system')!,
-    ];
-  } else if (isInventory) {
-    orderedSections = [
-      allSections.find((s) => s.id === 'inventory')!,
-      allSections.find((s) => s.id === 'self_service')!,
-      allSections.find((s) => s.id === 'billing')!,
-      allSections.find((s) => s.id === 'staff')!,
-      allSections.find((s) => s.id === 'system')!,
-    ];
-  } else if (isHR) {
-    orderedSections = [
-      allSections.find((s) => s.id === 'staff')!,
-      allSections.find((s) => s.id === 'self_service')!,
-      allSections.find((s) => s.id === 'billing')!,
-      allSections.find((s) => s.id === 'inventory')!,
-      allSections.find((s) => s.id === 'system')!,
-    ];
-  } else {
-    // Owner / Manager default layout
-    orderedSections = allSections;
-  }
-
-  // Remove empty sections
-  const visibleSections = orderedSections.filter((sec) => sec && sec.items.length > 0);
 
   return (
     <aside className="w-64 bg-white border-r border-slate-200/80 flex flex-col h-screen select-none shrink-0 shadow-sm">
@@ -189,13 +152,15 @@ export const Sidebar: React.FC = () => {
 
       {/* Navigation Sections */}
       <nav className="flex-1 overflow-y-auto p-3 space-y-4 custom-scrollbar">
-        {visibleSections.map((section, sIdx) => (
+        {sections.map((section, sIdx) => (
           <div key={section.id} className={sIdx > 0 ? 'pt-1' : ''}>
-            <div className="px-3 pb-1.5 flex items-center justify-between">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                {section.title}
-              </p>
-            </div>
+            {section.title && (
+              <div className="px-3 pb-1.5 flex items-center justify-between">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  {section.title}
+                </p>
+              </div>
+            )}
 
             <div className="space-y-1">
               {section.items.map((item) => (
@@ -227,3 +192,4 @@ export const Sidebar: React.FC = () => {
     </aside>
   );
 };
+

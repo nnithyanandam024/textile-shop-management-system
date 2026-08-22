@@ -290,26 +290,43 @@ export function seedDatabase(db: Database.Database) {
         (1, 'Men''s Wear', 'Clothing and fabrics for men', NULL),
         (2, 'Women''s Wear', 'Sarees, kurtis, dresses and traditional wear', NULL),
         (3, 'Kids Wear', 'Children and infant apparel', NULL),
-        (4, 'Fabrics & Silks', 'Pure silks, cotton shirting, and suiting pieces', NULL),
-        (5, 'Men Formal Shirts', 'Premium cotton and linen shirts', 1),
-        (6, 'Silk Sarees', 'Kanchipuram, Banarasi and soft silk sarees', 2),
-        (7, 'Cotton Kurtis', 'Daily wear embroidered kurtis', 2),
-        (8, 'Silk Dhotis', 'Traditional wedding and festival dhotis', 1);
+        (4, 'Silks & Traditional', 'Pure silks, cotton shirting, and suiting pieces', NULL),
+        (5, 'Fabrics & Suiting', 'Unstitched suit lengths, fine linen, and shirting material', NULL),
+        (6, 'Daily Cotton Kurtis', 'Breathable block-printed pure cotton kurtis', 2),
+        (7, 'Silk Sarees', 'Pure mulberry silk with heavy gold and silver zari', 4),
+        (8, 'Men Formal Shirts', 'Premium cotton and linen wrinkle-free shirts', 1),
+        (9, 'Silk Dhotis & Sets', 'Traditional wedding dhotis with angavastram', 1),
+        (10, 'Designer Salwar & Suits', 'Embroidered festive and casual salwar kameez sets', 2),
+        (11, 'Kids Ethnic & Pattu Pavadai', 'Traditional silk skirts and kurta sets for children', 3),
+        (12, 'Home Linen & Furnishings', 'Fine cotton bedsheets, silk shawls and drapery', 5);
 
       INSERT OR IGNORE INTO brands (id, name, description) VALUES
-        (1, 'Raymond', 'Premium fine suiting and shirting brand'),
-        (2, 'Kanchipuram Silks', 'Handloom pure mulberry silk sarees'),
-        (3, 'Peter England', 'Formal business apparel'),
-        (4, 'FabIndia', 'Organic traditional ethnic collection'),
-        (5, 'Ramraj', 'Traditional cotton and silk dhotis');
+        (1, 'Raymond', 'Fine luxury fabrics, suiting, and formal shirting'),
+        (2, 'Kanchipuram Silks', 'Handcrafted heritage mulberry silk sarees'),
+        (3, 'FabIndia', 'Authentic Indian ethnic handloom and organic cotton'),
+        (4, 'Ramraj Cotton', 'Pioneer in South Indian traditional dhotis and shirts'),
+        (5, 'Peter England', 'Modern business formals and smart casuals'),
+        (6, 'Manyavar', 'Celebration ethnic wear, kurtas, and sherwanis'),
+        (7, 'Pothys Silks', 'Traditional textile house for silk weaves'),
+        (8, 'Linen Club', 'Premium 100% pure European linen apparel and fabrics'),
+        (9, 'Biba', 'Contemporary ethnic wear and designer salwar suits'),
+        (10, 'Bombay Dyeing', 'Heritage home textiles and high-count cotton bedding');
     `);
 
-    // Products & Variants
+    // Products
     const products = [
-      { id: 1, name: 'Premium Cotton Shirt', cat_id: 5, brand_id: 1, mat: 'Cotton' },
-      { id: 2, name: 'Silk Saree Traditional', cat_id: 6, brand_id: 2, mat: 'Silk' },
-      { id: 3, name: 'FabIndia Embroidered Kurti', cat_id: 7, brand_id: 4, mat: 'Organic Cotton' },
-      { id: 4, name: 'Ramraj Pattu Dhoti with Angavastram', cat_id: 8, brand_id: 5, mat: 'Silk & Zari' },
+      { id: 1, name: 'Kanchipuram Pure Zari Silk Saree', cat_id: 7, brand_id: 2, mat: 'Pure Mulberry Silk' },
+      { id: 2, name: 'Raymond 100% Egyptian Cotton Formal Shirt', cat_id: 8, brand_id: 1, mat: 'Giza Egyptian Cotton' },
+      { id: 3, name: 'FabIndia Hand-Block Printed Cotton Kurti', cat_id: 6, brand_id: 3, mat: 'Organic Cotton' },
+      { id: 4, name: 'Ramraj Pure Silk Dhoti & Angavastram Set', cat_id: 9, brand_id: 4, mat: 'Pure Silk & Zari' },
+      { id: 5, name: 'Peter England Classic Business Formal Shirt', cat_id: 8, brand_id: 5, mat: 'Cotton Blend' },
+      { id: 6, name: 'Manyavar Jacquard Silk Kurta & Churidar Set', cat_id: 1, brand_id: 6, mat: 'Art Silk Jacquard' },
+      { id: 7, name: 'Banarasi Brocade Silk Saree', cat_id: 7, brand_id: 7, mat: 'Banarasi Silk' },
+      { id: 8, name: 'Linen Club Pure Linen Casual Shirt', cat_id: 1, brand_id: 8, mat: '100% Pure Flax Linen' },
+      { id: 9, name: 'Biba Festive Anarkali Embroidered Suit', cat_id: 10, brand_id: 9, mat: 'Chanderi Silk & Georgette' },
+      { id: 10, name: 'Pattu Pavadai Girls Traditional Silk Set', cat_id: 11, brand_id: 7, mat: 'Soft Silk & Zari' },
+      { id: 11, name: 'Coimbatore Handloom Soft Silk Saree', cat_id: 7, brand_id: 2, mat: 'Soft Handloom Silk' },
+      { id: 12, name: 'Bombay Dyeing 100% Cotton King Bedsheet Set', cat_id: 12, brand_id: 10, mat: '300 TC Percale Cotton' },
     ];
 
     for (const p of products) {
@@ -324,20 +341,73 @@ export function seedDatabase(db: Database.Database) {
       `).run(p.id, p.name, p.cat_id, p.brand_id, p.mat);
     }
 
-    // Variants
+    // Variants with Normal, Low Stock, and Out of Stock
     const variants = [
-      { id: 1, pid: 1, sku: 'TX-PCS-001', barcode: '89010001001', size: 'M', color: 'Blue', buy: 600.0, sell: 999.0, stock: 15 },
-      { id: 2, pid: 1, sku: 'TX-PCS-002', barcode: '89010001002', size: 'L', color: 'Blue', buy: 600.0, sell: 999.0, stock: 12 },
-      { id: 3, pid: 2, sku: 'TX-SLK-001', barcode: '89010002001', size: 'Free Size', color: 'Gold', buy: 2500.0, sell: 4500.0, stock: 8 },
-      { id: 4, pid: 2, sku: 'KAN-SAR-GRN-02', barcode: '89010002002', size: 'Free Size', color: 'Emerald Green', buy: 4200.0, sell: 8499.0, stock: 8 },
-      { id: 5, pid: 3, sku: 'FAB-KUR-YLW-M', barcode: '89010003001', size: 'M', color: 'Mustard Yellow', buy: 400.0, sell: 899.0, stock: 25 },
-      { id: 6, pid: 4, sku: 'RAM-DHO-GLD-01', barcode: '89010004001', size: 'Free Size', color: 'Cream / Gold Zari', buy: 850.0, sell: 1599.0, stock: 15 },
+      // Product 1 - Kanchipuram Silk Saree
+      { id: 1, pid: 1, sku: 'KAN-SLK-MRN-01', barcode: '89010001001', size: 'Free Size', color: 'Royal Maroon & Gold', buy: 4500, sell: 8499, min: 5, stock: 14 },
+      { id: 2, pid: 1, sku: 'KAN-SLK-GRN-02', barcode: '89010001002', size: 'Free Size', color: 'Emerald Green & Gold', buy: 4500, sell: 8499, min: 5, stock: 7 },
+      { id: 3, pid: 1, sku: 'KAN-SLK-NVY-03', barcode: '89010001003', size: 'Free Size', color: 'Royal Navy Blue', buy: 4800, sell: 8999, min: 4, stock: 3 },
+      { id: 4, pid: 1, sku: 'KAN-SLK-RED-04', barcode: '89010001004', size: 'Free Size', color: 'Temple Crimson Red', buy: 5200, sell: 9499, min: 4, stock: 0 },
+
+      // Product 2 - Raymond Cotton Shirt
+      { id: 5, pid: 2, sku: 'RAY-SHT-BLU-38', barcode: '89010002038', size: '38 (S)', color: 'Sky Blue', buy: 750, sell: 1499, min: 8, stock: 18 },
+      { id: 6, pid: 2, sku: 'RAY-SHT-BLU-40', barcode: '89010002040', size: '40 (M)', color: 'Sky Blue', buy: 750, sell: 1499, min: 10, stock: 24 },
+      { id: 7, pid: 2, sku: 'RAY-SHT-BLU-42', barcode: '89010002042', size: '42 (L)', color: 'Sky Blue', buy: 750, sell: 1499, min: 8, stock: 4 },
+      { id: 8, pid: 2, sku: 'RAY-SHT-WHT-40', barcode: '89010002140', size: '40 (M)', color: 'Pure White', buy: 750, sell: 1499, min: 10, stock: 32 },
+      { id: 9, pid: 2, sku: 'RAY-SHT-CHR-40', barcode: '89010002240', size: '40 (M)', color: 'Charcoal Gray', buy: 750, sell: 1499, min: 6, stock: 0 },
+
+      // Product 3 - FabIndia Kurti
+      { id: 10, pid: 3, sku: 'FAB-KUR-IND-S', barcode: '89010003001', size: 'S', color: 'Indigo Blue', buy: 550, sell: 1299, min: 5, stock: 12 },
+      { id: 11, pid: 3, sku: 'FAB-KUR-IND-M', barcode: '89010003002', size: 'M', color: 'Indigo Blue', buy: 550, sell: 1299, min: 8, stock: 20 },
+      { id: 12, pid: 3, sku: 'FAB-KUR-IND-L', barcode: '89010003003', size: 'L', color: 'Indigo Blue', buy: 550, sell: 1299, min: 6, stock: 2 },
+      { id: 13, pid: 3, sku: 'FAB-KUR-MST-M', barcode: '89010003102', size: 'M', color: 'Mustard Yellow', buy: 550, sell: 1299, min: 6, stock: 15 },
+      { id: 14, pid: 3, sku: 'FAB-KUR-OLV-M', barcode: '89010003202', size: 'M', color: 'Olive Green', buy: 550, sell: 1299, min: 5, stock: 0 },
+
+      // Product 4 - Ramraj Silk Dhoti
+      { id: 15, pid: 4, sku: 'RAM-DHO-GLD-01', barcode: '89010004001', size: '4.0 Meters', color: 'Cream / Gold Zari', buy: 950, sell: 1899, min: 10, stock: 28 },
+      { id: 16, pid: 4, sku: 'RAM-DHO-SLV-02', barcode: '89010004002', size: '4.0 Meters', color: 'White / Silver Border', buy: 850, sell: 1699, min: 8, stock: 4 },
+
+      // Product 5 - Peter England Shirt
+      { id: 17, pid: 5, sku: 'PET-SHT-WHT-40', barcode: '89010005040', size: '40 (M)', color: 'Crisp White', buy: 580, sell: 1199, min: 10, stock: 35 },
+      { id: 18, pid: 5, sku: 'PET-SHT-NVY-40', barcode: '89010005140', size: '40 (M)', color: 'Navy Blue', buy: 580, sell: 1199, min: 8, stock: 18 },
+      { id: 19, pid: 5, sku: 'PET-SHT-OXF-42', barcode: '89010005242', size: '42 (L)', color: 'Oxford Gray', buy: 580, sell: 1199, min: 6, stock: 0 },
+
+      // Product 6 - Manyavar Kurta Set
+      { id: 20, pid: 6, sku: 'MAN-KUR-MRN-L', barcode: '89010006001', size: 'L (42)', color: 'Deep Maroon', buy: 1700, sell: 3499, min: 4, stock: 8 },
+      { id: 21, pid: 6, sku: 'MAN-KUR-IVR-M', barcode: '89010006002', size: 'M (40)', color: 'Ivory Gold', buy: 1800, sell: 3699, min: 4, stock: 3 },
+      { id: 22, pid: 6, sku: 'MAN-KUR-ROY-XL', barcode: '89010006003', size: 'XL (44)', color: 'Royal Blue', buy: 1700, sell: 3499, min: 3, stock: 0 },
+
+      // Product 7 - Banarasi Silk Saree
+      { id: 23, pid: 7, sku: 'BAN-SLK-RED-01', barcode: '89010007001', size: 'Free Size', color: 'Crimson Red & Zari', buy: 3800, sell: 6999, min: 5, stock: 9 },
+      { id: 24, pid: 7, sku: 'BAN-SLK-PNK-02', barcode: '89010007002', size: 'Free Size', color: 'Rani Pink & Gold', buy: 3800, sell: 6999, min: 4, stock: 2 },
+
+      // Product 8 - Linen Club Shirt
+      { id: 25, pid: 8, sku: 'LIN-SHT-BGE-40', barcode: '89010008040', size: '40 (M)', color: 'Natural Beige', buy: 1100, sell: 2299, min: 6, stock: 16 },
+      { id: 26, pid: 8, sku: 'LIN-SHT-OLV-42', barcode: '89010008042', size: '42 (L)', color: 'Olive Green', buy: 1100, sell: 2299, min: 5, stock: 11 },
+      { id: 27, pid: 8, sku: 'LIN-SHT-SKY-40', barcode: '89010008140', size: '40 (M)', color: 'Sky Blue', buy: 1100, sell: 2299, min: 6, stock: 1 },
+
+      // Product 9 - Biba Anarkali Suit
+      { id: 28, pid: 9, sku: 'BIB-SLW-TEL-M', barcode: '89010009001', size: 'M (38)', color: 'Teal Blue & Gold', buy: 1600, sell: 3299, min: 5, stock: 14 },
+      { id: 29, pid: 9, sku: 'BIB-SLW-PCH-L', barcode: '89010009002', size: 'L (40)', color: 'Peach Blossom', buy: 1600, sell: 3299, min: 5, stock: 3 },
+      { id: 30, pid: 9, sku: 'BIB-SLW-MRN-S', barcode: '89010009003', size: 'S (36)', color: 'Wine Maroon', buy: 1600, sell: 3299, min: 4, stock: 0 },
+
+      // Product 10 - Pattu Pavadai Kids Set
+      { id: 31, pid: 10, sku: 'PAT-KID-MAG-28', barcode: '89010010028', size: 'Size 28 (Age 6-8)', color: 'Magenta & Gold', buy: 950, sell: 1999, min: 6, stock: 15 },
+      { id: 32, pid: 10, sku: 'PAT-KID-GRN-32', barcode: '89010010032', size: 'Size 32 (Age 9-11)', color: 'Emerald Peacock', buy: 1050, sell: 2199, min: 4, stock: 2 },
+
+      // Product 11 - Coimbatore Soft Silk Saree
+      { id: 33, pid: 11, sku: 'COI-SLK-PEA-01', barcode: '89010011001', size: 'Free Size', color: 'Peacock Blue & Gold', buy: 2200, sell: 4299, min: 6, stock: 12 },
+      { id: 34, pid: 11, sku: 'COI-SLK-MST-02', barcode: '89010011002', size: 'Free Size', color: 'Mustard Gold', buy: 2200, sell: 4299, min: 5, stock: 0 },
+
+      // Product 12 - Bombay Dyeing Bedsheet Set
+      { id: 35, pid: 12, sku: 'BOM-BED-FLR-K', barcode: '89010012001', size: 'King (108x108 in)', color: 'Floral Jaipuri', buy: 850, sell: 1799, min: 8, stock: 22 },
+      { id: 36, pid: 12, sku: 'BOM-BED-GEO-K', barcode: '89010012002', size: 'King (108x108 in)', color: 'Geometric Indigo', buy: 850, sell: 1799, min: 6, stock: 4 },
     ];
 
     for (const v of variants) {
       db.prepare(`
         INSERT INTO product_variants (id, product_id, sku, barcode, size, color, purchase_price, selling_price, minimum_stock, current_stock)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 5, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(id) DO UPDATE SET
           sku = excluded.sku,
           barcode = excluded.barcode,
@@ -345,8 +415,9 @@ export function seedDatabase(db: Database.Database) {
           color = excluded.color,
           purchase_price = excluded.purchase_price,
           selling_price = excluded.selling_price,
+          minimum_stock = excluded.minimum_stock,
           current_stock = excluded.current_stock
-      `).run(v.id, v.pid, v.sku, v.barcode, v.size, v.color, v.buy, v.sell, v.stock);
+      `).run(v.id, v.pid, v.sku, v.barcode, v.size, v.color, v.buy, v.sell, v.min, v.stock);
     }
 
     // ----------------------------------------------------

@@ -3,9 +3,11 @@ import { Card } from '../../../components/ui/Card';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 import { RequestProfileChangeModal } from '../modals/RequestProfileChangeModal';
+import { useAuth } from '../../auth/AuthContext';
 import { User, Lock, Edit2, Check } from 'lucide-react';
 
 export const MyProfilePage: React.FC = () => {
+  const { currentUser } = useAuth();
   const [profile, setProfile] = useState<any>(null);
   const [requests, setRequests] = useState<any[]>([]);
   const [isEditing, setIsEditing] = useState(false);
@@ -25,28 +27,59 @@ export const MyProfilePage: React.FC = () => {
     try {
       if (window.api?.selfService) {
         const p = await window.api.selfService.getProfile();
-        setProfile(p);
         if (p) {
+          setProfile(p);
           setEmail(p.email || '');
           setPhone(p.phone || '');
           setAddressLine1(p.address_line_1 || '');
           setCity(p.city || '');
           setState(p.state || '');
           setPincode(p.pincode || '');
+
+          const reqs = await window.api.selfService.getProfileChangeRequests();
+          setRequests(reqs || []);
+          setLoading(false);
+          return;
         }
-        const reqs = await window.api.selfService.getProfileChangeRequests();
-        setRequests(reqs || []);
       }
     } catch (err) {
       console.error('Failed to load profile:', err);
-    } finally {
-      setLoading(false);
     }
+
+    // Fallback profile
+    const fallback = {
+      staff_code: currentUser?.username === 'admin' ? 'ADM-0001' : `STF-${String(currentUser?.userId || 1).padStart(4, '0')}`,
+      first_name: currentUser?.displayName?.split(' ')[0] || currentUser?.username || 'Staff',
+      last_name: currentUser?.displayName?.split(' ').slice(1).join(' ') || '',
+      email: `${currentUser?.username || 'staff'}@texora.shop`,
+      phone: '+91 98765 00000',
+      designation_name: currentUser?.roleName || 'Store Staff',
+      department_name: currentUser?.roleName === 'Owner' || currentUser?.roleName === 'Manager' ? 'Store Management' : 'Store Operations',
+      work_location: 'Main Textile Store',
+      joining_date: '2026-01-01',
+      employment_type: 'FULL_TIME',
+      status: 'ACTIVE',
+      address_line_1: '123 Bazaar Main St',
+      city: 'Coimbatore',
+      state: 'Tamil Nadu',
+      pincode: '641001',
+      manager_name: currentUser?.roleName === 'Owner' ? 'Executive Board' : 'Rajesh Kumar (Manager)',
+      username: currentUser?.username || 'user',
+    };
+
+    setProfile(fallback);
+    setEmail(fallback.email);
+    setPhone(fallback.phone);
+    setAddressLine1(fallback.address_line_1);
+    setCity(fallback.city);
+    setState(fallback.state);
+    setPincode(fallback.pincode);
+    setLoading(false);
   };
 
   useEffect(() => {
     fetchProfile();
-  }, []);
+  }, [currentUser]);
 
   const handleSaveEditable = async () => {
     if (window.api?.selfService) {
@@ -60,6 +93,17 @@ export const MyProfilePage: React.FC = () => {
       });
       setIsEditing(false);
       fetchProfile();
+    } else {
+      setProfile((prev: any) => ({
+        ...prev,
+        email,
+        phone,
+        address_line_1: addressLine1,
+        city,
+        state,
+        pincode,
+      }));
+      setIsEditing(false);
     }
   };
 

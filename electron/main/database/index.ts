@@ -412,6 +412,29 @@ function runMigrations(db: Database.Database) {
       name: 'auth_and_rbac_permissions',
       up: (database: Database.Database) => {
         database.exec(`
+          -- Ensure core auth tables exist (idempotent guard for existing DBs)
+          CREATE TABLE IF NOT EXISTS permissions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            code TEXT NOT NULL UNIQUE,
+            module TEXT NOT NULL,
+            description TEXT
+          );
+
+          CREATE TABLE IF NOT EXISTS roles (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL UNIQUE,
+            description TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          CREATE TABLE IF NOT EXISTS role_permissions (
+            role_id INTEGER NOT NULL,
+            permission_id INTEGER NOT NULL,
+            PRIMARY KEY (role_id, permission_id),
+            FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE,
+            FOREIGN KEY (permission_id) REFERENCES permissions(id) ON DELETE CASCADE
+          );
+
           -- Seed Permissions Table
           INSERT OR IGNORE INTO permissions (id, code, module, description) VALUES
             (1, 'dashboard.view', 'Dashboard', 'View dashboard metrics'),

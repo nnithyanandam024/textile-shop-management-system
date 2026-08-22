@@ -633,12 +633,6 @@ export function registerIpcHandlers() {
     }
   });
 
-  // Backup & Restore
-  ipcMain.handle('backup:create', (_, customName?: string) => {
-    AuthorizationService.requirePermission('backup.create');
-    return BackupService.createBackup(customName);
-  });
-
   // Renderer Log
   ipcMain.handle('app:log', (_, { level, message, details }: { level: string; message: string; details?: any }) => {
     if (level === 'error') log.error(`[Renderer] ${message}`, details || '');

@@ -26,6 +26,9 @@ const DEFAULT_CATEGORIES = [
   { id: 7, name: 'Silk Sarees', description: 'Pure mulberry silk with heavy gold and silver zari', parent_id: 4, is_active: 1 },
   { id: 8, name: 'Men Formal Shirts', description: 'Premium cotton and linen wrinkle-free shirts', parent_id: 1, is_active: 1 },
   { id: 9, name: 'Silk Dhotis & Sets', description: 'Traditional wedding dhotis with angavastram', parent_id: 1, is_active: 1 },
+  { id: 10, name: 'Designer Salwar & Suits', description: 'Embroidered festive and casual salwar kameez sets', parent_id: 2, is_active: 1 },
+  { id: 11, name: 'Kids Ethnic & Pattu Pavadai', description: 'Traditional silk skirts and kurta sets for children', parent_id: 3, is_active: 1 },
+  { id: 12, name: 'Home Linen & Furnishings', description: 'Fine cotton bedsheets, silk shawls and drapery', parent_id: 5, is_active: 1 },
 ];
 
 // Initial Demo Brands
@@ -37,6 +40,9 @@ const DEFAULT_BRANDS = [
   { id: 5, name: 'Peter England', description: 'Modern business formals and smart casuals', is_active: 1 },
   { id: 6, name: 'Manyavar', description: 'Celebration ethnic wear, kurtas, and sherwanis', is_active: 1 },
   { id: 7, name: 'Pothys Silks', description: 'Traditional textile house for silk weaves', is_active: 1 },
+  { id: 8, name: 'Linen Club', description: 'Premium 100% pure European linen apparel and fabrics', is_active: 1 },
+  { id: 9, name: 'Biba', description: 'Contemporary ethnic wear and designer salwar suits', is_active: 1 },
+  { id: 10, name: 'Bombay Dyeing', description: 'Heritage home textiles and high-count cotton bedding', is_active: 1 },
 ];
 
 // Initial Demo Products
@@ -125,39 +131,129 @@ const DEFAULT_PRODUCTS = [
     is_active: 1,
     created_at: '2026-01-25T15:10:00Z',
   },
+  {
+    id: 8,
+    name: 'Linen Club Pure Linen Casual Shirt',
+    category_id: 1,
+    category_name: "Men's Wear",
+    brand_id: 8,
+    brand_name: 'Linen Club',
+    material: '100% Pure Flax Linen',
+    description: 'Ultra-breathable premium washed linen regular fit casual button-down shirt',
+    is_active: 1,
+    created_at: '2026-02-01T10:00:00Z',
+  },
+  {
+    id: 9,
+    name: 'Biba Festive Anarkali Embroidered Suit',
+    category_id: 10,
+    category_name: 'Designer Salwar & Suits',
+    brand_id: 9,
+    brand_name: 'Biba',
+    material: 'Chanderi Silk & Georgette',
+    description: 'Floor-length flared anarkali suit set with heavy gota patti work and net dupatta',
+    is_active: 1,
+    created_at: '2026-02-05T12:00:00Z',
+  },
+  {
+    id: 10,
+    name: 'Pattu Pavadai Girls Traditional Silk Set',
+    category_id: 11,
+    category_name: 'Kids Ethnic & Pattu Pavadai',
+    brand_id: 7,
+    brand_name: 'Pothys Silks',
+    material: 'Soft Silk & Zari',
+    description: 'Traditional South Indian kids lehenga choli with rich peacock border and matching top',
+    is_active: 1,
+    created_at: '2026-02-08T14:30:00Z',
+  },
+  {
+    id: 11,
+    name: 'Coimbatore Handloom Soft Silk Saree',
+    category_id: 7,
+    category_name: 'Silk Sarees',
+    brand_id: 2,
+    brand_name: 'Kanchipuram Silks',
+    material: 'Soft Handloom Silk',
+    description: 'Lightweight dual-tone soft silk saree with temple border suitable for functions',
+    is_active: 1,
+    created_at: '2026-02-12T16:45:00Z',
+  },
+  {
+    id: 12,
+    name: 'Bombay Dyeing 100% Cotton King Bedsheet Set',
+    category_id: 12,
+    category_name: 'Home Linen & Furnishings',
+    brand_id: 10,
+    brand_name: 'Bombay Dyeing',
+    material: '300 TC Percale Cotton',
+    description: 'Luxurious king size glazed cotton bedsheet with two matching standard pillowcases',
+    is_active: 1,
+    created_at: '2026-02-15T11:20:00Z',
+  },
 ];
 
 // Initial Demo Variants
 const DEFAULT_VARIANTS = [
   // Product 1 - Kanchipuram Silk Saree
-  { id: 1, product_id: 1, sku: 'KAN-SLK-MRN-01', barcode: '89010001001', size: 'Free Size', color: 'Royal Maroon & Gold', purchase_price: 4500, selling_price: 8499, minimum_stock: 5, current_stock: 12, is_active: 1 },
-  { id: 2, product_id: 1, sku: 'KAN-SLK-GRN-02', barcode: '89010001002', size: 'Free Size', color: 'Emerald Green & Gold', purchase_price: 4500, selling_price: 8499, minimum_stock: 5, current_stock: 8, is_active: 1 },
-  { id: 3, product_id: 1, sku: 'KAN-SLK-NVY-03', barcode: '89010001003', size: 'Free Size', color: 'Royal Navy Blue', purchase_price: 4800, selling_price: 8999, minimum_stock: 4, current_stock: 6, is_active: 1 },
+  { id: 1, product_id: 1, sku: 'KAN-SLK-MRN-01', barcode: '89010001001', size: 'Free Size', color: 'Royal Maroon & Gold', purchase_price: 4500, selling_price: 8499, minimum_stock: 5, current_stock: 14, is_active: 1 },
+  { id: 2, product_id: 1, sku: 'KAN-SLK-GRN-02', barcode: '89010001002', size: 'Free Size', color: 'Emerald Green & Gold', purchase_price: 4500, selling_price: 8499, minimum_stock: 5, current_stock: 7, is_active: 1 },
+  { id: 3, product_id: 1, sku: 'KAN-SLK-NVY-03', barcode: '89010001003', size: 'Free Size', color: 'Royal Navy Blue', purchase_price: 4800, selling_price: 8999, minimum_stock: 4, current_stock: 3, is_active: 1 },
+  { id: 4, product_id: 1, sku: 'KAN-SLK-RED-04', barcode: '89010001004', size: 'Free Size', color: 'Temple Crimson Red', purchase_price: 5200, selling_price: 9499, minimum_stock: 4, current_stock: 0, is_active: 1 },
 
   // Product 2 - Raymond Cotton Shirt
-  { id: 4, product_id: 2, sku: 'RAY-SHT-BLU-38', barcode: '89010002038', size: '38 (S)', color: 'Sky Blue', purchase_price: 750, selling_price: 1499, minimum_stock: 8, current_stock: 20, is_active: 1 },
-  { id: 5, product_id: 2, sku: 'RAY-SHT-BLU-40', barcode: '89010002040', size: '40 (M)', color: 'Sky Blue', purchase_price: 750, selling_price: 1499, minimum_stock: 10, current_stock: 25, is_active: 1 },
-  { id: 6, product_id: 2, sku: 'RAY-SHT-BLU-42', barcode: '89010002042', size: '42 (L)', color: 'Sky Blue', purchase_price: 750, selling_price: 1499, minimum_stock: 8, current_stock: 18, is_active: 1 },
-  { id: 7, product_id: 2, sku: 'RAY-SHT-WHT-40', barcode: '89010002140', size: '40 (M)', color: 'Pure White', purchase_price: 750, selling_price: 1499, minimum_stock: 10, current_stock: 30, is_active: 1 },
+  { id: 5, product_id: 2, sku: 'RAY-SHT-BLU-38', barcode: '89010002038', size: '38 (S)', color: 'Sky Blue', purchase_price: 750, selling_price: 1499, minimum_stock: 8, current_stock: 18, is_active: 1 },
+  { id: 6, product_id: 2, sku: 'RAY-SHT-BLU-40', barcode: '89010002040', size: '40 (M)', color: 'Sky Blue', purchase_price: 750, selling_price: 1499, minimum_stock: 10, current_stock: 24, is_active: 1 },
+  { id: 7, product_id: 2, sku: 'RAY-SHT-BLU-42', barcode: '89010002042', size: '42 (L)', color: 'Sky Blue', purchase_price: 750, selling_price: 1499, minimum_stock: 8, current_stock: 4, is_active: 1 },
+  { id: 8, product_id: 2, sku: 'RAY-SHT-WHT-40', barcode: '89010002140', size: '40 (M)', color: 'Pure White', purchase_price: 750, selling_price: 1499, minimum_stock: 10, current_stock: 32, is_active: 1 },
+  { id: 9, product_id: 2, sku: 'RAY-SHT-CHR-40', barcode: '89010002240', size: '40 (M)', color: 'Charcoal Gray', purchase_price: 750, selling_price: 1499, minimum_stock: 6, current_stock: 0, is_active: 1 },
 
   // Product 3 - FabIndia Kurti
-  { id: 8, product_id: 3, sku: 'FAB-KUR-IND-S', barcode: '89010003001', size: 'S', color: 'Indigo Blue', purchase_price: 550, selling_price: 1299, minimum_stock: 5, current_stock: 15, is_active: 1 },
-  { id: 9, product_id: 3, sku: 'FAB-KUR-IND-M', barcode: '89010003002', size: 'M', color: 'Indigo Blue', purchase_price: 550, selling_price: 1299, minimum_stock: 8, current_stock: 22, is_active: 1 },
-  { id: 10, product_id: 3, sku: 'FAB-KUR-IND-L', barcode: '89010003003', size: 'L', color: 'Indigo Blue', purchase_price: 550, selling_price: 1299, minimum_stock: 6, current_stock: 16, is_active: 1 },
-  { id: 11, product_id: 3, sku: 'FAB-KUR-MST-M', barcode: '89010003102', size: 'M', color: 'Mustard Yellow', purchase_price: 550, selling_price: 1299, minimum_stock: 6, current_stock: 14, is_active: 1 },
+  { id: 10, product_id: 3, sku: 'FAB-KUR-IND-S', barcode: '89010003001', size: 'S', color: 'Indigo Blue', purchase_price: 550, selling_price: 1299, minimum_stock: 5, current_stock: 12, is_active: 1 },
+  { id: 11, product_id: 3, sku: 'FAB-KUR-IND-M', barcode: '89010003002', size: 'M', color: 'Indigo Blue', purchase_price: 550, selling_price: 1299, minimum_stock: 8, current_stock: 20, is_active: 1 },
+  { id: 12, product_id: 3, sku: 'FAB-KUR-IND-L', barcode: '89010003003', size: 'L', color: 'Indigo Blue', purchase_price: 550, selling_price: 1299, minimum_stock: 6, current_stock: 2, is_active: 1 },
+  { id: 13, product_id: 3, sku: 'FAB-KUR-MST-M', barcode: '89010003102', size: 'M', color: 'Mustard Yellow', purchase_price: 550, selling_price: 1299, minimum_stock: 6, current_stock: 15, is_active: 1 },
+  { id: 14, product_id: 3, sku: 'FAB-KUR-OLV-M', barcode: '89010003202', size: 'M', color: 'Olive Green', purchase_price: 550, selling_price: 1299, minimum_stock: 5, current_stock: 0, is_active: 1 },
 
   // Product 4 - Ramraj Silk Dhoti
-  { id: 12, product_id: 4, sku: 'RAM-DHO-GLD-01', barcode: '89010004001', size: '4.0 Meters', color: 'Cream / Gold Zari', purchase_price: 950, selling_price: 1899, minimum_stock: 10, current_stock: 28, is_active: 1 },
+  { id: 15, product_id: 4, sku: 'RAM-DHO-GLD-01', barcode: '89010004001', size: '4.0 Meters', color: 'Cream / Gold Zari', purchase_price: 950, selling_price: 1899, minimum_stock: 10, current_stock: 28, is_active: 1 },
+  { id: 16, product_id: 4, sku: 'RAM-DHO-SLV-02', barcode: '89010004002', size: '4.0 Meters', color: 'White / Silver Border', purchase_price: 850, selling_price: 1699, minimum_stock: 8, current_stock: 4, is_active: 1 },
 
   // Product 5 - Peter England Shirt
-  { id: 13, product_id: 5, sku: 'PET-SHT-WHT-40', barcode: '89010005040', size: '40 (M)', color: 'Crisp White', purchase_price: 580, selling_price: 1199, minimum_stock: 10, current_stock: 35, is_active: 1 },
-  { id: 14, product_id: 5, sku: 'PET-SHT-NVY-40', barcode: '89010005140', size: '40 (M)', color: 'Navy Blue', purchase_price: 580, selling_price: 1199, minimum_stock: 8, current_stock: 20, is_active: 1 },
+  { id: 17, product_id: 5, sku: 'PET-SHT-WHT-40', barcode: '89010005040', size: '40 (M)', color: 'Crisp White', purchase_price: 580, selling_price: 1199, minimum_stock: 10, current_stock: 35, is_active: 1 },
+  { id: 18, product_id: 5, sku: 'PET-SHT-NVY-40', barcode: '89010005140', size: '40 (M)', color: 'Navy Blue', purchase_price: 580, selling_price: 1199, minimum_stock: 8, current_stock: 18, is_active: 1 },
+  { id: 19, product_id: 5, sku: 'PET-SHT-OXF-42', barcode: '89010005242', size: '42 (L)', color: 'Oxford Gray', purchase_price: 580, selling_price: 1199, minimum_stock: 6, current_stock: 0, is_active: 1 },
 
-  // Product 6 - Manyavar Kurta
-  { id: 15, product_id: 6, sku: 'MAN-KUR-MRN-L', barcode: '89010006001', size: 'L (42)', color: 'Deep Maroon', purchase_price: 1700, selling_price: 3499, minimum_stock: 4, current_stock: 9, is_active: 1 },
+  // Product 6 - Manyavar Kurta Set
+  { id: 20, product_id: 6, sku: 'MAN-KUR-MRN-L', barcode: '89010006001', size: 'L (42)', color: 'Deep Maroon', purchase_price: 1700, selling_price: 3499, minimum_stock: 4, current_stock: 8, is_active: 1 },
+  { id: 21, product_id: 6, sku: 'MAN-KUR-IVR-M', barcode: '89010006002', size: 'M (40)', color: 'Ivory Gold', purchase_price: 1800, selling_price: 3699, minimum_stock: 4, current_stock: 3, is_active: 1 },
+  { id: 22, product_id: 6, sku: 'MAN-KUR-ROY-XL', barcode: '89010006003', size: 'XL (44)', color: 'Royal Blue', purchase_price: 1700, selling_price: 3499, minimum_stock: 3, current_stock: 0, is_active: 1 },
 
   // Product 7 - Banarasi Silk Saree
-  { id: 16, product_id: 7, sku: 'BAN-SLK-RED-01', barcode: '89010007001', size: 'Free Size', color: 'Crimson Red & Zari', purchase_price: 3800, selling_price: 6999, minimum_stock: 5, current_stock: 10, is_active: 1 },
+  { id: 23, product_id: 7, sku: 'BAN-SLK-RED-01', barcode: '89010007001', size: 'Free Size', color: 'Crimson Red & Zari', purchase_price: 3800, selling_price: 6999, minimum_stock: 5, current_stock: 9, is_active: 1 },
+  { id: 24, product_id: 7, sku: 'BAN-SLK-PNK-02', barcode: '89010007002', size: 'Free Size', color: 'Rani Pink & Gold', purchase_price: 3800, selling_price: 6999, minimum_stock: 4, current_stock: 2, is_active: 1 },
+
+  // Product 8 - Linen Club Shirt
+  { id: 25, product_id: 8, sku: 'LIN-SHT-BGE-40', barcode: '89010008040', size: '40 (M)', color: 'Natural Beige', purchase_price: 1100, selling_price: 2299, minimum_stock: 6, current_stock: 16, is_active: 1 },
+  { id: 26, product_id: 8, sku: 'LIN-SHT-OLV-42', barcode: '89010008042', size: '42 (L)', color: 'Olive Green', purchase_price: 1100, selling_price: 2299, minimum_stock: 5, current_stock: 11, is_active: 1 },
+  { id: 27, product_id: 8, sku: 'LIN-SHT-SKY-40', barcode: '89010008140', size: '40 (M)', color: 'Sky Blue', purchase_price: 1100, selling_price: 2299, minimum_stock: 6, current_stock: 1, is_active: 1 },
+
+  // Product 9 - Biba Anarkali Suit
+  { id: 28, product_id: 9, sku: 'BIB-SLW-TEL-M', barcode: '89010009001', size: 'M (38)', color: 'Teal Blue & Gold', purchase_price: 1600, selling_price: 3299, minimum_stock: 5, current_stock: 14, is_active: 1 },
+  { id: 29, product_id: 9, sku: 'BIB-SLW-PCH-L', barcode: '89010009002', size: 'L (40)', color: 'Peach Blossom', purchase_price: 1600, selling_price: 3299, minimum_stock: 5, current_stock: 3, is_active: 1 },
+  { id: 30, product_id: 9, sku: 'BIB-SLW-MRN-S', barcode: '89010009003', size: 'S (36)', color: 'Wine Maroon', purchase_price: 1600, selling_price: 3299, minimum_stock: 4, current_stock: 0, is_active: 1 },
+
+  // Product 10 - Pattu Pavadai Kids Set
+  { id: 31, product_id: 10, sku: 'PAT-KID-MAG-28', barcode: '89010010028', size: 'Size 28 (Age 6-8)', color: 'Magenta & Gold', purchase_price: 950, selling_price: 1999, minimum_stock: 6, current_stock: 15, is_active: 1 },
+  { id: 32, product_id: 10, sku: 'PAT-KID-GRN-32', barcode: '89010010032', size: 'Size 32 (Age 9-11)', color: 'Emerald Peacock', purchase_price: 1050, selling_price: 2199, minimum_stock: 4, current_stock: 2, is_active: 1 },
+
+  // Product 11 - Coimbatore Soft Silk Saree
+  { id: 33, product_id: 11, sku: 'COI-SLK-PEA-01', barcode: '89010011001', size: 'Free Size', color: 'Peacock Blue & Gold', purchase_price: 2200, selling_price: 4299, minimum_stock: 6, current_stock: 12, is_active: 1 },
+  { id: 34, product_id: 11, sku: 'COI-SLK-MST-02', barcode: '89010011002', size: 'Free Size', color: 'Mustard Gold', purchase_price: 2200, selling_price: 4299, minimum_stock: 5, current_stock: 0, is_active: 1 },
+
+  // Product 12 - Bombay Dyeing Bedsheet Set
+  { id: 35, product_id: 12, sku: 'BOM-BED-FLR-K', barcode: '89010012001', size: 'King (108x108 in)', color: 'Floral Jaipuri', purchase_price: 850, selling_price: 1799, minimum_stock: 8, current_stock: 22, is_active: 1 },
+  { id: 36, product_id: 12, sku: 'BOM-BED-GEO-K', barcode: '89010012002', size: 'King (108x108 in)', color: 'Geometric Indigo', purchase_price: 850, selling_price: 1799, minimum_stock: 6, current_stock: 4, is_active: 1 },
 ];
 
 // Initial Demo Suppliers
@@ -369,11 +465,17 @@ export function initBrowserMockApi() {
       getAll: async () => {
         const vList = loadStorage(STORAGE_KEYS.VARIANTS, DEFAULT_VARIANTS);
         const pList = loadStorage(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS);
+        const cList = loadStorage(STORAGE_KEYS.CATEGORIES, DEFAULT_CATEGORIES);
+        const bList = loadStorage(STORAGE_KEYS.BRANDS, DEFAULT_BRANDS);
         return vList.map((v: any) => {
           const p = pList.find((prod: any) => prod.id === v.product_id);
+          const c = cList.find((cat: any) => cat.id === p?.category_id);
+          const b = bList.find((brand: any) => brand.id === p?.brand_id);
           return {
             ...v,
             product_name: p?.name || 'Textile Item',
+            category_name: c?.name || p?.category_name || 'General',
+            brand_name: b?.name || p?.brand_name || 'Generic',
             material: p?.material || 'Cotton',
           };
         });
@@ -504,6 +606,19 @@ export function initBrowserMockApi() {
 
     // --- INVENTORY API ---
     inventory: {
+      getMetrics: async () => {
+        const vList = loadStorage(STORAGE_KEYS.VARIANTS, DEFAULT_VARIANTS);
+        const totalVariants = vList.length;
+        const totalStockUnits = vList.reduce((acc: number, v: any) => acc + (Number(v.current_stock) || 0), 0);
+        const lowStockCount = vList.filter((v: any) => Number(v.current_stock) > 0 && Number(v.current_stock) <= (Number(v.minimum_stock) || 5)).length;
+        const outOfStockCount = vList.filter((v: any) => (Number(v.current_stock) || 0) === 0).length;
+        return {
+          totalVariants,
+          totalStockUnits,
+          lowStockCount,
+          outOfStockCount,
+        };
+      },
       getLedger: async () => {
         const vars = loadStorage(STORAGE_KEYS.VARIANTS, DEFAULT_VARIANTS);
         const prods = loadStorage(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS);
@@ -843,16 +958,154 @@ export function initBrowserMockApi() {
         };
       },
       login: async (username: string) => {
-        const mockUser = {
-          userId: 1,
-          username,
-          displayName: username === 'admin' ? 'Store Administrator' : username,
-          roleId: 1,
-          roleName: 'Owner',
-          permissions: ['*'],
+        const key = (username || 'admin').trim().toLowerCase();
+        const MOCK_USERS_MAP: Record<string, any> = {
+          admin: {
+            userId: 1,
+            username: 'admin',
+            displayName: 'Store Administrator',
+            roleId: 1,
+            roleName: 'Owner',
+            permissions: ['*'],
+          },
+          owner: {
+            userId: 1,
+            username: 'admin',
+            displayName: 'Store Administrator',
+            roleId: 1,
+            roleName: 'Owner',
+            permissions: ['*'],
+          },
+          manager: {
+            userId: 2,
+            username: 'manager',
+            displayName: 'Rajesh Kumar',
+            roleId: 2,
+            roleName: 'Manager',
+            permissions: [
+              'dashboard.view', 'billing.create', 'sales.view', 'customers.view', 'products.view', 'products.manage',
+              'inventory.view', 'inventory.manage', 'suppliers.view', 'purchases.view', 'returns.create', 'reports.view',
+              'staff.view', 'attendance.view', 'shift.view', 'leave.view', 'payroll.view', 'settings.view'
+            ],
+          },
+          'stf-0001': {
+            userId: 2,
+            username: 'manager',
+            displayName: 'Rajesh Kumar',
+            roleId: 2,
+            roleName: 'Manager',
+            permissions: [
+              'dashboard.view', 'billing.create', 'sales.view', 'customers.view', 'products.view', 'products.manage',
+              'inventory.view', 'inventory.manage', 'suppliers.view', 'purchases.view', 'returns.create', 'reports.view',
+              'staff.view', 'attendance.view', 'shift.view', 'leave.view', 'payroll.view', 'settings.view'
+            ],
+          },
+          'arun.cashier': {
+            userId: 3,
+            username: 'arun.cashier',
+            displayName: 'Arun Kumar',
+            roleId: 3,
+            roleName: 'Cashier',
+            permissions: [
+              'dashboard.view', 'billing.create', 'sales.view', 'customers.view', 'products.view', 'inventory.view', 'returns.create',
+              'self.profile.view', 'self.attendance.view', 'self.shift.view', 'self.leave.view', 'self.payroll.view'
+            ],
+          },
+          'stf-0002': {
+            userId: 3,
+            username: 'arun.cashier',
+            displayName: 'Arun Kumar',
+            roleId: 3,
+            roleName: 'Cashier',
+            permissions: [
+              'dashboard.view', 'billing.create', 'sales.view', 'customers.view', 'products.view', 'inventory.view', 'returns.create',
+              'self.profile.view', 'self.attendance.view', 'self.shift.view', 'self.leave.view', 'self.payroll.view'
+            ],
+          },
+          'priya.sales': {
+            userId: 4,
+            username: 'priya.sales',
+            displayName: 'Priya Sharma',
+            roleId: 3,
+            roleName: 'Cashier',
+            permissions: [
+              'dashboard.view', 'billing.create', 'sales.view', 'customers.view', 'products.view', 'inventory.view', 'returns.create',
+              'self.profile.view', 'self.attendance.view', 'self.shift.view', 'self.leave.view', 'self.payroll.view'
+            ],
+          },
+          'stf-0003': {
+            userId: 4,
+            username: 'priya.sales',
+            displayName: 'Priya Sharma',
+            roleId: 3,
+            roleName: 'Cashier',
+            permissions: [
+              'dashboard.view', 'billing.create', 'sales.view', 'customers.view', 'products.view', 'inventory.view', 'returns.create',
+              'self.profile.view', 'self.attendance.view', 'self.shift.view', 'self.leave.view', 'self.payroll.view'
+            ],
+          },
+          'karthik.inventory': {
+            userId: 5,
+            username: 'karthik.inventory',
+            displayName: 'Karthik Raja',
+            roleId: 4,
+            roleName: 'Inventory Staff',
+            permissions: [
+              'dashboard.view', 'inventory.view', 'inventory.manage', 'products.view', 'products.manage', 'purchases.view', 'suppliers.view',
+              'self.profile.view', 'self.attendance.view', 'self.shift.view', 'self.leave.view', 'self.payroll.view'
+            ],
+          },
+          'stf-0004': {
+            userId: 5,
+            username: 'karthik.inventory',
+            displayName: 'Karthik Raja',
+            roleId: 4,
+            roleName: 'Inventory Staff',
+            permissions: [
+              'dashboard.view', 'inventory.view', 'inventory.manage', 'products.view', 'products.manage', 'purchases.view', 'suppliers.view',
+              'self.profile.view', 'self.attendance.view', 'self.shift.view', 'self.leave.view', 'self.payroll.view'
+            ],
+          },
+          'anitha.hr': {
+            userId: 6,
+            username: 'anitha.hr',
+            displayName: 'Anitha Ramesh',
+            roleId: 6,
+            roleName: 'HR Staff',
+            permissions: [
+              'dashboard.view', 'staff.view', 'staff.manage', 'staff.organization', 'attendance.view', 'shift.view', 'leave.view', 'payroll.view',
+              'performance.view', 'documents.view', 'communication.view', 'reports.view',
+              'self.profile.view', 'self.attendance.view', 'self.shift.view', 'self.leave.view', 'self.payroll.view'
+            ],
+          },
+          'stf-0005': {
+            userId: 6,
+            username: 'anitha.hr',
+            displayName: 'Anitha Ramesh',
+            roleId: 6,
+            roleName: 'HR Staff',
+            permissions: [
+              'dashboard.view', 'staff.view', 'staff.manage', 'staff.organization', 'attendance.view', 'shift.view', 'leave.view', 'payroll.view',
+              'performance.view', 'documents.view', 'communication.view', 'reports.view',
+              'self.profile.view', 'self.attendance.view', 'self.shift.view', 'self.leave.view', 'self.payroll.view'
+            ],
+          },
         };
-        localStorage.setItem('texora_current_user', JSON.stringify(mockUser));
-        return { success: true, user: mockUser };
+
+        const matchedUser = MOCK_USERS_MAP[key] || {
+          userId: 99,
+          username,
+          displayName: username,
+          roleId: 3,
+          roleName: 'Cashier',
+          permissions: [
+            'dashboard.view', 'billing.create', 'sales.view', 'customers.view', 'products.view', 'inventory.view', 'returns.create',
+            'self.profile.view', 'self.attendance.view', 'self.shift.view', 'self.leave.view', 'self.payroll.view'
+          ],
+        };
+
+        localStorage.setItem('texora_current_user', JSON.stringify(matchedUser));
+        return { success: true, user: matchedUser };
       },
       logout: async () => {
         localStorage.removeItem('texora_current_user');
@@ -874,7 +1127,271 @@ export function initBrowserMockApi() {
       update: async (_id: number, _data: any) => ({ success: true, message: 'User updated' }),
       resetPassword: async (_id: number, _pass: string) => ({ success: true, message: 'Password reset' }),
     },
+
+    // --- SELF SERVICE API ---
+    selfService: {
+      getDashboard: async () => {
+        const raw = localStorage.getItem('texora_current_user');
+        let user: any = { userId: 1, username: 'admin', displayName: 'Store Administrator', roleName: 'Owner' };
+        if (raw) {
+          try { user = JSON.parse(raw); } catch {}
+        }
+        const profile = getMockStaffProfile(user);
+        return {
+          profile,
+          todayAttendance: {
+            check_in: new Date().toISOString().slice(0, 10) + 'T09:15:00',
+            check_out: null,
+            status: 'PRESENT',
+            work_duration_minutes: 360,
+          },
+          todayShift: {
+            shift_name: 'Standard Store Shift',
+            start_time: '09:00',
+            end_time: '18:00',
+            location: 'Main Textile Store',
+          },
+          leaveBalance: {
+            used: 3,
+            total: 18,
+            remaining: 15,
+          },
+          documentCompletion: {
+            totalRequired: 5,
+            completedCount: 5,
+            complianceScore: 100,
+          },
+          unreadNotificationsCount: 2,
+        };
+      },
+      getProfile: async () => {
+        const raw = localStorage.getItem('texora_current_user');
+        let user: any = { userId: 1, username: 'admin', displayName: 'Store Administrator', roleName: 'Owner' };
+        if (raw) {
+          try { user = JSON.parse(raw); } catch {}
+        }
+        return getMockStaffProfile(user);
+      },
+      updateProfile: async (fields: any) => {
+        const saved = loadStorage('texora_profile_custom', {});
+        saveStorage('texora_profile_custom', { ...saved, ...fields });
+        return { success: true };
+      },
+      requestProfileChange: async (input: any) => {
+        const reqs = loadStorage<any[]>('texora_profile_requests', []);
+        reqs.unshift({ id: Date.now(), ...input, status: 'PENDING', created_at: new Date().toISOString() });
+        saveStorage('texora_profile_requests', reqs);
+        return { success: true, id: Date.now() };
+      },
+      getProfileChangeRequests: async () => {
+        return loadStorage<any[]>('texora_profile_requests', [
+          { id: 101, field_name: 'phone', old_value: '+91 98765 00000', new_value: '+91 98765 33003', reason: 'Updated primary contact', status: 'APPROVED', created_at: '2026-02-10' }
+        ]);
+      },
+      getAttendance: async (_month?: string, _year?: number) => {
+        return [
+          { id: 1, date: new Date().toISOString().slice(0, 10), check_in: '09:15', check_out: '18:05', status: 'PRESENT', total_hours: '8.8' },
+          { id: 2, date: '2026-08-22', check_in: '09:00', check_out: '18:00', status: 'PRESENT', total_hours: '9.0' },
+          { id: 3, date: '2026-08-21', check_in: '09:30', check_out: '18:00', status: 'LATE', total_hours: '8.5' },
+          { id: 4, date: '2026-08-20', check_in: '09:00', check_out: '18:00', status: 'PRESENT', total_hours: '9.0' },
+          { id: 5, date: '2026-08-19', check_in: '09:00', check_out: '18:00', status: 'PRESENT', total_hours: '9.0' },
+          { id: 6, date: '2026-08-18', check_in: null, check_out: null, status: 'LEAVE', total_hours: '0' },
+        ];
+      },
+      requestAttendanceCorrection: async (_input: any) => {
+        return { success: true, id: Date.now() };
+      },
+      getLeave: async () => {
+        return {
+          balances: [
+            { leave_type: 'Casual Leave (CL)', allocated: 12, used: 2, remaining: 10 },
+            { leave_type: 'Sick Leave (SL)', allocated: 6, used: 1, remaining: 5 },
+            { leave_type: 'Earned Leave (EL)', allocated: 15, used: 0, remaining: 15 },
+          ],
+          requests: [
+            { id: 201, leave_type: 'Casual Leave', start_date: '2026-08-18', end_date: '2026-08-18', days_count: 1, reason: 'Family function', status: 'APPROVED' },
+            { id: 202, leave_type: 'Sick Leave', start_date: '2026-07-12', end_date: '2026-07-12', days_count: 1, reason: 'Viral fever', status: 'APPROVED' },
+          ]
+        };
+      },
+      applyLeave: async (_input: any) => {
+        return { success: true, id: Date.now() };
+      },
+      cancelLeave: async (_id: number) => {
+        return { success: true };
+      },
+      getPayroll: async () => {
+        return [
+          { id: 301, month: 'July 2026', basic_salary: 25000, allowances: 5000, deductions: 1800, net_pay: 28200, status: 'PAID', pay_date: '2026-08-01' },
+          { id: 302, month: 'June 2026', basic_salary: 25000, allowances: 5000, deductions: 1800, net_pay: 28200, status: 'PAID', pay_date: '2026-07-01' },
+          { id: 303, month: 'May 2026', basic_salary: 25000, allowances: 5000, deductions: 1800, net_pay: 28200, status: 'PAID', pay_date: '2026-06-01' },
+        ];
+      },
+      getDocuments: async () => {
+        return [
+          { id: 401, title: 'Aadhaar Card Copy', doc_type: 'ID_PROOF', status: 'VERIFIED', upload_date: '2026-01-15' },
+          { id: 402, title: 'PAN Card Copy', doc_type: 'TAX_PROOF', status: 'VERIFIED', upload_date: '2026-01-15' },
+          { id: 403, title: 'Employment Contract', doc_type: 'CONTRACT', status: 'VERIFIED', upload_date: '2026-01-15' },
+        ];
+      },
+      getPerformance: async () => {
+        return {
+          rating: 4.8,
+          salesTarget: 500000,
+          salesAchieved: 485000,
+          kpis: [
+            { name: 'Customer Satisfaction', score: '96%' },
+            { name: 'Billing Accuracy', score: '99.8%' },
+            { name: 'Punctuality Score', score: '98%' },
+          ]
+        };
+      },
+    },
   };
+
+  // Helper for mock staff profiles
+  function getMockStaffProfile(user: any) {
+    const username = (user?.username || 'admin').toLowerCase();
+    const custom = loadStorage<any>('texora_profile_custom', {});
+    const baseMap: Record<string, any> = {
+      admin: {
+        id: 1,
+        staff_code: 'ADM-0001',
+        first_name: 'Store',
+        last_name: 'Administrator',
+        email: 'admin@texora.shop',
+        phone: '+91 98765 00001',
+        department_name: 'Store Management',
+        designation_name: 'Store Administrator & Owner',
+        work_location: 'Main Textile Store',
+        joining_date: '2025-01-01',
+        employment_type: 'FULL_TIME',
+        status: 'ACTIVE',
+        address_line_1: '123 Bazaar Main St',
+        city: 'Coimbatore',
+        state: 'Tamil Nadu',
+        pincode: '641001',
+        manager_name: 'Executive Board',
+      },
+      manager: {
+        id: 2,
+        staff_code: 'STF-0001',
+        first_name: 'Rajesh',
+        last_name: 'Kumar',
+        email: 'rajesh.manager@texora.shop',
+        phone: '+91 98765 11001',
+        department_name: 'Store Management',
+        designation_name: 'Store Manager',
+        work_location: 'Main Textile Store',
+        joining_date: '2025-06-01',
+        employment_type: 'FULL_TIME',
+        status: 'ACTIVE',
+        address_line_1: '45 Raja Street',
+        city: 'Coimbatore',
+        state: 'Tamil Nadu',
+        pincode: '641002',
+        manager_name: 'Store Administrator',
+      },
+      'priya.sales': {
+        id: 3,
+        staff_code: 'STF-0003',
+        first_name: 'Priya',
+        last_name: 'Sharma',
+        email: 'priya.sales@texora.shop',
+        phone: '+91 98765 33003',
+        department_name: 'Storefront Sales',
+        designation_name: 'Sales Executive',
+        work_location: 'Main Textile Store',
+        joining_date: '2026-01-10',
+        employment_type: 'FULL_TIME',
+        status: 'ACTIVE',
+        address_line_1: '78 Gandhi Road',
+        city: 'Coimbatore',
+        state: 'Tamil Nadu',
+        pincode: '641001',
+        manager_name: 'Rajesh Kumar (Manager)',
+      },
+      'arun.cashier': {
+        id: 4,
+        staff_code: 'STF-0002',
+        first_name: 'Arun',
+        last_name: 'Kumar',
+        email: 'arun.cashier@texora.shop',
+        phone: '+91 98765 22002',
+        department_name: 'Accounts & Billing',
+        designation_name: 'Head Cashier',
+        work_location: 'Main Textile Store',
+        joining_date: '2026-01-05',
+        employment_type: 'FULL_TIME',
+        status: 'ACTIVE',
+        address_line_1: '12 Temple View Apt',
+        city: 'Coimbatore',
+        state: 'Tamil Nadu',
+        pincode: '641004',
+        manager_name: 'Rajesh Kumar (Manager)',
+      },
+      'karthik.inventory': {
+        id: 5,
+        staff_code: 'STF-0004',
+        first_name: 'Karthik',
+        last_name: 'Raja',
+        email: 'karthik.stock@texora.shop',
+        phone: '+91 98765 44004',
+        department_name: 'Inventory & Stock',
+        designation_name: 'Stock Specialist',
+        work_location: 'Warehouse Hub',
+        joining_date: '2026-02-01',
+        employment_type: 'FULL_TIME',
+        status: 'ACTIVE',
+        address_line_1: '56 Mill Road',
+        city: 'Coimbatore',
+        state: 'Tamil Nadu',
+        pincode: '641006',
+        manager_name: 'Rajesh Kumar (Manager)',
+      },
+      'anitha.hr': {
+        id: 6,
+        staff_code: 'STF-0005',
+        first_name: 'Anitha',
+        last_name: 'Ramesh',
+        email: 'anitha.hr@texora.shop',
+        phone: '+91 98765 55005',
+        department_name: 'HR & Administration',
+        designation_name: 'HR Specialist',
+        work_location: 'Main Textile Store',
+        joining_date: '2026-01-01',
+        employment_type: 'FULL_TIME',
+        status: 'ACTIVE',
+        address_line_1: '89 Cross Cut Road',
+        city: 'Coimbatore',
+        state: 'Tamil Nadu',
+        pincode: '641012',
+        manager_name: 'Store Administrator',
+      },
+    };
+
+    const base = baseMap[username] || {
+      id: user?.userId || 99,
+      staff_code: `STF-${String(user?.userId || 99).padStart(4, '0')}`,
+      first_name: user?.displayName?.split(' ')[0] || user?.username || 'Staff',
+      last_name: user?.displayName?.split(' ').slice(1).join(' ') || '',
+      email: `${user?.username || 'staff'}@texora.shop`,
+      phone: '+91 98765 00000',
+      department_name: 'Store Operations',
+      designation_name: user?.roleName || 'Store Staff',
+      work_location: 'Main Textile Store',
+      joining_date: '2026-01-01',
+      employment_type: 'FULL_TIME',
+      status: 'ACTIVE',
+      address_line_1: '123 Bazaar Main St',
+      city: 'Coimbatore',
+      state: 'Tamil Nadu',
+      pincode: '641001',
+      manager_name: 'Rajesh Kumar (Manager)',
+    };
+
+    return { ...base, ...custom };
+  }
 
   // Attach mock to window
   (window as any).api = mockApi;

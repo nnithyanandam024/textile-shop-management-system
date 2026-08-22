@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import { DemoCredentialsHelper } from '../../components/ui/DemoCredentialsHelper';
+import { getDefaultRouteForUser } from '../../auth/permissions';
+import { StorageManager } from '../../utils/storage';
 import { Lock, User, Eye, EyeOff, AlertCircle, Loader2 } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
+  const navigate = useNavigate();
   const { login } = useAuth();
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -27,7 +31,11 @@ export const LoginPage: React.FC = () => {
 
     try {
       const res = await login(username.trim(), password);
-      if (!res.success) {
+      if (res.success) {
+        const user = StorageManager.getCurrentUser();
+        const targetRoute = getDefaultRouteForUser(user);
+        navigate(targetRoute, { replace: true });
+      } else {
         setError(res.error || 'Invalid username or password.');
       }
     } catch (err: any) {

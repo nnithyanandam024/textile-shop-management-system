@@ -6,6 +6,13 @@ import { SetupWizard } from './features/auth/SetupWizard';
 import { LockScreenModal } from './features/auth/LockScreenModal';
 import { ProtectedRoute } from './features/auth/ProtectedRoute';
 import { AppShell } from './components/layout/AppShell';
+import { getDefaultRouteForUser } from './auth/permissions';
+
+const RoleDefaultRedirect: React.FC = () => {
+  const { currentUser } = useAuth();
+  const targetRoute = getDefaultRouteForUser(currentUser);
+  return <Navigate to={targetRoute} replace />;
+};
 
 // Pages
 import { DashboardPage } from './features/dashboard/DashboardPage';
@@ -206,7 +213,7 @@ const MainAppRouter: React.FC = () => {
               {isLocked && <LockScreenModal />}
               <AppShell>
                 <Routes>
-                  <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                  <Route path="/" element={<RoleDefaultRedirect />} />
                   <Route path="/dashboard" element={<ProtectedRoute permission="dashboard.view"><DashboardPage /></ProtectedRoute>} />
                   <Route path="/products" element={<ProtectedRoute permission="products.view"><ProductsPage /></ProtectedRoute>} />
                   <Route path="/categories" element={<ProtectedRoute permission="products.manage"><CategoriesPage /></ProtectedRoute>} />
@@ -247,7 +254,7 @@ const MainAppRouter: React.FC = () => {
                   <Route path="/backup" element={<ProtectedRoute permission="backup.create"><BackupPage /></ProtectedRoute>} />
                   <Route path="/health" element={<ProtectedRoute permission="settings.view"><SystemHealthPage /></ProtectedRoute>} />
                   <Route path="/settings" element={<ProtectedRoute permission="settings.view"><SettingsPage /></ProtectedRoute>} />
-                  <Route path="*" element={<Navigate to="/dashboard" replace />} />
+                  <Route path="*" element={<RoleDefaultRedirect />} />
                 </Routes>
               </AppShell>
             </>

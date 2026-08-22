@@ -411,3 +411,39 @@ export function checkPermissionMatch(userPermissions: string[], requiredPermissi
 
   return false;
 }
+
+/**
+ * Resolves the primary authorized landing route for any given user role/permissions
+ */
+export function getDefaultRouteForUser(user?: { roleId?: number; roleName?: string; role?: string; permissions?: string[] } | null): string {
+  if (!user) return '/dashboard';
+  const roleName = (user.roleName || user.role || '').toLowerCase();
+  const permissions = user.permissions || [];
+  const hasWildcard = permissions.includes('*') || user.roleId === 1;
+
+  if (hasWildcard || roleName.includes('owner') || roleName.includes('manager') || roleName.includes('admin') || checkPermissionMatch(permissions, 'dashboard.view')) {
+    return '/dashboard';
+  }
+
+  // Cashier / POS
+  if (roleName.includes('cashier') || checkPermissionMatch(permissions, 'billing.create') || checkPermissionMatch(permissions, 'POS_VIEW')) {
+    return '/billing';
+  }
+
+  // Inventory Specialist
+  if (roleName.includes('inventory') || checkPermissionMatch(permissions, 'inventory.view') || checkPermissionMatch(permissions, 'products.view')) {
+    return '/inventory';
+  }
+
+  // HR / Staff / Accounts
+  if (roleName.includes('hr') || roleName.includes('account') || checkPermissionMatch(permissions, 'staff.view') || checkPermissionMatch(permissions, 'payroll.view')) {
+    return '/staff';
+  }
+
+  // Self-Service
+  if (checkPermissionMatch(permissions, 'self.profile.view')) {
+    return '/self-service/dashboard';
+  }
+
+  return '/dashboard';
+}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search, History, Lock, LogOut, KeyRound, ChevronDown } from 'lucide-react';
 import { useAuth } from '../../features/auth/AuthContext';
 import { ChangePasswordModal } from '../../features/auth/ChangePasswordModal';
@@ -6,6 +7,7 @@ import { NotificationBell } from './NotificationBell';
 import { ConnectionStatusIndicator } from '../common/ConnectionStatusIndicator';
 
 export const Header: React.FC = () => {
+  const navigate = useNavigate();
   const { currentUser, lockScreen, logout } = useAuth();
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const [showChangePass, setShowChangePass] = useState<boolean>(false);
@@ -96,9 +98,10 @@ export const Header: React.FC = () => {
               <div className="my-1 border-t border-slate-100" />
 
               <button
-                onClick={() => {
+                onClick={async () => {
                   setShowMenu(false);
-                  logout();
+                  await logout();
+                  navigate('/', { replace: true });
                 }}
                 className="w-full px-4 py-2 text-left text-xs font-semibold text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors"
               >

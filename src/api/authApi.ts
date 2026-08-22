@@ -41,7 +41,13 @@ const DEMO_ACCOUNTS_MAP: Record<string, UserSessionData> = {
     role: 'Manager',
     roleId: 2,
     staffId: 1,
-    permissions: ['pos.*', 'inventory.*', 'sales.*', 'purchases.*', 'customers.*', 'reports.*', 'staff.view'],
+    permissions: [
+      'dashboard.view', 'billing.create', 'pos.access', 'pos.create', 'pos.discount',
+      'inventory.view', 'inventory.manage', 'products.view', 'products.manage',
+      'sales.view', 'returns.create', 'customers.view', 'customers.create',
+      'purchases.view', 'suppliers.view', 'reports.view', 'staff.view',
+      'attendance.view', 'shift.view', 'leave.view', 'payroll.view', 'settings.view'
+    ],
   },
   'stf-0001': {
     id: 2,
@@ -50,7 +56,13 @@ const DEMO_ACCOUNTS_MAP: Record<string, UserSessionData> = {
     role: 'Manager',
     roleId: 2,
     staffId: 1,
-    permissions: ['pos.*', 'inventory.*', 'sales.*', 'purchases.*', 'customers.*', 'reports.*', 'staff.view'],
+    permissions: [
+      'dashboard.view', 'billing.create', 'pos.access', 'pos.create', 'pos.discount',
+      'inventory.view', 'inventory.manage', 'products.view', 'products.manage',
+      'sales.view', 'returns.create', 'customers.view', 'customers.create',
+      'purchases.view', 'suppliers.view', 'reports.view', 'staff.view',
+      'attendance.view', 'shift.view', 'leave.view', 'payroll.view', 'settings.view'
+    ],
   },
   'arun.cashier': {
     id: 3,
@@ -59,7 +71,11 @@ const DEMO_ACCOUNTS_MAP: Record<string, UserSessionData> = {
     role: 'Cashier',
     roleId: 3,
     staffId: 2,
-    permissions: ['pos.access', 'pos.create', 'pos.discount', 'pos.hold', 'customers.view', 'customers.create', 'sales.view'],
+    permissions: [
+      'billing.create', 'pos.access', 'pos.create', 'pos.discount', 'pos.hold',
+      'sales.view', 'customers.view', 'customers.create', 'returns.create',
+      'self.profile.view', 'self.attendance.view', 'self.leave.view', 'self.payroll.view'
+    ],
   },
   stf001: {
     id: 3,
@@ -68,7 +84,11 @@ const DEMO_ACCOUNTS_MAP: Record<string, UserSessionData> = {
     role: 'Cashier',
     roleId: 3,
     staffId: 2,
-    permissions: ['pos.access', 'pos.create', 'pos.discount', 'pos.hold', 'customers.view', 'customers.create', 'sales.view'],
+    permissions: [
+      'billing.create', 'pos.access', 'pos.create', 'pos.discount', 'pos.hold',
+      'sales.view', 'customers.view', 'customers.create', 'returns.create',
+      'self.profile.view', 'self.attendance.view', 'self.leave.view', 'self.payroll.view'
+    ],
   },
   'stf-0002': {
     id: 3,
@@ -77,7 +97,11 @@ const DEMO_ACCOUNTS_MAP: Record<string, UserSessionData> = {
     role: 'Cashier',
     roleId: 3,
     staffId: 2,
-    permissions: ['pos.access', 'pos.create', 'pos.discount', 'pos.hold', 'customers.view', 'customers.create', 'sales.view'],
+    permissions: [
+      'billing.create', 'pos.access', 'pos.create', 'pos.discount', 'pos.hold',
+      'sales.view', 'customers.view', 'customers.create', 'returns.create',
+      'self.profile.view', 'self.attendance.view', 'self.leave.view', 'self.payroll.view'
+    ],
   },
   'priya.sales': {
     id: 4,
@@ -86,7 +110,11 @@ const DEMO_ACCOUNTS_MAP: Record<string, UserSessionData> = {
     role: 'Cashier',
     roleId: 3,
     staffId: 3,
-    permissions: ['pos.access', 'pos.create', 'customers.view', 'customers.create', 'sales.view'],
+    permissions: [
+      'billing.create', 'pos.access', 'pos.create', 'sales.view',
+      'customers.view', 'customers.create', 'returns.create',
+      'self.profile.view', 'self.attendance.view', 'self.leave.view', 'self.payroll.view'
+    ],
   },
   'stf-0003': {
     id: 4,
@@ -95,7 +123,11 @@ const DEMO_ACCOUNTS_MAP: Record<string, UserSessionData> = {
     role: 'Cashier',
     roleId: 3,
     staffId: 3,
-    permissions: ['pos.access', 'pos.create', 'customers.view', 'customers.create', 'sales.view'],
+    permissions: [
+      'billing.create', 'pos.access', 'pos.create', 'sales.view',
+      'customers.view', 'customers.create', 'returns.create',
+      'self.profile.view', 'self.attendance.view', 'self.leave.view', 'self.payroll.view'
+    ],
   },
   'karthik.inventory': {
     id: 5,
@@ -104,7 +136,11 @@ const DEMO_ACCOUNTS_MAP: Record<string, UserSessionData> = {
     role: 'Inventory Staff',
     roleId: 4,
     staffId: 4,
-    permissions: ['inventory.access', 'inventory.manage', 'inventory.audit', 'purchases.view', 'suppliers.view'],
+    permissions: [
+      'inventory.view', 'inventory.access', 'inventory.manage', 'inventory.audit',
+      'products.view', 'products.manage', 'purchases.view', 'suppliers.view',
+      'self.profile.view', 'self.attendance.view', 'self.leave.view', 'self.payroll.view'
+    ],
   },
   'stf-0004': {
     id: 5,
@@ -113,7 +149,11 @@ const DEMO_ACCOUNTS_MAP: Record<string, UserSessionData> = {
     role: 'Inventory Staff',
     roleId: 4,
     staffId: 4,
-    permissions: ['inventory.access', 'inventory.manage', 'inventory.audit', 'purchases.view', 'suppliers.view'],
+    permissions: [
+      'inventory.view', 'inventory.access', 'inventory.manage', 'inventory.audit',
+      'products.view', 'products.manage', 'purchases.view', 'suppliers.view',
+      'self.profile.view', 'self.attendance.view', 'self.leave.view', 'self.payroll.view'
+    ],
   },
   'anitha.hr': {
     id: 6,
@@ -122,7 +162,12 @@ const DEMO_ACCOUNTS_MAP: Record<string, UserSessionData> = {
     role: 'HR Staff',
     roleId: 6,
     staffId: 5,
-    permissions: ['staff.access', 'staff.manage', 'staff.attendance', 'staff.leave', 'payroll.view', 'payroll.manage'],
+    permissions: [
+      'staff.view', 'staff.manage', 'staff.organization',
+      'attendance.view', 'shift.view', 'leave.view', 'payroll.view',
+      'performance.view', 'documents.view', 'communication.view',
+      'self.profile.view', 'self.attendance.view', 'self.leave.view', 'self.payroll.view'
+    ],
   },
   'stf-0005': {
     id: 6,
@@ -131,7 +176,12 @@ const DEMO_ACCOUNTS_MAP: Record<string, UserSessionData> = {
     role: 'HR Staff',
     roleId: 6,
     staffId: 5,
-    permissions: ['staff.access', 'staff.manage', 'staff.attendance', 'staff.leave', 'payroll.view', 'payroll.manage'],
+    permissions: [
+      'staff.view', 'staff.manage', 'staff.organization',
+      'attendance.view', 'shift.view', 'leave.view', 'payroll.view',
+      'performance.view', 'documents.view', 'communication.view',
+      'self.profile.view', 'self.attendance.view', 'self.leave.view', 'self.payroll.view'
+    ],
   },
 };
 

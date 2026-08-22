@@ -18,7 +18,7 @@ export const LoginPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!username.trim()) {
-      setError('Please enter your username.');
+      setError('Please enter your username or Staff ID.');
       return;
     }
     if (!password) {
@@ -36,7 +36,7 @@ export const LoginPage: React.FC = () => {
         const targetRoute = getDefaultRouteForUser(user);
         navigate(targetRoute, { replace: true });
       } else {
-        setError(res.error || 'Invalid username or password.');
+        setError(res.error || 'Invalid username/staff ID or password.');
       }
     } catch (err: any) {
       setError(err.message || 'Unable to connect to authentication service.');
@@ -75,7 +75,7 @@ export const LoginPage: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
-              Username
+              Username or Staff ID
             </label>
             <div className="relative">
               <User className="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -86,7 +86,7 @@ export const LoginPage: React.FC = () => {
                   setUsername(e.target.value);
                   if (error) setError('');
                 }}
-                placeholder="Enter your username"
+                placeholder="e.g. admin, STF-0001, arun.cashier"
                 disabled={loading}
                 className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2818cf] focus:bg-white transition-all disabled:opacity-50"
               />
@@ -138,7 +138,6 @@ export const LoginPage: React.FC = () => {
 
         {/* Quick Demo Login Credentials Helper */}
         <DemoCredentialsHelper
-          portalType="ADMIN"
           onSelect={(uname, pw) => {
             setUsername(uname);
             setPassword(pw);

@@ -206,7 +206,6 @@ export const StaffLogin: React.FC = () => {
 
           {/* Quick Demo Login Credentials Helper */}
           <DemoCredentialsHelper
-            portalType="STAFF"
             onSelect={(id, pw) => {
               setEmployeeId(id);
               setPassword(pw);

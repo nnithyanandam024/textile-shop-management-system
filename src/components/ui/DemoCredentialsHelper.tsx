@@ -1,132 +1,89 @@
 import React, { useState } from 'react';
 import { KeyRound, ChevronDown, ChevronUp, Check, Sparkles } from 'lucide-react';
 
-interface DemoAccount {
+export interface DemoAccount {
   label: string;
   role: string;
   badgeBg: string;
-  badgeText: string;
+  idText: string;
   username: string;
-  employeeId?: string;
   password: string;
   description: string;
 }
 
 interface DemoCredentialsHelperProps {
   onSelect: (identifier: string, password: string) => void;
-  portalType?: 'STAFF' | 'ADMIN';
 }
 
-export const DemoCredentialsHelper: React.FC<DemoCredentialsHelperProps> = ({
-  onSelect,
-  portalType = 'STAFF',
-}) => {
+export const ALL_DEMO_ACCOUNTS: DemoAccount[] = [
+  {
+    label: 'Store Administrator',
+    role: 'Owner',
+    badgeBg: 'bg-rose-50 text-rose-700 border-rose-200',
+    idText: 'admin',
+    username: 'admin',
+    password: 'password123',
+    description: 'Full store owner access, all modules & settings',
+  },
+  {
+    label: 'Rajesh Kumar',
+    role: 'Manager',
+    badgeBg: 'bg-purple-50 text-purple-700 border-purple-200',
+    idText: 'manager / STF-0001',
+    username: 'manager',
+    password: 'password123',
+    description: 'Store operations supervisor, sales, stock & reports',
+  },
+  {
+    label: 'Arun Kumar',
+    role: 'Cashier',
+    badgeBg: 'bg-indigo-50 text-[#2818cf] border-indigo-200',
+    idText: 'arun.cashier / STF-0002',
+    username: 'arun.cashier',
+    password: 'password123',
+    description: 'Head Cashier • POS billing counter & customer sales',
+  },
+  {
+    label: 'Priya Sharma',
+    role: 'Sales Staff',
+    badgeBg: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    idText: 'priya.sales / STF-0003',
+    username: 'priya.sales',
+    password: 'password123',
+    description: 'Sales Executive • Floor billing & customer assistance',
+  },
+  {
+    label: 'Karthik Raja',
+    role: 'Inventory',
+    badgeBg: 'bg-amber-50 text-amber-700 border-amber-200',
+    idText: 'karthik.inventory / STF-0004',
+    username: 'karthik.inventory',
+    password: 'password123',
+    description: 'Inventory Specialist • Stock management & purchases',
+  },
+  {
+    label: 'Anitha Ramesh',
+    role: 'HR & Accounts',
+    badgeBg: 'bg-cyan-50 text-cyan-700 border-cyan-200',
+    idText: 'anitha.hr / STF-0005',
+    username: 'anitha.hr',
+    password: 'password123',
+    description: 'HR & Accounts • Staff directory, attendance & payroll',
+  },
+];
+
+export const DemoCredentialsHelper: React.FC<DemoCredentialsHelperProps> = ({ onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
-  const staffAccounts: DemoAccount[] = [
-    {
-      label: 'Arun Kumar',
-      role: 'Senior Staff',
-      badgeBg: 'bg-indigo-50 text-[#2818cf] border-indigo-100',
-      badgeText: 'STF001 / STF-0002',
-      username: 'arun.cashier',
-      employeeId: 'STF001',
-      password: 'password123',
-      description: 'Senior Sales Associate • Main Storefront',
-    },
-    {
-      label: 'Priya Sharma',
-      role: 'Sales Executive',
-      badgeBg: 'bg-emerald-50 text-emerald-700 border-emerald-100',
-      badgeText: 'STF-0003',
-      username: 'priya.sales',
-      employeeId: 'STF-0003',
-      password: 'password123',
-      description: 'Women Wear Floor Staff',
-    },
-    {
-      label: 'Rajesh Kumar',
-      role: 'Store Manager',
-      badgeBg: 'bg-purple-50 text-purple-700 border-purple-100',
-      badgeText: 'STF-0001',
-      username: 'manager',
-      employeeId: 'STF-0001',
-      password: 'password123',
-      description: 'Store Operations Supervisor',
-    },
-    {
-      label: 'Karthik Raja',
-      role: 'Inventory Staff',
-      badgeBg: 'bg-amber-50 text-amber-700 border-amber-100',
-      badgeText: 'STF-0004',
-      username: 'karthik.inventory',
-      employeeId: 'STF-0004',
-      password: 'password123',
-      description: 'Stock & Warehouse Specialist',
-    },
-    {
-      label: 'Anitha Ramesh',
-      role: 'HR & Accounts',
-      badgeBg: 'bg-cyan-50 text-cyan-700 border-cyan-100',
-      badgeText: 'STF-0005',
-      username: 'anitha.hr',
-      employeeId: 'STF-0005',
-      password: 'password123',
-      description: 'People Operations & Payroll',
-    },
-  ];
-
-  const adminAccounts: DemoAccount[] = [
-    {
-      label: 'Store Administrator',
-      role: 'Super Owner',
-      badgeBg: 'bg-rose-50 text-rose-700 border-rose-100',
-      badgeText: 'Owner',
-      username: 'admin',
-      password: 'password123',
-      description: 'Full administrative store access',
-    },
-    {
-      label: 'Rajesh Kumar',
-      role: 'Branch Manager',
-      badgeBg: 'bg-purple-50 text-purple-700 border-purple-100',
-      badgeText: 'Manager',
-      username: 'manager',
-      password: 'password123',
-      description: 'Sales, Inventory, and Purchases',
-    },
-    {
-      label: 'Arun Kumar',
-      role: 'Head Cashier',
-      badgeBg: 'bg-indigo-50 text-[#2818cf] border-indigo-100',
-      badgeText: 'Cashier',
-      username: 'arun.cashier',
-      password: 'password123',
-      description: 'POS Terminal & Customer Registry',
-    },
-    {
-      label: 'Karthik Raja',
-      role: 'Inventory Specialist',
-      badgeBg: 'bg-amber-50 text-amber-700 border-amber-100',
-      badgeText: 'Inventory Staff',
-      username: 'karthik.inventory',
-      password: 'password123',
-      description: 'Stock adjustments and receipts',
-    },
-  ];
-
-  const activeAccounts = portalType === 'STAFF' ? staffAccounts : adminAccounts;
-
   const handleFill = (acc: DemoAccount, index: number) => {
-    const id = portalType === 'STAFF' ? (acc.employeeId || acc.username) : acc.username;
-    onSelect(id, acc.password);
+    onSelect(acc.username, acc.password);
     setCopiedIndex(index);
     setTimeout(() => setCopiedIndex(null), 1500);
   };
 
   return (
-    <div className="w-full mt-6 bg-slate-50 border border-slate-200/90 rounded-2xl overflow-hidden transition-all duration-200 select-none">
+    <div className="w-full mt-5 bg-slate-50 border border-slate-200/90 rounded-2xl overflow-hidden transition-all duration-200 select-none">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
@@ -135,9 +92,9 @@ export const DemoCredentialsHelper: React.FC<DemoCredentialsHelperProps> = ({
         <div className="flex items-center gap-2">
           <KeyRound className="w-4 h-4 text-[#2818cf]" />
           <span className="text-xs font-extrabold text-slate-800 tracking-tight">
-            Demo Login Accounts
+            Quick Demo Accounts
           </span>
-          <span className="text-[10px] font-bold bg-indigo-50 text-[#2818cf] px-1.5 py-0.2 rounded border border-indigo-100">
+          <span className="text-[10px] font-bold bg-indigo-50 text-[#2818cf] px-1.5 py-0.5 rounded border border-indigo-100">
             Password: password123
           </span>
         </div>
@@ -154,8 +111,8 @@ export const DemoCredentialsHelper: React.FC<DemoCredentialsHelperProps> = ({
             Click any account below to auto-fill credentials:
           </p>
 
-          <div className="grid grid-cols-1 gap-1.5 max-h-52 overflow-y-auto pr-1">
-            {activeAccounts.map((acc, index) => (
+          <div className="grid grid-cols-1 gap-1.5 max-h-56 overflow-y-auto pr-1">
+            {ALL_DEMO_ACCOUNTS.map((acc, index) => (
               <div
                 key={index}
                 onClick={() => handleFill(acc, index)}
@@ -167,13 +124,13 @@ export const DemoCredentialsHelper: React.FC<DemoCredentialsHelperProps> = ({
                       {acc.label}
                     </span>
                     <span
-                      className={`text-[10px] font-mono font-bold px-1.5 py-0.2 rounded border ${acc.badgeBg}`}
+                      className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded border ${acc.badgeBg}`}
                     >
-                      {acc.badgeText}
+                      {acc.role}
                     </span>
                   </div>
-                  <p className="text-[10px] font-semibold text-slate-400 truncate mt-0.5">
-                    {acc.description}
+                  <p className="text-[10px] font-medium text-slate-500 truncate mt-0.5">
+                    <span className="font-mono text-slate-400">{acc.idText}</span> • {acc.description}
                   </p>
                 </div>
 

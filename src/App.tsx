@@ -51,23 +51,6 @@ import { MyPayrollPage } from './features/staff-self-service/pages/MyPayrollPage
 import { MyDocumentsPage } from './features/staff-self-service/pages/MyDocumentsPage';
 import { MyPerformancePage } from './features/staff-self-service/pages/MyPerformancePage';
 import { MySettingsPage } from './features/staff-self-service/pages/MySettingsPage';
-import { StaffAuthProvider } from './features/staff-portal/context/StaffAuthContext';
-import { StaffLogin } from './features/staff-portal/pages/StaffLogin';
-import { StaffDashboard } from './features/staff-portal/pages/StaffDashboard';
-import { StaffProfile } from './features/staff-portal/pages/StaffProfile';
-import { StaffAttendance } from './features/staff-portal/pages/StaffAttendance';
-import { StaffShifts } from './features/staff-portal/pages/StaffShifts';
-import { StaffLeave } from './features/staff-portal/pages/StaffLeave';
-import { StaffPayroll } from './features/staff-portal/pages/StaffPayroll';
-import { StaffInventory } from './features/staff-portal/pages/StaffInventory';
-import { StaffPOS } from './features/staff-portal/pages/StaffPOS';
-import { StaffMySales } from './features/staff-portal/pages/StaffMySales';
-import { StaffCustomers } from './features/staff-portal/pages/StaffCustomers';
-import { StaffCustomerProfile } from './features/staff-portal/pages/StaffCustomerProfile';
-import { StaffReports } from './features/staff-portal/pages/StaffReports';
-import { StaffNotifications } from './features/staff-portal/pages/StaffNotifications';
-import { StaffSettings } from './features/staff-portal/pages/StaffSettings';
-import { StaffProtectedRoute } from './features/staff-portal/components/StaffProtectedRoute';
 
 const MainAppRouter: React.FC = () => {
   const { currentUser, isLoading, isLocked, setupRequired } = useAuth();
@@ -87,122 +70,10 @@ const MainAppRouter: React.FC = () => {
 
   return (
     <Routes>
-      {/* Dedicated Staff Portal Routes */}
-      <Route path="/staff/login" element={<StaffLogin />} />
-      <Route
-        path="/staff/dashboard"
-        element={
-          <StaffProtectedRoute>
-            <StaffDashboard />
-          </StaffProtectedRoute>
-        }
-      />
-      <Route
-        path="/staff/profile"
-        element={
-          <StaffProtectedRoute>
-            <StaffProfile />
-          </StaffProtectedRoute>
-        }
-      />
-      <Route
-        path="/staff/attendance"
-        element={
-          <StaffProtectedRoute>
-            <StaffAttendance />
-          </StaffProtectedRoute>
-        }
-      />
-      <Route
-        path="/staff/shifts"
-        element={
-          <StaffProtectedRoute>
-            <StaffShifts />
-          </StaffProtectedRoute>
-        }
-      />
-      <Route
-        path="/staff/leave"
-        element={
-          <StaffProtectedRoute>
-            <StaffLeave />
-          </StaffProtectedRoute>
-        }
-      />
-      <Route
-        path="/staff/payroll"
-        element={
-          <StaffProtectedRoute>
-            <StaffPayroll />
-          </StaffProtectedRoute>
-        }
-      />
-      <Route
-        path="/staff/inventory"
-        element={
-          <StaffProtectedRoute>
-            <StaffInventory />
-          </StaffProtectedRoute>
-        }
-      />
-      <Route
-        path="/staff/pos"
-        element={
-          <StaffProtectedRoute>
-            <StaffPOS />
-          </StaffProtectedRoute>
-        }
-      />
-      <Route
-        path="/staff/sales"
-        element={
-          <StaffProtectedRoute>
-            <StaffMySales />
-          </StaffProtectedRoute>
-        }
-      />
-      <Route
-        path="/staff/customers"
-        element={
-          <StaffProtectedRoute>
-            <StaffCustomers />
-          </StaffProtectedRoute>
-        }
-      />
-      <Route
-        path="/staff/customers/:id"
-        element={
-          <StaffProtectedRoute>
-            <StaffCustomerProfile />
-          </StaffProtectedRoute>
-        }
-      />
-      <Route
-        path="/staff/reports"
-        element={
-          <StaffProtectedRoute>
-            <StaffReports />
-          </StaffProtectedRoute>
-        }
-      />
-      <Route
-        path="/staff/notifications"
-        element={
-          <StaffProtectedRoute>
-            <StaffNotifications />
-          </StaffProtectedRoute>
-        }
-      />
-      <Route
-        path="/staff/settings"
-        element={
-          <StaffProtectedRoute>
-            <StaffSettings />
-          </StaffProtectedRoute>
-        }
-      />
+      {/* Route legacy staff login to unified login */}
+      <Route path="/staff/login" element={<Navigate to="/" replace />} />
 
-      {/* Main Administrative / Store App Routes */}
+      {/* Main Unified Administrative & Store App Routes */}
       <Route
         path="/*"
         element={
@@ -226,7 +97,7 @@ const MainAppRouter: React.FC = () => {
                   <Route path="/returns" element={<ProtectedRoute permission="returns.create"><ReturnsPage /></ProtectedRoute>} />
                   <Route path="/reports" element={<ProtectedRoute permission="reports.view"><ReportsPage /></ProtectedRoute>} />
 
-                  {/* Self-Service Portal Routes */}
+                  {/* Self-Service & Staff Workspace Routes */}
                   <Route path="/self-service/dashboard" element={<ProtectedRoute permission="self.profile.view"><StaffDashboardPage /></ProtectedRoute>} />
                   <Route path="/self-service/profile" element={<ProtectedRoute permission="self.profile.view"><MyProfilePage /></ProtectedRoute>} />
                   <Route path="/self-service/attendance" element={<ProtectedRoute permission="self.attendance.view"><MyAttendancePage /></ProtectedRoute>} />
@@ -238,6 +109,7 @@ const MainAppRouter: React.FC = () => {
                   <Route path="/self-service/notifications" element={<ProtectedRoute permission="self.notifications.view"><CommunicationPage /></ProtectedRoute>} />
                   <Route path="/self-service/settings" element={<ProtectedRoute permission="self.settings.manage"><MySettingsPage /></ProtectedRoute>} />
 
+                  {/* Staff Management Routes */}
                   <Route path="/staff" element={<ProtectedRoute permission="staff.view"><StaffListPage /></ProtectedRoute>} />
                   <Route path="/staff/profile/:id" element={<ProtectedRoute permission="staff.view"><StaffProfilePage /></ProtectedRoute>} />
                   <Route path="/staff/departments" element={<ProtectedRoute permission="staff.organization"><DepartmentListPage /></ProtectedRoute>} />
@@ -269,9 +141,7 @@ export function App() {
   return (
     <HashRouter>
       <AuthProvider>
-        <StaffAuthProvider>
-          <MainAppRouter />
-        </StaffAuthProvider>
+        <MainAppRouter />
       </AuthProvider>
     </HashRouter>
   );

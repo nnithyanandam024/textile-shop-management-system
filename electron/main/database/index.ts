@@ -2006,6 +2006,43 @@ function runMigrations(db: Database.Database) {
           CREATE INDEX IF NOT EXISTS idx_inventory_tasks_staff ON inventory_tasks(staff_id, status);
         `);
       }
+    },
+    {
+      version: 18,
+      name: 'staff_module_pos_and_held_sales',
+      up: (database: Database.Database) => {
+        database.exec(`
+          -- 1. Held Sales Table (Shopping Cart Parking)
+          CREATE TABLE IF NOT EXISTS held_sales (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            reference_name TEXT,
+            customer_id INTEGER REFERENCES customers(id) ON DELETE SET NULL,
+            cart_data TEXT NOT NULL,
+            subtotal REAL NOT NULL DEFAULT 0.0,
+            discount_amount REAL DEFAULT 0.0,
+            tax_amount REAL DEFAULT 0.0,
+            total_amount REAL NOT NULL DEFAULT 0.0,
+            status TEXT DEFAULT 'HELD' CHECK (status IN ('HELD', 'RESUMED', 'CANCELLED')),
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 2. Staff Sales Commission Configuration Table
+          CREATE TABLE IF NOT EXISTS staff_sales_commissions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+            commission_rate REAL NOT NULL DEFAULT 1.5,
+            effective_from TEXT DEFAULT CURRENT_TIMESTAMP,
+            status TEXT DEFAULT 'ACTIVE' CHECK (status IN ('ACTIVE', 'INACTIVE'))
+          );
+
+          -- Indexes for POS performance
+          CREATE INDEX IF NOT EXISTS idx_held_sales_staff ON held_sales(staff_id, status);
+          CREATE INDEX IF NOT EXISTS idx_sales_created_by ON sales(created_by, sale_date);
+          CREATE INDEX IF NOT EXISTS idx_sale_items_variant ON sale_items(product_variant_id, sale_id);
+        `);
+      }
     }
   ];
 

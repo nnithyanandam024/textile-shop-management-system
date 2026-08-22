@@ -284,6 +284,22 @@ export interface ElectronAPI {
     getHistory: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
     getMetrics: () => Promise<{ success: boolean; data?: any; error?: string }>;
   };
+  staffPOS: {
+    searchProducts: (query?: string, categoryId?: number) => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    getByBarcode: (barcode: string) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getCustomers: (query?: string) => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    quickCustomer: (input: any) => Promise<{ success: boolean; customer?: any; error?: string }>;
+    customerHistory: (customerId: number) => Promise<{ success: boolean; data?: any; error?: string }>;
+    calculateTotals: (input: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    completeSale: (input: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    holdSale: (input: any) => Promise<{ success: boolean; heldId?: number; message?: string; error?: string }>;
+    getHeldSales: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    resumeSale: (heldId: number) => Promise<{ success: boolean; data?: any; error?: string }>;
+    cancelHeldSale: (heldId: number) => Promise<{ success: boolean; message?: string; error?: string }>;
+    getMySales: (filters?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getInvoice: (saleId: number) => Promise<{ success: boolean; data?: any; error?: string }>;
+    createReturn: (input: any) => Promise<{ success: boolean; returnId?: number; returnNumber?: string; refundAmount?: number; message?: string; error?: string }>;
+  };
   products: {
     getAll: () => Promise<any[]>;
     create: (product: any) => Promise<{ success: boolean; id?: number; error?: string }>;
@@ -645,6 +661,22 @@ const api: ElectronAPI = {
     submitReceiving: (input) => ipcRenderer.invoke('staff-inventory:submit-receiving', input),
     getHistory: () => ipcRenderer.invoke('staff-inventory:get-history'),
     getMetrics: () => ipcRenderer.invoke('staff-inventory:get-metrics'),
+  },
+  staffPOS: {
+    searchProducts: (query, categoryId) => ipcRenderer.invoke('staff-pos:search-products', query, categoryId),
+    getByBarcode: (barcode) => ipcRenderer.invoke('staff-pos:get-by-barcode', barcode),
+    getCustomers: (query) => ipcRenderer.invoke('staff-pos:get-customers', query),
+    quickCustomer: (input) => ipcRenderer.invoke('staff-pos:quick-customer', input),
+    customerHistory: (customerId) => ipcRenderer.invoke('staff-pos:customer-history', customerId),
+    calculateTotals: (input) => ipcRenderer.invoke('staff-pos:calculate-totals', input),
+    completeSale: (input) => ipcRenderer.invoke('staff-pos:complete-sale', input),
+    holdSale: (input) => ipcRenderer.invoke('staff-pos:hold-sale', input),
+    getHeldSales: () => ipcRenderer.invoke('staff-pos:get-held-sales'),
+    resumeSale: (heldId) => ipcRenderer.invoke('staff-pos:resume-sale', heldId),
+    cancelHeldSale: (heldId) => ipcRenderer.invoke('staff-pos:cancel-held-sale', heldId),
+    getMySales: (filters) => ipcRenderer.invoke('staff-pos:get-my-sales', filters),
+    getInvoice: (saleId) => ipcRenderer.invoke('staff-pos:get-invoice', saleId),
+    createReturn: (input) => ipcRenderer.invoke('staff-pos:create-return', input),
   },
   products: {
     getAll: () => ipcRenderer.invoke('products:get-all'),

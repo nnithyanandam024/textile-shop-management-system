@@ -126,7 +126,7 @@ export const StaffCustomerProfile: React.FC = () => {
               onClick={() => setActiveTab(tab.id as any)}
               className={`px-4 py-2.5 rounded-2xl text-xs font-extrabold flex items-center gap-2 transition-all whitespace-nowrap ${
                 isActive
-                  ? 'bg-[#2818cf] text-white shadow-md shadow-indigo-600/20'
+                  ? 'bg-[#2012ad] text-white shadow-md shadow-indigo-600/20'
                   : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
               }`}
             >

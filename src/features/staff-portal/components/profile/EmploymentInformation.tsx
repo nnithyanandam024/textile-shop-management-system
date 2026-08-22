@@ -76,7 +76,7 @@ export const EmploymentInformation: React.FC<EmploymentInformationProps> = ({
             Official Designation
           </span>
           <div className="flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#2818cf] shrink-0" />
+            <ShieldCheck className="w-3.5 h-3.5 text-[#2012ad] shrink-0" />
             <p className="text-xs font-bold text-slate-900 truncate">
               {profile.designationName}
             </p>
@@ -101,7 +101,7 @@ export const EmploymentInformation: React.FC<EmploymentInformationProps> = ({
           <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">
             Employment Type
           </span>
-          <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-indigo-50 text-[#2818cf]">
+          <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-indigo-50 text-[#2012ad]">
             {profile.employmentType.replace('_', ' ')}
           </span>
         </div>
@@ -128,7 +128,7 @@ export const EmploymentInformation: React.FC<EmploymentInformationProps> = ({
         <button
           type="button"
           onClick={onRequestChangeClick}
-          className="text-xs font-extrabold text-[#2818cf] hover:text-indigo-800 hover:underline shrink-0"
+          className="text-xs font-extrabold text-[#2012ad] hover:text-indigo-800 hover:underline shrink-0"
         >
           Submit Change Request →
         </button>

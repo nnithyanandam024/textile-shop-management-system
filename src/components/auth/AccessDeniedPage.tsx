@@ -24,7 +24,7 @@ export const AccessDeniedPage: React.FC<AccessDeniedPageProps> = ({ requiredPerm
       <p className="text-xs font-semibold text-slate-500 max-w-md mt-2 leading-relaxed">
         You do not have permission to access this feature or section.
         {requiredPermission && (
-          <span className="block mt-1 font-mono text-[#2818cf] font-bold">
+          <span className="block mt-1 font-mono text-[#2012ad] font-bold">
             Required Permission Code: {requiredPermission}
           </span>
         )}

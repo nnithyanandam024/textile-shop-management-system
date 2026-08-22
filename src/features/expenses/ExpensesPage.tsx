@@ -120,7 +120,7 @@ export const ExpensesPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2818cf]">
+          <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2012ad]">
             <DollarSign className="w-6 h-6" />
           </div>
           <div>
@@ -139,7 +139,7 @@ export const ExpensesPage: React.FC = () => {
           </button>
           <button
             onClick={() => setShowAddModal(true)}
-            className="px-4 py-2.5 bg-[#2818cf] hover:bg-[#2012ad] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2818cf]/20 transition-all flex items-center gap-2"
+            className="px-4 py-2.5 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2012ad]/20 transition-all flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             <span>Record New Expense</span>
@@ -170,7 +170,7 @@ export const ExpensesPage: React.FC = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search by Expense #, Category, or Description..."
-            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
           />
         </div>
       </div>
@@ -179,7 +179,7 @@ export const ExpensesPage: React.FC = () => {
       <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden">
         {loading ? (
           <div className="p-12 text-center text-slate-500">
-            <RefreshCw className="w-8 h-8 animate-spin text-[#2818cf] mx-auto mb-2" />
+            <RefreshCw className="w-8 h-8 animate-spin text-[#2012ad] mx-auto mb-2" />
             <span className="text-sm font-medium">Loading expenses...</span>
           </div>
         ) : filteredExpenses.length === 0 ? (
@@ -205,7 +205,7 @@ export const ExpensesPage: React.FC = () => {
                   <td className="px-6 py-4 font-mono font-bold text-slate-900">{ex.expense_number}</td>
                   <td className="px-6 py-4 font-bold text-slate-800">{ex.category_name || 'General'}</td>
                   <td className="px-6 py-4 text-xs text-slate-500">{new Date(ex.expense_date).toLocaleDateString()}</td>
-                  <td className="px-6 py-4 font-extrabold text-[#2818cf]">₹{ex.amount}</td>
+                  <td className="px-6 py-4 font-extrabold text-[#2012ad]">₹{ex.amount}</td>
                   <td className="px-6 py-4 text-xs text-slate-600 font-semibold">{ex.payment_method}</td>
                   <td className="px-6 py-4">
                     <span
@@ -314,7 +314,7 @@ export const ExpensesPage: React.FC = () => {
               </div>
               <div className="flex gap-2 pt-2">
                 <button type="button" onClick={() => setShowAddModal(false)} className="w-1/2 py-2.5 bg-slate-100 text-slate-700 text-xs font-bold rounded-xl">Cancel</button>
-                <button type="submit" disabled={actionLoading} className="w-1/2 py-2.5 bg-[#2818cf] text-white text-xs font-bold rounded-xl shadow-md flex items-center justify-center gap-1.5">
+                <button type="submit" disabled={actionLoading} className="w-1/2 py-2.5 bg-[#2012ad] text-white text-xs font-bold rounded-xl shadow-md flex items-center justify-center gap-1.5">
                   {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>Save Expense</span>}
                 </button>
               </div>

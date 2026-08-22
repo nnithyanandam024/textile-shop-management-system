@@ -45,7 +45,7 @@ export const ReturnsPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2818cf]">
+          <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2012ad]">
             <RotateCcw className="w-6 h-6" />
           </div>
           <div>
@@ -71,7 +71,7 @@ export const ReturnsPage: React.FC = () => {
           </button>
           <button
             onClick={() => setShowReturnModal(true)}
-            className="px-4 py-2.5 bg-[#2818cf] hover:bg-[#2012ad] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2818cf]/20 transition-all flex items-center gap-2"
+            className="px-4 py-2.5 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2012ad]/20 transition-all flex items-center gap-2"
           >
             <RotateCcw className="w-4 h-4" />
             <span>Process Return</span>
@@ -90,7 +90,7 @@ export const ReturnsPage: React.FC = () => {
       <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden">
         {loading ? (
           <div className="p-12 text-center text-slate-500">
-            <RefreshCw className="w-8 h-8 animate-spin text-[#2818cf] mx-auto mb-2" />
+            <RefreshCw className="w-8 h-8 animate-spin text-[#2012ad] mx-auto mb-2" />
             <span className="text-sm font-medium">Loading returns history...</span>
           </div>
         ) : returns.length === 0 ? (
@@ -116,7 +116,7 @@ export const ReturnsPage: React.FC = () => {
                   <td className="px-6 py-4 font-mono text-slate-700">{r.invoice_number}</td>
                   <td className="px-6 py-4 font-bold text-slate-800">{r.customer_name || 'Walk-in Customer'}</td>
                   <td className="px-6 py-4 text-xs text-slate-500">{new Date(r.return_date).toLocaleDateString()}</td>
-                  <td className="px-6 py-4 font-extrabold text-[#2818cf]">₹{r.refund_amount}</td>
+                  <td className="px-6 py-4 font-extrabold text-[#2012ad]">₹{r.refund_amount}</td>
                   <td className="px-6 py-4">
                     <span className="px-2.5 py-1 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded text-xs font-bold">
                       {r.refund_method}

@@ -92,7 +92,7 @@ export const DocumentsPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf] shadow-sm">
+          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad] shadow-sm">
             <FileText className="w-5 h-5" />
           </div>
           <div>
@@ -137,7 +137,7 @@ export const DocumentsPage: React.FC = () => {
           onClick={() => setActiveTab('all')}
           className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
             activeTab === 'all'
-              ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+              ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
@@ -149,7 +149,7 @@ export const DocumentsPage: React.FC = () => {
           onClick={() => setActiveTab('pending')}
           className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
             activeTab === 'pending'
-              ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+              ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
@@ -161,7 +161,7 @@ export const DocumentsPage: React.FC = () => {
           onClick={() => setActiveTab('expiring')}
           className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
             activeTab === 'expiring'
-              ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+              ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
@@ -173,7 +173,7 @@ export const DocumentsPage: React.FC = () => {
           onClick={() => setActiveTab('categories')}
           className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
             activeTab === 'categories'
-              ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+              ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
@@ -202,7 +202,7 @@ export const DocumentsPage: React.FC = () => {
                 {documents.map((d) => (
                   <tr key={d.id} className="hover:bg-slate-50/60 transition-all">
                     <td className="py-3 px-4 font-bold text-slate-900">{d.staff_code} — {d.first_name} {d.last_name || ''}</td>
-                    <td className="py-3 px-4 font-bold text-[#2818cf]">{d.document_name} (v{d.version})</td>
+                    <td className="py-3 px-4 font-bold text-[#2012ad]">{d.document_name} (v{d.version})</td>
                     <td className="py-3 px-4">{d.category_name}</td>
                     <td className="py-3 px-4 font-mono text-slate-500">{d.masked_document_number || 'N/A'}</td>
                     <td className="py-3 px-4">{d.expiry_date || 'No Expiry'}</td>
@@ -259,7 +259,7 @@ export const DocumentsPage: React.FC = () => {
                 {documents.filter((d) => d.verification_status === 'PENDING').map((d) => (
                   <tr key={d.id} className="hover:bg-slate-50/60 transition-all">
                     <td className="py-3 px-4 font-bold text-slate-900">{d.staff_code} — {d.first_name} {d.last_name || ''}</td>
-                    <td className="py-3 px-4 font-bold text-[#2818cf]">{d.document_name}</td>
+                    <td className="py-3 px-4 font-bold text-[#2012ad]">{d.document_name}</td>
                     <td className="py-3 px-4">{d.category_name}</td>
                     <td className="py-3 px-4 font-mono text-slate-500">{d.file_name}</td>
                     <td className="py-3 px-4">{d.created_at}</td>
@@ -366,7 +366,7 @@ export const DocumentsPage: React.FC = () => {
                 {categories.map((c) => (
                   <tr key={c.id} className="hover:bg-slate-50/60 transition-all">
                     <td className="py-3 px-4 font-bold text-slate-900">{c.name}</td>
-                    <td className="py-3 px-4 font-mono font-bold text-[#2818cf]">{c.code}</td>
+                    <td className="py-3 px-4 font-mono font-bold text-[#2012ad]">{c.code}</td>
                     <td className="py-3 px-4">{c.allowed_file_types}</td>
                     <td className="py-3 px-4">{c.max_file_size_mb} MB</td>
                     <td className="py-3 px-4">{c.requires_expiry ? 'Yes' : 'No'}</td>

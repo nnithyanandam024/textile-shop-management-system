@@ -124,7 +124,7 @@ export const PermissionRequestModal: React.FC<PermissionRequestModalProps> = ({
                 value={requestDate}
                 onChange={(e) => setRequestDate(e.target.value)}
                 disabled={isSubmitting}
-                className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white"
+                className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white"
               />
             </div>
           </div>
@@ -140,7 +140,7 @@ export const PermissionRequestModal: React.FC<PermissionRequestModalProps> = ({
                 value={startTime}
                 onChange={(e) => setStartTime(e.target.value)}
                 disabled={isSubmitting}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white"
               />
             </div>
 
@@ -153,7 +153,7 @@ export const PermissionRequestModal: React.FC<PermissionRequestModalProps> = ({
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}
                 disabled={isSubmitting}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white"
               />
             </div>
           </div>
@@ -177,7 +177,7 @@ export const PermissionRequestModal: React.FC<PermissionRequestModalProps> = ({
               rows={3}
               placeholder="State reason for permission (e.g. Bank visit, Medical appointment)..."
               disabled={isSubmitting}
-              className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white resize-none"
+              className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white resize-none"
             />
           </div>
 

@@ -122,7 +122,7 @@ export const BackupPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2818cf]">
+          <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2012ad]">
             <DatabaseBackup className="w-6 h-6" />
           </div>
           <div>
@@ -137,12 +137,12 @@ export const BackupPage: React.FC = () => {
             className="p-2.5 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl border border-slate-200 transition-all"
             title="Refresh Backups"
           >
-            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-[#2818cf]' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-[#2012ad]' : ''}`} />
           </button>
           <button
             onClick={handleCreateBackup}
             disabled={actionLoading}
-            className="px-4 py-2.5 bg-[#2818cf] hover:bg-[#2012ad] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2818cf]/20 transition-all flex items-center gap-2"
+            className="px-4 py-2.5 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2012ad]/20 transition-all flex items-center gap-2"
           >
             {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <DatabaseBackup className="w-4 h-4" />}
             <span>Backup Now</span>
@@ -170,7 +170,7 @@ export const BackupPage: React.FC = () => {
 
         {loading ? (
           <div className="p-12 text-center text-slate-500">
-            <RefreshCw className="w-8 h-8 animate-spin text-[#2818cf] mx-auto mb-2" />
+            <RefreshCw className="w-8 h-8 animate-spin text-[#2012ad] mx-auto mb-2" />
             <span className="text-sm font-medium">Scanning backups directory...</span>
           </div>
         ) : backups.length === 0 ? (
@@ -227,7 +227,7 @@ export const BackupPage: React.FC = () => {
                     </button>
                     <button
                       onClick={() => setSelectedRestoreBackup(b)}
-                      className="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-[#2818cf] border border-indigo-200 rounded text-xs font-bold transition-all"
+                      className="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-[#2012ad] border border-indigo-200 rounded text-xs font-bold transition-all"
                     >
                       Restore
                     </button>
@@ -276,7 +276,7 @@ export const BackupPage: React.FC = () => {
                 type="button"
                 onClick={handleConfirmRestore}
                 disabled={actionLoading}
-                className="w-1/2 py-2.5 bg-[#2818cf] text-white text-xs font-bold rounded-xl shadow-md flex items-center justify-center gap-1.5"
+                className="w-1/2 py-2.5 bg-[#2012ad] text-white text-xs font-bold rounded-xl shadow-md flex items-center justify-center gap-1.5"
               >
                 {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>Execute Restore</span>}
               </button>

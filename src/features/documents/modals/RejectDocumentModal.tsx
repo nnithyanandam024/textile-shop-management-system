@@ -75,7 +75,7 @@ export const RejectDocumentModal: React.FC<RejectDocumentModalProps> = ({
               onChange={(e) => setReason(e.target.value)}
               required
               placeholder="e.g. Document copy is blurry or expired"
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
             />
           </div>
 

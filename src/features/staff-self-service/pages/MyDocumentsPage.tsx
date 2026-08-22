@@ -51,7 +51,7 @@ export const MyDocumentsPage: React.FC = () => {
 
         <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-emerald-500 to-[#2818cf] transition-all duration-500"
+            className="h-full bg-gradient-to-r from-emerald-500 to-[#2012ad] transition-all duration-500"
             style={{ width: `${compliance?.complianceScore || 100}%` }}
           />
         </div>

@@ -26,7 +26,7 @@ export const CustomerSearch: React.FC<CustomerSearchProps> = ({
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
           placeholder="Search by Name, Mobile (e.g. 9876543210 / +91), or Customer ID..."
-          className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs sm:text-sm font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] transition-all"
+          className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs sm:text-sm font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] transition-all"
         />
       </div>
 
@@ -47,7 +47,7 @@ export const CustomerSearch: React.FC<CustomerSearchProps> = ({
               onClick={() => onTierFilterChange(t.id)}
               className={`px-3 py-1.5 rounded-xl transition-all ${
                 tierFilter === t.id
-                  ? 'bg-white text-[#2818cf] shadow-xs'
+                  ? 'bg-white text-[#2012ad] shadow-xs'
                   : 'hover:text-slate-900'
               }`}
             >
@@ -60,7 +60,7 @@ export const CustomerSearch: React.FC<CustomerSearchProps> = ({
         <button
           type="button"
           onClick={onOpenAddModal}
-          className="px-4 py-2.5 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-2xl text-xs font-extrabold flex items-center gap-2 shadow-lg shadow-indigo-600/25 transition-all"
+          className="px-4 py-2.5 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-2xl text-xs font-extrabold flex items-center gap-2 shadow-lg shadow-indigo-600/25 transition-all"
         >
           <UserPlus className="w-4 h-4" />
           <span>New Customer</span>

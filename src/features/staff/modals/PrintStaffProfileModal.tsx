@@ -27,7 +27,7 @@ export const PrintStaffProfileModal: React.FC<PrintStaffProfileModalProps> = ({
         {/* Modal Controls Header */}
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 print:hidden">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
               <Printer className="w-4 h-4" />
             </div>
             <div>
@@ -54,14 +54,14 @@ export const PrintStaffProfileModal: React.FC<PrintStaffProfileModalProps> = ({
               <p className="text-xs text-slate-500 uppercase tracking-widest font-bold">Textile Shop Management System</p>
             </div>
             <div className="text-right">
-              <span className="text-lg font-extrabold text-[#2818cf] font-mono">{staff.staff_code}</span>
+              <span className="text-lg font-extrabold text-[#2012ad] font-mono">{staff.staff_code}</span>
               <p className="text-[10px] text-slate-400">Generated: {new Date().toLocaleDateString()}</p>
             </div>
           </div>
 
           {/* Profile Basic Card */}
           <div className="flex items-center gap-6 p-4 border border-slate-200 rounded-2xl bg-slate-50/50">
-            <div className="w-20 h-20 rounded-xl bg-white border border-slate-300 flex items-center justify-center overflow-hidden shrink-0 font-bold text-xl text-[#2818cf]">
+            <div className="w-20 h-20 rounded-xl bg-white border border-slate-300 flex items-center justify-center overflow-hidden shrink-0 font-bold text-xl text-[#2012ad]">
               {staff.photo_path ? (
                 <img src={`file://${staff.photo_path}`} alt={fullName} className="w-full h-full object-cover" />
               ) : (
@@ -72,7 +72,7 @@ export const PrintStaffProfileModal: React.FC<PrintStaffProfileModalProps> = ({
             <div>
               <h2 className="text-xl font-bold">{fullName}</h2>
               <p className="text-xs font-semibold text-slate-600">
-                {staff.designation_name} — <span className="text-[#2818cf] font-bold">{staff.department_name}</span>
+                {staff.designation_name} — <span className="text-[#2012ad] font-bold">{staff.department_name}</span>
               </p>
               <div className="mt-2 flex items-center gap-2">
                 <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold border border-emerald-300 bg-emerald-50 text-emerald-700">

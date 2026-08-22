@@ -81,7 +81,7 @@ export const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center">
               <UserPlus className="w-5 h-5" />
             </div>
             <div>
@@ -117,7 +117,7 @@ export const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Ramesh Kumar"
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2818cf]"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2012ad]"
               />
             </div>
 
@@ -132,7 +132,7 @@ export const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="9876543210"
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold font-mono text-slate-900 focus:outline-none focus:border-[#2818cf]"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold font-mono text-slate-900 focus:outline-none focus:border-[#2012ad]"
               />
             </div>
           </div>
@@ -148,7 +148,7 @@ export const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="ramesh@gmail.com"
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2818cf]"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2012ad]"
               />
             </div>
 
@@ -160,7 +160,7 @@ export const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
                 type="date"
                 value={dob}
                 onChange={(e) => setDob(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2818cf]"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2012ad]"
               />
             </div>
           </div>
@@ -176,7 +176,7 @@ export const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
               value={address}
               onChange={(e) => setAddress(e.target.value)}
               placeholder="e.g. 14 South Usman Road, T Nagar"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2818cf]"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2012ad]"
             />
           </div>
 
@@ -216,7 +216,7 @@ export const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
           {/* Textile Retail Preferences */}
           <div className="p-4 bg-slate-50/80 rounded-2xl border border-slate-200/80 space-y-3">
             <h4 className="text-xs font-extrabold text-slate-800 flex items-center gap-1.5">
-              <Tag className="w-3.5 h-3.5 text-[#2818cf]" />
+              <Tag className="w-3.5 h-3.5 text-[#2012ad]" />
               <span>Textile Shopping Preferences</span>
             </h4>
 
@@ -268,7 +268,7 @@ export const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="e.g. Referred by Priya; VIP wedding collection shopper"
-                className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2818cf]"
+                className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2012ad]"
               />
             </div>
           )}
@@ -292,7 +292,7 @@ export const CustomerFormModal: React.FC<CustomerFormModalProps> = ({
             <button
               type="submit"
               disabled={submitting}
-              className="px-6 py-2.5 rounded-2xl bg-[#2818cf] hover:bg-indigo-700 text-white text-xs font-extrabold shadow-lg shadow-indigo-600/25 transition-all disabled:opacity-50"
+              className="px-6 py-2.5 rounded-2xl bg-[#2012ad] hover:bg-indigo-700 text-white text-xs font-extrabold shadow-lg shadow-indigo-600/25 transition-all disabled:opacity-50"
             >
               {submitting ? 'Saving Profile...' : isEditing ? 'Update Profile' : 'Save Customer'}
             </button>

@@ -63,7 +63,7 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full border border-slate-200/80 overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
               <Send className="w-4 h-4" />
             </div>
             <div>
@@ -90,7 +90,7 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
               <select
                 value={recipientStaffId}
                 onChange={(e) => setRecipientStaffId(e.target.value ? Number(e.target.value) : '')}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               >
                 <option value="">Select Employee...</option>
                 {staffList.map((s) => (
@@ -106,7 +106,7 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as any)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               >
                 <option value="LOW">LOW</option>
                 <option value="NORMAL">NORMAL</option>
@@ -132,7 +132,7 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
               onChange={(e) => setMessage(e.target.value)}
               required
               placeholder="Type your message..."
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
             />
           </div>
 

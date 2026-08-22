@@ -134,7 +134,7 @@ export const StaffInventory: React.FC = () => {
                     {metrics.totalProducts}
                   </strong>
                 </div>
-                <div className="w-9 h-9 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center font-bold">
+                <div className="w-9 h-9 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center font-bold">
                   <Package className="w-4 h-4" />
                 </div>
               </div>
@@ -172,11 +172,11 @@ export const StaffInventory: React.FC = () => {
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                     Pending Tasks
                   </span>
-                  <strong className="text-xl font-extrabold text-[#2818cf] font-mono">
+                  <strong className="text-xl font-extrabold text-[#2012ad] font-mono">
                     {metrics.pendingTasksCount}
                   </strong>
                 </div>
-                <div className="w-9 h-9 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center font-bold">
+                <div className="w-9 h-9 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center font-bold">
                   <CheckSquare className="w-4 h-4" />
                 </div>
               </div>

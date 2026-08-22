@@ -86,7 +86,7 @@ export const StockAdjustmentModal: React.FC<StockAdjustmentModalProps> = ({
         </button>
 
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-[#2818cf]">
+          <div className="w-10 h-10 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-[#2012ad]">
             <Boxes className="w-5 h-5" />
           </div>
           <div>
@@ -140,7 +140,7 @@ export const StockAdjustmentModal: React.FC<StockAdjustmentModalProps> = ({
             <select
               value={movementType}
               onChange={(e) => setMovementType(e.target.value as any)}
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
             >
               <option value="ADJUSTMENT">Manual Stock Adjustment / Audit</option>
               <option value="DAMAGE">Damaged / Defective Stock</option>
@@ -156,7 +156,7 @@ export const StockAdjustmentModal: React.FC<StockAdjustmentModalProps> = ({
               min={1}
               value={quantity}
               onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
               required
             />
           </div>
@@ -168,7 +168,7 @@ export const StockAdjustmentModal: React.FC<StockAdjustmentModalProps> = ({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. Audit correction, water damaged saree, stock inward..."
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
               required
             />
           </div>
@@ -184,7 +184,7 @@ export const StockAdjustmentModal: React.FC<StockAdjustmentModalProps> = ({
             <button
               type="submit"
               disabled={loading}
-              className="w-1/2 py-2.5 bg-[#2818cf] hover:bg-[#2012ad] text-white text-sm font-semibold rounded-xl shadow-md flex items-center justify-center gap-2"
+              className="w-1/2 py-2.5 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-sm font-semibold rounded-xl shadow-md flex items-center justify-center gap-2"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>Confirm Adjustment</span>}
             </button>

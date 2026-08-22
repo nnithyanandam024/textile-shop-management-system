@@ -140,7 +140,7 @@ export const CorrectionRequestModal: React.FC<CorrectionRequestModalProps> = ({
             type="button"
             onClick={() => setTab('NEW')}
             className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${
-              tab === 'NEW' ? 'bg-white text-[#2818cf] shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              tab === 'NEW' ? 'bg-white text-[#2012ad] shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             New Request
@@ -149,7 +149,7 @@ export const CorrectionRequestModal: React.FC<CorrectionRequestModalProps> = ({
             type="button"
             onClick={() => setTab('HISTORY')}
             className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
-              tab === 'HISTORY' ? 'bg-white text-[#2818cf] shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              tab === 'HISTORY' ? 'bg-white text-[#2012ad] shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <span>Past Requests</span>
@@ -183,7 +183,7 @@ export const CorrectionRequestModal: React.FC<CorrectionRequestModalProps> = ({
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
                     disabled={isSubmitting}
-                    className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white"
+                    className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white"
                   />
                 </div>
               </div>
@@ -198,7 +198,7 @@ export const CorrectionRequestModal: React.FC<CorrectionRequestModalProps> = ({
                     value={checkIn}
                     onChange={(e) => setCheckIn(e.target.value)}
                     disabled={isSubmitting}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white"
                   />
                 </div>
 
@@ -211,7 +211,7 @@ export const CorrectionRequestModal: React.FC<CorrectionRequestModalProps> = ({
                     value={checkOut}
                     onChange={(e) => setCheckOut(e.target.value)}
                     disabled={isSubmitting}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white"
                   />
                 </div>
               </div>
@@ -226,7 +226,7 @@ export const CorrectionRequestModal: React.FC<CorrectionRequestModalProps> = ({
                   rows={3}
                   placeholder="Explain why you missed clocking in/out (e.g. Forgot to clock out after closing counter, Store electricity glitch)..."
                   disabled={isSubmitting}
-                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white resize-none"
+                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white resize-none"
                 />
               </div>
 
@@ -242,7 +242,7 @@ export const CorrectionRequestModal: React.FC<CorrectionRequestModalProps> = ({
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 py-3 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center justify-center gap-1.5"
+                  className="flex-1 py-3 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center justify-center gap-1.5"
                 >
                   {isSubmitting ? (
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />

@@ -105,7 +105,7 @@ export const LeaveListPage: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf] shadow-sm">
+          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad] shadow-sm">
             <Calendar className="w-5 h-5" />
           </div>
           <div>
@@ -132,8 +132,8 @@ export const LeaveListPage: React.FC = () => {
         </Card>
 
         <Card className="p-4 bg-indigo-50/50 border border-indigo-100">
-          <span className="text-[10px] font-extrabold text-[#2818cf] uppercase tracking-wider">On Leave Today</span>
-          <p className="text-xl font-extrabold text-[#2818cf] mt-1">{approvedToday.length}</p>
+          <span className="text-[10px] font-extrabold text-[#2012ad] uppercase tracking-wider">On Leave Today</span>
+          <p className="text-xl font-extrabold text-[#2012ad] mt-1">{approvedToday.length}</p>
         </Card>
 
         <Card className="p-4 bg-amber-50/50 border border-amber-100">
@@ -153,7 +153,7 @@ export const LeaveListPage: React.FC = () => {
           onClick={() => setActiveTab('requests')}
           className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
             activeTab === 'requests'
-              ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+              ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
@@ -165,7 +165,7 @@ export const LeaveListPage: React.FC = () => {
           onClick={() => setActiveTab('approvals')}
           className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 relative ${
             activeTab === 'approvals'
-              ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+              ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
@@ -182,7 +182,7 @@ export const LeaveListPage: React.FC = () => {
           onClick={() => setActiveTab('types')}
           className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
             activeTab === 'types'
-              ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+              ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
@@ -194,7 +194,7 @@ export const LeaveListPage: React.FC = () => {
           onClick={() => setActiveTab('holidays')}
           className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
             activeTab === 'holidays'
-              ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+              ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
@@ -214,14 +214,14 @@ export const LeaveListPage: React.FC = () => {
                 placeholder="Search staff code or name..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               />
             </div>
 
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20"
+              className="bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20"
             >
               <option value="">All Statuses</option>
               <option value="PENDING">PENDING</option>
@@ -247,12 +247,12 @@ export const LeaveListPage: React.FC = () => {
               <tbody className="divide-y divide-slate-100 text-slate-700 font-semibold">
                 {requests.map((r) => (
                   <tr key={r.id} className="hover:bg-slate-50/60 transition-all">
-                    <td className="py-3 px-4 font-mono font-bold text-[#2818cf]">{r.staff_code}</td>
+                    <td className="py-3 px-4 font-mono font-bold text-[#2012ad]">{r.staff_code}</td>
                     <td className="py-3 px-4 text-slate-900 font-bold">
                       {r.first_name} {r.last_name || ''}
                     </td>
                     <td className="py-3 px-4">
-                      <span className="px-2 py-0.5 bg-indigo-50 text-[#2818cf] text-[10px] font-bold rounded-md">
+                      <span className="px-2 py-0.5 bg-indigo-50 text-[#2012ad] text-[10px] font-bold rounded-md">
                         {r.leave_code} — {r.leave_name}
                       </span>
                     </td>
@@ -283,7 +283,7 @@ export const LeaveListPage: React.FC = () => {
                               setSelectedRequestForReview(r);
                               setIsApprovalModalOpen(true);
                             }}
-                            className="text-[11px] font-bold text-[#2818cf] hover:underline"
+                            className="text-[11px] font-bold text-[#2012ad] hover:underline"
                           >
                             Review
                           </button>
@@ -326,7 +326,7 @@ export const LeaveListPage: React.FC = () => {
                       <span className="text-xs font-bold text-slate-900">
                         {req.staff_code} — {req.first_name} {req.last_name || ''}
                       </span>
-                      <span className="px-2 py-0.5 bg-indigo-50 text-[#2818cf] text-[10px] font-bold rounded-md">
+                      <span className="px-2 py-0.5 bg-indigo-50 text-[#2012ad] text-[10px] font-bold rounded-md">
                         {req.leave_name} ({req.duration_days} Days)
                       </span>
                     </div>
@@ -368,7 +368,7 @@ export const LeaveListPage: React.FC = () => {
             {leaveTypes.map((lt) => (
               <Card key={lt.id} className="p-5 border border-slate-200/80 space-y-3 hover:shadow-md transition-all">
                 <div className="flex items-start justify-between">
-                  <span className="font-mono text-xs font-extrabold text-[#2818cf] bg-indigo-50 px-2.5 py-0.5 rounded-lg border border-indigo-100">
+                  <span className="font-mono text-xs font-extrabold text-[#2012ad] bg-indigo-50 px-2.5 py-0.5 rounded-lg border border-indigo-100">
                     {lt.leave_code}
                   </span>
                   <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${lt.paid ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}`}>
@@ -393,7 +393,7 @@ export const LeaveListPage: React.FC = () => {
                 <div className="flex justify-end pt-2 border-t border-slate-100">
                   <button
                     onClick={() => { setSelectedTypeForEdit(lt); setIsTypeModalOpen(true); }}
-                    className="p-1.5 text-slate-400 hover:text-[#2818cf] hover:bg-indigo-50 rounded-lg"
+                    className="p-1.5 text-slate-400 hover:text-[#2012ad] hover:bg-indigo-50 rounded-lg"
                   >
                     <Edit2 className="w-4 h-4" />
                   </button>
@@ -432,7 +432,7 @@ export const LeaveListPage: React.FC = () => {
               <tbody className="divide-y divide-slate-100 text-slate-700 font-semibold">
                 {holidays.map((h) => (
                   <tr key={h.id} className="hover:bg-slate-50/60 transition-all">
-                    <td className="py-3 px-4 font-mono font-bold text-[#2818cf]">{h.holiday_date}</td>
+                    <td className="py-3 px-4 font-mono font-bold text-[#2012ad]">{h.holiday_date}</td>
                     <td className="py-3 px-4 text-slate-900 font-bold">{h.name}</td>
                     <td className="py-3 px-4">
                       <span className="px-2 py-0.5 bg-amber-50 text-amber-800 text-[10px] font-bold rounded-md border border-amber-200">

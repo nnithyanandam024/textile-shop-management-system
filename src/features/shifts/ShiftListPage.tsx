@@ -98,7 +98,7 @@ export const ShiftListPage: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf] shadow-sm">
+          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad] shadow-sm">
             <Clock className="w-5 h-5" />
           </div>
           <div>
@@ -123,7 +123,7 @@ export const ShiftListPage: React.FC = () => {
           onClick={() => setActiveTab('templates')}
           className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
             activeTab === 'templates'
-              ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+              ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
@@ -135,7 +135,7 @@ export const ShiftListPage: React.FC = () => {
           onClick={() => setActiveTab('grid')}
           className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
             activeTab === 'grid'
-              ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+              ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
@@ -147,7 +147,7 @@ export const ShiftListPage: React.FC = () => {
           onClick={() => setActiveTab('overrides')}
           className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 relative ${
             activeTab === 'overrides'
-              ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+              ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
@@ -172,7 +172,7 @@ export const ShiftListPage: React.FC = () => {
                 placeholder="Search shift name or code..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               />
             </div>
           </div>
@@ -183,7 +183,7 @@ export const ShiftListPage: React.FC = () => {
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-xs font-extrabold text-[#2818cf] bg-indigo-50 px-2.5 py-0.5 rounded-lg border border-indigo-100">
+                      <span className="font-mono text-xs font-extrabold text-[#2012ad] bg-indigo-50 px-2.5 py-0.5 rounded-lg border border-indigo-100">
                         {tmp.shift_code}
                       </span>
                       {tmp.is_overnight ? (
@@ -242,7 +242,7 @@ export const ShiftListPage: React.FC = () => {
                         setSelectedTemplateForEdit(tmp);
                         setIsTemplateModalOpen(true);
                       }}
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-[#2818cf] hover:bg-indigo-50 transition-all"
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-[#2012ad] hover:bg-indigo-50 transition-all"
                       title="Edit Shift"
                     >
                       <Edit2 className="w-4 h-4" />
@@ -297,14 +297,14 @@ export const ShiftListPage: React.FC = () => {
               <tbody className="divide-y divide-slate-100 text-slate-700 font-semibold">
                 {staffList.map((s) => (
                   <tr key={s.id} className="hover:bg-slate-50/60 transition-all">
-                    <td className="py-3 px-4 font-mono font-bold text-[#2818cf]">{s.staff_code}</td>
+                    <td className="py-3 px-4 font-mono font-bold text-[#2012ad]">{s.staff_code}</td>
                     <td className="py-3 px-4 text-slate-900 font-bold">
                       {s.first_name} {s.last_name || ''}
                     </td>
                     <td className="py-3 px-4 text-slate-500">{s.department_name || 'Unassigned'}</td>
                     {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
                       <td key={day} className="py-3 px-4 text-center">
-                        <span className="px-2 py-1 bg-indigo-50 text-[#2818cf] text-[10px] font-extrabold rounded-lg border border-indigo-100">
+                        <span className="px-2 py-1 bg-indigo-50 text-[#2012ad] text-[10px] font-extrabold rounded-lg border border-indigo-100">
                           GEN (09-18)
                         </span>
                       </td>
@@ -355,7 +355,7 @@ export const ShiftListPage: React.FC = () => {
                 <tbody className="divide-y divide-slate-100 text-slate-700 font-semibold">
                   {overrides.map((ov) => (
                     <tr key={ov.id} className="hover:bg-slate-50/60 transition-all">
-                      <td className="py-3 px-4 font-mono font-bold text-[#2818cf]">{ov.override_date}</td>
+                      <td className="py-3 px-4 font-mono font-bold text-[#2012ad]">{ov.override_date}</td>
                       <td className="py-3 px-4 text-slate-900 font-bold">
                         {ov.staff_code} — {ov.first_name} {ov.last_name || ''}
                       </td>
@@ -365,7 +365,7 @@ export const ShiftListPage: React.FC = () => {
                             Special Week Off
                           </span>
                         ) : (
-                          <span className="px-2 py-0.5 bg-indigo-50 text-[#2818cf] text-[10px] font-bold rounded-md">
+                          <span className="px-2 py-0.5 bg-indigo-50 text-[#2012ad] text-[10px] font-bold rounded-md">
                             {ov.shift_name} ({ov.start_time} - {ov.end_time})
                           </span>
                         )}

@@ -83,7 +83,7 @@ export const ShiftChangeRequestModal: React.FC<ShiftChangeRequestModalProps> = (
 
         {/* Modal Header */}
         <div className="text-center mb-2">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center mx-auto mb-2">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center mx-auto mb-2">
             <CalendarCheck className="w-6 h-6" />
           </div>
           <h2 className="text-base font-extrabold text-slate-900">Request Shift Change</h2>
@@ -112,7 +112,7 @@ export const ShiftChangeRequestModal: React.FC<ShiftChangeRequestModalProps> = (
                 value={targetDate}
                 onChange={(e) => setTargetDate(e.target.value)}
                 disabled={isSubmitting}
-                className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white"
+                className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white"
               />
             </div>
           </div>
@@ -128,7 +128,7 @@ export const ShiftChangeRequestModal: React.FC<ShiftChangeRequestModalProps> = (
               checked={isWeekOff}
               onChange={(e) => setIsWeekOff(e.target.checked)}
               disabled={isSubmitting}
-              className="w-4 h-4 text-[#2818cf] rounded border-slate-300 focus:ring-[#2818cf]"
+              className="w-4 h-4 text-[#2012ad] rounded border-slate-300 focus:ring-[#2012ad]"
             />
           </div>
 
@@ -142,7 +142,7 @@ export const ShiftChangeRequestModal: React.FC<ShiftChangeRequestModalProps> = (
                 value={selectedTemplateId}
                 onChange={(e) => setSelectedTemplateId(Number(e.target.value))}
                 disabled={isSubmitting}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white cursor-pointer"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white cursor-pointer"
               >
                 {templates.map((t) => (
                   <option key={t.id} value={t.id}>
@@ -164,7 +164,7 @@ export const ShiftChangeRequestModal: React.FC<ShiftChangeRequestModalProps> = (
               rows={3}
               placeholder="Provide context for this schedule request (e.g. University exam, Personal emergency)..."
               disabled={isSubmitting}
-              className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white resize-none"
+              className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white resize-none"
             />
           </div>
 
@@ -181,7 +181,7 @@ export const ShiftChangeRequestModal: React.FC<ShiftChangeRequestModalProps> = (
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 py-3 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center justify-center gap-1.5"
+              className="flex-1 py-3 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center justify-center gap-1.5"
             >
               {isSubmitting ? (
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />

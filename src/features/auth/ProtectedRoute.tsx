@@ -14,7 +14,7 @@ export function ProtectedRoute({ children, permission }: ProtectedRouteProps): R
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#f9fafc] flex flex-col justify-center items-center">
-        <div className="w-10 h-10 border-4 border-[#2818cf] border-t-transparent rounded-full animate-spin mb-3" />
+        <div className="w-10 h-10 border-4 border-[#2012ad] border-t-transparent rounded-full animate-spin mb-3" />
         <p className="text-sm font-semibold text-slate-600">Loading Texora System...</p>
       </div>
     );

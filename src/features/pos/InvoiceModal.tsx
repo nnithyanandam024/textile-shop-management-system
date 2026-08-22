@@ -54,7 +54,7 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({
 
         {loading ? (
           <div className="p-12 text-center text-slate-500">
-            <RefreshCw className="w-8 h-8 animate-spin text-[#2818cf] mx-auto mb-2" />
+            <RefreshCw className="w-8 h-8 animate-spin text-[#2012ad] mx-auto mb-2" />
             <span className="text-xs font-medium">Generating invoice receipt...</span>
           </div>
         ) : !invoiceData ? (
@@ -129,7 +129,7 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({
                 )}
                 <div className="flex justify-between text-base font-extrabold text-slate-900 pt-2 border-t border-slate-300">
                   <span>GRAND TOTAL</span>
-                  <span className="text-[#2818cf]">₹{invoiceData.sale.total}</span>
+                  <span className="text-[#2012ad]">₹{invoiceData.sale.total}</span>
                 </div>
               </div>
 
@@ -163,7 +163,7 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({
                   onNewSale();
                   onClose();
                 }}
-                className="w-1/2 py-2.5 bg-[#2818cf] hover:bg-[#2012ad] text-white text-xs font-bold rounded-xl shadow-md flex items-center justify-center gap-2"
+                className="w-1/2 py-2.5 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-xs font-bold rounded-xl shadow-md flex items-center justify-center gap-2"
               >
                 <CheckCircle2 className="w-4 h-4" />
                 <span>Start New Sale</span>

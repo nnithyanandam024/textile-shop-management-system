@@ -33,7 +33,7 @@ export const LockScreenModal: React.FC = () => {
   return (
     <div className="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fade-in select-none">
       <div className="w-full max-w-sm bg-white rounded-2xl border border-slate-200/80 shadow-2xl p-6 text-center relative">
-        <div className="w-16 h-16 bg-indigo-50 border border-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4 text-[#2818cf]">
+        <div className="w-16 h-16 bg-indigo-50 border border-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4 text-[#2012ad]">
           <Lock className="w-8 h-8" />
         </div>
 
@@ -57,7 +57,7 @@ export const LockScreenModal: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter password to unlock"
               autoFocus
-              className="w-full pl-4 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+              className="w-full pl-4 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
             />
             <button
               type="button"
@@ -71,7 +71,7 @@ export const LockScreenModal: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-[#2818cf] hover:bg-[#2012ad] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2818cf]/20 transition-all flex items-center justify-center gap-2"
+            className="w-full py-3 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2012ad]/20 transition-all flex items-center justify-center gap-2"
           >
             {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <span>Unlock Screen</span>}
           </button>

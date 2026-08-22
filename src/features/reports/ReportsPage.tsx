@@ -133,7 +133,7 @@ export const ReportsPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm print:hidden">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2818cf]">
+          <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2012ad]">
             <BarChart3 className="w-6 h-6" />
           </div>
           <div>
@@ -152,7 +152,7 @@ export const ReportsPage: React.FC = () => {
           </button>
           <button
             onClick={handleExportCSV}
-            className="px-4 py-2 bg-[#2818cf] hover:bg-[#2012ad] text-white text-xs font-bold rounded-xl shadow-lg shadow-[#2818cf]/20 transition-all flex items-center gap-2"
+            className="px-4 py-2 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-xs font-bold rounded-xl shadow-lg shadow-[#2012ad]/20 transition-all flex items-center gap-2"
           >
             <Download className="w-4 h-4" />
             <span>Export CSV</span>
@@ -166,7 +166,7 @@ export const ReportsPage: React.FC = () => {
           <button
             onClick={() => setActiveTab('SALES')}
             className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-              activeTab === 'SALES' ? 'bg-white text-[#2818cf] shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              activeTab === 'SALES' ? 'bg-white text-[#2012ad] shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Sales Reports
@@ -174,7 +174,7 @@ export const ReportsPage: React.FC = () => {
           <button
             onClick={() => setActiveTab('INVENTORY')}
             className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-              activeTab === 'INVENTORY' ? 'bg-white text-[#2818cf] shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              activeTab === 'INVENTORY' ? 'bg-white text-[#2012ad] shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Inventory Valuation
@@ -182,7 +182,7 @@ export const ReportsPage: React.FC = () => {
           <button
             onClick={() => setActiveTab('FINANCIAL')}
             className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-              activeTab === 'FINANCIAL' ? 'bg-white text-[#2818cf] shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              activeTab === 'FINANCIAL' ? 'bg-white text-[#2012ad] shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Financial P&L
@@ -190,7 +190,7 @@ export const ReportsPage: React.FC = () => {
           <button
             onClick={() => setActiveTab('CUSTOMERS')}
             className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-              activeTab === 'CUSTOMERS' ? 'bg-white text-[#2818cf] shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              activeTab === 'CUSTOMERS' ? 'bg-white text-[#2012ad] shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Customer Balances
@@ -198,7 +198,7 @@ export const ReportsPage: React.FC = () => {
           <button
             onClick={() => setActiveTab('SUPPLIERS')}
             className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-              activeTab === 'SUPPLIERS' ? 'bg-white text-[#2818cf] shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              activeTab === 'SUPPLIERS' ? 'bg-white text-[#2012ad] shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Supplier Payables
@@ -251,7 +251,7 @@ export const ReportsPage: React.FC = () => {
                         <td className="p-3 font-bold text-slate-800">{inv.customer_name || 'Walk-in'}</td>
                         <td className="p-3 text-slate-600">{inv.employee_name || 'Admin'}</td>
                         <td className="p-3 text-slate-500">{new Date(inv.sale_date).toLocaleDateString()}</td>
-                        <td className="p-3 font-extrabold text-[#2818cf]">₹{inv.total}</td>
+                        <td className="p-3 font-extrabold text-[#2012ad]">₹{inv.total}</td>
                         <td className="p-3 font-semibold text-emerald-700">{inv.balance_amount > 0 ? 'PARTIAL' : 'PAID'}</td>
                       </tr>
                     ))}
@@ -267,7 +267,7 @@ export const ReportsPage: React.FC = () => {
               <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-xl flex justify-between items-center">
                 <div>
                   <p className="text-xs font-bold text-slate-500 uppercase">Total Inventory Valuation (Purchase Price)</p>
-                  <p className="text-2xl font-extrabold text-[#2818cf]">₹{inventoryReport.totalValuation.toLocaleString()}</p>
+                  <p className="text-2xl font-extrabold text-[#2012ad]">₹{inventoryReport.totalValuation.toLocaleString()}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-xs font-bold text-slate-700">{inventoryReport.currentStock.length} Active Product SKUs</p>
@@ -295,7 +295,7 @@ export const ReportsPage: React.FC = () => {
                         <td className="p-3 text-slate-600">{it.category_name || 'General'}</td>
                         <td className="p-3 font-extrabold text-slate-900">{it.current_stock}</td>
                         <td className="p-3 font-medium text-slate-600">₹{it.purchase_price}</td>
-                        <td className="p-3 text-right font-extrabold text-[#2818cf]">₹{it.stock_valuation}</td>
+                        <td className="p-3 text-right font-extrabold text-[#2012ad]">₹{it.stock_valuation}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -320,7 +320,7 @@ export const ReportsPage: React.FC = () => {
                 </div>
                 <div className="p-4 bg-indigo-50/50 flex justify-between font-extrabold text-slate-900">
                   <span>Net Sales Revenue</span>
-                  <span className="text-[#2818cf]">₹{financialReport.netRevenue.toLocaleString()}</span>
+                  <span className="text-[#2012ad]">₹{financialReport.netRevenue.toLocaleString()}</span>
                 </div>
                 <div className="p-4 flex justify-between text-slate-600 font-medium">
                   <span>(-) Cost of Goods Sold (COGS)</span>

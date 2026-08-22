@@ -20,7 +20,7 @@ export const UserAccessCard: React.FC<UserAccessCardProps> = ({
     <Card className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+          <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
             <ShieldCheck className="w-4 h-4" />
           </div>
           <div>
@@ -61,7 +61,7 @@ export const UserAccessCard: React.FC<UserAccessCardProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-xs font-semibold text-slate-700">
           <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl space-y-1">
             <p className="text-slate-400 uppercase tracking-wider text-[10px]">Username</p>
-            <p className="text-sm font-extrabold text-[#2818cf] font-mono">@{staff.username}</p>
+            <p className="text-sm font-extrabold text-[#2012ad] font-mono">@{staff.username}</p>
           </div>
 
           <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl space-y-1">

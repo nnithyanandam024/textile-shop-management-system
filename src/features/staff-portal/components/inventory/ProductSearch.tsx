@@ -29,7 +29,7 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
           placeholder="Search by Product Name, SKU, Barcode, Category, Color, Size..."
-          className="w-full pl-12 pr-12 py-3.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs sm:text-sm font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] transition-all"
+          className="w-full pl-12 pr-12 py-3.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs sm:text-sm font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] transition-all"
         />
         <div className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5 text-slate-400">
           <Barcode className="w-5 h-5" />
@@ -44,7 +44,7 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({
             onClick={() => onStatusFilterChange('ALL')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
               statusFilter === 'ALL'
-                ? 'bg-[#2818cf] text-white shadow-md shadow-indigo-200'
+                ? 'bg-[#2012ad] text-white shadow-md shadow-indigo-200'
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
           >
@@ -93,7 +93,7 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({
 
         <div className="text-xs font-semibold text-slate-500">
           {searching ? (
-            <span className="text-[#2818cf]">Searching items...</span>
+            <span className="text-[#2012ad]">Searching items...</span>
           ) : (
             <span>Showing <strong className="text-slate-900">{totalResults}</strong> matching {totalResults === 1 ? 'item' : 'items'}</span>
           )}

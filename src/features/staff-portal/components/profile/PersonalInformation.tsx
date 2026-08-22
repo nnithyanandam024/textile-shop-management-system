@@ -62,7 +62,7 @@ export const PersonalInformation: React.FC<PersonalInformationProps> = ({
       {/* Card Header */}
       <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2818cf] flex items-center justify-center font-bold">
+          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2012ad] flex items-center justify-center font-bold">
             <User className="w-4 h-4" />
           </div>
           <div>
@@ -79,7 +79,7 @@ export const PersonalInformation: React.FC<PersonalInformationProps> = ({
           <button
             type="button"
             onClick={() => setIsEditing(true)}
-            className="px-3 py-1.5 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-[#2818cf] border border-slate-200 hover:border-indigo-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95"
+            className="px-3 py-1.5 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-[#2012ad] border border-slate-200 hover:border-indigo-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95"
           >
             <Edit3 className="w-3.5 h-3.5" />
             <span>Edit</span>
@@ -99,7 +99,7 @@ export const PersonalInformation: React.FC<PersonalInformationProps> = ({
               type="button"
               onClick={handleSave}
               disabled={isSaving}
-              className="px-3 py-1.5 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-1.5"
+              className="px-3 py-1.5 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-1.5"
             >
               {isSaving ? (
                 <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -164,7 +164,7 @@ export const PersonalInformation: React.FC<PersonalInformationProps> = ({
                 value={dob}
                 onChange={(e) => setDob(e.target.value)}
                 disabled={isSaving}
-                className="w-full pl-9 pr-3.5 py-2.5 bg-white border border-indigo-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                className="w-full pl-9 pr-3.5 py-2.5 bg-white border border-indigo-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               />
             </div>
           ) : (
@@ -186,7 +186,7 @@ export const PersonalInformation: React.FC<PersonalInformationProps> = ({
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
                 disabled={isSaving}
-                className="w-full pl-9 pr-3.5 py-2.5 bg-white border border-indigo-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] cursor-pointer"
+                className="w-full pl-9 pr-3.5 py-2.5 bg-white border border-indigo-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] cursor-pointer"
               >
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>

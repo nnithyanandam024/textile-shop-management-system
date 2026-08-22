@@ -70,7 +70,7 @@ export const RoleListPage: React.FC = () => {
       {/* Top Header Card */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf] shadow-sm">
+          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad] shadow-sm">
             <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
@@ -101,7 +101,7 @@ export const RoleListPage: React.FC = () => {
                       <span
                         className={`px-2 py-0.5 rounded-md text-[10px] font-extrabold ${
                           role.is_system_role === 1
-                            ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+                            ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
                             : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                         }`}
                       >
@@ -117,7 +117,7 @@ export const RoleListPage: React.FC = () => {
 
                   <button
                     onClick={() => handleOpenEdit(role)}
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-[#2818cf] hover:bg-indigo-50 transition-all"
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-[#2012ad] hover:bg-indigo-50 transition-all"
                     title="Edit Role Matrix"
                   >
                     <Edit2 className="w-4 h-4" />

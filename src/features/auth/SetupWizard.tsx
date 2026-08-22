@@ -80,7 +80,7 @@ export const SetupWizard: React.FC = () => {
         {/* Step Indicator */}
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-100">
           <div className="flex items-center gap-3">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${step === 1 ? 'bg-[#2818cf] text-white' : 'bg-emerald-500 text-white'}`}>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${step === 1 ? 'bg-[#2012ad] text-white' : 'bg-emerald-500 text-white'}`}>
               {step > 1 ? <CheckCircle className="w-5 h-5" /> : '1'}
             </div>
             <span className="text-sm font-semibold text-slate-800">Shop Setup</span>
@@ -89,7 +89,7 @@ export const SetupWizard: React.FC = () => {
           <div className="w-12 h-0.5 bg-slate-200" />
 
           <div className="flex items-center gap-3">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${step === 2 ? 'bg-[#2818cf] text-white' : 'bg-slate-100 text-slate-400'}`}>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${step === 2 ? 'bg-[#2012ad] text-white' : 'bg-slate-100 text-slate-400'}`}>
               2
             </div>
             <span className="text-sm font-semibold text-slate-800">Owner Account</span>
@@ -106,7 +106,7 @@ export const SetupWizard: React.FC = () => {
         {step === 1 ? (
           <form onSubmit={handleNext} className="space-y-4">
             <div className="text-center mb-6">
-              <Store className="w-10 h-10 text-[#2818cf] mx-auto mb-2" />
+              <Store className="w-10 h-10 text-[#2012ad] mx-auto mb-2" />
               <h2 className="text-xl font-bold text-slate-900">Welcome to Texora</h2>
               <p className="text-sm text-slate-500">Configure your textile shop business details</p>
             </div>
@@ -118,7 +118,7 @@ export const SetupWizard: React.FC = () => {
                 value={shopName}
                 onChange={(e) => setShopName(e.target.value)}
                 placeholder="e.g. Royal Textile & Saree Store"
-                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                 required
               />
             </div>
@@ -130,7 +130,7 @@ export const SetupWizard: React.FC = () => {
                 value={shopAddress}
                 onChange={(e) => setShopAddress(e.target.value)}
                 placeholder="Street address, City"
-                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
               />
             </div>
 
@@ -142,7 +142,7 @@ export const SetupWizard: React.FC = () => {
                   value={shopPhone}
                   onChange={(e) => setShopPhone(e.target.value)}
                   placeholder="+91 98765 43210"
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                 />
               </div>
               <div>
@@ -152,14 +152,14 @@ export const SetupWizard: React.FC = () => {
                   value={gstNumber}
                   onChange={(e) => setGstNumber(e.target.value)}
                   placeholder="33AAAAA0000A1Z5"
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                 />
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full py-3 mt-4 bg-[#2818cf] hover:bg-[#2012ad] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2818cf]/20 transition-all"
+              className="w-full py-3 mt-4 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2012ad]/20 transition-all"
             >
               Continue to Owner Setup →
             </button>
@@ -167,7 +167,7 @@ export const SetupWizard: React.FC = () => {
         ) : (
           <form onSubmit={handleFinish} className="space-y-4">
             <div className="text-center mb-6">
-              <User className="w-10 h-10 text-[#2818cf] mx-auto mb-2" />
+              <User className="w-10 h-10 text-[#2012ad] mx-auto mb-2" />
               <h2 className="text-xl font-bold text-slate-900">Create Administrator Account</h2>
               <p className="text-sm text-slate-500">Set up the primary Owner account for Texora</p>
             </div>
@@ -179,7 +179,7 @@ export const SetupWizard: React.FC = () => {
                 value={ownerName}
                 onChange={(e) => setOwnerName(e.target.value)}
                 placeholder="e.g. Nithyanandam (Store Owner)"
-                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                 required
               />
             </div>
@@ -191,7 +191,7 @@ export const SetupWizard: React.FC = () => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="admin"
-                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                 required
               />
             </div>
@@ -204,7 +204,7 @@ export const SetupWizard: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                   required
                 />
               </div>
@@ -215,7 +215,7 @@ export const SetupWizard: React.FC = () => {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                   required
                 />
               </div>
@@ -233,7 +233,7 @@ export const SetupWizard: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-2/3 py-3 bg-[#2818cf] hover:bg-[#2012ad] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2818cf]/20 transition-all flex items-center justify-center gap-2"
+                className="w-2/3 py-3 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2012ad]/20 transition-all flex items-center justify-center gap-2"
               >
                 {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Lock className="w-4 h-4" />}
                 <span>Complete Setup</span>

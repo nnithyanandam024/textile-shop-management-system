@@ -116,7 +116,7 @@ export const LeaveTypeModal: React.FC<LeaveTypeModalProps> = ({
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full border border-slate-200/80 overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
               <Layers className="w-4 h-4" />
             </div>
             <div>
@@ -172,7 +172,7 @@ export const LeaveTypeModal: React.FC<LeaveTypeModalProps> = ({
               <select
                 value={paid ? 'PAID' : 'UNPAID'}
                 onChange={(e) => setPaid(e.target.value === 'PAID')}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               >
                 <option value="PAID">Paid Leave</option>
                 <option value="UNPAID">Unpaid (Loss of Pay)</option>
@@ -193,7 +193,7 @@ export const LeaveTypeModal: React.FC<LeaveTypeModalProps> = ({
               id="carry_forward_allowed"
               checked={carryForwardAllowed}
               onChange={(e) => setCarryForwardAllowed(e.target.checked)}
-              className="w-4 h-4 text-[#2818cf] rounded border-slate-300 focus:ring-[#2818cf]"
+              className="w-4 h-4 text-[#2012ad] rounded border-slate-300 focus:ring-[#2012ad]"
             />
             <label htmlFor="carry_forward_allowed" className="text-xs font-bold text-slate-800 cursor-pointer">
               Allow Carry Forward to Next Leave Year

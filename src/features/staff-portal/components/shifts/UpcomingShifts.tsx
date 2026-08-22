@@ -39,7 +39,7 @@ export const UpcomingShifts: React.FC<UpcomingShiftsProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between pb-3 border-b border-slate-100">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2818cf] flex items-center justify-center font-bold">
+          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2012ad] flex items-center justify-center font-bold">
             <Calendar className="w-4 h-4" />
           </div>
           <div>

@@ -44,7 +44,7 @@ export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({
       <div className="px-4 py-3">
         <p className="text-xs font-extrabold text-slate-900 truncate">{user.displayName}</p>
         <div className="flex items-center gap-1.5 mt-0.5">
-          <span className="text-[11px] font-mono font-bold text-[#2818cf] bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-100">
+          <span className="text-[11px] font-mono font-bold text-[#2012ad] bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-100">
             {user.employeeCode}
           </span>
           <span className="text-[10px] font-bold text-slate-400 uppercase">• {user.roleName}</span>

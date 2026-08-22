@@ -105,7 +105,7 @@ export const AttendanceCard: React.FC<AttendanceCardProps> = ({
       <div className="mt-5 pt-3 border-t border-slate-100">
         <button
           onClick={() => navigate('/staff/attendance')}
-          className="w-full flex items-center justify-center gap-1.5 py-2 px-3 bg-slate-50 hover:bg-indigo-50/80 text-slate-700 hover:text-[#2818cf] border border-slate-200/80 hover:border-indigo-200 rounded-xl text-xs font-bold transition-all group"
+          className="w-full flex items-center justify-center gap-1.5 py-2 px-3 bg-slate-50 hover:bg-indigo-50/80 text-slate-700 hover:text-[#2012ad] border border-slate-200/80 hover:border-indigo-200 rounded-xl text-xs font-bold transition-all group"
         >
           <span>View Attendance</span>
           <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />

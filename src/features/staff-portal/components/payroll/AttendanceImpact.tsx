@@ -14,7 +14,7 @@ export const AttendanceImpact: React.FC<AttendanceImpactProps> = ({ attendance }
       {/* Header */}
       <div className="flex items-center justify-between pb-3 border-b border-slate-100">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2818cf] flex items-center justify-center font-bold">
+          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2012ad] flex items-center justify-center font-bold">
             <CalendarCheck className="w-4 h-4" />
           </div>
           <div>
@@ -42,7 +42,7 @@ export const AttendanceImpact: React.FC<AttendanceImpactProps> = ({ attendance }
         </div>
 
         <div className="p-3 bg-indigo-50/60 border border-indigo-100 rounded-2xl">
-          <span className="text-[10px] font-bold text-[#2818cf] block">Paid Leaves</span>
+          <span className="text-[10px] font-bold text-[#2012ad] block">Paid Leaves</span>
           <strong className="text-lg font-extrabold text-indigo-900 font-mono">
             {attendance.paidLeaveDays} d
           </strong>

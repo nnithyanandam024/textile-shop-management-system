@@ -19,7 +19,7 @@ export const StaffDashboard: React.FC = () => {
   const { data, loading, error, refresh } = useStaffDashboard();
 
   return (
-    <div className="flex h-screen bg-[#f8fafc] overflow-hidden font-sans text-slate-900 selection:bg-[#2818cf] selection:text-white">
+    <div className="flex h-screen bg-[#f8fafc] overflow-hidden font-sans text-slate-900 selection:bg-[#2012ad] selection:text-white">
       {/* Responsive Staff Sidebar */}
       <StaffSidebar />
 
@@ -42,7 +42,7 @@ export const StaffDashboard: React.FC = () => {
                 </div>
                 <button
                   onClick={refresh}
-                  className="w-full py-2.5 px-4 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-xl text-xs font-extrabold transition-all shadow-md shadow-[#2818cf]/20 flex items-center justify-center gap-2"
+                  className="w-full py-2.5 px-4 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-xl text-xs font-extrabold transition-all shadow-md shadow-[#2012ad]/20 flex items-center justify-center gap-2"
                 >
                   <RotateCw className="w-3.5 h-3.5" />
                   <span>Retry</span>

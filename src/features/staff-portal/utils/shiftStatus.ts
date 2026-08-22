@@ -20,10 +20,10 @@ export interface ShiftStatusConfig {
 export const SHIFT_STATUS_MAP: Record<ShiftStatusCode, ShiftStatusConfig> = {
   SCHEDULED: {
     label: 'Scheduled',
-    badgeClass: 'bg-indigo-50 text-[#2818cf] border-indigo-200',
-    dotClass: 'bg-[#2818cf]',
+    badgeClass: 'bg-indigo-50 text-[#2012ad] border-indigo-200',
+    dotClass: 'bg-[#2012ad]',
     bgLight: 'bg-indigo-50/50',
-    textColor: 'text-[#2818cf]',
+    textColor: 'text-[#2012ad]',
     borderColor: 'border-indigo-200',
   },
   IN_PROGRESS: {

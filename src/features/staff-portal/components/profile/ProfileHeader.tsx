@@ -37,7 +37,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
           {/* Avatar Photo Frame */}
           <div className="relative group">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl overflow-hidden bg-gradient-to-br from-[#2818cf] to-indigo-700 p-0.5 shadow-md flex items-center justify-center">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl overflow-hidden bg-gradient-to-br from-[#2012ad] to-indigo-700 p-0.5 shadow-md flex items-center justify-center">
               {profile.photoPath ? (
                 <img
                   src={profile.photoPath}
@@ -81,7 +81,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
                   {profile.fullName}
                 </h1>
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold tracking-wider uppercase bg-indigo-50 text-[#2818cf] border border-indigo-100/80">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold tracking-wider uppercase bg-indigo-50 text-[#2012ad] border border-indigo-100/80">
                   {profile.staffCode}
                 </span>
               </div>
@@ -127,7 +127,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           <button
             type="button"
             onClick={onChangePasswordClick}
-            className="px-3.5 py-2.5 bg-slate-100 hover:bg-indigo-50 text-slate-700 hover:text-[#2818cf] border border-transparent hover:border-indigo-100 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95"
+            className="px-3.5 py-2.5 bg-slate-100 hover:bg-indigo-50 text-slate-700 hover:text-[#2012ad] border border-transparent hover:border-indigo-100 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95"
           >
             <KeyRound className="w-4 h-4 text-slate-500" />
             <span>Password</span>
@@ -136,7 +136,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           <button
             type="button"
             onClick={onRequestChangeClick}
-            className="px-3.5 py-2.5 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center gap-1.5 active:scale-95"
+            className="px-3.5 py-2.5 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center gap-1.5 active:scale-95"
           >
             <FileQuestion className="w-4 h-4" />
             <span>Request HR Update</span>

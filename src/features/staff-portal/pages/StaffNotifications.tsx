@@ -39,7 +39,7 @@ export const StaffNotifications: React.FC = () => {
       case 'INVENTORY':
         return <Package className="w-4 h-4 text-purple-600" />;
       case 'POS':
-        return <ShoppingCart className="w-4 h-4 text-[#2818cf]" />;
+        return <ShoppingCart className="w-4 h-4 text-[#2012ad]" />;
       default:
         return <Info className="w-4 h-4 text-slate-600" />;
     }
@@ -86,9 +86,9 @@ export const StaffNotifications: React.FC = () => {
           <button
             type="button"
             onClick={onMarkAllRead}
-            className="px-4 py-2.5 bg-white border border-slate-200/80 hover:border-[#2818cf] text-slate-700 hover:text-[#2818cf] rounded-2xl text-xs font-extrabold flex items-center gap-2 shadow-xs transition-all shrink-0"
+            className="px-4 py-2.5 bg-white border border-slate-200/80 hover:border-[#2012ad] text-slate-700 hover:text-[#2012ad] rounded-2xl text-xs font-extrabold flex items-center gap-2 shadow-xs transition-all shrink-0"
           >
-            <CheckCheck className="w-4 h-4 text-[#2818cf]" />
+            <CheckCheck className="w-4 h-4 text-[#2012ad]" />
             <span>Mark All as Read</span>
           </button>
         )}
@@ -126,7 +126,7 @@ export const StaffNotifications: React.FC = () => {
               onClick={() => setCategoryFilter(cat.id)}
               className={`px-3 py-1.5 rounded-xl transition-all whitespace-nowrap ${
                 categoryFilter === cat.id
-                  ? 'bg-[#2818cf] text-white shadow-xs'
+                  ? 'bg-[#2012ad] text-white shadow-xs'
                   : 'text-slate-500 hover:text-slate-800'
               }`}
             >
@@ -153,7 +153,7 @@ export const StaffNotifications: React.FC = () => {
             onClick={() => setReadStateFilter('UNREAD')}
             className={`px-3 py-1.5 rounded-xl transition-all ${
               readStateFilter === 'UNREAD'
-                ? 'bg-[#2818cf] text-white'
+                ? 'bg-[#2012ad] text-white'
                 : 'text-slate-500 hover:text-slate-800'
             }`}
           >
@@ -174,7 +174,7 @@ export const StaffNotifications: React.FC = () => {
 
         {!loading && notifications.length === 0 && (
           <div className="p-16 bg-white rounded-3xl border border-slate-200/80 shadow-xs text-center space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center mx-auto">
               <Bell className="w-6 h-6" />
             </div>
             <div>
@@ -193,7 +193,7 @@ export const StaffNotifications: React.FC = () => {
               className={`p-4 sm:p-5 rounded-3xl border transition-all flex items-start justify-between gap-4 ${
                 n.isRead
                   ? 'bg-white border-slate-200/70 shadow-xs opacity-90'
-                  : 'bg-white border-indigo-200 shadow-md shadow-indigo-600/5 ring-1 ring-[#2818cf]/10'
+                  : 'bg-white border-indigo-200 shadow-md shadow-indigo-600/5 ring-1 ring-[#2012ad]/10'
               }`}
             >
               <div className="flex items-start gap-3.5">
@@ -217,7 +217,7 @@ export const StaffNotifications: React.FC = () => {
                       </span>
                     ) : null}
                     {!n.isRead && (
-                      <span className="w-2 h-2 rounded-full bg-[#2818cf]" />
+                      <span className="w-2 h-2 rounded-full bg-[#2012ad]" />
                     )}
                   </div>
                   <p className="text-xs text-slate-600 font-medium leading-relaxed">{n.message}</p>
@@ -232,7 +232,7 @@ export const StaffNotifications: React.FC = () => {
                   type="button"
                   onClick={() => onMarkRead(n.id)}
                   title="Mark as read"
-                  className="p-2 rounded-xl bg-slate-50 hover:bg-indigo-50 text-slate-400 hover:text-[#2818cf] border border-slate-200/80 transition-all shrink-0"
+                  className="p-2 rounded-xl bg-slate-50 hover:bg-indigo-50 text-slate-400 hover:text-[#2012ad] border border-slate-200/80 transition-all shrink-0"
                 >
                   <Check className="w-4 h-4" />
                 </button>

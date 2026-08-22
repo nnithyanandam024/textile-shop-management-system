@@ -124,7 +124,7 @@ export const ShiftHistory: React.FC<ShiftHistoryProps> = ({
                           e.stopPropagation();
                           onSelectShift(row);
                         }}
-                        className="p-1 text-slate-400 hover:text-[#2818cf] transition-colors"
+                        className="p-1 text-slate-400 hover:text-[#2012ad] transition-colors"
                         title="View Details"
                       >
                         <Eye className="w-4 h-4" />

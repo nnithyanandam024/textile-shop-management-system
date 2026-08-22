@@ -83,7 +83,7 @@ export const ProfilePhotoModal: React.FC<ProfilePhotoModalProps> = ({
 
         {/* Modal Title */}
         <div className="text-center mb-6">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center mx-auto mb-3">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center mx-auto mb-3">
             <Camera className="w-6 h-6" />
           </div>
           <h2 className="text-lg font-bold text-slate-900">Profile Photo</h2>
@@ -149,7 +149,7 @@ export const ProfilePhotoModal: React.FC<ProfilePhotoModalProps> = ({
                 type="button"
                 onClick={handleSave}
                 disabled={isSaving}
-                className="flex-1 py-3 px-4 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center justify-center gap-1.5"
+                className="flex-1 py-3 px-4 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center justify-center gap-1.5"
               >
                 {isSaving ? (
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -167,7 +167,7 @@ export const ProfilePhotoModal: React.FC<ProfilePhotoModalProps> = ({
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isSaving}
-                className="flex-1 py-3 px-4 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center justify-center gap-1.5"
+                className="flex-1 py-3 px-4 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center justify-center gap-1.5"
               >
                 <UploadCloud className="w-4 h-4" />
                 <span>Upload New Photo</span>

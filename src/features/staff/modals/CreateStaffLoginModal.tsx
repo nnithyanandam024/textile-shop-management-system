@@ -111,7 +111,7 @@ export const CreateStaffLoginModal: React.FC<CreateStaffLoginModalProps> = ({
       <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full border border-slate-200/80 overflow-hidden flex flex-col max-h-[90vh]">
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
               <UserPlus className="w-4 h-4" />
             </div>
             <div>
@@ -164,7 +164,7 @@ export const CreateStaffLoginModal: React.FC<CreateStaffLoginModalProps> = ({
               value={roleId}
               onChange={(e) => setRoleId(Number(e.target.value))}
               required
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
             >
               <option value="">Select Role...</option>
               {roles.map((r) => (
@@ -180,10 +180,10 @@ export const CreateStaffLoginModal: React.FC<CreateStaffLoginModalProps> = ({
             <div className="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-[#2818cf]" />
+                  <ShieldCheck className="w-4 h-4 text-[#2012ad]" />
                   {selectedRole.name} Permissions Summary
                 </span>
-                <span className="text-[10px] font-extrabold text-[#2818cf] bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100 font-mono">
+                <span className="text-[10px] font-extrabold text-[#2012ad] bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-100 font-mono">
                   {selectedRolePermissions.length} Granted
                 </span>
               </div>

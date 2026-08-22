@@ -115,7 +115,7 @@ export const CategoriesPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2818cf]">
+          <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2012ad]">
             <Layers className="w-6 h-6" />
           </div>
           <div>
@@ -127,7 +127,7 @@ export const CategoriesPage: React.FC = () => {
         <div className="flex items-center gap-3">
           <button
             onClick={() => (activeTab === 'CATEGORIES' ? setShowCatModal(true) : setShowBrandModal(true))}
-            className="px-4 py-2.5 bg-[#2818cf] hover:bg-[#2012ad] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2818cf]/20 transition-all flex items-center gap-2"
+            className="px-4 py-2.5 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2012ad]/20 transition-all flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             <span>Add {activeTab === 'CATEGORIES' ? 'Category' : 'Brand'}</span>
@@ -160,7 +160,7 @@ export const CategoriesPage: React.FC = () => {
         <button
           onClick={() => setActiveTab('CATEGORIES')}
           className={`px-5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-            activeTab === 'CATEGORIES' ? 'bg-[#2818cf] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+            activeTab === 'CATEGORIES' ? 'bg-[#2012ad] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
           }`}
         >
           <Layers className="w-4 h-4" />
@@ -169,7 +169,7 @@ export const CategoriesPage: React.FC = () => {
         <button
           onClick={() => setActiveTab('BRANDS')}
           className={`px-5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-            activeTab === 'BRANDS' ? 'bg-[#2818cf] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+            activeTab === 'BRANDS' ? 'bg-[#2012ad] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
           }`}
         >
           <Tag className="w-4 h-4" />
@@ -181,7 +181,7 @@ export const CategoriesPage: React.FC = () => {
       <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden">
         {loading ? (
           <div className="p-12 text-center text-slate-500">
-            <RefreshCw className="w-8 h-8 animate-spin text-[#2818cf] mx-auto mb-2" />
+            <RefreshCw className="w-8 h-8 animate-spin text-[#2012ad] mx-auto mb-2" />
             <span className="text-sm font-medium">Loading data...</span>
           </div>
         ) : activeTab === 'CATEGORIES' ? (
@@ -236,7 +236,7 @@ export const CategoriesPage: React.FC = () => {
                   value={catName}
                   onChange={(e) => setCatName(e.target.value)}
                   placeholder="e.g. Sarees, Shirts, Kurtis..."
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                   required
                 />
               </div>
@@ -247,12 +247,12 @@ export const CategoriesPage: React.FC = () => {
                   value={catDesc}
                   onChange={(e) => setCatDesc(e.target.value)}
                   placeholder="Optional description"
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                 />
               </div>
               <div className="flex gap-3 pt-2">
                 <button type="button" onClick={() => setShowCatModal(false)} className="w-1/2 py-2.5 bg-slate-100 text-slate-700 text-sm font-semibold rounded-xl">Cancel</button>
-                <button type="submit" disabled={actionLoading} className="w-1/2 py-2.5 bg-[#2818cf] text-white text-sm font-semibold rounded-xl shadow-md flex items-center justify-center gap-2">
+                <button type="submit" disabled={actionLoading} className="w-1/2 py-2.5 bg-[#2012ad] text-white text-sm font-semibold rounded-xl shadow-md flex items-center justify-center gap-2">
                   {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>Create Category</span>}
                 </button>
               </div>
@@ -274,7 +274,7 @@ export const CategoriesPage: React.FC = () => {
                   value={brandName}
                   onChange={(e) => setBrandName(e.target.value)}
                   placeholder="e.g. Raymond, Levis, Allen Solly..."
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                   required
                 />
               </div>
@@ -285,12 +285,12 @@ export const CategoriesPage: React.FC = () => {
                   value={brandDesc}
                   onChange={(e) => setBrandDesc(e.target.value)}
                   placeholder="Optional brand description"
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                 />
               </div>
               <div className="flex gap-3 pt-2">
                 <button type="button" onClick={() => setShowBrandModal(false)} className="w-1/2 py-2.5 bg-slate-100 text-slate-700 text-sm font-semibold rounded-xl">Cancel</button>
-                <button type="submit" disabled={actionLoading} className="w-1/2 py-2.5 bg-[#2818cf] text-white text-sm font-semibold rounded-xl shadow-md flex items-center justify-center gap-2">
+                <button type="submit" disabled={actionLoading} className="w-1/2 py-2.5 bg-[#2012ad] text-white text-sm font-semibold rounded-xl shadow-md flex items-center justify-center gap-2">
                   {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>Create Brand</span>}
                 </button>
               </div>

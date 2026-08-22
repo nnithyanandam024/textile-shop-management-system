@@ -48,13 +48,13 @@ export const DocumentStatusCard: React.FC<DocumentStatusCardProps> = ({
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="text-sm font-black text-[#2818cf] font-mono">
+          <span className="text-sm font-black text-[#2012ad] font-mono">
             {completionPercentage}%
           </span>
           <div className="w-32 bg-slate-100 rounded-full h-2.5 overflow-hidden">
             <div
               className={`h-2.5 rounded-full transition-all duration-500 ${
-                completionPercentage === 100 ? 'bg-emerald-500' : 'bg-[#2818cf]'
+                completionPercentage === 100 ? 'bg-emerald-500' : 'bg-[#2012ad]'
               }`}
               style={{ width: `${Math.max(5, completionPercentage)}%` }}
             />
@@ -100,7 +100,7 @@ export const DocumentStatusCard: React.FC<DocumentStatusCardProps> = ({
       <div className="pt-2 flex justify-end">
         <button
           onClick={() => navigate('/self-service/documents')}
-          className="inline-flex items-center gap-1.5 py-1.5 px-3 bg-slate-50 hover:bg-indigo-50/80 text-slate-700 hover:text-[#2818cf] border border-slate-200/80 hover:border-indigo-200 rounded-xl text-xs font-bold transition-all group"
+          className="inline-flex items-center gap-1.5 py-1.5 px-3 bg-slate-50 hover:bg-indigo-50/80 text-slate-700 hover:text-[#2012ad] border border-slate-200/80 hover:border-indigo-200 rounded-xl text-xs font-bold transition-all group"
         >
           <span>View Documents</span>
           <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />

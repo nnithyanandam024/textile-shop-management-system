@@ -31,7 +31,7 @@ export const PayslipModal: React.FC<PayslipModalProps> = ({
         {/* Header */}
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 print:hidden">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
               <Receipt className="w-4 h-4" />
             </div>
             <div>
@@ -55,7 +55,7 @@ export const PayslipModal: React.FC<PayslipModalProps> = ({
         <div className="p-8 space-y-6 text-slate-900 font-sans">
           {/* Shop Branding */}
           <div className="text-center border-b border-slate-200 pb-4">
-            <h1 className="text-2xl font-extrabold text-[#2818cf] tracking-wider uppercase">Texora Textile Hub</h1>
+            <h1 className="text-2xl font-extrabold text-[#2012ad] tracking-wider uppercase">Texora Textile Hub</h1>
             <p className="text-xs text-slate-500 font-semibold mt-1">Official Employee Salary Payment Advice</p>
           </div>
 
@@ -69,7 +69,7 @@ export const PayslipModal: React.FC<PayslipModalProps> = ({
             </div>
             <div className="text-right">
               <p className="text-slate-500">Payroll Period:</p>
-              <p className="font-extrabold text-[#2818cf] text-sm">{periodName || 'Monthly Payroll'}</p>
+              <p className="font-extrabold text-[#2012ad] text-sm">{periodName || 'Monthly Payroll'}</p>
               <p className="text-slate-500 mt-2">Attendance Summary:</p>
               <p className="font-semibold text-slate-800">
                 Present: {record.present_days}d | Unpaid Leave: {record.unpaid_leave_days}d | OT: {record.overtime_hours}h
@@ -128,7 +128,7 @@ export const PayslipModal: React.FC<PayslipModalProps> = ({
               <span className="text-xs font-bold uppercase tracking-wider text-slate-600">Net Take-Home Salary</span>
               <p className="text-xs text-slate-500 font-semibold">Credited to employee salary bank account</p>
             </div>
-            <span className="text-2xl font-extrabold text-[#2818cf]">₹{record.net_salary.toLocaleString()}</span>
+            <span className="text-2xl font-extrabold text-[#2012ad]">₹{record.net_salary.toLocaleString()}</span>
           </div>
 
           {/* Signatures */}

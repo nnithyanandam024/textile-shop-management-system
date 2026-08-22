@@ -80,7 +80,7 @@ export const POSHeldSalesModal: React.FC<POSHeldSalesModalProps> = ({
                     <button
                       type="button"
                       onClick={() => onResume(h.id)}
-                      className="px-3 py-1.5 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-xl text-[11px] font-extrabold flex items-center gap-1 transition-all shadow-xs"
+                      className="px-3 py-1.5 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-xl text-[11px] font-extrabold flex items-center gap-1 transition-all shadow-xs"
                     >
                       <Play className="w-3 h-3" />
                       <span>Resume</span>

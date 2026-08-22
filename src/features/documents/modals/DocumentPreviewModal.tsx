@@ -48,7 +48,7 @@ export const DocumentPreviewModal: React.FC<DocumentPreviewModalProps> = ({
         {/* Header */}
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
               <FileText className="w-4 h-4" />
             </div>
             <div>
@@ -76,7 +76,7 @@ export const DocumentPreviewModal: React.FC<DocumentPreviewModalProps> = ({
         <div className="p-6 flex-1 overflow-auto bg-slate-100 flex items-center justify-center min-h-[400px]">
           {loading ? (
             <div className="text-center">
-              <div className="w-8 h-8 border-3 border-[#2818cf] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+              <div className="w-8 h-8 border-3 border-[#2012ad] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
               <p className="text-xs font-semibold text-slate-500">Loading document preview...</p>
             </div>
           ) : error ? (

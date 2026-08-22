@@ -26,7 +26,7 @@ export const StaffHeader: React.FC = () => {
       <header className="h-16 bg-white border-b border-slate-200/80 px-6 flex items-center justify-between sticky top-0 z-30 shadow-sm">
         {/* Left Branding */}
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf] shadow-sm">
+          <div className="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad] shadow-sm">
             <Sparkles className="w-4 h-4" />
           </div>
           <div>
@@ -61,7 +61,7 @@ export const StaffHeader: React.FC = () => {
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="flex items-center gap-2.5 p-1.5 pl-2.5 pr-3 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-2xl transition-all select-none"
               >
-                <div className="w-7 h-7 rounded-xl bg-[#2818cf] text-white flex items-center justify-center text-xs font-extrabold shadow-sm">
+                <div className="w-7 h-7 rounded-xl bg-[#2012ad] text-white flex items-center justify-center text-xs font-extrabold shadow-sm">
                   {currentStaffUser.displayName.charAt(0)}
                 </div>
                 <div className="text-left hidden sm:block">

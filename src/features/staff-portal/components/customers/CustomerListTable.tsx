@@ -39,7 +39,7 @@ export const CustomerListTable: React.FC<CustomerListTableProps> = ({
   if (customers.length === 0) {
     return (
       <div className="bg-white rounded-3xl p-12 border border-slate-200/80 shadow-xs text-center space-y-2 select-none">
-        <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center mx-auto">
+        <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center mx-auto">
           <User className="w-6 h-6" />
         </div>
         <h4 className="text-sm font-extrabold text-slate-800">No Customers Found</h4>
@@ -83,11 +83,11 @@ export const CustomerListTable: React.FC<CustomerListTableProps> = ({
                 {/* Name & Code */}
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-indigo-50 text-[#2818cf] font-extrabold text-xs flex items-center justify-center shrink-0">
+                    <div className="w-9 h-9 rounded-xl bg-indigo-50 text-[#2012ad] font-extrabold text-xs flex items-center justify-center shrink-0">
                       {c.name.slice(0, 2).toUpperCase()}
                     </div>
                     <div>
-                      <span className="text-xs font-extrabold text-slate-900 block group-hover:text-[#2818cf] transition-colors">
+                      <span className="text-xs font-extrabold text-slate-900 block group-hover:text-[#2012ad] transition-colors">
                         {c.name}
                       </span>
                       <span className="text-[10px] text-slate-400 font-mono">
@@ -130,7 +130,7 @@ export const CustomerListTable: React.FC<CustomerListTableProps> = ({
                       <Award className="w-3 h-3" />
                       <span>{c.tier}</span>
                     </span>
-                    <span className="text-[11px] font-extrabold text-[#2818cf] font-mono">
+                    <span className="text-[11px] font-extrabold text-[#2012ad] font-mono">
                       {c.loyaltyPoints} pts
                     </span>
                   </div>
@@ -144,7 +144,7 @@ export const CustomerListTable: React.FC<CustomerListTableProps> = ({
                       e.stopPropagation();
                       onSelectCustomer(c.id);
                     }}
-                    className="p-2 hover:bg-indigo-50 text-slate-400 hover:text-[#2818cf] rounded-xl transition-colors inline-flex items-center gap-1 text-[11px] font-extrabold"
+                    className="p-2 hover:bg-indigo-50 text-slate-400 hover:text-[#2012ad] rounded-xl transition-colors inline-flex items-center gap-1 text-[11px] font-extrabold"
                   >
                     <span>Profile</span>
                     <ArrowRight className="w-3.5 h-3.5" />

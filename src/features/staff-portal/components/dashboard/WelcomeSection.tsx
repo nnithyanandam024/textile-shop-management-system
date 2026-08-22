@@ -33,7 +33,7 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({
   };
 
   return (
-    <div className="p-7 sm:p-8 bg-gradient-to-r from-[#2818cf] via-indigo-600 to-indigo-800 text-white rounded-3xl shadow-xl shadow-[#2818cf]/15 relative overflow-hidden">
+    <div className="p-7 sm:p-8 bg-gradient-to-r from-[#2012ad] via-indigo-600 to-indigo-800 text-white rounded-3xl shadow-xl shadow-[#2012ad]/15 relative overflow-hidden">
       {/* Decorative Blur Backdrops */}
       <div className="absolute top-0 right-0 -mt-8 -mr-8 w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-1/3 -mb-8 w-32 h-32 bg-indigo-400/15 rounded-full blur-2xl pointer-events-none" />

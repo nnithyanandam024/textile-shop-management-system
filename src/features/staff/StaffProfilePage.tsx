@@ -263,7 +263,7 @@ export const StaffProfilePage: React.FC = () => {
 
       {/* Hero Banner Header Card */}
       <Card className="p-0 overflow-hidden relative">
-        <div className="h-32 bg-gradient-to-r from-[#2818cf] via-indigo-600 to-purple-600 p-6 flex items-start justify-between">
+        <div className="h-32 bg-gradient-to-r from-[#2012ad] via-indigo-600 to-purple-600 p-6 flex items-start justify-between">
           <span className="px-3.5 py-1 bg-white/20 backdrop-blur-md border border-white/30 text-white rounded-full text-xs font-extrabold tracking-wider uppercase font-mono">
             {staff.staff_code}
           </span>
@@ -281,7 +281,7 @@ export const StaffProfilePage: React.FC = () => {
 
         <div className="px-6 pb-6 pt-0 relative flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div className="flex items-end gap-5 -mt-12">
-            <div className="w-24 h-24 rounded-2xl bg-white border-4 border-white shadow-xl flex items-center justify-center overflow-hidden shrink-0 font-bold text-3xl text-[#2818cf]">
+            <div className="w-24 h-24 rounded-2xl bg-white border-4 border-white shadow-xl flex items-center justify-center overflow-hidden shrink-0 font-bold text-3xl text-[#2012ad]">
               {staff.photo_path ? (
                 <img src={`file://${staff.photo_path}`} alt={fullName} className="w-full h-full object-cover" />
               ) : (
@@ -292,7 +292,7 @@ export const StaffProfilePage: React.FC = () => {
             <div>
               <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">{fullName}</h1>
               <p className="text-xs font-semibold text-slate-500 mt-0.5">
-                {staff.designation_name} — <span className="text-[#2818cf] font-bold">{staff.department_name}</span>
+                {staff.designation_name} — <span className="text-[#2012ad] font-bold">{staff.department_name}</span>
               </p>
             </div>
           </div>
@@ -310,7 +310,7 @@ export const StaffProfilePage: React.FC = () => {
             <div className="w-px h-6 bg-slate-200" />
             <div>
               <p className="text-[10px] text-slate-400">Profile Completion</p>
-              <p className="font-bold text-[#2818cf] font-mono">{completion}%</p>
+              <p className="font-bold text-[#2012ad] font-mono">{completion}%</p>
             </div>
           </div>
         </div>
@@ -324,7 +324,7 @@ export const StaffProfilePage: React.FC = () => {
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
               activeTab === tab
-                ? 'bg-[#2818cf] text-white shadow-md'
+                ? 'bg-[#2012ad] text-white shadow-md'
                 : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
             }`}
           >
@@ -382,7 +382,7 @@ export const StaffProfilePage: React.FC = () => {
             <p className="text-xs text-slate-600 font-semibold">
               Daily check-ins, late arrivals, and working hours for {staff.first_name} are recorded in the central Attendance Module.
             </p>
-            <p className="text-xs text-[#2818cf] font-bold">
+            <p className="text-xs text-[#2012ad] font-bold">
               Staff ID: {staff.staff_code}
             </p>
           </div>
@@ -403,7 +403,7 @@ export const StaffProfilePage: React.FC = () => {
 
           <div className="p-4 bg-indigo-50/50 border border-indigo-100 rounded-2xl flex items-center justify-between">
             <div className="space-y-1">
-              <span className="text-[10px] font-extrabold text-[#2818cf] uppercase tracking-wider">Current Assigned Shift</span>
+              <span className="text-[10px] font-extrabold text-[#2012ad] uppercase tracking-wider">Current Assigned Shift</span>
               <h4 className="text-lg font-extrabold text-slate-900">General Shift (09:00 AM — 06:00 PM)</h4>
               <p className="text-xs text-slate-600">Grace Period: 10 mins • Break: 60 mins • Full Working Hours: 8 hrs</p>
             </div>
@@ -558,7 +558,7 @@ export const StaffProfilePage: React.FC = () => {
                 placeholder="At least 6 characters"
                 value={newPasswordInput}
                 onChange={(e) => setNewPasswordInput(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               />
             </div>
 

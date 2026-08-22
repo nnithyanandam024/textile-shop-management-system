@@ -104,7 +104,7 @@ export const ApplyLeaveModal: React.FC<ApplyLeaveModalProps> = ({
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full border border-slate-200/80 overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
               <Calendar className="w-4 h-4" />
             </div>
             <div>
@@ -131,7 +131,7 @@ export const ApplyLeaveModal: React.FC<ApplyLeaveModalProps> = ({
               value={staffId}
               onChange={(e) => setStaffId(Number(e.target.value))}
               required
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
             >
               <option value="">Select Staff...</option>
               {staffList.map((s) => (
@@ -149,7 +149,7 @@ export const ApplyLeaveModal: React.FC<ApplyLeaveModalProps> = ({
                 value={leaveTypeId}
                 onChange={(e) => setLeaveTypeId(Number(e.target.value))}
                 required
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               >
                 <option value="">Select Type...</option>
                 {leaveTypes.map((lt) => (
@@ -165,7 +165,7 @@ export const ApplyLeaveModal: React.FC<ApplyLeaveModalProps> = ({
               <select
                 value={durationType}
                 onChange={(e) => setDurationType(e.target.value as any)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               >
                 <option value="FULL_DAY">Full Day</option>
                 <option value="HALF_DAY">Half Day (0.5)</option>
@@ -204,7 +204,7 @@ export const ApplyLeaveModal: React.FC<ApplyLeaveModalProps> = ({
                 <select
                   value={session}
                   onChange={(e) => setSession(e.target.value as any)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
                 >
                   <option value="MORNING">Morning Session</option>
                   <option value="AFTERNOON">Afternoon Session</option>
@@ -221,7 +221,7 @@ export const ApplyLeaveModal: React.FC<ApplyLeaveModalProps> = ({
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               required
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
             />
           </div>
 

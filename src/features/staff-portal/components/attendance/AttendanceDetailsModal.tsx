@@ -68,7 +68,7 @@ export const AttendanceDetailsModal: React.FC<AttendanceDetailsModalProps> = ({
 
         {/* Modal Header */}
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center font-bold">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center font-bold">
             <Calendar className="w-6 h-6" />
           </div>
           <div>
@@ -118,7 +118,7 @@ export const AttendanceDetailsModal: React.FC<AttendanceDetailsModalProps> = ({
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-0.5">
               Total Working Hours
             </span>
-            <p className="font-extrabold text-[#2818cf] font-mono">
+            <p className="font-extrabold text-[#2012ad] font-mono">
               {record.formattedHours}
             </p>
           </div>
@@ -162,7 +162,7 @@ export const AttendanceDetailsModal: React.FC<AttendanceDetailsModalProps> = ({
               onClose();
               onRequestCorrection(record);
             }}
-            className="w-full py-3 bg-slate-100 hover:bg-indigo-50 text-slate-700 hover:text-[#2818cf] border border-slate-200 hover:border-indigo-200 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5"
+            className="w-full py-3 bg-slate-100 hover:bg-indigo-50 text-slate-700 hover:text-[#2012ad] border border-slate-200 hover:border-indigo-200 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5"
           >
             <HelpCircle className="w-4 h-4" />
             <span>Submit Correction Request for this Date</span>

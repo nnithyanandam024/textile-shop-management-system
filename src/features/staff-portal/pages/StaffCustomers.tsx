@@ -67,7 +67,7 @@ export const StaffCustomers: React.FC = () => {
 
         <div className="flex items-center gap-4 bg-white p-3 rounded-3xl border border-slate-200/80 shadow-xs shrink-0 flex-wrap">
           <div className="flex items-center gap-2.5 px-2">
-            <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2818cf] flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2012ad] flex items-center justify-center">
               <Users className="w-4 h-4" />
             </div>
             <div>

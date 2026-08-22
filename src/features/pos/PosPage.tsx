@@ -282,7 +282,7 @@ export const PosPage: React.FC = () => {
       {/* Top Header Bar */}
       <div className="flex items-center justify-between bg-white px-6 py-3 rounded-2xl border border-slate-200/80 shadow-sm shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-[#2818cf]">
+          <div className="w-10 h-10 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-[#2012ad]">
             <ShoppingCart className="w-5 h-5" />
           </div>
           <div>
@@ -335,7 +335,7 @@ export const PosPage: React.FC = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Scan Barcode or Search Product / SKU... (F2)"
-              className="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+              className="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
               autoFocus
             />
             <Barcode className="w-5 h-5 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2" />
@@ -361,7 +361,7 @@ export const PosPage: React.FC = () => {
                     className="p-3 bg-slate-50 hover:bg-indigo-50/60 border border-slate-200 hover:border-indigo-200 rounded-xl cursor-pointer transition-all flex items-center justify-between group"
                   >
                     <div>
-                      <h4 className="text-sm font-bold text-slate-900 group-hover:text-[#2818cf]">{v.product_name}</h4>
+                      <h4 className="text-sm font-bold text-slate-900 group-hover:text-[#2012ad]">{v.product_name}</h4>
                       <p className="text-xs text-slate-500 font-mono">
                         {v.sku} ({v.color} / {v.size})
                       </p>
@@ -401,7 +401,7 @@ export const PosPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowAddCustomerModal(true)}
-              className="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg text-xs font-semibold text-[#2818cf] transition-all"
+              className="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg text-xs font-semibold text-[#2012ad] transition-all"
             >
               + New (F4)
             </button>
@@ -489,7 +489,7 @@ export const PosPage: React.FC = () => {
 
             <div className="flex justify-between text-lg font-extrabold text-slate-900 pt-2 border-t border-slate-200">
               <span>FINAL TOTAL:</span>
-              <span className="text-[#2818cf]">₹{finalTotal.toLocaleString('en-IN')}</span>
+              <span className="text-[#2012ad]">₹{finalTotal.toLocaleString('en-IN')}</span>
             </div>
 
             <div className="flex gap-2 pt-2">
@@ -513,7 +513,7 @@ export const PosPage: React.FC = () => {
                 type="button"
                 onClick={() => setShowPaymentModal(true)}
                 disabled={cart.length === 0}
-                className="w-1/2 py-2.5 bg-[#2818cf] hover:bg-[#2012ad] text-white rounded-xl font-bold shadow-lg shadow-[#2818cf]/20 transition-all flex items-center justify-center gap-1.5 text-sm"
+                className="w-1/2 py-2.5 bg-[#2012ad] hover:bg-[#1a0e91] text-white rounded-xl font-bold shadow-lg shadow-[#2012ad]/20 transition-all flex items-center justify-center gap-1.5 text-sm"
               >
                 <CreditCard className="w-4 h-4" />
                 <span>PAY (F6 / F9)</span>
@@ -571,7 +571,7 @@ export const PosPage: React.FC = () => {
               </div>
               <div className="flex gap-2 pt-2">
                 <button type="button" onClick={() => setShowAddCustomerModal(false)} className="w-1/2 py-2 bg-slate-100 text-slate-700 text-xs font-bold rounded-xl">Cancel</button>
-                <button type="submit" className="w-1/2 py-2 bg-[#2818cf] text-white text-xs font-bold rounded-xl shadow-md">Save & Select</button>
+                <button type="submit" className="w-1/2 py-2 bg-[#2012ad] text-white text-xs font-bold rounded-xl shadow-md">Save & Select</button>
               </div>
             </form>
           </div>
@@ -595,7 +595,7 @@ export const PosPage: React.FC = () => {
                   </div>
                   <button
                     onClick={() => resumeHeldCart(h)}
-                    className="px-3 py-1.5 bg-[#2818cf] text-white rounded-lg text-xs font-bold shadow-sm"
+                    className="px-3 py-1.5 bg-[#2012ad] text-white rounded-lg text-xs font-bold shadow-sm"
                   >
                     Resume
                   </button>

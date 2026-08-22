@@ -130,13 +130,13 @@ export const POSReturnModal: React.FC<POSReturnModalProps> = ({
               value={invoiceIdInput}
               onChange={(e) => setInvoiceIdInput(e.target.value)}
               placeholder="Enter Sale ID (e.g. 1)"
-              className="w-full pl-3.5 pr-3 py-2 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2818cf]"
+              className="w-full pl-3.5 pr-3 py-2 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2012ad]"
             />
           </div>
           <button
             type="submit"
             disabled={loading || !invoiceIdInput.trim()}
-            className="px-4 py-2 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-2xl text-xs font-extrabold flex items-center gap-1.5 transition-all shadow-xs disabled:opacity-40"
+            className="px-4 py-2 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-2xl text-xs font-extrabold flex items-center gap-1.5 transition-all shadow-xs disabled:opacity-40"
           >
             <Search className="w-3.5 h-3.5" />
             <span>{loading ? 'Finding...' : 'Find'}</span>
@@ -221,7 +221,7 @@ export const POSReturnModal: React.FC<POSReturnModalProps> = ({
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="e.g. Exchanged for different size"
-                className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2818cf]"
+                className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2012ad]"
               />
             </div>
           </div>

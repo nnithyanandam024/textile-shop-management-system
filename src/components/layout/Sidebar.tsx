@@ -74,7 +74,6 @@ export const Sidebar: React.FC = () => {
     { name: 'Sales History', path: '/sales', icon: Receipt, permission: 'sales.view' },
     { name: 'Sales Returns', path: '/returns', icon: RotateCcw, permission: 'returns.create' },
     { name: 'Customers & Loyalty', path: '/customers', icon: Users, permission: 'customers.view' },
-    { name: 'Product Catalog', path: '/products', icon: Package, permission: 'products.view' },
   ];
 
   // --- Section 3: Catalog & Inventory ---
@@ -173,7 +172,7 @@ export const Sidebar: React.FC = () => {
       {/* Brand Header */}
       <div className="h-16 px-5 flex items-center justify-between border-b border-slate-200/80 bg-slate-50/50">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-[#2818cf] shadow-sm">
+          <div className="w-9 h-9 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-[#2012ad] shadow-sm">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
             </svg>
@@ -183,7 +182,7 @@ export const Sidebar: React.FC = () => {
             <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Textile Manager</p>
           </div>
         </div>
-        <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-indigo-50 text-[#2818cf] border border-indigo-100 uppercase">
+        <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-indigo-50 text-[#2012ad] border border-indigo-100 uppercase">
           {currentUser?.roleName || 'Staff'}
         </span>
       </div>
@@ -206,7 +205,7 @@ export const Sidebar: React.FC = () => {
                   className={({ isActive }) =>
                     `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                       isActive
-                        ? 'bg-indigo-50/90 text-[#2818cf] shadow-sm border border-indigo-100/90 font-bold'
+                        ? 'bg-indigo-50/90 text-[#2012ad] shadow-sm border border-indigo-100/90 font-bold'
                         : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                     }`
                   }
@@ -214,7 +213,7 @@ export const Sidebar: React.FC = () => {
                   <item.icon className="w-4 h-4 shrink-0" />
                   <span className="truncate flex-1">{item.name}</span>
                   {item.badge && (
-                    <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-indigo-100 text-[#2818cf]">
+                    <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-indigo-100 text-[#2012ad]">
                       {item.badge}
                     </span>
                   )}
@@ -224,15 +223,6 @@ export const Sidebar: React.FC = () => {
           </div>
         ))}
       </nav>
-
-      {/* Footer Version & Status */}
-      <div className="p-3 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between text-[10px] font-medium text-slate-500">
-        <span>Texora Retail v0.1.0</span>
-        <div className="flex items-center gap-1.5">
-          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="font-semibold text-slate-600">Online</span>
-        </div>
-      </div>
     </aside>
   );
 };

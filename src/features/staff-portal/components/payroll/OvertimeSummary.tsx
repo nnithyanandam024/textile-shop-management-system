@@ -14,7 +14,7 @@ export const OvertimeSummary: React.FC<OvertimeSummaryProps> = ({ overtime }) =>
       {/* Header */}
       <div className="flex items-center justify-between pb-3 border-b border-slate-100">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2818cf] flex items-center justify-center font-bold">
+          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2012ad] flex items-center justify-center font-bold">
             <Clock className="w-4 h-4" />
           </div>
           <div>
@@ -27,7 +27,7 @@ export const OvertimeSummary: React.FC<OvertimeSummaryProps> = ({ overtime }) =>
           </div>
         </div>
 
-        <span className="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-indigo-50 text-[#2818cf] border border-indigo-200 flex items-center gap-1">
+        <span className="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-indigo-50 text-[#2012ad] border border-indigo-200 flex items-center gap-1">
           <ShieldCheck className="w-3.5 h-3.5" />
           <span>Approved</span>
         </span>
@@ -54,10 +54,10 @@ export const OvertimeSummary: React.FC<OvertimeSummaryProps> = ({ overtime }) =>
         </div>
 
         <div className="p-4 bg-indigo-50/60 rounded-2xl border border-indigo-100 space-y-1">
-          <span className="text-[10px] font-bold text-[#2818cf] uppercase tracking-wider block">
+          <span className="text-[10px] font-bold text-[#2012ad] uppercase tracking-wider block">
             Overtime Compensation
           </span>
-          <strong className="text-xl font-extrabold text-[#2818cf] font-mono">
+          <strong className="text-xl font-extrabold text-[#2012ad] font-mono">
             ₹{overtime.overtimeAmount.toLocaleString('en-IN')}
           </strong>
         </div>

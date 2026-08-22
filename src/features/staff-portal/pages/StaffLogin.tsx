@@ -71,23 +71,23 @@ export const StaffLogin: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-indigo-50/40 flex items-center justify-center p-4 selection:bg-[#2818cf] selection:text-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-indigo-50/40 flex items-center justify-center p-4 selection:bg-[#2012ad] selection:text-white">
       <div className="w-full max-w-md">
         {/* Main Card */}
         <div className="bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-3xl shadow-xl shadow-slate-200/50 p-8 sm:p-10 relative overflow-hidden">
           {/* Top Brand Decorative Glow */}
           <div className="absolute -top-12 -right-12 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none" />
-          <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-[#2818cf]/10 rounded-full blur-2xl pointer-events-none" />
+          <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-[#2012ad]/10 rounded-full blur-2xl pointer-events-none" />
 
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-[#2818cf] text-white shadow-lg shadow-[#2818cf]/25 mb-4 transform hover:scale-105 transition-transform">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-[#2012ad] text-white shadow-lg shadow-[#2012ad]/25 mb-4 transform hover:scale-105 transition-transform">
               <Sparkles className="w-7 h-7" />
             </div>
             <h1 className="text-xl font-black text-slate-900 tracking-tight uppercase">
               TEXTILE SHOP
             </h1>
-            <p className="text-xs font-bold text-[#2818cf] tracking-wide mt-0.5">
+            <p className="text-xs font-bold text-[#2012ad] tracking-wide mt-0.5">
               Staff Management System
             </p>
             <div className="mt-2 inline-block px-3 py-1 bg-slate-100 rounded-full border border-slate-200">
@@ -125,7 +125,7 @@ export const StaffLogin: React.FC = () => {
                   }}
                   placeholder="Enter your employee ID (e.g. STF001)"
                   disabled={isSubmitting}
-                  className="w-full pl-10 pr-4 py-3 bg-slate-50/80 border border-slate-200 rounded-2xl text-xs font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white transition-all disabled:opacity-50"
+                  className="w-full pl-10 pr-4 py-3 bg-slate-50/80 border border-slate-200 rounded-2xl text-xs font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white transition-all disabled:opacity-50"
                   autoFocus
                 />
               </div>
@@ -149,7 +149,7 @@ export const StaffLogin: React.FC = () => {
                   }}
                   placeholder="Enter your password"
                   disabled={isSubmitting}
-                  className="w-full pl-10 pr-11 py-3 bg-slate-50/80 border border-slate-200 rounded-2xl text-xs font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white transition-all disabled:opacity-50"
+                  className="w-full pl-10 pr-11 py-3 bg-slate-50/80 border border-slate-200 rounded-2xl text-xs font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white transition-all disabled:opacity-50"
                 />
                 <button
                   type="button"
@@ -171,7 +171,7 @@ export const StaffLogin: React.FC = () => {
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
                   disabled={isSubmitting}
-                  className="w-4 h-4 rounded text-[#2818cf] border-slate-300 focus:ring-[#2818cf] cursor-pointer"
+                  className="w-4 h-4 rounded text-[#2012ad] border-slate-300 focus:ring-[#2012ad] cursor-pointer"
                 />
                 <span className="text-xs font-bold text-slate-600">Remember me</span>
               </label>
@@ -179,7 +179,7 @@ export const StaffLogin: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowForgotModal(true)}
-                className="text-xs font-bold text-[#2818cf] hover:text-indigo-700 hover:underline focus:outline-none"
+                className="text-xs font-bold text-[#2012ad] hover:text-indigo-700 hover:underline focus:outline-none"
               >
                 Forgot Password?
               </button>
@@ -190,7 +190,7 @@ export const StaffLogin: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-3.5 px-4 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-2xl text-xs font-extrabold tracking-wider uppercase transition-all duration-200 shadow-lg shadow-[#2818cf]/25 hover:shadow-indigo-600/35 active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-3.5 px-4 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-2xl text-xs font-extrabold tracking-wider uppercase transition-all duration-200 shadow-lg shadow-[#2012ad]/25 hover:shadow-indigo-600/35 active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
                   <>
@@ -226,7 +226,7 @@ export const StaffLogin: React.FC = () => {
       {showForgotModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-6 border border-slate-200 text-center space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center mx-auto">
               <HelpCircle className="w-6 h-6" />
             </div>
             <div>

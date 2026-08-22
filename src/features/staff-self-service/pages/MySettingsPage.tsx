@@ -54,7 +54,7 @@ export const MySettingsPage: React.FC = () => {
     <div className="space-y-6 pb-12 max-w-3xl">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf] shadow-sm">
+        <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad] shadow-sm">
           <Settings className="w-5 h-5" />
         </div>
         <div>
@@ -66,7 +66,7 @@ export const MySettingsPage: React.FC = () => {
       {/* Password Change Card */}
       <Card className="p-6 space-y-4 bg-white border border-slate-200/80">
         <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-          <Lock className="w-4 h-4 text-[#2818cf]" />
+          <Lock className="w-4 h-4 text-[#2012ad]" />
           <h3 className="text-base font-bold text-slate-900">Change Login Password</h3>
         </div>
 

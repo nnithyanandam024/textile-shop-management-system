@@ -56,7 +56,7 @@ export const StaffReports: React.FC = () => {
                 onClick={() => setPeriod(p.id as any)}
                 className={`px-3 py-1.5 rounded-xl transition-all ${
                   period === p.id
-                    ? 'bg-[#2818cf] text-white shadow-xs'
+                    ? 'bg-[#2012ad] text-white shadow-xs'
                     : 'text-slate-500 hover:text-slate-800'
                 }`}
               >
@@ -92,7 +92,7 @@ export const StaffReports: React.FC = () => {
               onClick={() => setActiveTab(tab.id as any)}
               className={`px-4 py-2.5 rounded-2xl text-xs font-extrabold flex items-center gap-2 transition-all whitespace-nowrap ${
                 isActive
-                  ? 'bg-[#2818cf] text-white shadow-md shadow-indigo-600/20'
+                  ? 'bg-[#2012ad] text-white shadow-md shadow-indigo-600/20'
                   : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
               }`}
             >
@@ -121,7 +121,7 @@ export const StaffReports: React.FC = () => {
           {/* Top Metric Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center shrink-0">
                 <DollarSign className="w-6 h-6" />
               </div>
               <div>
@@ -182,7 +182,7 @@ export const StaffReports: React.FC = () => {
             {/* Tender Breakdown */}
             <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-4">
               <h4 className="text-xs font-extrabold text-slate-900 flex items-center gap-2">
-                <CreditCard className="w-4 h-4 text-[#2818cf]" />
+                <CreditCard className="w-4 h-4 text-[#2012ad]" />
                 <span>Payment Mode Breakdown</span>
               </h4>
 
@@ -202,7 +202,7 @@ export const StaffReports: React.FC = () => {
                       </div>
                       <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-[#2818cf] rounded-full"
+                          className="h-full bg-[#2012ad] rounded-full"
                           style={{ width: `${Math.min(100, t.percentage)}%` }}
                         />
                       </div>
@@ -273,7 +273,7 @@ export const StaffReports: React.FC = () => {
                   <tbody className="divide-y divide-slate-100 font-semibold text-slate-700">
                     {salesReport.recentSales.map((s) => (
                       <tr key={s.id} className="hover:bg-slate-50/50">
-                        <td className="px-6 py-3.5 font-bold font-mono text-[#2818cf]">{s.invoiceNumber}</td>
+                        <td className="px-6 py-3.5 font-bold font-mono text-[#2012ad]">{s.invoiceNumber}</td>
                         <td className="px-6 py-3.5 text-slate-900">{s.customerName}</td>
                         <td className="px-6 py-3.5">{s.itemsCount} items</td>
                         <td className="px-6 py-3.5">
@@ -316,7 +316,7 @@ export const StaffReports: React.FC = () => {
             </div>
 
             <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center shrink-0">
                 <Calendar className="w-6 h-6" />
               </div>
               <div>
@@ -439,7 +439,7 @@ export const StaffReports: React.FC = () => {
               <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">
                 Active Commission Rate
               </span>
-              <span className="text-2xl font-black text-[#2818cf] font-mono block">
+              <span className="text-2xl font-black text-[#2012ad] font-mono block">
                 {commissionReport.commissionRate}%
               </span>
               <span className="text-[11px] text-slate-400 font-semibold">Configured Store Commission</span>
@@ -525,7 +525,7 @@ export const StaffReports: React.FC = () => {
               <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">
                 Stock Movements Handled
               </span>
-              <span className="text-2xl font-black text-[#2818cf] font-mono block">
+              <span className="text-2xl font-black text-[#2012ad] font-mono block">
                 {inventoryReport.stockMovementsHandled} Items
               </span>
               <span className="text-[11px] text-slate-400 font-semibold">Sales, Returns & Adjustments</span>
@@ -550,7 +550,7 @@ export const StaffReports: React.FC = () => {
                 {inventoryReport.recentTransactions.map((tx) => (
                   <div key={tx.id} className="px-6 py-3.5 flex items-center justify-between hover:bg-slate-50/50">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2818cf] flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2012ad] flex items-center justify-center">
                         <Package className="w-4 h-4" />
                       </div>
                       <div>

@@ -56,7 +56,7 @@ export const LeaveDetailsModal: React.FC<LeaveDetailsModalProps> = ({
 
         {/* Modal Header */}
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center font-bold">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center font-bold">
             <FileText className="w-6 h-6" />
           </div>
           <div>

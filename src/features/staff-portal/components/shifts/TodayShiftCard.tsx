@@ -44,7 +44,7 @@ export const TodayShiftCard: React.FC<TodayShiftCardProps> = ({
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center font-bold">
+          <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center font-bold">
             <Sunrise className="w-5 h-5" />
           </div>
           <div>
@@ -79,9 +79,9 @@ export const TodayShiftCard: React.FC<TodayShiftCardProps> = ({
             <button
               type="button"
               onClick={onRequestChange}
-              className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-[#2818cf] border border-indigo-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
+              className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-[#2012ad] border border-indigo-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
             >
-              <CalendarCheck className="w-3.5 h-3.5 text-[#2818cf]" />
+              <CalendarCheck className="w-3.5 h-3.5 text-[#2012ad]" />
               <span>Request Change</span>
             </button>
           </div>
@@ -215,7 +215,7 @@ export const TodayShiftCard: React.FC<TodayShiftCardProps> = ({
                 Grace Period
               </span>
               <div className="flex items-center gap-1.5">
-                <Clock className="w-4 h-4 text-[#2818cf]" />
+                <Clock className="w-4 h-4 text-[#2012ad]" />
                 <p className="text-sm font-extrabold text-slate-900">
                   {shift.graceMinutes} mins
                 </p>

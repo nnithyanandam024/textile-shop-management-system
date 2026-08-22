@@ -89,7 +89,7 @@ export const CustomerProfileModal: React.FC<CustomerProfileModalProps> = ({
 
         {loading ? (
           <div className="p-12 text-center text-slate-500">
-            <RefreshCw className="w-8 h-8 animate-spin text-[#2818cf] mx-auto mb-2" />
+            <RefreshCw className="w-8 h-8 animate-spin text-[#2012ad] mx-auto mb-2" />
             <span className="text-xs font-medium">Loading customer profile...</span>
           </div>
         ) : !profileData ? (
@@ -97,7 +97,7 @@ export const CustomerProfileModal: React.FC<CustomerProfileModalProps> = ({
         ) : (
           <>
             <div className="flex items-center gap-3 border-b border-slate-100 pb-4 mb-4">
-              <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2818cf] font-bold text-lg">
+              <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2012ad] font-bold text-lg">
                 {profileData.customer.name.substring(0, 2).toUpperCase()}
               </div>
               <div>
@@ -134,10 +134,10 @@ export const CustomerProfileModal: React.FC<CustomerProfileModalProps> = ({
               </div>
               <div className="p-3 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-between">
                 <div>
-                  <p className="text-[10px] font-semibold text-[#2818cf] uppercase">Receive Payment</p>
+                  <p className="text-[10px] font-semibold text-[#2012ad] uppercase">Receive Payment</p>
                   <button
                     onClick={() => setShowPayModal(true)}
-                    className="mt-1 px-3 py-1 bg-[#2818cf] text-white rounded-lg text-xs font-bold shadow-sm"
+                    className="mt-1 px-3 py-1 bg-[#2012ad] text-white rounded-lg text-xs font-bold shadow-sm"
                   >
                     + Record Payment
                   </button>
@@ -166,7 +166,7 @@ export const CustomerProfileModal: React.FC<CustomerProfileModalProps> = ({
                       <tr key={inv.id} className="hover:bg-slate-50/50">
                         <td className="p-2.5 font-mono font-bold text-slate-900">{inv.invoice_number}</td>
                         <td className="p-2.5 text-slate-500">{new Date(inv.sale_date).toLocaleDateString()}</td>
-                        <td className="p-2.5 font-extrabold text-[#2818cf]">₹{inv.total}</td>
+                        <td className="p-2.5 font-extrabold text-[#2012ad]">₹{inv.total}</td>
                         <td className="p-2.5">
                           <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded text-[10px] font-bold">
                             {inv.status}
@@ -211,7 +211,7 @@ export const CustomerProfileModal: React.FC<CustomerProfileModalProps> = ({
                     </div>
                     <div className="flex gap-2 pt-2">
                       <button type="button" onClick={() => setShowPayModal(false)} className="w-1/2 py-2 bg-slate-100 text-slate-700 text-xs font-bold rounded-xl">Cancel</button>
-                      <button type="submit" className="w-1/2 py-2 bg-[#2818cf] text-white text-xs font-bold rounded-xl shadow-md">Confirm Payment</button>
+                      <button type="submit" className="w-1/2 py-2 bg-[#2012ad] text-white text-xs font-bold rounded-xl shadow-md">Confirm Payment</button>
                     </div>
                   </form>
                 </div>

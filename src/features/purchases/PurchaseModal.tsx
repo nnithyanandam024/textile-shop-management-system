@@ -183,7 +183,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
       <div className="w-full max-w-4xl bg-white rounded-2xl border border-slate-200 shadow-2xl p-6 relative flex flex-col max-h-[90vh] animate-scale-up">
         <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-[#2818cf]">
+            <div className="w-10 h-10 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-[#2012ad]">
               <ShoppingBag className="w-5 h-5" />
             </div>
             <div>
@@ -257,7 +257,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
                       <span className="font-bold text-slate-900">{v.sku}</span>
                       <span className="text-slate-500 ml-2">({v.product_name || 'Item'})</span>
                     </div>
-                    <span className="font-extrabold text-[#2818cf]">Cost: ₹{v.cost_price || 500}</span>
+                    <span className="font-extrabold text-[#2012ad]">Cost: ₹{v.cost_price || 500}</span>
                   </div>
                 ))}
               </div>
@@ -316,7 +316,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
                           className="w-16 px-2 py-1 bg-slate-50 border border-slate-200 rounded font-bold"
                         />
                       </td>
-                      <td className="p-2.5 font-extrabold text-[#2818cf]">
+                      <td className="p-2.5 font-extrabold text-[#2012ad]">
                         ₹{item.quantity * item.unitCost - item.discount}
                       </td>
                       <td className="p-2.5 text-right">
@@ -362,12 +362,12 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
             <div className="text-right flex items-center gap-4">
               <div>
                 <p className="text-[10px] font-bold text-slate-500 uppercase">Grand Total</p>
-                <p className="text-xl font-extrabold text-[#2818cf]">₹{total}</p>
+                <p className="text-xl font-extrabold text-[#2012ad]">₹{total}</p>
               </div>
               <button
                 type="submit"
                 disabled={loading || cart.length === 0}
-                className="px-5 py-2.5 bg-[#2818cf] hover:bg-[#2012ad] text-white text-xs font-bold rounded-xl shadow-lg shadow-[#2818cf]/20 transition-all flex items-center gap-2"
+                className="px-5 py-2.5 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-xs font-bold rounded-xl shadow-lg shadow-[#2012ad]/20 transition-all flex items-center gap-2"
               >
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>Save Purchase</span>}
               </button>

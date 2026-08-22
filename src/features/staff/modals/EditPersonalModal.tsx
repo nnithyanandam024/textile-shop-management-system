@@ -95,7 +95,7 @@ export const EditPersonalModal: React.FC<EditPersonalModalProps> = ({
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full border border-slate-200/80 overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
               <User className="w-4 h-4" />
             </div>
             <div>
@@ -124,7 +124,7 @@ export const EditPersonalModal: React.FC<EditPersonalModalProps> = ({
                 <ImageIcon className="w-6 h-6 text-slate-300" />
               )}
             </div>
-            <label className="cursor-pointer text-xs font-bold text-[#2818cf] hover:underline flex items-center gap-1.5">
+            <label className="cursor-pointer text-xs font-bold text-[#2012ad] hover:underline flex items-center gap-1.5">
               <Upload className="w-3.5 h-3.5" />
               Upload New Photo
               <input type="file" accept="image/*" onChange={handlePhotoChange} className="hidden" />
@@ -156,7 +156,7 @@ export const EditPersonalModal: React.FC<EditPersonalModalProps> = ({
             <select
               value={gender}
               onChange={(e) => setGender(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
             >
               <option value="Male">Male</option>
               <option value="Female">Female</option>

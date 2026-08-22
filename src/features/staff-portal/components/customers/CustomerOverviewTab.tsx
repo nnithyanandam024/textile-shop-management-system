@@ -17,7 +17,7 @@ export const CustomerOverviewTab: React.FC<CustomerOverviewTabProps> = ({
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Spend */}
         <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center shrink-0">
             <DollarSign className="w-6 h-6" />
           </div>
           <div>
@@ -81,7 +81,7 @@ export const CustomerOverviewTab: React.FC<CustomerOverviewTabProps> = ({
         {/* Customer Milestone Info */}
         <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-4">
           <h4 className="text-xs font-extrabold text-slate-900 flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-[#2818cf]" />
+            <Calendar className="w-4 h-4 text-[#2012ad]" />
             <span>Customer History & Milestones</span>
           </h4>
 
@@ -114,7 +114,7 @@ export const CustomerOverviewTab: React.FC<CustomerOverviewTabProps> = ({
 
             <div className="py-2.5 flex items-center justify-between">
               <span className="text-slate-500 font-medium">Loyalty Lifetime Points</span>
-              <span className="font-extrabold text-[#2818cf] font-mono">
+              <span className="font-extrabold text-[#2012ad] font-mono">
                 {customer.lifetimePoints} Points
               </span>
             </div>
@@ -125,7 +125,7 @@ export const CustomerOverviewTab: React.FC<CustomerOverviewTabProps> = ({
         <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <h4 className="text-xs font-extrabold text-slate-900 flex items-center gap-2">
-              <Tag className="w-4 h-4 text-[#2818cf]" />
+              <Tag className="w-4 h-4 text-[#2012ad]" />
               <span>Textile Retail Preferences</span>
             </h4>
 

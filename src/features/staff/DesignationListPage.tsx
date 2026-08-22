@@ -134,12 +134,12 @@ export const DesignationListPage: React.FC = () => {
             <Card key={des.id} className="relative transition-all hover:shadow-md">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
                     <BadgeCheck className="w-5 h-5" />
                   </div>
                   <div>
                     <h3 className="text-sm font-bold text-slate-900">{des.name}</h3>
-                    <span className="inline-block px-2 py-0.5 mt-0.5 rounded-md text-[10px] font-bold bg-indigo-50 text-[#2818cf]">
+                    <span className="inline-block px-2 py-0.5 mt-0.5 rounded-md text-[10px] font-bold bg-indigo-50 text-[#2012ad]">
                       {des.department_name}
                     </span>
                   </div>

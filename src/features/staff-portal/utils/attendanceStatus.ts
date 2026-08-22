@@ -33,11 +33,11 @@ export const ATTENDANCE_STATUS_MAP: Record<AttendanceStatusCode, AttendanceStatu
   },
   WORKING: {
     label: 'In Progress (Working)',
-    badgeClass: 'bg-indigo-50 text-[#2818cf] border-indigo-200 animate-pulse',
-    dotClass: 'bg-[#2818cf]',
+    badgeClass: 'bg-indigo-50 text-[#2012ad] border-indigo-200 animate-pulse',
+    dotClass: 'bg-[#2012ad]',
     calendarSymbol: '●',
     bgLight: 'bg-indigo-50',
-    textColor: 'text-[#2818cf]',
+    textColor: 'text-[#2012ad]',
     borderColor: 'border-indigo-200',
   },
   ON_BREAK: {

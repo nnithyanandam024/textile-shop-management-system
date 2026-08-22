@@ -79,7 +79,7 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
         {/* Header */}
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
               <ArrowRightLeft className="w-4 h-4" />
             </div>
             <div>
@@ -111,7 +111,7 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
           {/* Current Stock Banner */}
           <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/80 flex items-center justify-between">
             <span className="font-bold text-slate-600">Available Stock for Transfer:</span>
-            <strong className="text-sm font-extrabold text-[#2818cf] font-mono">
+            <strong className="text-sm font-extrabold text-[#2012ad] font-mono">
               {product.currentStock} pcs
             </strong>
           </div>
@@ -123,7 +123,7 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
               <select
                 value={fromLocation}
                 onChange={(e) => setFromLocation(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               >
                 <option value="Main Shop">Main Shop</option>
                 <option value="Warehouse">Warehouse</option>
@@ -137,7 +137,7 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
               <select
                 value={toLocation}
                 onChange={(e) => setToLocation(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               >
                 <option value="Warehouse">Warehouse</option>
                 <option value="Branch 02">Branch 02</option>
@@ -159,7 +159,7 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
               required
               value={quantity}
               onChange={(e) => setQuantity(Number(e.target.value))}
-              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-extrabold text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-extrabold text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
             />
           </div>
 
@@ -174,7 +174,7 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               placeholder="e.g. Replenish Branch 02 weekend showcase display"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
             />
           </div>
 
@@ -198,7 +198,7 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
             <button
               type="submit"
               disabled={submitting}
-              className="px-4 py-2 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 disabled:opacity-50"
+              className="px-4 py-2 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 disabled:opacity-50"
             >
               {submitting ? 'Submitting...' : 'Request Stock Transfer'}
             </button>

@@ -25,7 +25,7 @@ export const StaffProfileModal: React.FC<StaffProfileModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full border border-slate-200/80 overflow-hidden">
         {/* Header Banner */}
-        <div className="h-28 bg-gradient-to-r from-[#2818cf] to-indigo-600 relative p-6 flex items-start justify-between">
+        <div className="h-28 bg-gradient-to-r from-[#2012ad] to-indigo-600 relative p-6 flex items-start justify-between">
           <span className="px-3 py-1 bg-white/20 backdrop-blur-md border border-white/30 text-white rounded-full text-[10px] font-bold tracking-wider uppercase">
             {staff.staff_code}
           </span>
@@ -45,7 +45,7 @@ export const StaffProfileModal: React.FC<StaffProfileModalProps> = ({
               {staff.photo_path ? (
                 <img src={`file://${staff.photo_path}`} alt={fullName} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full bg-indigo-50 text-[#2818cf] flex items-center justify-center text-2xl font-bold">
+                <div className="w-full h-full bg-indigo-50 text-[#2012ad] flex items-center justify-center text-2xl font-bold">
                   {staff.first_name[0]}
                 </div>
               )}
@@ -78,7 +78,7 @@ export const StaffProfileModal: React.FC<StaffProfileModalProps> = ({
               </span>
             </div>
             <p className="text-xs font-semibold text-slate-500 mt-0.5">
-              {staff.designation_name} — <span className="text-[#2818cf]">{staff.department_name}</span>
+              {staff.designation_name} — <span className="text-[#2012ad]">{staff.department_name}</span>
             </p>
           </div>
 

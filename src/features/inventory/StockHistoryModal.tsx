@@ -60,7 +60,7 @@ export const StockHistoryModal: React.FC<StockHistoryModalProps> = ({
         </button>
 
         <div className="flex items-center gap-3 border-b border-slate-100 pb-3 mb-4">
-          <div className="w-10 h-10 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-[#2818cf]">
+          <div className="w-10 h-10 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-[#2012ad]">
             <History className="w-5 h-5" />
           </div>
           <div>
@@ -74,7 +74,7 @@ export const StockHistoryModal: React.FC<StockHistoryModalProps> = ({
         <div className="flex-1 overflow-y-auto pr-1 border border-slate-200 rounded-xl">
           {loading ? (
             <div className="p-12 text-center text-slate-500">
-              <RefreshCw className="w-8 h-8 animate-spin text-[#2818cf] mx-auto mb-2" />
+              <RefreshCw className="w-8 h-8 animate-spin text-[#2012ad] mx-auto mb-2" />
               <span className="text-xs font-medium">Loading ledger transactions...</span>
             </div>
           ) : history.length === 0 ? (

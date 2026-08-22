@@ -93,7 +93,7 @@ export const POSCartSummary: React.FC<POSCartSummaryProps> = ({
           type="button"
           disabled={isCartEmpty}
           onClick={onOpenPaymentModal}
-          className="col-span-2 py-3 px-4 rounded-2xl bg-[#2818cf] hover:bg-indigo-700 text-white text-xs font-extrabold flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/25 transition-all disabled:opacity-40"
+          className="col-span-2 py-3 px-4 rounded-2xl bg-[#2012ad] hover:bg-indigo-700 text-white text-xs font-extrabold flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/25 transition-all disabled:opacity-40"
         >
           <span>Proceed to Pay</span>
           <ArrowRight className="w-4 h-4" />

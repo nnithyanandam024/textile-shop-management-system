@@ -22,7 +22,7 @@ export const StaffMySales: React.FC = () => {
     <div className="space-y-6 select-none max-w-7xl mx-auto pb-12">
       {/* Page Header */}
       <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-xs flex items-center gap-3">
-        <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center">
+        <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center">
           <TrendingUp className="w-6 h-6" />
         </div>
         <div>

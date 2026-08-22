@@ -115,7 +115,7 @@ export const ApplyLeaveModal: React.FC<ApplyLeaveModalProps> = ({
 
         {/* Header */}
         <div className="text-center mb-1">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center mx-auto mb-2 font-bold">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center mx-auto mb-2 font-bold">
             <Plus className="w-6 h-6" />
           </div>
           <h2 className="text-base font-extrabold text-slate-900">Apply For Leave</h2>
@@ -141,7 +141,7 @@ export const ApplyLeaveModal: React.FC<ApplyLeaveModalProps> = ({
               value={leaveTypeId}
               onChange={(e) => setLeaveTypeId(Number(e.target.value))}
               disabled={isSubmitting}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white cursor-pointer"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white cursor-pointer"
             >
               {leaveTypes.map((t) => (
                 <option key={t.id} value={t.id}>
@@ -154,7 +154,7 @@ export const ApplyLeaveModal: React.FC<ApplyLeaveModalProps> = ({
             {selectedBalance && (
               <div className="mt-1.5 flex items-center justify-between text-[11px] px-2.5 py-1 bg-slate-50 rounded-lg border border-slate-100">
                 <span className="text-slate-500 font-semibold">Available Quota:</span>
-                <span className={`font-extrabold ${selectedBalance.availableDays > 0 ? 'text-[#2818cf]' : 'text-rose-600'}`}>
+                <span className={`font-extrabold ${selectedBalance.availableDays > 0 ? 'text-[#2012ad]' : 'text-rose-600'}`}>
                   {selectedBalance.availableDays} Days
                 </span>
               </div>
@@ -172,7 +172,7 @@ export const ApplyLeaveModal: React.FC<ApplyLeaveModalProps> = ({
                 onClick={() => setDurationType('FULL_DAY')}
                 className={`py-2 px-3 rounded-xl border text-xs font-bold transition-all ${
                   durationType === 'FULL_DAY'
-                    ? 'bg-[#2818cf] text-white border-[#2818cf] shadow-xs'
+                    ? 'bg-[#2012ad] text-white border-[#2012ad] shadow-xs'
                     : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                 }`}
               >
@@ -183,7 +183,7 @@ export const ApplyLeaveModal: React.FC<ApplyLeaveModalProps> = ({
                 onClick={() => setDurationType('HALF_DAY')}
                 className={`py-2 px-3 rounded-xl border text-xs font-bold transition-all ${
                   durationType === 'HALF_DAY'
-                    ? 'bg-[#2818cf] text-white border-[#2818cf] shadow-xs'
+                    ? 'bg-[#2012ad] text-white border-[#2012ad] shadow-xs'
                     : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                 }`}
               >
@@ -204,7 +204,7 @@ export const ApplyLeaveModal: React.FC<ApplyLeaveModalProps> = ({
                   onClick={() => setSession('MORNING')}
                   className={`py-1.5 px-2 rounded-lg text-xs font-bold border transition-all ${
                     session === 'MORNING'
-                      ? 'bg-white text-[#2818cf] border-[#2818cf] shadow-xs'
+                      ? 'bg-white text-[#2012ad] border-[#2012ad] shadow-xs'
                       : 'bg-transparent text-slate-600 border-slate-200 hover:bg-white/50'
                   }`}
                 >
@@ -215,7 +215,7 @@ export const ApplyLeaveModal: React.FC<ApplyLeaveModalProps> = ({
                   onClick={() => setSession('AFTERNOON')}
                   className={`py-1.5 px-2 rounded-lg text-xs font-bold border transition-all ${
                     session === 'AFTERNOON'
-                      ? 'bg-white text-[#2818cf] border-[#2818cf] shadow-xs'
+                      ? 'bg-white text-[#2012ad] border-[#2012ad] shadow-xs'
                       : 'bg-transparent text-slate-600 border-slate-200 hover:bg-white/50'
                   }`}
                 >
@@ -241,7 +241,7 @@ export const ApplyLeaveModal: React.FC<ApplyLeaveModalProps> = ({
                     if (durationType === 'HALF_DAY') setEndDate(e.target.value);
                   }}
                   disabled={isSubmitting}
-                  className="w-full pl-9 pr-2.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white"
+                  className="w-full pl-9 pr-2.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white"
                 />
               </div>
             </div>
@@ -258,7 +258,7 @@ export const ApplyLeaveModal: React.FC<ApplyLeaveModalProps> = ({
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
                     disabled={isSubmitting}
-                    className="w-full pl-9 pr-2.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white"
+                    className="w-full pl-9 pr-2.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white"
                   />
                 </div>
               </div>
@@ -278,7 +278,7 @@ export const ApplyLeaveModal: React.FC<ApplyLeaveModalProps> = ({
           {durationType === 'FULL_DAY' && (
             <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between text-xs">
               <span className="text-slate-500 font-semibold">Total Calculated Duration:</span>
-              <span className="font-extrabold text-[#2818cf] font-mono">
+              <span className="font-extrabold text-[#2012ad] font-mono">
                 {calculatedDuration} {calculatedDuration === 1 ? 'Day' : 'Days'}
               </span>
             </div>
@@ -305,7 +305,7 @@ export const ApplyLeaveModal: React.FC<ApplyLeaveModalProps> = ({
               rows={3}
               placeholder="Explain context for your leave (e.g. Family function, Medical emergency)..."
               disabled={isSubmitting}
-              className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white resize-none"
+              className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white resize-none"
             />
           </div>
 
@@ -322,7 +322,7 @@ export const ApplyLeaveModal: React.FC<ApplyLeaveModalProps> = ({
             <button
               type="submit"
               disabled={isSubmitting || isBalanceInsufficient}
-              className="flex-1 py-3 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center justify-center gap-1.5 disabled:opacity-50"
+              className="flex-1 py-3 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center justify-center gap-1.5 disabled:opacity-50"
             >
               {isSubmitting ? (
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />

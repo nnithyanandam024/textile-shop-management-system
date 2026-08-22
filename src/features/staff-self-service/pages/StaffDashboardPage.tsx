@@ -40,7 +40,7 @@ export const StaffDashboardPage: React.FC = () => {
   if (loading || !data) {
     return (
       <div className="p-8 text-center">
-        <div className="w-8 h-8 border-4 border-[#2818cf] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+        <div className="w-8 h-8 border-4 border-[#2012ad] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
         <p className="text-xs font-semibold text-slate-500">Loading your personal workspace...</p>
       </div>
     );
@@ -51,7 +51,7 @@ export const StaffDashboardPage: React.FC = () => {
   return (
     <div className="space-y-6 pb-12">
       {/* Greeting Banner */}
-      <Card className="p-6 bg-gradient-to-r from-indigo-900 via-indigo-800 to-[#2818cf] text-white rounded-3xl shadow-xl relative overflow-hidden">
+      <Card className="p-6 bg-gradient-to-r from-indigo-900 via-indigo-800 to-[#2012ad] text-white rounded-3xl shadow-xl relative overflow-hidden">
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-white/90 text-[11px] font-extrabold mb-2 backdrop-blur-md">
@@ -117,11 +117,11 @@ export const StaffDashboardPage: React.FC = () => {
         <Card className="p-4 bg-white border border-slate-200/80">
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Leave Balance</span>
-            <div className="p-2 rounded-xl bg-indigo-50 text-[#2818cf]">
+            <div className="p-2 rounded-xl bg-indigo-50 text-[#2012ad]">
               <Calendar className="w-4 h-4" />
             </div>
           </div>
-          <p className="text-lg font-extrabold text-[#2818cf] mt-2">
+          <p className="text-lg font-extrabold text-[#2012ad] mt-2">
             {leaveBalance?.remaining || 14} Days Remaining
           </p>
           <span className="text-[11px] font-semibold text-slate-500">
@@ -162,7 +162,7 @@ export const StaffDashboardPage: React.FC = () => {
           <Button
             variant="outline"
             className="w-full bg-white justify-start"
-            icon={<Calendar className="w-4 h-4 text-[#2818cf]" />}
+            icon={<Calendar className="w-4 h-4 text-[#2012ad]" />}
             onClick={() => navigate('/self-service/leave')}
           >
             Apply Leave
@@ -205,7 +205,7 @@ export const StaffDashboardPage: React.FC = () => {
             <h3 className="text-sm font-bold text-slate-900">Personal Information Summary</h3>
             <button
               onClick={() => navigate('/self-service/profile')}
-              className="text-xs font-extrabold text-[#2818cf] hover:underline flex items-center gap-1"
+              className="text-xs font-extrabold text-[#2012ad] hover:underline flex items-center gap-1"
             >
               View Full Profile <ArrowRight className="w-3.5 h-3.5" />
             </button>
@@ -240,7 +240,7 @@ export const StaffDashboardPage: React.FC = () => {
             <h3 className="text-sm font-bold text-slate-900">Work Schedule Overview</h3>
             <button
               onClick={() => navigate('/self-service/shifts')}
-              className="text-xs font-extrabold text-[#2818cf] hover:underline flex items-center gap-1"
+              className="text-xs font-extrabold text-[#2012ad] hover:underline flex items-center gap-1"
             >
               Weekly Schedule <ArrowRight className="w-3.5 h-3.5" />
             </button>

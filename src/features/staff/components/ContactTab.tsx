@@ -13,7 +13,7 @@ export const ContactTab: React.FC<ContactTabProps> = ({ staff, onEdit }) => {
     <Card className="space-y-6">
       <div className="flex items-center justify-between border-b border-slate-100 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+          <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
             <Phone className="w-4 h-4" />
           </div>
           <div>

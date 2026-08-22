@@ -130,7 +130,7 @@ export const ContactInformation: React.FC<ContactInformationProps> = ({
       {/* Card Header */}
       <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2818cf] flex items-center justify-center font-bold">
+          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2012ad] flex items-center justify-center font-bold">
             <Phone className="w-4 h-4" />
           </div>
           <div>
@@ -147,7 +147,7 @@ export const ContactInformation: React.FC<ContactInformationProps> = ({
           <button
             type="button"
             onClick={() => setIsEditing(true)}
-            className="px-3 py-1.5 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-[#2818cf] border border-slate-200 hover:border-indigo-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95"
+            className="px-3 py-1.5 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-[#2012ad] border border-slate-200 hover:border-indigo-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95"
           >
             <Edit3 className="w-3.5 h-3.5" />
             <span>Edit</span>
@@ -167,7 +167,7 @@ export const ContactInformation: React.FC<ContactInformationProps> = ({
               type="button"
               onClick={handleSave}
               disabled={isSaving}
-              className="px-3 py-1.5 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-1.5"
+              className="px-3 py-1.5 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-1.5"
             >
               {isSaving ? (
                 <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -206,7 +206,7 @@ export const ContactInformation: React.FC<ContactInformationProps> = ({
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+91 98765 43210"
                 disabled={isSaving}
-                className="w-full pl-9 pr-3.5 py-2.5 bg-white border border-indigo-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                className="w-full pl-9 pr-3.5 py-2.5 bg-white border border-indigo-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               />
             </div>
           ) : (
@@ -231,7 +231,7 @@ export const ContactInformation: React.FC<ContactInformationProps> = ({
                 onChange={(e) => setAltPhone(e.target.value)}
                 placeholder="Optional second number"
                 disabled={isSaving}
-                className="w-full pl-9 pr-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                className="w-full pl-9 pr-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               />
             </div>
           ) : (
@@ -255,7 +255,7 @@ export const ContactInformation: React.FC<ContactInformationProps> = ({
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="employee@texora.shop"
                 disabled={isSaving}
-                className="w-full pl-9 pr-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                className="w-full pl-9 pr-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               />
             </div>
           ) : (
@@ -280,7 +280,7 @@ export const ContactInformation: React.FC<ContactInformationProps> = ({
                 onChange={(e) => setAddr1(e.target.value)}
                 placeholder="House / Door No, Street, Landmark"
                 disabled={isSaving}
-                className="w-full pl-9 pr-3.5 py-2.5 bg-white border border-indigo-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                className="w-full pl-9 pr-3.5 py-2.5 bg-white border border-indigo-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               />
             </div>
           ) : (
@@ -303,7 +303,7 @@ export const ContactInformation: React.FC<ContactInformationProps> = ({
               onChange={(e) => setCity(e.target.value)}
               placeholder="e.g. Coimbatore"
               disabled={isSaving}
-              className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+              className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
             />
           ) : (
             <p className="text-xs font-bold text-slate-800 bg-slate-50/60 px-3.5 py-2.5 rounded-xl border border-slate-100">
@@ -323,7 +323,7 @@ export const ContactInformation: React.FC<ContactInformationProps> = ({
               onChange={(e) => setState(e.target.value)}
               placeholder="e.g. Tamil Nadu"
               disabled={isSaving}
-              className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+              className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
             />
           ) : (
             <p className="text-xs font-bold text-slate-800 bg-slate-50/60 px-3.5 py-2.5 rounded-xl border border-slate-100">
@@ -343,7 +343,7 @@ export const ContactInformation: React.FC<ContactInformationProps> = ({
               onChange={(e) => setPincode(e.target.value)}
               placeholder="641012"
               disabled={isSaving}
-              className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+              className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
             />
           ) : (
             <p className="text-xs font-bold text-slate-800 bg-slate-50/60 px-3.5 py-2.5 rounded-xl border border-slate-100 font-mono">

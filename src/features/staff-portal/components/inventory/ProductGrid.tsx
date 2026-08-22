@@ -114,7 +114,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                   Price
                 </span>
-                <strong className="text-base font-extrabold text-[#2818cf] font-mono">
+                <strong className="text-base font-extrabold text-[#2012ad] font-mono">
                   ₹{p.sellingPrice.toLocaleString('en-IN')}
                 </strong>
               </div>
@@ -135,7 +135,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
               <button
                 type="button"
                 onClick={() => onCountStock(p)}
-                className="px-2 py-2 bg-indigo-50 hover:bg-indigo-100 text-[#2818cf] rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1"
+                className="px-2 py-2 bg-indigo-50 hover:bg-indigo-100 text-[#2012ad] rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1"
                 title="Count Stock"
               >
                 <ClipboardCheck className="w-3.5 h-3.5" />

@@ -66,7 +66,7 @@ export const MyProfilePage: React.FC = () => {
   if (loading || !profile) {
     return (
       <div className="p-8 text-center">
-        <div className="w-8 h-8 border-4 border-[#2818cf] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+        <div className="w-8 h-8 border-4 border-[#2012ad] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
         <p className="text-xs font-semibold text-slate-500">Loading profile details...</p>
       </div>
     );
@@ -77,7 +77,7 @@ export const MyProfilePage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf] shadow-sm">
+          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad] shadow-sm">
             <User className="w-5 h-5" />
           </div>
           <div>
@@ -129,12 +129,12 @@ export const MyProfilePage: React.FC = () => {
 
             <div>
               <span className="text-slate-400 font-bold block text-[10px] uppercase">Department</span>
-              <span className="font-extrabold text-[#2818cf]">{profile.department_name || 'N/A'}</span>
+              <span className="font-extrabold text-[#2012ad]">{profile.department_name || 'N/A'}</span>
             </div>
 
             <div>
               <span className="text-slate-400 font-bold block text-[10px] uppercase">Designation</span>
-              <span className="font-extrabold text-[#2818cf]">{profile.designation_name || 'N/A'}</span>
+              <span className="font-extrabold text-[#2012ad]">{profile.designation_name || 'N/A'}</span>
             </div>
 
             <div>
@@ -218,7 +218,7 @@ export const MyProfilePage: React.FC = () => {
                   <tr key={r.id} className="hover:bg-slate-50/60">
                     <td className="py-3 px-4 font-bold text-slate-900">{r.field_name}</td>
                     <td className="py-3 px-4 text-slate-500">{r.old_value || '—'}</td>
-                    <td className="py-3 px-4 font-bold text-[#2818cf]">{r.new_value}</td>
+                    <td className="py-3 px-4 font-bold text-[#2012ad]">{r.new_value}</td>
                     <td className="py-3 px-4 text-slate-600 max-w-xs truncate">{r.reason}</td>
                     <td className="py-3 px-4">
                       <span

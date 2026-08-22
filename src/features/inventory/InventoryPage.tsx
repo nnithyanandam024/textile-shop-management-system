@@ -114,7 +114,7 @@ export const InventoryPage: React.FC = () => {
       {/* Header Card */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2818cf]">
+          <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2012ad]">
             <Boxes className="w-6 h-6" />
           </div>
           <div>
@@ -128,7 +128,7 @@ export const InventoryPage: React.FC = () => {
             onClick={() => setShowFullHistory(true)}
             className="px-4 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 transition-all flex items-center gap-2"
           >
-            <History className="w-4 h-4 text-[#2818cf]" />
+            <History className="w-4 h-4 text-[#2012ad]" />
             <span>Full Audit Ledger</span>
           </button>
           <button
@@ -148,7 +148,7 @@ export const InventoryPage: React.FC = () => {
             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Variants</p>
             <h3 className="text-2xl font-bold text-slate-900 mt-1">{metrics.totalVariants}</h3>
           </div>
-          <div className="w-12 h-12 bg-indigo-50 text-[#2818cf] rounded-2xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-indigo-50 text-[#2012ad] rounded-2xl flex items-center justify-center">
             <Layers className="w-6 h-6" />
           </div>
         </div>
@@ -191,7 +191,7 @@ export const InventoryPage: React.FC = () => {
           <button
             onClick={() => setActiveTab('ALL')}
             className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
-              activeTab === 'ALL' ? 'bg-white text-[#2818cf] shadow-sm font-bold' : 'text-slate-600 hover:text-slate-900'
+              activeTab === 'ALL' ? 'bg-white text-[#2012ad] shadow-sm font-bold' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             All Stock Items ({metrics.totalVariants})
@@ -222,7 +222,7 @@ export const InventoryPage: React.FC = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search SKU, Barcode, Product Name, Size, Color..."
-            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
           />
         </div>
       </div>
@@ -231,7 +231,7 @@ export const InventoryPage: React.FC = () => {
       <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden">
         {loading ? (
           <div className="p-12 text-center text-slate-500">
-            <RefreshCw className="w-8 h-8 animate-spin text-[#2818cf] mx-auto mb-2" />
+            <RefreshCw className="w-8 h-8 animate-spin text-[#2012ad] mx-auto mb-2" />
             <span className="text-sm font-medium">Loading inventory data...</span>
           </div>
         ) : filteredVariants.length === 0 ? (
@@ -277,7 +277,7 @@ export const InventoryPage: React.FC = () => {
                   <td className="px-6 py-4 text-right space-x-2">
                     <button
                       onClick={() => setSelectedVariantForAdjust(v)}
-                      className="px-3 py-1.5 bg-[#2818cf] hover:bg-[#2012ad] text-white rounded-lg text-xs font-semibold transition-all shadow-sm"
+                      className="px-3 py-1.5 bg-[#2012ad] hover:bg-[#1a0e91] text-white rounded-lg text-xs font-semibold transition-all shadow-sm"
                     >
                       Adjust Stock
                     </button>

@@ -21,7 +21,7 @@ export const Header: React.FC = () => {
           <input
             type="text"
             placeholder="Search items, invoices, customers... (Ctrl + K)"
-            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200/80 rounded-xl text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2818cf] focus:bg-white transition-all"
+            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200/80 rounded-xl text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2012ad] focus:bg-white transition-all"
           />
         </div>
       </div>
@@ -51,7 +51,7 @@ export const Header: React.FC = () => {
             onClick={() => setShowMenu(!showMenu)}
             className="flex items-center gap-3 p-1.5 pl-2.5 rounded-xl border border-slate-200/80 hover:bg-slate-50 transition-all text-left"
           >
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf] font-bold text-xs">
+            <div className="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad] font-bold text-xs">
               {currentUser?.displayName ? currentUser.displayName.charAt(0).toUpperCase() : 'U'}
             </div>
             <div className="hidden sm:block">
@@ -78,7 +78,7 @@ export const Header: React.FC = () => {
                   setShowMenu(false);
                   lockScreen();
                 }}
-                className="w-full px-4 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-[#2818cf] flex items-center gap-2 transition-colors"
+                className="w-full px-4 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-[#2012ad] flex items-center gap-2 transition-colors"
               >
                 <Lock className="w-4 h-4" />
                 <span>Lock Station</span>
@@ -89,7 +89,7 @@ export const Header: React.FC = () => {
                   setShowMenu(false);
                   setShowChangePass(true);
                 }}
-                className="w-full px-4 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-[#2818cf] flex items-center gap-2 transition-colors"
+                className="w-full px-4 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-[#2012ad] flex items-center gap-2 transition-colors"
               >
                 <KeyRound className="w-4 h-4" />
                 <span>Change Password</span>

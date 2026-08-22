@@ -80,7 +80,7 @@ export const DocumentsTab: React.FC<DocumentsTabProps> = ({
                   <td className="py-3 px-4 font-bold text-slate-900">
                     {doc.document_type}
                   </td>
-                  <td className="py-3 px-4 font-mono text-[#2818cf]">
+                  <td className="py-3 px-4 font-mono text-[#2012ad]">
                     {doc.file_name}
                   </td>
                   <td className="py-3 px-4 text-slate-500">

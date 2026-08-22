@@ -73,7 +73,7 @@ export const DashboardPage: React.FC = () => {
             onClick={fetchDashboardData}
             className="px-4 py-2 bg-white border border-slate-200 rounded-xl text-slate-700 text-xs font-bold shadow-sm hover:bg-slate-50 transition-all flex items-center gap-2"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#2818cf]' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#2012ad]' : ''}`} />
             <span>Refresh Data</span>
           </button>
         </div>
@@ -84,7 +84,7 @@ export const DashboardPage: React.FC = () => {
         {/* Today's Sales */}
         <Card>
           <div className="flex items-center justify-between">
-            <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-[#2818cf]">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-[#2012ad]">
               <ShoppingCart className="w-5 h-5" />
             </div>
             <span className="text-[10px] font-bold text-slate-400 uppercase">TODAY'S SALES</span>
@@ -207,8 +207,8 @@ export const DashboardPage: React.FC = () => {
                 <AreaChart data={salesTrend.length > 0 ? salesTrend : [{ date: 'Today', sales: kpis?.today_sales || 0 }]} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#2818cf" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#2818cf" stopOpacity={0.0} />
+                      <stop offset="5%" stopColor="#2012ad" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#2012ad" stopOpacity={0.0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
@@ -223,7 +223,7 @@ export const DashboardPage: React.FC = () => {
                       boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
                     }}
                   />
-                  <Area type="monotone" dataKey="sales" name="Sales Revenue (₹)" stroke="#2818cf" strokeWidth={2.5} fillOpacity={1} fill="url(#colorSales)" />
+                  <Area type="monotone" dataKey="sales" name="Sales Revenue (₹)" stroke="#2012ad" strokeWidth={2.5} fillOpacity={1} fill="url(#colorSales)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -275,7 +275,7 @@ export const DashboardPage: React.FC = () => {
               bestSellers.map((b, idx) => (
                 <div key={idx} className="p-3.5 flex items-center justify-between hover:bg-slate-50">
                   <div className="flex items-center gap-3">
-                    <span className="w-6 h-6 rounded-lg bg-indigo-50 text-[#2818cf] font-bold text-xs flex items-center justify-center">
+                    <span className="w-6 h-6 rounded-lg bg-indigo-50 text-[#2012ad] font-bold text-xs flex items-center justify-center">
                       #{idx + 1}
                     </span>
                     <div>
@@ -284,7 +284,7 @@ export const DashboardPage: React.FC = () => {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-xs font-extrabold text-[#2818cf]">₹{b.total_revenue}</p>
+                    <p className="text-xs font-extrabold text-[#2012ad]">₹{b.total_revenue}</p>
                     <p className="text-[10px] font-semibold text-slate-500">{b.total_qty} units sold</p>
                   </div>
                 </div>

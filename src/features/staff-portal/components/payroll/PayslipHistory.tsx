@@ -65,7 +65,7 @@ export const PayslipHistory: React.FC<PayslipHistoryProps> = ({ history, onViewP
                     -₹{h.totalDeductions.toLocaleString('en-IN')}
                   </td>
 
-                  <td className="py-3 px-3 font-extrabold text-[#2818cf] font-mono whitespace-nowrap">
+                  <td className="py-3 px-3 font-extrabold text-[#2012ad] font-mono whitespace-nowrap">
                     ₹{h.netSalary.toLocaleString('en-IN')}
                   </td>
 

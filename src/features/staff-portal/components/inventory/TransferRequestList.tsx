@@ -75,7 +75,7 @@ export const TransferRequestList: React.FC<TransferRequestListProps> = ({ transf
                       {t.fromLocation} → <strong className="text-slate-900">{t.toLocation}</strong>
                     </td>
 
-                    <td className="py-3 px-3 text-center font-mono font-extrabold text-[#2818cf]">
+                    <td className="py-3 px-3 text-center font-mono font-extrabold text-[#2012ad]">
                       {t.quantity} pcs
                     </td>
 

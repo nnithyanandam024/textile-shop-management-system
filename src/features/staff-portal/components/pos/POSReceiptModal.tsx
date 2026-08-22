@@ -140,7 +140,7 @@ export const POSReceiptModal: React.FC<POSReceiptModalProps> = ({
           <button
             type="button"
             onClick={handlePrint}
-            className="px-5 py-2.5 rounded-2xl bg-[#2818cf] hover:bg-indigo-700 text-white text-xs font-extrabold flex items-center gap-2 shadow-lg shadow-indigo-600/25 transition-all"
+            className="px-5 py-2.5 rounded-2xl bg-[#2012ad] hover:bg-indigo-700 text-white text-xs font-extrabold flex items-center gap-2 shadow-lg shadow-indigo-600/25 transition-all"
           >
             <Printer className="w-4 h-4" />
             <span>Print Receipt</span>

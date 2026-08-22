@@ -37,7 +37,7 @@ export const ALL_DEMO_ACCOUNTS: DemoAccount[] = [
   {
     label: 'Arun Kumar',
     role: 'Cashier',
-    badgeBg: 'bg-indigo-50 text-[#2818cf] border-indigo-200',
+    badgeBg: 'bg-indigo-50 text-[#2012ad] border-indigo-200',
     idText: 'arun.cashier / STF-0002',
     username: 'arun.cashier',
     password: 'password123',
@@ -90,11 +90,11 @@ export const DemoCredentialsHelper: React.FC<DemoCredentialsHelperProps> = ({ on
         className="w-full px-4 py-2.5 flex items-center justify-between text-left hover:bg-slate-100/80 transition-colors"
       >
         <div className="flex items-center gap-2">
-          <KeyRound className="w-4 h-4 text-[#2818cf]" />
+          <KeyRound className="w-4 h-4 text-[#2012ad]" />
           <span className="text-xs font-extrabold text-slate-800 tracking-tight">
             Quick Demo Accounts
           </span>
-          <span className="text-[10px] font-bold bg-indigo-50 text-[#2818cf] px-1.5 py-0.5 rounded border border-indigo-100">
+          <span className="text-[10px] font-bold bg-indigo-50 text-[#2012ad] px-1.5 py-0.5 rounded border border-indigo-100">
             Password: password123
           </span>
         </div>
@@ -120,7 +120,7 @@ export const DemoCredentialsHelper: React.FC<DemoCredentialsHelperProps> = ({ on
               >
                 <div className="min-w-0 pr-2">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-extrabold text-slate-900 group-hover:text-[#2818cf] transition-colors truncate">
+                    <span className="text-xs font-extrabold text-slate-900 group-hover:text-[#2012ad] transition-colors truncate">
                       {acc.label}
                     </span>
                     <span
@@ -140,7 +140,7 @@ export const DemoCredentialsHelper: React.FC<DemoCredentialsHelperProps> = ({ on
                     e.stopPropagation();
                     handleFill(acc, index);
                   }}
-                  className="px-2.5 py-1 bg-slate-100 hover:bg-[#2818cf] text-slate-700 hover:text-white rounded-lg text-[10px] font-bold transition-all shrink-0 flex items-center gap-1"
+                  className="px-2.5 py-1 bg-slate-100 hover:bg-[#2012ad] text-slate-700 hover:text-white rounded-lg text-[10px] font-bold transition-all shrink-0 flex items-center gap-1"
                 >
                   {copiedIndex === index ? (
                     <>

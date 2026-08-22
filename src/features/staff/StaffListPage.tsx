@@ -158,7 +158,7 @@ export const StaffListPage: React.FC = () => {
       {/* KPI Overview Bar */}
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
         <Card className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+          <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
             <Users2 className="w-5 h-5" />
           </div>
           <div>
@@ -212,7 +212,7 @@ export const StaffListPage: React.FC = () => {
                 setSearch(e.target.value);
                 setPage(1);
               }}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-xs font-semibold text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] transition-all"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-xs font-semibold text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] transition-all"
             />
           </div>
 
@@ -321,13 +321,13 @@ export const StaffListPage: React.FC = () => {
                   const comp = s.profile_completion || 0;
                   return (
                     <tr key={s.id} className="hover:bg-slate-50/60 transition-all cursor-pointer" onClick={() => navigate(`/staff/profile/${s.id}`)}>
-                      <td className="py-3 px-4 font-mono font-bold text-[#2818cf]">
+                      <td className="py-3 px-4 font-mono font-bold text-[#2012ad]">
                         {s.staff_code}
                       </td>
 
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf] font-bold overflow-hidden shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad] font-bold overflow-hidden shrink-0">
                             {s.photo_path ? (
                               <img src={`file://${s.photo_path}`} alt={fullName} className="w-full h-full object-cover" />
                             ) : (
@@ -335,7 +335,7 @@ export const StaffListPage: React.FC = () => {
                             )}
                           </div>
                           <div>
-                            <p className="font-bold text-slate-900 hover:text-[#2818cf]">{fullName}</p>
+                            <p className="font-bold text-slate-900 hover:text-[#2012ad]">{fullName}</p>
                             <p className="text-[10px] text-slate-400">Joined: {s.joining_date}</p>
                           </div>
                         </div>
@@ -348,7 +348,7 @@ export const StaffListPage: React.FC = () => {
 
                       <td className="py-3 px-4">
                         <p className="font-bold text-slate-900">{s.designation_name}</p>
-                        <p className="text-[10px] font-semibold text-[#2818cf]">{s.department_name}</p>
+                        <p className="text-[10px] font-semibold text-[#2012ad]">{s.department_name}</p>
                       </td>
 
                       <td className="py-3 px-4">
@@ -358,7 +358,7 @@ export const StaffListPage: React.FC = () => {
                       </td>
 
                       <td className="py-3 px-4">
-                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-indigo-50 text-[#2818cf] border border-indigo-100 font-mono">
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-indigo-50 text-[#2012ad] border border-indigo-100 font-mono">
                           {comp}%
                         </span>
                       </td>
@@ -379,7 +379,7 @@ export const StaffListPage: React.FC = () => {
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => navigate(`/staff/profile/${s.id}`)}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-[#2818cf] hover:bg-indigo-50 transition-all"
+                            className="p-1.5 rounded-lg text-slate-400 hover:text-[#2012ad] hover:bg-indigo-50 transition-all"
                             title="View Full Staff Profile"
                           >
                             <Eye className="w-4 h-4" />

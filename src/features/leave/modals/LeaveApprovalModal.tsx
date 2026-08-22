@@ -74,7 +74,7 @@ export const LeaveApprovalModal: React.FC<LeaveApprovalModalProps> = ({
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full border border-slate-200/80 overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
               <ShieldCheck className="w-4 h-4" />
             </div>
             <div>
@@ -100,7 +100,7 @@ export const LeaveApprovalModal: React.FC<LeaveApprovalModalProps> = ({
           <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl space-y-2 text-xs">
             <div className="flex justify-between items-center text-slate-500">
               <span>Leave Type:</span>
-              <span className="font-bold text-[#2818cf] bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">
+              <span className="font-bold text-[#2012ad] bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100">
                 {request.leave_code} — {request.leave_name}
               </span>
             </div>

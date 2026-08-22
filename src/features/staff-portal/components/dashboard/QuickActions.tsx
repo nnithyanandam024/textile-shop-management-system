@@ -11,7 +11,7 @@ export const QuickActions: React.FC = () => {
       description: 'Quick scan & terminal checkout',
       path: '/staff/pos',
       icon: ShoppingCart,
-      iconBg: 'bg-indigo-50 text-[#2818cf] border-indigo-100',
+      iconBg: 'bg-indigo-50 text-[#2012ad] border-indigo-100',
     },
     {
       name: 'Customers',
@@ -63,7 +63,7 @@ export const QuickActions: React.FC = () => {
           <div
             key={act.name}
             onClick={() => navigate(act.path)}
-            className="p-4 bg-white border border-slate-200/80 rounded-2xl hover:border-[#2818cf] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between space-y-3"
+            className="p-4 bg-white border border-slate-200/80 rounded-2xl hover:border-[#2012ad] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between space-y-3"
           >
             <div className="flex items-start justify-between">
               <div
@@ -71,11 +71,11 @@ export const QuickActions: React.FC = () => {
               >
                 <act.icon className="w-4 h-4" />
               </div>
-              <ArrowUpRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-[#2818cf] transition-colors" />
+              <ArrowUpRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-[#2012ad] transition-colors" />
             </div>
 
             <div>
-              <span className="text-xs font-extrabold text-slate-900 block group-hover:text-[#2818cf] transition-colors">
+              <span className="text-xs font-extrabold text-slate-900 block group-hover:text-[#2012ad] transition-colors">
                 {act.name}
               </span>
               <p className="text-[10px] text-slate-400 font-semibold line-clamp-1">

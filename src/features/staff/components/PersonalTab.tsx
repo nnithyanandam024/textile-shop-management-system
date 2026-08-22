@@ -25,7 +25,7 @@ export const PersonalTab: React.FC<PersonalTabProps> = ({ staff, onEdit }) => {
     <Card className="space-y-6">
       <div className="flex items-center justify-between border-b border-slate-100 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+          <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
             <User className="w-4 h-4" />
           </div>
           <div>
@@ -65,7 +65,7 @@ export const PersonalTab: React.FC<PersonalTabProps> = ({ staff, onEdit }) => {
 
         <div>
           <p className="text-slate-400 uppercase tracking-wider text-[10px]">Calculated Age</p>
-          <p className="text-sm font-bold text-[#2818cf] mt-1">{calculateAge(staff.date_of_birth)}</p>
+          <p className="text-sm font-bold text-[#2012ad] mt-1">{calculateAge(staff.date_of_birth)}</p>
         </div>
 
         <div>

@@ -127,7 +127,7 @@ export const POSPaymentModal: React.FC<POSPaymentModalProps> = ({
                 onClick={() => setMethod(m.id as any)}
                 className={`p-3 rounded-2xl border text-center flex flex-col items-center gap-1.5 transition-all ${
                   isSelected
-                    ? 'border-[#2818cf] bg-indigo-50/70 text-[#2818cf] shadow-xs'
+                    ? 'border-[#2012ad] bg-indigo-50/70 text-[#2012ad] shadow-xs'
                     : 'border-slate-200/80 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50'
                 }`}
               >
@@ -148,7 +148,7 @@ export const POSPaymentModal: React.FC<POSPaymentModalProps> = ({
                   type="number"
                   value={cashTendered || ''}
                   onChange={(e) => setCashTendered(Number(e.target.value))}
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-base font-extrabold text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] transition-all"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-base font-extrabold text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] transition-all"
                 />
               </div>
 
@@ -191,7 +191,7 @@ export const POSPaymentModal: React.FC<POSPaymentModalProps> = ({
                   value={upiRef}
                   onChange={(e) => setUpiRef(e.target.value)}
                   placeholder="e.g. UPI89234710238"
-                  className="w-full px-3.5 py-2 bg-white border border-slate-200/80 rounded-xl text-xs font-semibold font-mono text-slate-900 focus:outline-none focus:border-[#2818cf]"
+                  className="w-full px-3.5 py-2 bg-white border border-slate-200/80 rounded-xl text-xs font-semibold font-mono text-slate-900 focus:outline-none focus:border-[#2012ad]"
                 />
               </div>
             </div>
@@ -206,7 +206,7 @@ export const POSPaymentModal: React.FC<POSPaymentModalProps> = ({
                   value={cardRef}
                   onChange={(e) => setCardRef(e.target.value)}
                   placeholder="e.g. APP98214"
-                  className="w-full px-3.5 py-2 bg-white border border-slate-200/80 rounded-xl text-xs font-semibold font-mono text-slate-900 focus:outline-none focus:border-[#2818cf]"
+                  className="w-full px-3.5 py-2 bg-white border border-slate-200/80 rounded-xl text-xs font-semibold font-mono text-slate-900 focus:outline-none focus:border-[#2012ad]"
                 />
               </div>
             </div>
@@ -252,7 +252,7 @@ export const POSPaymentModal: React.FC<POSPaymentModalProps> = ({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. Festival offer applied"
-              className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200/80 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2818cf]"
+              className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200/80 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2012ad]"
             />
           </div>
         </div>
@@ -279,7 +279,7 @@ export const POSPaymentModal: React.FC<POSPaymentModalProps> = ({
             type="button"
             disabled={submitting || (method === 'SPLIT' && splitBalance !== 0)}
             onClick={handleProcessPayment}
-            className="px-6 py-2.5 rounded-2xl bg-[#2818cf] hover:bg-indigo-700 text-white text-xs font-black shadow-lg shadow-indigo-600/25 transition-all disabled:opacity-40"
+            className="px-6 py-2.5 rounded-2xl bg-[#2012ad] hover:bg-indigo-700 text-white text-xs font-black shadow-lg shadow-indigo-600/25 transition-all disabled:opacity-40"
           >
             {submitting ? 'Processing Transaction...' : `Complete Sale (₹${totalAmount.toLocaleString('en-IN')})`}
           </button>

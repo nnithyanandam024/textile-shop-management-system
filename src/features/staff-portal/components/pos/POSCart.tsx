@@ -18,7 +18,7 @@ export const POSCart: React.FC<POSCartProps> = ({
   if (cart.length === 0) {
     return (
       <div className="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-xs text-center space-y-3 select-none">
-        <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center mx-auto">
+        <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center mx-auto">
           <ShoppingCart className="w-6 h-6" />
         </div>
         <div>
@@ -37,7 +37,7 @@ export const POSCart: React.FC<POSCartProps> = ({
       <div className="px-5 py-3.5 bg-slate-50/70 border-b border-slate-100 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-xs font-extrabold text-slate-900">Current Cart Items</span>
-          <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-[#2818cf]/10 text-[#2818cf]">
+          <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-[#2012ad]/10 text-[#2012ad]">
             {cart.reduce((sum, i) => sum + i.quantity, 0)} units
           </span>
         </div>

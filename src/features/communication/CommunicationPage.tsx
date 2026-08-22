@@ -75,7 +75,7 @@ export const CommunicationPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf] shadow-sm">
+          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad] shadow-sm">
             <Bell className="w-5 h-5" />
           </div>
           <div>
@@ -107,8 +107,8 @@ export const CommunicationPage: React.FC = () => {
         </Card>
 
         <Card className="p-4 bg-indigo-50/50 border border-indigo-100">
-          <span className="text-[10px] font-extrabold text-[#2818cf] uppercase tracking-wider">Active Announcements</span>
-          <p className="text-xl font-extrabold text-[#2818cf] mt-1">{announcements.length}</p>
+          <span className="text-[10px] font-extrabold text-[#2012ad] uppercase tracking-wider">Active Announcements</span>
+          <p className="text-xl font-extrabold text-[#2012ad] mt-1">{announcements.length}</p>
         </Card>
 
         <Card className="p-4 bg-cyan-50/50 border border-cyan-100">
@@ -124,7 +124,7 @@ export const CommunicationPage: React.FC = () => {
             onClick={() => setActiveTab('notifications')}
             className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
               activeTab === 'notifications'
-                ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+                ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
                 : 'text-slate-600 hover:bg-slate-100'
             }`}
           >
@@ -136,7 +136,7 @@ export const CommunicationPage: React.FC = () => {
             onClick={() => setActiveTab('announcements')}
             className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
               activeTab === 'announcements'
-                ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+                ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
                 : 'text-slate-600 hover:bg-slate-100'
             }`}
           >
@@ -148,7 +148,7 @@ export const CommunicationPage: React.FC = () => {
             onClick={() => setActiveTab('messages')}
             className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
               activeTab === 'messages'
-                ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+                ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
                 : 'text-slate-600 hover:bg-slate-100'
             }`}
           >
@@ -160,7 +160,7 @@ export const CommunicationPage: React.FC = () => {
             onClick={() => setActiveTab('preferences')}
             className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
               activeTab === 'preferences'
-                ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+                ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
                 : 'text-slate-600 hover:bg-slate-100'
             }`}
           >
@@ -197,7 +197,7 @@ export const CommunicationPage: React.FC = () => {
                       ? 'bg-rose-100 text-rose-600'
                       : n.priority === 'HIGH'
                       ? 'bg-amber-100 text-amber-600'
-                      : 'bg-indigo-100 text-[#2818cf]'
+                      : 'bg-indigo-100 text-[#2012ad]'
                   }`}
                 >
                   {n.priority === 'URGENT' ? (
@@ -247,7 +247,7 @@ export const CommunicationPage: React.FC = () => {
                       ? 'bg-rose-100 text-rose-700'
                       : a.priority === 'HIGH'
                       ? 'bg-amber-100 text-amber-700'
-                      : 'bg-indigo-50 text-[#2818cf]'
+                      : 'bg-indigo-50 text-[#2012ad]'
                   }`}
                 >
                   {a.priority}
@@ -283,7 +283,7 @@ export const CommunicationPage: React.FC = () => {
                 {messages.map((m) => (
                   <tr key={m.id} className="hover:bg-slate-50/60 transition-all">
                     <td className="py-3 px-4 font-bold text-slate-900">{m.sender_name || 'System Manager'}</td>
-                    <td className="py-3 px-4 font-bold text-[#2818cf]">{m.subject}</td>
+                    <td className="py-3 px-4 font-bold text-[#2012ad]">{m.subject}</td>
                     <td className="py-3 px-4 text-slate-600 max-w-xs truncate">{m.message}</td>
                     <td className="py-3 px-4 font-bold">{m.priority}</td>
                     <td className="py-3 px-4 font-mono text-slate-400">{m.created_at}</td>
@@ -318,11 +318,11 @@ export const CommunicationPage: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-3">
                   <label className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 cursor-pointer">
-                    <input type="checkbox" defaultChecked className="rounded border-slate-300 text-[#2818cf]" />
+                    <input type="checkbox" defaultChecked className="rounded border-slate-300 text-[#2012ad]" />
                     In-App
                   </label>
                   <label className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 cursor-pointer">
-                    <input type="checkbox" defaultChecked className="rounded border-slate-300 text-[#2818cf]" />
+                    <input type="checkbox" defaultChecked className="rounded border-slate-300 text-[#2012ad]" />
                     Desktop
                   </label>
                 </div>

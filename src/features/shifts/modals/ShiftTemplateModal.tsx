@@ -120,7 +120,7 @@ export const ShiftTemplateModal: React.FC<ShiftTemplateModalProps> = ({
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full border border-slate-200/80 overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
               <Clock className="w-4 h-4" />
             </div>
             <div>
@@ -209,7 +209,7 @@ export const ShiftTemplateModal: React.FC<ShiftTemplateModalProps> = ({
               id="is_overnight"
               checked={isOvernight}
               onChange={(e) => setIsOvernight(e.target.checked)}
-              className="w-4 h-4 text-[#2818cf] rounded border-slate-300 focus:ring-[#2818cf]"
+              className="w-4 h-4 text-[#2012ad] rounded border-slate-300 focus:ring-[#2012ad]"
             />
             <label htmlFor="is_overnight" className="text-xs font-bold text-slate-800 cursor-pointer">
               Overnight Shift (Spans midnight to next day)

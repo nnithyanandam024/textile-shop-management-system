@@ -105,7 +105,7 @@ export const StaffShifts: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => handleOpenChange()}
-                  className="px-3.5 py-2 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center gap-1.5"
+                  className="px-3.5 py-2 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center gap-1.5"
                 >
                   <CalendarCheck className="w-3.5 h-3.5" />
                   <span>Request Change</span>

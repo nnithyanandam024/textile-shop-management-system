@@ -103,7 +103,7 @@ export const ProfileChangeRequestModal: React.FC<ProfileChangeRequestModalProps>
 
         {/* Modal Header */}
         <div className="text-center mb-4">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center mx-auto mb-2">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center mx-auto mb-2">
             <FileQuestion className="w-6 h-6" />
           </div>
           <h2 className="text-lg font-bold text-slate-900">Request Official Record Update</h2>
@@ -118,7 +118,7 @@ export const ProfileChangeRequestModal: React.FC<ProfileChangeRequestModalProps>
             type="button"
             onClick={() => setTab('NEW')}
             className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${
-              tab === 'NEW' ? 'bg-white text-[#2818cf] shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              tab === 'NEW' ? 'bg-white text-[#2012ad] shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             New Request
@@ -127,12 +127,12 @@ export const ProfileChangeRequestModal: React.FC<ProfileChangeRequestModalProps>
             type="button"
             onClick={() => setTab('HISTORY')}
             className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
-              tab === 'HISTORY' ? 'bg-white text-[#2818cf] shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              tab === 'HISTORY' ? 'bg-white text-[#2012ad] shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <span>Past Requests</span>
             {pastRequests.length > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-indigo-50 text-[#2818cf]">
+              <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-indigo-50 text-[#2012ad]">
                 {pastRequests.length}
               </span>
             )}
@@ -158,7 +158,7 @@ export const ProfileChangeRequestModal: React.FC<ProfileChangeRequestModalProps>
                   value={fieldName}
                   onChange={(e) => setFieldName(e.target.value)}
                   disabled={isSubmitting}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white cursor-pointer"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white cursor-pointer"
                 >
                   <option value="Legal Full Name">Legal Full Name</option>
                   <option value="Bank Account Number">Bank Account Number</option>
@@ -181,7 +181,7 @@ export const ProfileChangeRequestModal: React.FC<ProfileChangeRequestModalProps>
                   onChange={(e) => setOldValue(e.target.value)}
                   placeholder="Existing value on record"
                   disabled={isSubmitting}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white"
                 />
               </div>
 
@@ -195,7 +195,7 @@ export const ProfileChangeRequestModal: React.FC<ProfileChangeRequestModalProps>
                   onChange={(e) => setNewValue(e.target.value)}
                   placeholder="Exact new detail to be recorded"
                   disabled={isSubmitting}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white"
                 />
               </div>
 
@@ -209,7 +209,7 @@ export const ProfileChangeRequestModal: React.FC<ProfileChangeRequestModalProps>
                   rows={3}
                   placeholder="Explain why this change is needed (e.g. Bank change, Legal name correction with gazette)..."
                   disabled={isSubmitting}
-                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white resize-none"
+                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white resize-none"
                 />
               </div>
 
@@ -225,7 +225,7 @@ export const ProfileChangeRequestModal: React.FC<ProfileChangeRequestModalProps>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 py-3 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center justify-center gap-1.5"
+                  className="flex-1 py-3 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center justify-center gap-1.5"
                 >
                   {isSubmitting ? (
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />

@@ -115,7 +115,7 @@ export const RoleFormModal: React.FC<RoleFormModalProps> = ({
       <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full border border-slate-200/80 overflow-hidden flex flex-col max-h-[90vh]">
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
               <ShieldCheck className="w-4 h-4" />
             </div>
             <div>
@@ -168,7 +168,7 @@ export const RoleFormModal: React.FC<RoleFormModalProps> = ({
                     setSelectedPermissions(allPermissions.map((p) => p.code));
                   }
                 }}
-                className="text-xs font-bold text-[#2818cf] hover:underline"
+                className="text-xs font-bold text-[#2012ad] hover:underline"
               >
                 {selectedPermissions.length === allPermissions.length ? 'Deselect All' : 'Select All Permissions'}
               </button>
@@ -187,9 +187,9 @@ export const RoleFormModal: React.FC<RoleFormModalProps> = ({
                       <button
                         type="button"
                         onClick={() => toggleGroup(moduleName)}
-                        className="text-[11px] font-bold text-[#2818cf] hover:underline flex items-center gap-1"
+                        className="text-[11px] font-bold text-[#2012ad] hover:underline flex items-center gap-1"
                       >
-                        {allInGroup ? <CheckSquare className="w-3.5 h-3.5 text-[#2818cf]" /> : <Square className="w-3.5 h-3.5 text-slate-400" />}
+                        {allInGroup ? <CheckSquare className="w-3.5 h-3.5 text-[#2012ad]" /> : <Square className="w-3.5 h-3.5 text-slate-400" />}
                         Toggle All
                       </button>
                     </div>
@@ -203,7 +203,7 @@ export const RoleFormModal: React.FC<RoleFormModalProps> = ({
                               type="checkbox"
                               checked={isChecked}
                               onChange={() => togglePermission(p.code)}
-                              className="w-4 h-4 mt-0.5 rounded text-[#2818cf] border-slate-300 focus:ring-[#2818cf]"
+                              className="w-4 h-4 mt-0.5 rounded text-[#2012ad] border-slate-300 focus:ring-[#2012ad]"
                             />
                             <div>
                               <p className="text-xs font-semibold text-slate-800">{p.code}</p>

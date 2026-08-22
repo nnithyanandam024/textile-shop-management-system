@@ -43,13 +43,13 @@ export const LeaveBalanceCard: React.FC<LeaveBalanceCardProps> = ({ balances }) 
             <div key={item.code} className="space-y-1.5">
               <div className="flex items-center justify-between text-xs">
                 <span className="font-bold text-slate-800">{item.name}</span>
-                <span className="font-extrabold text-[#2818cf]">
+                <span className="font-extrabold text-[#2012ad]">
                   {item.available} <span className="text-[10px] font-semibold text-slate-500">/ {item.allocated} Days</span>
                 </span>
               </div>
               <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
                 <div
-                  className="bg-[#2818cf] h-2 rounded-full transition-all duration-500"
+                  className="bg-[#2012ad] h-2 rounded-full transition-all duration-500"
                   style={{ width: `${Math.min(100, Math.max(5, item.percentage))}%` }}
                 />
               </div>
@@ -61,7 +61,7 @@ export const LeaveBalanceCard: React.FC<LeaveBalanceCardProps> = ({ balances }) 
       <div className="mt-5 pt-3 border-t border-slate-100">
         <button
           onClick={() => navigate('/staff/leave')}
-          className="w-full flex items-center justify-center gap-1.5 py-2 px-3 bg-slate-50 hover:bg-indigo-50/80 text-slate-700 hover:text-[#2818cf] border border-slate-200/80 hover:border-indigo-200 rounded-xl text-xs font-bold transition-all group"
+          className="w-full flex items-center justify-center gap-1.5 py-2 px-3 bg-slate-50 hover:bg-indigo-50/80 text-slate-700 hover:text-[#2012ad] border border-slate-200/80 hover:border-indigo-200 rounded-xl text-xs font-bold transition-all group"
         >
           <span>View Leave</span>
           <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />

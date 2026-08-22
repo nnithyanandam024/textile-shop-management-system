@@ -89,7 +89,7 @@ export const AttendanceSummary: React.FC<AttendanceSummaryProps> = ({ summary })
               {summary.totalHoursFormatted}
             </p>
           </div>
-          <Clock className="w-6 h-6 text-[#2818cf] opacity-80" />
+          <Clock className="w-6 h-6 text-[#2012ad] opacity-80" />
         </div>
       </div>
 

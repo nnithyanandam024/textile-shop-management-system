@@ -116,7 +116,7 @@ export const IssueAdvanceModal: React.FC<IssueAdvanceModalProps> = ({
               value={staffId}
               onChange={(e) => setStaffId(Number(e.target.value))}
               required
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
             >
               <option value="">Select Staff...</option>
               {staffList.map((s) => (
@@ -160,7 +160,7 @@ export const IssueAdvanceModal: React.FC<IssueAdvanceModalProps> = ({
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               required
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
             />
           </div>
 

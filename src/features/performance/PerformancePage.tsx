@@ -87,7 +87,7 @@ export const PerformancePage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf] shadow-sm">
+          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad] shadow-sm">
             <Award className="w-5 h-5" />
           </div>
           <div>
@@ -117,8 +117,8 @@ export const PerformancePage: React.FC = () => {
         </Card>
 
         <Card className="p-4 bg-indigo-50/50 border border-indigo-100">
-          <span className="text-[10px] font-extrabold text-[#2818cf] uppercase tracking-wider">Average Performance</span>
-          <p className="text-xl font-extrabold text-[#2818cf] mt-1">{avgScore}%</p>
+          <span className="text-[10px] font-extrabold text-[#2012ad] uppercase tracking-wider">Average Performance</span>
+          <p className="text-xl font-extrabold text-[#2012ad] mt-1">{avgScore}%</p>
         </Card>
 
         <Card className="p-4 bg-emerald-50/50 border border-emerald-100">
@@ -138,7 +138,7 @@ export const PerformancePage: React.FC = () => {
           onClick={() => setActiveTab('cycles')}
           className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
             activeTab === 'cycles'
-              ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+              ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
@@ -150,7 +150,7 @@ export const PerformancePage: React.FC = () => {
           onClick={() => setActiveTab('goals')}
           className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
             activeTab === 'goals'
-              ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+              ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
@@ -162,7 +162,7 @@ export const PerformancePage: React.FC = () => {
           onClick={() => setActiveTab('reviews')}
           className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
             activeTab === 'reviews'
-              ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+              ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
@@ -174,7 +174,7 @@ export const PerformancePage: React.FC = () => {
           onClick={() => setActiveTab('appraisals')}
           className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
             activeTab === 'appraisals'
-              ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+              ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
@@ -244,22 +244,22 @@ export const PerformancePage: React.FC = () => {
                 {goals.map((g) => (
                   <tr key={g.id} className="hover:bg-slate-50/60 transition-all">
                     <td className="py-3 px-4 font-bold text-slate-900">{g.staff_code} — {g.first_name} {g.last_name || ''}</td>
-                    <td className="py-3 px-4 font-bold text-[#2818cf]">{g.title}</td>
+                    <td className="py-3 px-4 font-bold text-[#2012ad]">{g.title}</td>
                     <td className="py-3 px-4">{g.category}</td>
                     <td className="py-3 px-4">
                       <div className="space-y-1">
                         <div className="flex justify-between text-[11px] font-bold">
                           <span>{g.unit}{g.current_value.toLocaleString()} / {g.unit}{g.target_value.toLocaleString()}</span>
-                          <span className="text-[#2818cf]">{g.progress_percentage}%</span>
+                          <span className="text-[#2012ad]">{g.progress_percentage}%</span>
                         </div>
                         <div className="w-32 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                          <div className="bg-[#2818cf] h-full rounded-full" style={{ width: `${g.progress_percentage}%` }} />
+                          <div className="bg-[#2012ad] h-full rounded-full" style={{ width: `${g.progress_percentage}%` }} />
                         </div>
                       </div>
                     </td>
                     <td className="py-3 px-4 font-bold">{g.priority}</td>
                     <td className="py-3 px-4">
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${g.status === 'COMPLETED' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-indigo-50 text-[#2818cf] border border-indigo-200'}`}>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${g.status === 'COMPLETED' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-indigo-50 text-[#2012ad] border border-indigo-200'}`}>
                         {g.status}
                       </span>
                     </td>
@@ -303,9 +303,9 @@ export const PerformancePage: React.FC = () => {
                     <td className="py-3 px-4 font-bold text-slate-900">{r.staff_code} — {r.first_name} {r.last_name || ''}</td>
                     <td className="py-3 px-4">{r.department_name || 'Staff'}</td>
                     <td className="py-3 px-4">{r.cycle_name}</td>
-                    <td className="py-3 px-4 font-extrabold text-base text-[#2818cf]">{r.overall_score}%</td>
+                    <td className="py-3 px-4 font-extrabold text-base text-[#2012ad]">{r.overall_score}%</td>
                     <td className="py-3 px-4">
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${r.overall_score >= 90 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-indigo-50 text-[#2818cf] border border-indigo-200'}`}>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${r.overall_score >= 90 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-indigo-50 text-[#2012ad] border border-indigo-200'}`}>
                         {r.overall_rating}
                       </span>
                     </td>
@@ -357,7 +357,7 @@ export const PerformancePage: React.FC = () => {
                     <td className="py-3 px-4 font-extrabold text-emerald-700">
                       {a.recommended_increment_type === 'PERCENTAGE' ? `+${a.recommended_increment_value}%` : `+₹${a.recommended_increment_value.toLocaleString()}`}
                     </td>
-                    <td className="py-3 px-4 font-extrabold text-[#2818cf]">₹{a.recommended_incentive.toLocaleString()}</td>
+                    <td className="py-3 px-4 font-extrabold text-[#2012ad]">₹{a.recommended_incentive.toLocaleString()}</td>
                     <td className="py-3 px-4 max-w-xs truncate">{a.reason}</td>
                     <td className="py-3 px-4">
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${a.status === 'APPROVED' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200'}`}>

@@ -77,7 +77,7 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full border border-slate-200/80 overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
               <Upload className="w-4 h-4" />
             </div>
             <div>
@@ -102,7 +102,7 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
             <select
               value={docType}
               onChange={(e) => setDocType(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
             >
               <option value="Identity Proof">Identity Proof (Aadhaar, PAN, Passport)</option>
               <option value="Address Proof">Address Proof (Ration card, Bill)</option>
@@ -115,7 +115,7 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
 
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1.5">Select File *</label>
-            <div className="border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center hover:border-[#2818cf] transition-all bg-slate-50/50">
+            <div className="border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center hover:border-[#2012ad] transition-all bg-slate-50/50">
               <FileText className="w-8 h-8 mx-auto text-slate-300 mb-2" />
               {file ? (
                 <div>
@@ -123,7 +123,7 @@ export const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
                   <p className="text-[10px] text-slate-400">{(file.size / 1024).toFixed(1)} KB</p>
                 </div>
               ) : (
-                <label className="cursor-pointer text-xs font-bold text-[#2818cf] hover:underline">
+                <label className="cursor-pointer text-xs font-bold text-[#2012ad] hover:underline">
                   Choose Document File (PDF, PNG, JPG)
                   <input type="file" onChange={handleFileSelect} className="hidden" />
                 </label>

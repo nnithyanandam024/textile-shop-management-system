@@ -24,7 +24,7 @@ export const InventoryTasks: React.FC<InventoryTasksProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between pb-2 border-b border-slate-100">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2818cf] flex items-center justify-center font-bold">
+          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2012ad] flex items-center justify-center font-bold">
             <CheckSquare className="w-4 h-4" />
           </div>
           <div>
@@ -37,7 +37,7 @@ export const InventoryTasks: React.FC<InventoryTasksProps> = ({
           </div>
         </div>
 
-        <span className="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-indigo-50 text-[#2818cf]">
+        <span className="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-indigo-50 text-[#2012ad]">
           {tasks.filter((t) => t.status === 'PENDING').length + poReceivingList.length} Active Tasks
         </span>
       </div>
@@ -122,7 +122,7 @@ export const InventoryTasks: React.FC<InventoryTasksProps> = ({
                     if (task.taskType === 'STOCK_COUNT') onOpenCount();
                     else onOpenTransfer();
                   }}
-                  className="px-3 py-1.5 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center gap-1"
+                  className="px-3 py-1.5 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center gap-1"
                 >
                   <span>Start Task</span>
                   <ArrowRight className="w-3.5 h-3.5" />

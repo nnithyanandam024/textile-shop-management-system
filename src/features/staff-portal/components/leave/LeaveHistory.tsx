@@ -53,7 +53,7 @@ export const LeaveHistory: React.FC<LeaveHistoryProps> = ({
               Annual Leave History & Utilization
             </h3>
             <p className="text-[11px] font-semibold text-slate-500">
-              Total Approved Time Off: <strong className="text-[#2818cf]">{totalApprovedDays} Days</strong> in {selectedYear}
+              Total Approved Time Off: <strong className="text-[#2012ad]">{totalApprovedDays} Days</strong> in {selectedYear}
             </p>
           </div>
         </div>

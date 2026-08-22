@@ -72,7 +72,7 @@ export const ShiftDetailsModal: React.FC<ShiftDetailsModalProps> = ({
 
         {/* Modal Header */}
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center font-bold">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center font-bold">
             <Calendar className="w-6 h-6" />
           </div>
           <div>
@@ -183,7 +183,7 @@ export const ShiftDetailsModal: React.FC<ShiftDetailsModalProps> = ({
                 onClose();
                 onRequestChange(shift);
               }}
-              className="py-2.5 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center justify-center gap-1.5"
+              className="py-2.5 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center justify-center gap-1.5"
             >
               <CalendarCheck className="w-4 h-4" />
               <span>Request Change</span>

@@ -97,7 +97,7 @@ export const DepartmentListPage: React.FC = () => {
             <Card key={dept.id} className="relative transition-all hover:shadow-md">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
                     <Briefcase className="w-5 h-5" />
                   </div>
                   <div>

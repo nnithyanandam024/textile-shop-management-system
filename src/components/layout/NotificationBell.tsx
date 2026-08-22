@@ -84,10 +84,10 @@ export const NotificationBell: React.FC = () => {
         <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200/90 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
           <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
             <div className="flex items-center gap-2">
-              <Bell className="w-4 h-4 text-[#2818cf]" />
+              <Bell className="w-4 h-4 text-[#2012ad]" />
               <span className="text-xs font-bold text-slate-900">Notifications</span>
               {unreadCount > 0 && (
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-indigo-50 text-[#2818cf]">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-indigo-50 text-[#2012ad]">
                   {unreadCount} new
                 </span>
               )}
@@ -95,7 +95,7 @@ export const NotificationBell: React.FC = () => {
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAllRead}
-                className="text-[11px] font-bold text-[#2818cf] hover:underline flex items-center gap-1"
+                className="text-[11px] font-bold text-[#2012ad] hover:underline flex items-center gap-1"
               >
                 <CheckCheck className="w-3.5 h-3.5" />
                 Mark All Read
@@ -138,7 +138,7 @@ export const NotificationBell: React.FC = () => {
                 setIsOpen(false);
                 navigate('/staff/communication');
               }}
-              className="text-xs font-extrabold text-[#2818cf] hover:underline"
+              className="text-xs font-extrabold text-[#2012ad] hover:underline"
             >
               View Notification Center →
             </button>

@@ -29,7 +29,7 @@ export const MyPerformancePage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf] shadow-sm">
+          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad] shadow-sm">
             <Award className="w-5 h-5" />
           </div>
           <div>
@@ -50,7 +50,7 @@ export const MyPerformancePage: React.FC = () => {
             <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Overall Rating Score</span>
             <h3 className="text-2xl font-extrabold text-slate-900 mt-0.5">88% — Exceeds Expectations</h3>
           </div>
-          <span className="px-3 py-1 bg-indigo-50 text-[#2818cf] rounded-full text-xs font-extrabold border border-indigo-100">
+          <span className="px-3 py-1 bg-indigo-50 text-[#2012ad] rounded-full text-xs font-extrabold border border-indigo-100">
             August 2026 Cycle
           </span>
         </div>
@@ -62,7 +62,7 @@ export const MyPerformancePage: React.FC = () => {
           </div>
           <div className="p-3 bg-slate-50 rounded-xl">
             <span className="text-[10px] font-extrabold text-slate-400 uppercase">Sales Performance</span>
-            <p className="text-lg font-extrabold text-[#2818cf] mt-0.5">85%</p>
+            <p className="text-lg font-extrabold text-[#2012ad] mt-0.5">85%</p>
           </div>
           <div className="p-3 bg-slate-50 rounded-xl">
             <span className="text-[10px] font-extrabold text-slate-400 uppercase">Customer Feedback</span>
@@ -79,7 +79,7 @@ export const MyPerformancePage: React.FC = () => {
       <Card className="p-5 space-y-4 bg-white border border-slate-200/80">
         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <div className="flex items-center gap-2">
-            <Target className="w-4 h-4 text-[#2818cf]" />
+            <Target className="w-4 h-4 text-[#2012ad]" />
             <h3 className="text-sm font-bold text-slate-900">Active KPI Targets & Goals</h3>
           </div>
           <span className="text-xs font-semibold text-slate-500">Q3 Performance Cycle</span>
@@ -88,7 +88,7 @@ export const MyPerformancePage: React.FC = () => {
         <div className="space-y-4">
           {[
             { title: 'Monthly Silk Saree Sales Target (₹2,50,000)', progress: 80, color: 'bg-emerald-500' },
-            { title: 'Customer Follow-up & Satisfaction Calls', progress: 95, color: 'bg-[#2818cf]' },
+            { title: 'Customer Follow-up & Satisfaction Calls', progress: 95, color: 'bg-[#2012ad]' },
             { title: 'New Fabric & Textile Product Training', progress: 60, color: 'bg-amber-500' },
           ].map((g, idx) => (
             <div key={idx} className="space-y-1.5">
@@ -124,7 +124,7 @@ export const MyPerformancePage: React.FC = () => {
                   onChange={(e) => setAchievements(e.target.value)}
                   required
                   placeholder="Describe your sales achievements and customer highlights..."
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
                 />
               </div>
 
@@ -135,7 +135,7 @@ export const MyPerformancePage: React.FC = () => {
                   value={challenges}
                   onChange={(e) => setChallenges(e.target.value)}
                   placeholder="Describe any challenges faced..."
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
                 />
               </div>
 

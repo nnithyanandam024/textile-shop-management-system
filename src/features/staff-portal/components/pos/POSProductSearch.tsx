@@ -24,9 +24,9 @@ export const POSProductSearch: React.FC<POSProductSearchProps> = ({
           value={query}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search by Product Name, SKU, Color, Size, or Scan Barcode..."
-          className="w-full pl-11 pr-24 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs sm:text-sm font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] transition-all"
+          className="w-full pl-11 pr-24 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs sm:text-sm font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] transition-all"
         />
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 px-2 py-0.5 rounded-lg bg-indigo-50 border border-indigo-100 text-[#2818cf] text-[10px] font-extrabold font-mono pointer-events-none">
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 px-2 py-0.5 rounded-lg bg-indigo-50 border border-indigo-100 text-[#2012ad] text-[10px] font-extrabold font-mono pointer-events-none">
           <Barcode className="w-3.5 h-3.5" />
           <span>Scanner Ready</span>
         </div>
@@ -40,7 +40,7 @@ export const POSProductSearch: React.FC<POSProductSearchProps> = ({
         className="p-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-2xl text-slate-600 hover:text-slate-900 transition-colors shrink-0"
         title="Refresh Product Catalog"
       >
-        <RotateCw className={`w-4 h-4 ${searching ? 'animate-spin text-[#2818cf]' : ''}`} />
+        <RotateCw className={`w-4 h-4 ${searching ? 'animate-spin text-[#2012ad]' : ''}`} />
       </button>
     </div>
   );

@@ -67,7 +67,7 @@ export const StaffPayroll: React.FC = () => {
                   type="button"
                   onClick={() => viewPayslip()}
                   disabled={!currentPayroll}
-                  className="px-4 py-2 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center gap-1.5 disabled:opacity-50"
+                  className="px-4 py-2 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center gap-1.5 disabled:opacity-50"
                 >
                   <FileText className="w-3.5 h-3.5" />
                   <span>View Current Payslip</span>

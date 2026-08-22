@@ -17,7 +17,7 @@ export const POSProductCard: React.FC<POSProductCardProps> = ({ product, onAddTo
       className={`bg-white rounded-2xl p-4 border border-slate-200/80 transition-all flex flex-col justify-between space-y-3 select-none ${
         isOutOfStock
           ? 'opacity-50 cursor-not-allowed bg-slate-50/50'
-          : 'hover:border-[#2818cf] hover:shadow-md cursor-pointer group'
+          : 'hover:border-[#2012ad] hover:shadow-md cursor-pointer group'
       }`}
     >
       {/* Top Details */}
@@ -40,7 +40,7 @@ export const POSProductCard: React.FC<POSProductCardProps> = ({ product, onAddTo
           </span>
         </div>
 
-        <h4 className="text-xs font-extrabold text-slate-900 line-clamp-1 group-hover:text-[#2818cf] transition-colors">
+        <h4 className="text-xs font-extrabold text-slate-900 line-clamp-1 group-hover:text-[#2012ad] transition-colors">
           {product.productName}
         </h4>
 
@@ -57,7 +57,7 @@ export const POSProductCard: React.FC<POSProductCardProps> = ({ product, onAddTo
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
             Price
           </span>
-          <strong className="text-sm font-extrabold text-[#2818cf] font-mono">
+          <strong className="text-sm font-extrabold text-[#2012ad] font-mono">
             ₹{product.sellingPrice.toLocaleString('en-IN')}
           </strong>
         </div>
@@ -69,7 +69,7 @@ export const POSProductCard: React.FC<POSProductCardProps> = ({ product, onAddTo
             e.stopPropagation();
             onAddToCart(product);
           }}
-          className="p-1.5 bg-indigo-50 hover:bg-[#2818cf] text-[#2818cf] hover:text-white rounded-xl transition-all shadow-xs group-hover:bg-[#2818cf] group-hover:text-white disabled:opacity-40"
+          className="p-1.5 bg-indigo-50 hover:bg-[#2012ad] text-[#2012ad] hover:text-white rounded-xl transition-all shadow-xs group-hover:bg-[#2012ad] group-hover:text-white disabled:opacity-40"
         >
           <Plus className="w-4 h-4" />
         </button>

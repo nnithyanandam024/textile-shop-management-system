@@ -162,7 +162,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onS
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-[#2818cf]">
+            <div className="w-10 h-10 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-[#2012ad]">
               <Package className="w-5 h-5" />
             </div>
             <div>
@@ -194,7 +194,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onS
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Men's Cotton Formal Shirt"
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                     required
                   />
                 </div>
@@ -204,7 +204,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onS
                   <select
                     value={categoryId}
                     onChange={(e) => setCategoryId(Number(e.target.value))}
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                   >
                     {categories.map((c) => (
                       <option key={c.id} value={c.id}>{c.name}</option>
@@ -217,7 +217,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onS
                   <select
                     value={brandId}
                     onChange={(e) => setBrandId(Number(e.target.value))}
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                   >
                     <option value={0}>None / Generic</option>
                     {brands.map((b) => (
@@ -231,7 +231,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onS
                   <select
                     value={material}
                     onChange={(e) => setMaterial(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                   >
                     {MATERIALS.map((m) => (
                       <option key={m} value={m}>{m}</option>
@@ -245,7 +245,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onS
                     type="number"
                     value={taxRate}
                     onChange={(e) => setTaxRate(Number(e.target.value))}
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                   />
                 </div>
               </div>
@@ -306,7 +306,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onS
                         onClick={() => toggleColor(c)}
                         className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
                           active
-                            ? 'bg-[#2818cf] text-white border-[#2818cf]'
+                            ? 'bg-[#2012ad] text-white border-[#2012ad]'
                             : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                         }`}
                       >
@@ -330,7 +330,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onS
                         onClick={() => toggleSize(s)}
                         className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
                           active
-                            ? 'bg-[#2818cf] text-white border-[#2818cf]'
+                            ? 'bg-[#2012ad] text-white border-[#2012ad]'
                             : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                         }`}
                       >
@@ -344,7 +344,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onS
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full py-3 bg-[#2818cf] hover:bg-[#2012ad] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2818cf]/20 transition-all flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2012ad]/20 transition-all flex items-center justify-center gap-2"
                 >
                   <Sparkles className="w-4 h-4" />
                   <span>Generate {selectedColors.length * selectedSizes.length} Variants →</span>
@@ -354,7 +354,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onS
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="flex items-center justify-between bg-indigo-50/50 p-3 rounded-xl border border-indigo-100 mb-2">
-                <span className="text-xs font-semibold text-[#2818cf]">
+                <span className="text-xs font-semibold text-[#2012ad]">
                   Generated {generatedVariants.length} independent variants for {name}
                 </span>
                 <button
@@ -404,7 +404,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onS
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-2/3 py-3 bg-[#2818cf] hover:bg-[#2012ad] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2818cf]/20 flex items-center justify-center gap-2"
+                  className="w-2/3 py-3 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2012ad]/20 flex items-center justify-center gap-2"
                 >
                   {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
                   <span>Save Master Product & Variants</span>

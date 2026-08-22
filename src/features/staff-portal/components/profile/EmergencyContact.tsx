@@ -114,7 +114,7 @@ export const EmergencyContact: React.FC<EmergencyContactProps> = ({
           <button
             type="button"
             onClick={() => startEdit()}
-            className="px-3 py-1.5 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-[#2818cf] border border-slate-200 hover:border-indigo-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95"
+            className="px-3 py-1.5 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-[#2012ad] border border-slate-200 hover:border-indigo-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add Contact</span>
@@ -156,7 +156,7 @@ export const EmergencyContact: React.FC<EmergencyContactProps> = ({
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Ramesh Kumar"
                 disabled={isSaving}
-                className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               />
             </div>
 
@@ -168,7 +168,7 @@ export const EmergencyContact: React.FC<EmergencyContactProps> = ({
                 value={relationship}
                 onChange={(e) => setRelationship(e.target.value)}
                 disabled={isSaving}
-                className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] cursor-pointer"
+                className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] cursor-pointer"
               >
                 <option value="Father">Father</option>
                 <option value="Mother">Mother</option>
@@ -191,7 +191,7 @@ export const EmergencyContact: React.FC<EmergencyContactProps> = ({
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+91 98765 00000"
                 disabled={isSaving}
-                className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               />
             </div>
 
@@ -205,7 +205,7 @@ export const EmergencyContact: React.FC<EmergencyContactProps> = ({
                 onChange={(e) => setAltPhone(e.target.value)}
                 placeholder="Optional second number"
                 disabled={isSaving}
-                className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               />
             </div>
 
@@ -219,7 +219,7 @@ export const EmergencyContact: React.FC<EmergencyContactProps> = ({
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Residence / City"
                 disabled={isSaving}
-                className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               />
             </div>
           </div>
@@ -236,7 +236,7 @@ export const EmergencyContact: React.FC<EmergencyContactProps> = ({
             <button
               type="submit"
               disabled={isSaving}
-              className="px-4 py-1.5 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
+              className="px-4 py-1.5 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
             >
               {isSaving ? (
                 <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -262,7 +262,7 @@ export const EmergencyContact: React.FC<EmergencyContactProps> = ({
           <button
             type="button"
             onClick={() => startEdit()}
-            className="mt-3 px-3.5 py-1.5 bg-[#2818cf] text-white rounded-xl text-xs font-bold hover:bg-indigo-700 transition-all inline-flex items-center gap-1"
+            className="mt-3 px-3.5 py-1.5 bg-[#2012ad] text-white rounded-xl text-xs font-bold hover:bg-indigo-700 transition-all inline-flex items-center gap-1"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add Contact Now</span>
@@ -278,7 +278,7 @@ export const EmergencyContact: React.FC<EmergencyContactProps> = ({
               <div className="space-y-2">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-indigo-50 text-[#2818cf] flex items-center justify-center font-bold text-xs shrink-0">
+                    <div className="w-7 h-7 rounded-lg bg-indigo-50 text-[#2012ad] flex items-center justify-center font-bold text-xs shrink-0">
                       <User className="w-3.5 h-3.5" />
                     </div>
                     <div>
@@ -293,7 +293,7 @@ export const EmergencyContact: React.FC<EmergencyContactProps> = ({
                     <button
                       type="button"
                       onClick={() => startEdit(c)}
-                      className="p-1 text-slate-400 hover:text-[#2818cf] transition-colors"
+                      className="p-1 text-slate-400 hover:text-[#2012ad] transition-colors"
                       title="Edit Contact"
                     >
                       <Edit3 className="w-3.5 h-3.5" />

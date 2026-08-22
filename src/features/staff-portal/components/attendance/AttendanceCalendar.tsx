@@ -75,7 +75,7 @@ export const AttendanceCalendar: React.FC<AttendanceCalendarProps> = ({
       {/* Calendar Header & Month Navigation */}
       <div className="flex items-center justify-between pb-3 border-b border-slate-100">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2818cf] flex items-center justify-center font-bold">
+          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2012ad] flex items-center justify-center font-bold">
             <CalendarIcon className="w-4 h-4" />
           </div>
           <div>
@@ -141,7 +141,7 @@ export const AttendanceCalendar: React.FC<AttendanceCalendarProps> = ({
               onClick={() => onDateClick(cell.dateStr)}
               className={`h-14 rounded-2xl p-1.5 border flex flex-col justify-between transition-all hover:scale-[1.02] hover:shadow-sm active:scale-95 text-left relative ${
                 cell.isToday
-                  ? 'border-[#2818cf] bg-indigo-50/40 ring-2 ring-[#2818cf]/20'
+                  ? 'border-[#2012ad] bg-indigo-50/40 ring-2 ring-[#2012ad]/20'
                   : cell.record
                   ? `${statusCfg?.bgLight} ${statusCfg?.borderColor}`
                   : isWeekend
@@ -154,7 +154,7 @@ export const AttendanceCalendar: React.FC<AttendanceCalendarProps> = ({
                 <span
                   className={`text-xs font-bold ${
                     cell.isToday
-                      ? 'text-[#2818cf] font-extrabold'
+                      ? 'text-[#2012ad] font-extrabold'
                       : 'text-slate-700'
                   }`}
                 >

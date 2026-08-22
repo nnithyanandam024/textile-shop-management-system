@@ -71,12 +71,12 @@ export const StaffSidebar: React.FC = () => {
       <aside className="w-64 bg-white border-r border-slate-200/80 flex flex-col h-screen select-none shrink-0 shadow-sm">
         {/* Brand Header */}
         <div className="h-16 px-6 flex items-center gap-3 border-b border-slate-200/80">
-          <div className="w-9 h-9 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-[#2818cf] shadow-sm">
+          <div className="w-9 h-9 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-[#2012ad] shadow-sm">
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
             <h1 className="text-base font-bold text-slate-900 tracking-tight leading-tight">TEXORA</h1>
-            <p className="text-[10px] font-semibold text-[#2818cf] uppercase tracking-widest">Staff Portal</p>
+            <p className="text-[10px] font-semibold text-[#2012ad] uppercase tracking-widest">Staff Portal</p>
           </div>
         </div>
 
@@ -93,7 +93,7 @@ export const StaffSidebar: React.FC = () => {
               className={({ isActive }) =>
                 `flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                   isActive
-                    ? 'bg-indigo-50/90 text-[#2818cf] shadow-sm border border-indigo-100/80 font-bold'
+                    ? 'bg-indigo-50/90 text-[#2012ad] shadow-sm border border-indigo-100/80 font-bold'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                 }`
               }

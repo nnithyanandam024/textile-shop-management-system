@@ -20,7 +20,7 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({ activities }) =>
       case 'ATTENDANCE':
         return <Clock className="w-3.5 h-3.5 text-emerald-600" />;
       case 'SHIFT':
-        return <Calendar className="w-3.5 h-3.5 text-[#2818cf]" />;
+        return <Calendar className="w-3.5 h-3.5 text-[#2012ad]" />;
       case 'LEAVE':
         return <FileEdit className="w-3.5 h-3.5 text-amber-600" />;
       case 'DOCUMENT':

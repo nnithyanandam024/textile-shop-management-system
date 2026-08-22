@@ -53,7 +53,7 @@ export const ShiftCard: React.FC<ShiftCardProps> = ({
       <div className="space-y-2.5">
         <div>
           <span className="text-sm font-extrabold text-slate-900 block">{name}</span>
-          <p className="text-xs font-extrabold text-[#2818cf] font-mono mt-0.5">{timeRange}</p>
+          <p className="text-xs font-extrabold text-[#2012ad] font-mono mt-0.5">{timeRange}</p>
         </div>
 
         <div className="space-y-1.5 pt-2 border-t border-slate-100 text-xs font-semibold text-slate-600">
@@ -75,7 +75,7 @@ export const ShiftCard: React.FC<ShiftCardProps> = ({
       <div>
         <div className="flex items-center justify-between pb-3">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2818cf] flex items-center justify-center border border-indigo-100 shadow-sm">
+            <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2012ad] flex items-center justify-center border border-indigo-100 shadow-sm">
               <Calendar className="w-4 h-4" />
             </div>
             <h3 className="text-xs font-extrabold text-slate-700 uppercase tracking-wider">
@@ -90,7 +90,7 @@ export const ShiftCard: React.FC<ShiftCardProps> = ({
       <div className="mt-5 pt-3 border-t border-slate-100">
         <button
           onClick={() => navigate('/staff/shifts')}
-          className="w-full flex items-center justify-center gap-1.5 py-2 px-3 bg-slate-50 hover:bg-indigo-50/80 text-slate-700 hover:text-[#2818cf] border border-slate-200/80 hover:border-indigo-200 rounded-xl text-xs font-bold transition-all group"
+          className="w-full flex items-center justify-center gap-1.5 py-2 px-3 bg-slate-50 hover:bg-indigo-50/80 text-slate-700 hover:text-[#2012ad] border border-slate-200/80 hover:border-indigo-200 rounded-xl text-xs font-bold transition-all group"
         >
           <span>View Shifts</span>
           <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />

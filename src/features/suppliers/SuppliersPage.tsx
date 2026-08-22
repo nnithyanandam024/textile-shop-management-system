@@ -104,7 +104,7 @@ export const SuppliersPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2818cf]">
+          <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2012ad]">
             <Building2 className="w-6 h-6" />
           </div>
           <div>
@@ -123,7 +123,7 @@ export const SuppliersPage: React.FC = () => {
           </button>
           <button
             onClick={() => setShowAddModal(true)}
-            className="px-4 py-2.5 bg-[#2818cf] hover:bg-[#2012ad] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2818cf]/20 transition-all flex items-center gap-2"
+            className="px-4 py-2.5 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2012ad]/20 transition-all flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             <span>Add New Supplier</span>
@@ -140,7 +140,7 @@ export const SuppliersPage: React.FC = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search by Company Name, Contact Person, Phone, or Code..."
-            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
           />
         </div>
       </div>
@@ -149,7 +149,7 @@ export const SuppliersPage: React.FC = () => {
       <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden">
         {loading ? (
           <div className="p-12 text-center text-slate-500">
-            <RefreshCw className="w-8 h-8 animate-spin text-[#2818cf] mx-auto mb-2" />
+            <RefreshCw className="w-8 h-8 animate-spin text-[#2012ad] mx-auto mb-2" />
             <span className="text-sm font-medium">Loading suppliers...</span>
           </div>
         ) : filteredSuppliers.length === 0 ? (
@@ -180,7 +180,7 @@ export const SuppliersPage: React.FC = () => {
                   <td className="px-6 py-4 text-right">
                     <button
                       onClick={() => setSelectedSupplierId(s.id)}
-                      className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-[#2818cf] border border-indigo-200 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1"
+                      className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-[#2012ad] border border-indigo-200 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1"
                     >
                       <Eye className="w-3.5 h-3.5" />
                       <span>View Profile</span>
@@ -248,7 +248,7 @@ export const SuppliersPage: React.FC = () => {
               </div>
               <div className="flex gap-2 pt-2">
                 <button type="button" onClick={() => setShowAddModal(false)} className="w-1/2 py-2.5 bg-slate-100 text-slate-700 text-xs font-bold rounded-xl">Cancel</button>
-                <button type="submit" disabled={actionLoading} className="w-1/2 py-2.5 bg-[#2818cf] text-white text-xs font-bold rounded-xl shadow-md flex items-center justify-center gap-1.5">
+                <button type="submit" disabled={actionLoading} className="w-1/2 py-2.5 bg-[#2012ad] text-white text-xs font-bold rounded-xl shadow-md flex items-center justify-center gap-1.5">
                   {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>Save Supplier</span>}
                 </button>
               </div>

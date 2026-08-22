@@ -87,7 +87,7 @@ export const AssignShiftModal: React.FC<AssignShiftModalProps> = ({
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full border border-slate-200/80 overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
               <UserCheck className="w-4 h-4" />
             </div>
             <div>
@@ -114,7 +114,7 @@ export const AssignShiftModal: React.FC<AssignShiftModalProps> = ({
               value={staffId}
               onChange={(e) => setStaffId(Number(e.target.value))}
               required
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
             >
               <option value="">Select Employee...</option>
               {staffList.map((s) => (
@@ -131,7 +131,7 @@ export const AssignShiftModal: React.FC<AssignShiftModalProps> = ({
               value={shiftTemplateId}
               onChange={(e) => setShiftTemplateId(Number(e.target.value))}
               required
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
             >
               <option value="">Select Shift...</option>
               {shiftTemplates.map((st) => (

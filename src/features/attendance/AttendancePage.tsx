@@ -224,7 +224,7 @@ export const AttendancePage: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf] shadow-sm">
+          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad] shadow-sm">
             <CalendarCheck className="w-5 h-5" />
           </div>
           <div>
@@ -303,7 +303,7 @@ export const AttendancePage: React.FC = () => {
           onClick={() => setActiveTab('today')}
           className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
             activeTab === 'today'
-              ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+              ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
@@ -315,7 +315,7 @@ export const AttendancePage: React.FC = () => {
           onClick={() => setActiveTab('monthly')}
           className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
             activeTab === 'monthly'
-              ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+              ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
@@ -327,7 +327,7 @@ export const AttendancePage: React.FC = () => {
           onClick={() => setActiveTab('reports')}
           className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
             activeTab === 'reports'
-              ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+              ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
@@ -339,7 +339,7 @@ export const AttendancePage: React.FC = () => {
           onClick={() => setActiveTab('approvals')}
           className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 relative ${
             activeTab === 'approvals'
-              ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+              ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
@@ -356,7 +356,7 @@ export const AttendancePage: React.FC = () => {
           onClick={() => setActiveTab('settings')}
           className={`px-4 py-2 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 ${
             activeTab === 'settings'
-              ? 'bg-indigo-50 text-[#2818cf] border border-indigo-100'
+              ? 'bg-indigo-50 text-[#2012ad] border border-indigo-100'
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
@@ -377,7 +377,7 @@ export const AttendancePage: React.FC = () => {
                 placeholder="Search staff code or name..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               />
             </div>
 
@@ -385,7 +385,7 @@ export const AttendancePage: React.FC = () => {
               <select
                 value={deptFilter}
                 onChange={(e) => setDeptFilter(Number(e.target.value) || '')}
-                className="bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20"
+                className="bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20"
               >
                 <option value="">All Departments</option>
                 {departments.map((d) => (
@@ -398,7 +398,7 @@ export const AttendancePage: React.FC = () => {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20"
+                className="bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20"
               >
                 <option value="">All Statuses</option>
                 <option value="PRESENT">PRESENT</option>
@@ -428,7 +428,7 @@ export const AttendancePage: React.FC = () => {
               <tbody className="divide-y divide-slate-100 text-slate-700 font-semibold">
                 {dailyList.map((row) => (
                   <tr key={row.staff_id} className="hover:bg-slate-50/60 transition-all">
-                    <td className="py-3 px-4 font-mono font-bold text-[#2818cf]">{row.staff_code}</td>
+                    <td className="py-3 px-4 font-mono font-bold text-[#2012ad]">{row.staff_code}</td>
                     <td className="py-3 px-4 text-slate-900 font-bold">
                       {row.first_name} {row.last_name || ''}
                     </td>
@@ -496,7 +496,7 @@ export const AttendancePage: React.FC = () => {
                             setSelectedRecordForCorrection(row);
                             setIsCorrectionModalOpen(true);
                           }}
-                          className="text-[11px] font-bold text-[#2818cf] hover:underline"
+                          className="text-[11px] font-bold text-[#2012ad] hover:underline"
                         >
                           Correct
                         </button>
@@ -552,7 +552,7 @@ export const AttendancePage: React.FC = () => {
             {monthlySummary && (
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-slate-500">Attendance Score:</span>
-                <span className="px-3 py-1 bg-indigo-50 border border-indigo-100 text-[#2818cf] text-sm font-extrabold rounded-full">
+                <span className="px-3 py-1 bg-indigo-50 border border-indigo-100 text-[#2012ad] text-sm font-extrabold rounded-full">
                   {monthlySummary.attendance_percentage}%
                 </span>
               </div>
@@ -578,8 +578,8 @@ export const AttendancePage: React.FC = () => {
                 <p className="text-lg font-bold text-amber-700 mt-1">{monthlySummary.late_count} Times</p>
               </Card>
               <Card className="p-4 bg-indigo-50/50">
-                <span className="text-[10px] font-extrabold text-[#2818cf] uppercase">Total Worked</span>
-                <p className="text-lg font-bold text-[#2818cf] mt-1">{monthlySummary.total_worked_hours_formatted}</p>
+                <span className="text-[10px] font-extrabold text-[#2012ad] uppercase">Total Worked</span>
+                <p className="text-lg font-bold text-[#2012ad] mt-1">{monthlySummary.total_worked_hours_formatted}</p>
               </Card>
               <Card className="p-4 bg-cyan-50/50">
                 <span className="text-[10px] font-extrabold text-cyan-600 uppercase">Half Days</span>
@@ -593,7 +593,7 @@ export const AttendancePage: React.FC = () => {
       {/* TAB 3: REPORTS */}
       {activeTab === 'reports' && (
         <Card className="space-y-4 text-center py-12">
-          <BarChart3 className="w-12 h-12 text-[#2818cf] mx-auto opacity-80" />
+          <BarChart3 className="w-12 h-12 text-[#2012ad] mx-auto opacity-80" />
           <h3 className="text-base font-bold text-slate-900">Attendance Reports & Exports</h3>
           <p className="text-xs text-slate-500 max-w-md mx-auto">
             Generate monthly staff attendance reports, late arrival summaries, and CSV data exports.
@@ -629,7 +629,7 @@ export const AttendancePage: React.FC = () => {
                       <span className="text-xs font-bold text-slate-900">
                         {corr.staff_code} — {corr.first_name} {corr.last_name || ''}
                       </span>
-                      <span className="px-2 py-0.5 bg-indigo-50 text-[#2818cf] text-[10px] font-bold rounded-md">
+                      <span className="px-2 py-0.5 bg-indigo-50 text-[#2012ad] text-[10px] font-bold rounded-md">
                         {corr.attendance_date}
                       </span>
                     </div>
@@ -666,7 +666,7 @@ export const AttendancePage: React.FC = () => {
 
           <form onSubmit={handleSaveSettings} className="space-y-4">
             {settingsMessage && (
-              <div className="p-3 bg-indigo-50 border border-indigo-200 rounded-xl text-xs font-bold text-[#2818cf]">
+              <div className="p-3 bg-indigo-50 border border-indigo-200 rounded-xl text-xs font-bold text-[#2012ad]">
                 {settingsMessage}
               </div>
             )}

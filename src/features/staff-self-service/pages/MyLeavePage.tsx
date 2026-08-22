@@ -76,7 +76,7 @@ export const MyLeavePage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf] shadow-sm">
+          <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad] shadow-sm">
             <Calendar className="w-5 h-5" />
           </div>
           <div>
@@ -93,7 +93,7 @@ export const MyLeavePage: React.FC = () => {
       {/* Leave Balances Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
-          { name: 'Casual Leave', total: 6, used: 2, color: 'bg-indigo-50 text-[#2818cf]' },
+          { name: 'Casual Leave', total: 6, used: 2, color: 'bg-indigo-50 text-[#2012ad]' },
           { name: 'Sick Leave', total: 6, used: 1, color: 'bg-emerald-50 text-emerald-600' },
           { name: 'Earned / Annual Leave', total: 6, used: 1, color: 'bg-amber-50 text-amber-600' },
         ].map((b, idx) => (
@@ -197,7 +197,7 @@ export const MyLeavePage: React.FC = () => {
                 <select
                   value={leaveTypeId}
                   onChange={(e) => setLeaveTypeId(Number(e.target.value))}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
                 >
                   <option value={1}>Casual Leave</option>
                   <option value={2}>Sick Leave</option>
@@ -218,7 +218,7 @@ export const MyLeavePage: React.FC = () => {
                   onChange={(e) => setReason(e.target.value)}
                   required
                   placeholder="Enter detailed reason..."
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf]"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 p-2.5 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
                 />
               </div>
 

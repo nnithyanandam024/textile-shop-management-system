@@ -83,7 +83,7 @@ export const PurchasesPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2818cf]">
+          <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2012ad]">
             <ShoppingBag className="w-6 h-6" />
           </div>
           <div>
@@ -102,7 +102,7 @@ export const PurchasesPage: React.FC = () => {
           </button>
           <button
             onClick={() => setShowPurchaseModal(true)}
-            className="px-4 py-2.5 bg-[#2818cf] hover:bg-[#2012ad] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2818cf]/20 transition-all flex items-center gap-2"
+            className="px-4 py-2.5 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2012ad]/20 transition-all flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             <span>New Purchase Inward</span>
@@ -133,7 +133,7 @@ export const PurchasesPage: React.FC = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search by Purchase # or Supplier Name..."
-            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
           />
         </div>
       </div>
@@ -142,7 +142,7 @@ export const PurchasesPage: React.FC = () => {
       <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden">
         {loading ? (
           <div className="p-12 text-center text-slate-500">
-            <RefreshCw className="w-8 h-8 animate-spin text-[#2818cf] mx-auto mb-2" />
+            <RefreshCw className="w-8 h-8 animate-spin text-[#2012ad] mx-auto mb-2" />
             <span className="text-sm font-medium">Loading purchase history...</span>
           </div>
         ) : filteredPurchases.length === 0 ? (
@@ -167,7 +167,7 @@ export const PurchasesPage: React.FC = () => {
                   <td className="px-6 py-4 font-mono font-bold text-slate-900">{p.purchase_number}</td>
                   <td className="px-6 py-4 font-bold text-slate-800">{p.supplier_name || 'Vendor'}</td>
                   <td className="px-6 py-4 text-xs text-slate-500">{new Date(p.purchase_date).toLocaleDateString()}</td>
-                  <td className="px-6 py-4 font-extrabold text-[#2818cf]">₹{p.total}</td>
+                  <td className="px-6 py-4 font-extrabold text-[#2012ad]">₹{p.total}</td>
                   <td className="px-6 py-4">
                     <span
                       className={`px-2.5 py-1 rounded text-xs font-bold ${
@@ -224,7 +224,7 @@ export const PurchasesPage: React.FC = () => {
               <div className="flex justify-between"><span className="text-slate-500">Date:</span><span className="font-bold">{new Date(selectedPurchase.purchase_date).toLocaleString()}</span></div>
               <div className="flex justify-between"><span className="text-slate-500">Subtotal:</span><span className="font-bold">₹{selectedPurchase.subtotal}</span></div>
               <div className="flex justify-between"><span className="text-slate-500">Discount:</span><span className="font-bold">₹{selectedPurchase.discount}</span></div>
-              <div className="flex justify-between"><span className="text-slate-500">Grand Total:</span><span className="font-bold text-[#2818cf]">₹{selectedPurchase.total}</span></div>
+              <div className="flex justify-between"><span className="text-slate-500">Grand Total:</span><span className="font-bold text-[#2012ad]">₹{selectedPurchase.total}</span></div>
             </div>
             <button onClick={() => setSelectedPurchase(null)} className="w-full py-2 bg-slate-100 text-slate-700 text-xs font-bold rounded-xl">Close</button>
           </div>

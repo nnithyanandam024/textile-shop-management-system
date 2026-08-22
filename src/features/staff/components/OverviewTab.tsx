@@ -31,7 +31,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
             <h4 className="text-sm font-bold text-slate-900">Profile Completion Status</h4>
             <p className="text-xs text-slate-500">Calculated automatically based on filled profile data sections</p>
           </div>
-          <span className="text-lg font-extrabold text-[#2818cf] font-mono">{completion}%</span>
+          <span className="text-lg font-extrabold text-[#2012ad] font-mono">{completion}%</span>
         </div>
 
         <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden p-0.5 border border-slate-200">
@@ -40,7 +40,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
               completion >= 90
                 ? 'bg-emerald-500'
                 : completion >= 60
-                ? 'bg-[#2818cf]'
+                ? 'bg-[#2012ad]'
                 : 'bg-amber-500'
             }`}
             style={{ width: `${completion}%` }}
@@ -61,12 +61,12 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
         <Card className="space-y-3">
           <div className="flex items-center justify-between border-b border-slate-100 pb-2">
             <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-              <Phone className="w-3.5 h-3.5 text-[#2818cf]" />
+              <Phone className="w-3.5 h-3.5 text-[#2012ad]" />
               Contact Information
             </h4>
             <button
               onClick={() => onNavigateTab('Contact')}
-              className="text-[11px] font-bold text-[#2818cf] hover:underline"
+              className="text-[11px] font-bold text-[#2012ad] hover:underline"
             >
               Manage
             </button>
@@ -97,7 +97,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
             </h4>
             <button
               onClick={() => onNavigateTab('Emergency')}
-              className="text-[11px] font-bold text-[#2818cf] hover:underline"
+              className="text-[11px] font-bold text-[#2012ad] hover:underline"
             >
               Manage
             </button>
@@ -123,7 +123,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
             </h4>
             <button
               onClick={() => onNavigateTab('Employment')}
-              className="text-[11px] font-bold text-[#2818cf] hover:underline"
+              className="text-[11px] font-bold text-[#2012ad] hover:underline"
             >
               View Full
             </button>
@@ -132,7 +132,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
           <div className="grid grid-cols-2 gap-2 text-xs font-semibold text-slate-700">
             <div>
               <p className="text-[10px] text-slate-400">Department</p>
-              <p className="font-bold text-[#2818cf]">{staff.department_name}</p>
+              <p className="font-bold text-[#2012ad]">{staff.department_name}</p>
             </div>
             <div>
               <p className="text-[10px] text-slate-400">Designation</p>
@@ -158,7 +158,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
             </h4>
             <button
               onClick={() => onNavigateTab('Documents')}
-              className="text-[11px] font-bold text-[#2818cf] hover:underline"
+              className="text-[11px] font-bold text-[#2012ad] hover:underline"
             >
               Manage
             </button>

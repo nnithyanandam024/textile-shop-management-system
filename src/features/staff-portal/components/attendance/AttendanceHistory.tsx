@@ -50,7 +50,7 @@ export const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
       {/* Header & Filter Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2818cf] flex items-center justify-center font-bold">
+          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2012ad] flex items-center justify-center font-bold">
             <History className="w-4 h-4" />
           </div>
           <div>
@@ -70,7 +70,7 @@ export const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
             <select
               value={statusFilter}
               onChange={(e) => onStatusFilterChange(e.target.value)}
-              className="pl-3 pr-8 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 cursor-pointer"
+              className="pl-3 pr-8 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 cursor-pointer"
             >
               <option value="ALL">All Status</option>
               <option value="PRESENT">Present</option>
@@ -149,7 +149,7 @@ export const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
                         <button
                           type="button"
                           onClick={() => onViewDetails(row.attendanceDate)}
-                          className="p-1 text-slate-400 hover:text-[#2818cf] transition-colors"
+                          className="p-1 text-slate-400 hover:text-[#2012ad] transition-colors"
                           title="View Details"
                         >
                           <Eye className="w-4 h-4" />

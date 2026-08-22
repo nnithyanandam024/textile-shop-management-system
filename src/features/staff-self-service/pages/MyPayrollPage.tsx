@@ -72,7 +72,7 @@ export const MyPayrollPage: React.FC = () => {
                     <td className="py-3 px-4 font-mono text-emerald-600">+₹{p.allowances?.toLocaleString() || 0}</td>
                     <td className="py-3 px-4 font-mono text-emerald-600">+₹{p.incentives?.toLocaleString() || 0}</td>
                     <td className="py-3 px-4 font-mono text-rose-600">-₹{p.deductions?.toLocaleString() || 0}</td>
-                    <td className="py-3 px-4 font-extrabold text-[#2818cf] text-sm">₹{p.net_salary?.toLocaleString() || 0}</td>
+                    <td className="py-3 px-4 font-extrabold text-[#2012ad] text-sm">₹{p.net_salary?.toLocaleString() || 0}</td>
                     <td className="py-3 px-4">
                       <Button size="sm" variant="outline" icon={<Eye className="w-3.5 h-3.5" />} onClick={() => setSelectedPayslip(p)}>
                         View Payslip
@@ -92,7 +92,7 @@ export const MyPayrollPage: React.FC = () => {
           <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full border border-slate-200/80 overflow-hidden">
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
               <div className="flex items-center gap-2">
-                <FileText className="w-5 h-5 text-[#2818cf]" />
+                <FileText className="w-5 h-5 text-[#2012ad]" />
                 <h3 className="text-base font-bold text-slate-900">Payslip — {selectedPayslip.month} {selectedPayslip.year}</h3>
               </div>
               <button onClick={() => setSelectedPayslip(null)} className="p-1 rounded-lg text-slate-400 hover:text-slate-600">
@@ -118,7 +118,7 @@ export const MyPayrollPage: React.FC = () => {
                   <span>Tax & Deductions</span>
                   <span>-₹{selectedPayslip.deductions?.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between text-sm font-extrabold text-[#2818cf] pt-1">
+                <div className="flex justify-between text-sm font-extrabold text-[#2012ad] pt-1">
                   <span>Net Salary Payable</span>
                   <span>₹{selectedPayslip.net_salary?.toLocaleString()}</span>
                 </div>

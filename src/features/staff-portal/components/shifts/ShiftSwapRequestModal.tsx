@@ -137,7 +137,7 @@ export const ShiftSwapRequestModal: React.FC<ShiftSwapRequestModalProps> = ({
                 value={shiftDate}
                 onChange={(e) => setShiftDate(e.target.value)}
                 disabled={isSubmitting}
-                className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white"
+                className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white"
               />
             </div>
           </div>
@@ -162,7 +162,7 @@ export const ShiftSwapRequestModal: React.FC<ShiftSwapRequestModalProps> = ({
                   value={selectedStaffId}
                   onChange={(e) => setSelectedStaffId(Number(e.target.value))}
                   disabled={isSubmitting}
-                  className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white cursor-pointer"
+                  className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white cursor-pointer"
                 >
                   {candidates.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -178,7 +178,7 @@ export const ShiftSwapRequestModal: React.FC<ShiftSwapRequestModalProps> = ({
           {selectedCandidate && (
             <div className="p-3 bg-indigo-50/60 border border-indigo-100 rounded-xl text-xs text-indigo-950 flex items-center justify-between">
               <span className="font-semibold">Colleague's Current Shift:</span>
-              <span className="font-bold text-[#2818cf]">{selectedCandidate.currentShift}</span>
+              <span className="font-bold text-[#2012ad]">{selectedCandidate.currentShift}</span>
             </div>
           )}
 
@@ -193,7 +193,7 @@ export const ShiftSwapRequestModal: React.FC<ShiftSwapRequestModalProps> = ({
               rows={3}
               placeholder="Explain the reason for this swap request (e.g. Mutual schedule agreement for family event)..."
               disabled={isSubmitting}
-              className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] focus:bg-white resize-none"
+              className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] focus:bg-white resize-none"
             />
           </div>
 

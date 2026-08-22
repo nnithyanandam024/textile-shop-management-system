@@ -40,7 +40,7 @@ export const InventoryHistory: React.FC<InventoryHistoryProps> = ({ history }) =
         <div className="space-y-2.5">
           {history.map((h, idx) => {
             let Icon = ClipboardCheck;
-            let iconBg = 'bg-indigo-50 text-[#2818cf]';
+            let iconBg = 'bg-indigo-50 text-[#2012ad]';
             if (h.type === 'TRANSFER_REQUEST') {
               Icon = ArrowRightLeft;
               iconBg = 'bg-emerald-50 text-emerald-700';

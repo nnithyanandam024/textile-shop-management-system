@@ -56,13 +56,13 @@ export const MyShiftsPage: React.FC = () => {
               className={`p-3.5 rounded-2xl border flex flex-col justify-between transition-all ${
                 s.status === 'OFF'
                   ? 'bg-slate-50 border-slate-200 text-slate-400'
-                  : 'bg-white border-slate-200/90 hover:border-[#2818cf]'
+                  : 'bg-white border-slate-200/90 hover:border-[#2012ad]'
               }`}
             >
               <div>
                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">{s.day}</span>
                 <p className="font-extrabold text-slate-900 text-xs mt-1">{s.shift}</p>
-                <p className="text-[11px] font-semibold text-[#2818cf] mt-0.5">{s.hours}</p>
+                <p className="text-[11px] font-semibold text-[#2012ad] mt-0.5">{s.hours}</p>
               </div>
 
               <div className="mt-3 pt-2 border-t border-slate-100 text-[10px] font-semibold text-slate-500 flex items-center gap-1">

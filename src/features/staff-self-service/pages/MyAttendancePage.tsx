@@ -69,8 +69,8 @@ export const MyAttendancePage: React.FC = () => {
         </Card>
 
         <Card className="p-4 bg-indigo-50/50 border border-indigo-100">
-          <span className="text-[10px] font-extrabold text-[#2818cf] uppercase tracking-wider">Leave Days</span>
-          <p className="text-xl font-extrabold text-[#2818cf] mt-1">{leaveCount}</p>
+          <span className="text-[10px] font-extrabold text-[#2012ad] uppercase tracking-wider">Leave Days</span>
+          <p className="text-xl font-extrabold text-[#2012ad] mt-1">{leaveCount}</p>
         </Card>
       </div>
 
@@ -115,7 +115,7 @@ export const MyAttendancePage: React.FC = () => {
                             ? 'bg-rose-100 text-rose-700'
                             : a.status === 'LATE'
                             ? 'bg-amber-100 text-amber-700'
-                            : 'bg-indigo-50 text-[#2818cf]'
+                            : 'bg-indigo-50 text-[#2012ad]'
                         }`}
                       >
                         {a.status}

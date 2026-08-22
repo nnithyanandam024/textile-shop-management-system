@@ -139,7 +139,7 @@ export const UsersPage: React.FC = () => {
       case 'Owner':
         return <span className="px-2.5 py-1 bg-purple-50 text-purple-700 border border-purple-200 rounded-full text-xs font-semibold">Owner</span>;
       case 'Manager':
-        return <span className="px-2.5 py-1 bg-indigo-50 text-[#2818cf] border border-indigo-200 rounded-full text-xs font-semibold">Manager</span>;
+        return <span className="px-2.5 py-1 bg-indigo-50 text-[#2012ad] border border-indigo-200 rounded-full text-xs font-semibold">Manager</span>;
       case 'Cashier':
         return <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-xs font-semibold">Cashier</span>;
       default:
@@ -152,7 +152,7 @@ export const UsersPage: React.FC = () => {
       {/* Top Action Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2818cf]">
+          <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2012ad]">
             <Users className="w-6 h-6" />
           </div>
           <div>
@@ -171,7 +171,7 @@ export const UsersPage: React.FC = () => {
           </button>
           <button
             onClick={() => setShowAddModal(true)}
-            className="px-4 py-2.5 bg-[#2818cf] hover:bg-[#2012ad] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2818cf]/20 transition-all flex items-center gap-2"
+            className="px-4 py-2.5 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2012ad]/20 transition-all flex items-center gap-2"
           >
             <UserPlus className="w-4 h-4" />
             <span>Add New User</span>
@@ -204,7 +204,7 @@ export const UsersPage: React.FC = () => {
       <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden">
         {loading ? (
           <div className="p-12 text-center text-slate-500 flex flex-col items-center">
-            <Loader2 className="w-8 h-8 animate-spin text-[#2818cf] mb-2" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#2012ad] mb-2" />
             <span className="text-sm font-medium">Loading user directory...</span>
           </div>
         ) : (
@@ -247,7 +247,7 @@ export const UsersPage: React.FC = () => {
                         setSelectedUser(user);
                         setShowResetModal(true);
                       }}
-                      className="p-2 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-[#2818cf] rounded-lg border border-slate-200 transition-all"
+                      className="p-2 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-[#2012ad] rounded-lg border border-slate-200 transition-all"
                       title="Reset Password"
                     >
                       <KeyRound className="w-4 h-4" />
@@ -284,7 +284,7 @@ export const UsersPage: React.FC = () => {
                   value={newDisplayName}
                   onChange={(e) => setNewDisplayName(e.target.value)}
                   placeholder="e.g. Ramesh Kumar"
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                   required
                 />
               </div>
@@ -296,7 +296,7 @@ export const UsersPage: React.FC = () => {
                   value={newUsername}
                   onChange={(e) => setNewUsername(e.target.value)}
                   placeholder="e.g. ramesh_cashier"
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                   required
                 />
               </div>
@@ -306,7 +306,7 @@ export const UsersPage: React.FC = () => {
                 <select
                   value={newRoleId}
                   onChange={(e) => setNewRoleId(Number(e.target.value))}
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                 >
                   <option value={1}>Owner (Full Control)</option>
                   <option value={2}>Manager (Operations)</option>
@@ -323,7 +323,7 @@ export const UsersPage: React.FC = () => {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                     required
                   />
                 </div>
@@ -334,7 +334,7 @@ export const UsersPage: React.FC = () => {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                     required
                   />
                 </div>
@@ -351,7 +351,7 @@ export const UsersPage: React.FC = () => {
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="w-1/2 py-2.5 bg-[#2818cf] hover:bg-[#2012ad] text-white text-sm font-semibold rounded-xl shadow-md flex items-center justify-center gap-2"
+                  className="w-1/2 py-2.5 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-sm font-semibold rounded-xl shadow-md flex items-center justify-center gap-2"
                 >
                   {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>Create Account</span>}
                 </button>
@@ -376,7 +376,7 @@ export const UsersPage: React.FC = () => {
                   value={resetPass}
                   onChange={(e) => setResetPass(e.target.value)}
                   placeholder="At least 6 characters"
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                   required
                 />
               </div>
@@ -392,7 +392,7 @@ export const UsersPage: React.FC = () => {
                 <button
                   type="submit"
                   disabled={actionLoading}
-                  className="w-1/2 py-2.5 bg-[#2818cf] hover:bg-[#2012ad] text-white text-sm font-semibold rounded-xl shadow-md flex items-center justify-center gap-2"
+                  className="w-1/2 py-2.5 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-sm font-semibold rounded-xl shadow-md flex items-center justify-center gap-2"
                 >
                   {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>Reset Password</span>}
                 </button>

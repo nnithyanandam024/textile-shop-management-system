@@ -139,7 +139,7 @@ export const ReturnModal: React.FC<ReturnModalProps> = ({
       <div className="w-full max-w-3xl bg-white rounded-2xl border border-slate-200 shadow-2xl p-6 relative flex flex-col max-h-[88vh] animate-scale-up">
         <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-[#2818cf]">
+            <div className="w-10 h-10 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-[#2012ad]">
               <RotateCcw className="w-5 h-5" />
             </div>
             <div>
@@ -188,7 +188,7 @@ export const ReturnModal: React.FC<ReturnModalProps> = ({
                 <span className="font-bold text-slate-900">Invoice: {saleData.sale.invoice_number}</span>
                 <span className="text-slate-500 ml-2">({new Date(saleData.sale.sale_date).toLocaleDateString()})</span>
               </div>
-              <span className="font-extrabold text-[#2818cf]">Original Total: ₹{saleData.sale.total}</span>
+              <span className="font-extrabold text-[#2012ad]">Original Total: ₹{saleData.sale.total}</span>
             </div>
 
             {/* Itemized Table */}
@@ -230,7 +230,7 @@ export const ReturnModal: React.FC<ReturnModalProps> = ({
                         </select>
                       </td>
                       <td className="p-2.5 font-semibold">₹{it.unit_price}</td>
-                      <td className="p-2.5 text-right font-extrabold text-[#2818cf]">
+                      <td className="p-2.5 text-right font-extrabold text-[#2012ad]">
                         ₹{(returnItems[it.id]?.qty || 0) * it.unit_price}
                       </td>
                     </tr>
@@ -272,12 +272,12 @@ export const ReturnModal: React.FC<ReturnModalProps> = ({
               <div className="text-right flex items-center gap-4">
                 <div>
                   <p className="text-[10px] font-bold text-slate-500 uppercase">Total Refund</p>
-                  <p className="text-xl font-extrabold text-[#2818cf]">₹{totalRefund}</p>
+                  <p className="text-xl font-extrabold text-[#2012ad]">₹{totalRefund}</p>
                 </div>
                 <button
                   type="submit"
                   disabled={loading || totalRefund === 0}
-                  className="px-5 py-2.5 bg-[#2818cf] hover:bg-[#2012ad] text-white text-xs font-bold rounded-xl shadow-lg shadow-[#2818cf]/20 transition-all flex items-center gap-2"
+                  className="px-5 py-2.5 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-xs font-bold rounded-xl shadow-lg shadow-[#2012ad]/20 transition-all flex items-center gap-2"
                 >
                   {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>Process Return</span>}
                 </button>

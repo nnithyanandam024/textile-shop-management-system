@@ -56,7 +56,7 @@ export const CustomerPreferencesModal: React.FC<CustomerPreferencesModalProps> =
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center">
               <Tag className="w-5 h-5" />
             </div>
             <div>
@@ -85,7 +85,7 @@ export const CustomerPreferencesModal: React.FC<CustomerPreferencesModalProps> =
               value={categories}
               onChange={(e) => setCategories(e.target.value)}
               placeholder="e.g. Kanchipuram Silk Sarees, Cotton Kurtis"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2818cf]"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2012ad]"
             />
           </div>
 
@@ -97,7 +97,7 @@ export const CustomerPreferencesModal: React.FC<CustomerPreferencesModalProps> =
                 value={colors}
                 onChange={(e) => setColors(e.target.value)}
                 placeholder="e.g. Royal Blue, Crimson Red"
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2818cf]"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2012ad]"
               />
             </div>
 
@@ -108,7 +108,7 @@ export const CustomerPreferencesModal: React.FC<CustomerPreferencesModalProps> =
                 value={sizes}
                 onChange={(e) => setSizes(e.target.value)}
                 placeholder="e.g. Free Size, L (40), XL"
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold font-mono text-slate-900 focus:outline-none focus:border-[#2818cf]"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold font-mono text-slate-900 focus:outline-none focus:border-[#2012ad]"
               />
             </div>
           </div>
@@ -120,7 +120,7 @@ export const CustomerPreferencesModal: React.FC<CustomerPreferencesModalProps> =
               value={brands}
               onChange={(e) => setBrands(e.target.value)}
               placeholder="e.g. Texora Heritage, Royal Weaves"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2818cf]"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2012ad]"
             />
           </div>
 
@@ -131,7 +131,7 @@ export const CustomerPreferencesModal: React.FC<CustomerPreferencesModalProps> =
               value={shoppingPreferences}
               onChange={(e) => setShoppingPreferences(e.target.value)}
               placeholder="e.g. Festival shopper, Wedding collections, Prefers lightweight fabrics"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2818cf]"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2012ad]"
             />
           </div>
 
@@ -142,7 +142,7 @@ export const CustomerPreferencesModal: React.FC<CustomerPreferencesModalProps> =
                 type="date"
                 value={dob}
                 onChange={(e) => setDob(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2818cf]"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2012ad]"
               />
             </div>
 
@@ -152,7 +152,7 @@ export const CustomerPreferencesModal: React.FC<CustomerPreferencesModalProps> =
                 type="date"
                 value={anniversary}
                 onChange={(e) => setAnniversary(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2818cf]"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2012ad]"
               />
             </div>
           </div>
@@ -174,7 +174,7 @@ export const CustomerPreferencesModal: React.FC<CustomerPreferencesModalProps> =
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2.5 rounded-2xl bg-[#2818cf] hover:bg-indigo-700 text-white text-xs font-extrabold shadow-lg shadow-indigo-600/25 transition-all disabled:opacity-50"
+              className="px-6 py-2.5 rounded-2xl bg-[#2012ad] hover:bg-indigo-700 text-white text-xs font-extrabold shadow-lg shadow-indigo-600/25 transition-all disabled:opacity-50"
             >
               {saving ? 'Saving...' : 'Save Preferences'}
             </button>

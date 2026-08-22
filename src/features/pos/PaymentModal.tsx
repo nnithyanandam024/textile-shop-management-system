@@ -84,7 +84,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
         <div className="text-center pb-4 mb-4 border-b border-slate-100">
           <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Checkout Total Amount</span>
-          <h2 className="text-3xl font-extrabold text-[#2818cf] mt-1">₹{totalAmount.toLocaleString('en-IN')}</h2>
+          <h2 className="text-3xl font-extrabold text-[#2012ad] mt-1">₹{totalAmount.toLocaleString('en-IN')}</h2>
         </div>
 
         {error && (
@@ -103,7 +103,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 type="button"
                 onClick={() => setPaymentMode('CASH')}
                 className={`p-3 rounded-xl border text-xs font-bold transition-all flex flex-col items-center gap-1.5 ${
-                  paymentMode === 'CASH' ? 'bg-[#2818cf] text-white border-[#2818cf] shadow-md' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                  paymentMode === 'CASH' ? 'bg-[#2012ad] text-white border-[#2012ad] shadow-md' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                 }`}
               >
                 <DollarSign className="w-5 h-5" />
@@ -114,7 +114,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 type="button"
                 onClick={() => setPaymentMode('UPI')}
                 className={`p-3 rounded-xl border text-xs font-bold transition-all flex flex-col items-center gap-1.5 ${
-                  paymentMode === 'UPI' ? 'bg-[#2818cf] text-white border-[#2818cf] shadow-md' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                  paymentMode === 'UPI' ? 'bg-[#2012ad] text-white border-[#2012ad] shadow-md' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                 }`}
               >
                 <QrCode className="w-5 h-5" />
@@ -125,7 +125,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 type="button"
                 onClick={() => setPaymentMode('CARD')}
                 className={`p-3 rounded-xl border text-xs font-bold transition-all flex flex-col items-center gap-1.5 ${
-                  paymentMode === 'CARD' ? 'bg-[#2818cf] text-white border-[#2818cf] shadow-md' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                  paymentMode === 'CARD' ? 'bg-[#2012ad] text-white border-[#2012ad] shadow-md' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                 }`}
               >
                 <CreditCard className="w-5 h-5" />
@@ -136,7 +136,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 type="button"
                 onClick={() => setPaymentMode('BANK_TRANSFER')}
                 className={`p-3 rounded-xl border text-xs font-bold transition-all flex flex-col items-center gap-1.5 ${
-                  paymentMode === 'BANK_TRANSFER' ? 'bg-[#2818cf] text-white border-[#2818cf] shadow-md' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                  paymentMode === 'BANK_TRANSFER' ? 'bg-[#2012ad] text-white border-[#2012ad] shadow-md' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                 }`}
               >
                 <Building2 className="w-5 h-5" />
@@ -147,7 +147,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 type="button"
                 onClick={() => setPaymentMode('CREDIT')}
                 className={`p-3 rounded-xl border text-xs font-bold transition-all flex flex-col items-center gap-1.5 ${
-                  paymentMode === 'CREDIT' ? 'bg-[#2818cf] text-white border-[#2818cf] shadow-md' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                  paymentMode === 'CREDIT' ? 'bg-[#2012ad] text-white border-[#2012ad] shadow-md' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                 }`}
               >
                 <UserCheck className="w-5 h-5" />
@@ -158,7 +158,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 type="button"
                 onClick={() => setPaymentMode('SPLIT')}
                 className={`p-3 rounded-xl border text-xs font-bold transition-all flex flex-col items-center gap-1.5 ${
-                  paymentMode === 'SPLIT' ? 'bg-[#2818cf] text-white border-[#2818cf] shadow-md' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                  paymentMode === 'SPLIT' ? 'bg-[#2012ad] text-white border-[#2012ad] shadow-md' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                 }`}
               >
                 <span className="text-base font-extrabold">₹ / %</span>
@@ -176,7 +176,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                   type="number"
                   value={cashTendered}
                   onChange={(e) => setCashTendered(Number(e.target.value))}
-                  className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-lg font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                  className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-lg font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                 />
               </div>
 
@@ -196,7 +196,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                   value={referenceNo}
                   onChange={(e) => setReferenceNo(e.target.value)}
                   placeholder="e.g. UPI123456789 or TXN98765"
-                  className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+                  className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
                 />
               </div>
             </div>
@@ -255,7 +255,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
             <button
               type="submit"
               disabled={loading}
-              className="w-2/3 py-3 bg-[#2818cf] hover:bg-[#2012ad] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2818cf]/20 flex items-center justify-center gap-2"
+              className="w-2/3 py-3 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2012ad]/20 flex items-center justify-center gap-2"
             >
               {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
               <span>Complete Checkout & Print (F9)</span>

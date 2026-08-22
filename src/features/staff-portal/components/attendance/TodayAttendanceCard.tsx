@@ -86,7 +86,7 @@ export const TodayAttendanceCard: React.FC<TodayAttendanceCardProps> = ({
         <button
           type="button"
           onClick={onRequestCorrectionClick}
-          className="text-xs font-bold text-slate-500 hover:text-[#2818cf] transition-colors flex items-center gap-1 self-start sm:self-auto"
+          className="text-xs font-bold text-slate-500 hover:text-[#2012ad] transition-colors flex items-center gap-1 self-start sm:self-auto"
         >
           <HelpCircle className="w-4 h-4" />
           <span>Need Correction?</span>
@@ -171,7 +171,7 @@ export const TodayAttendanceCard: React.FC<TodayAttendanceCardProps> = ({
             Working Time
           </span>
           <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4 text-[#2818cf]" />
+            <CheckCircle2 className="w-4 h-4 text-[#2012ad]" />
             <p className="text-sm font-extrabold text-slate-900">
               {Math.floor(liveSeconds / 3600)}h {Math.floor((liveSeconds % 3600) / 60)}m
             </p>
@@ -200,7 +200,7 @@ export const TodayAttendanceCard: React.FC<TodayAttendanceCardProps> = ({
             type="button"
             onClick={() => setConfirmModal('CHECK_IN')}
             disabled={isLoading}
-            className="w-full py-4 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-2xl text-sm font-extrabold transition-all shadow-lg shadow-indigo-200 flex items-center justify-center gap-2 active:scale-98"
+            className="w-full py-4 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-2xl text-sm font-extrabold transition-all shadow-lg shadow-indigo-200 flex items-center justify-center gap-2 active:scale-98"
           >
             <LogIn className="w-5 h-5" />
             <span>CONFIRM & CHECK IN NOW</span>
@@ -239,7 +239,7 @@ export const TodayAttendanceCard: React.FC<TodayAttendanceCardProps> = ({
             <div
               className={`w-12 h-12 rounded-2xl flex items-center justify-center mx-auto ${
                 confirmModal === 'CHECK_IN'
-                  ? 'bg-indigo-50 text-[#2818cf]'
+                  ? 'bg-indigo-50 text-[#2012ad]'
                   : 'bg-rose-50 text-rose-600'
               }`}
             >
@@ -272,7 +272,7 @@ export const TodayAttendanceCard: React.FC<TodayAttendanceCardProps> = ({
                 disabled={isLoading}
                 className={`flex-1 py-2.5 rounded-xl text-xs font-bold text-white transition-all shadow-md ${
                   confirmModal === 'CHECK_IN'
-                    ? 'bg-[#2818cf] hover:bg-indigo-700 shadow-indigo-200'
+                    ? 'bg-[#2012ad] hover:bg-indigo-700 shadow-indigo-200'
                     : 'bg-rose-600 hover:bg-rose-700 shadow-rose-200'
                 }`}
               >

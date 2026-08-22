@@ -41,7 +41,7 @@ export const LeaveRequestList: React.FC<LeaveRequestListProps> = ({
       {/* Header & Tabs */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2818cf] flex items-center justify-center font-bold">
+          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2012ad] flex items-center justify-center font-bold">
             <FileText className="w-4 h-4" />
           </div>
           <div>
@@ -143,7 +143,7 @@ export const LeaveRequestList: React.FC<LeaveRequestListProps> = ({
                           {r.leaveName}
                         </span>
                         {isHalfDay && (
-                          <span className="ml-1.5 px-1.5 py-0.2 rounded text-[10px] font-bold bg-indigo-50 text-[#2818cf]">
+                          <span className="ml-1.5 px-1.5 py-0.2 rounded text-[10px] font-bold bg-indigo-50 text-[#2012ad]">
                             {r.session || 'Half'}
                           </span>
                         )}
@@ -183,7 +183,7 @@ export const LeaveRequestList: React.FC<LeaveRequestListProps> = ({
                               e.stopPropagation();
                               onSelectRequest(r);
                             }}
-                            className="p-1 text-slate-400 hover:text-[#2818cf] transition-colors"
+                            className="p-1 text-slate-400 hover:text-[#2012ad] transition-colors"
                             title="View Details"
                           >
                             <Eye className="w-4 h-4" />

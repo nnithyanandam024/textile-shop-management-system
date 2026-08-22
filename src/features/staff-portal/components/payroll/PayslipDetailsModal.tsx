@@ -25,7 +25,7 @@ export const PayslipDetailsModal: React.FC<PayslipDetailsModalProps> = ({
         {/* Modal Top Action Bar (Hidden in Print) */}
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 print:hidden shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+            <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
               <Receipt className="w-4 h-4" />
             </div>
             <div>
@@ -40,7 +40,7 @@ export const PayslipDetailsModal: React.FC<PayslipDetailsModalProps> = ({
             <button
               type="button"
               onClick={handlePrint}
-              className="px-3.5 py-2 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center gap-1.5"
+              className="px-3.5 py-2 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center gap-1.5"
             >
               <Printer className="w-3.5 h-3.5" />
               <span>Print / Download PDF</span>
@@ -59,7 +59,7 @@ export const PayslipDetailsModal: React.FC<PayslipDetailsModalProps> = ({
         <div className="p-6 sm:p-8 space-y-6 text-slate-900 font-sans overflow-y-auto custom-scrollbar">
           {/* Shop Branding Header */}
           <div className="text-center border-b border-slate-200 pb-4">
-            <h1 className="text-2xl font-extrabold text-[#2818cf] tracking-wider uppercase">
+            <h1 className="text-2xl font-extrabold text-[#2012ad] tracking-wider uppercase">
               TEXORA TEXTILE HUB
             </h1>
             <p className="text-xs text-slate-500 font-bold mt-0.5">
@@ -89,7 +89,7 @@ export const PayslipDetailsModal: React.FC<PayslipDetailsModalProps> = ({
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                 Payroll Period
               </span>
-              <p className="font-extrabold text-[#2818cf] text-sm mt-0.5">
+              <p className="font-extrabold text-[#2012ad] text-sm mt-0.5">
                 {payroll.periodName}
               </p>
 
@@ -198,7 +198,7 @@ export const PayslipDetailsModal: React.FC<PayslipDetailsModalProps> = ({
                 Gross Earnings minus Applicable Deductions
               </p>
             </div>
-            <strong className="text-2xl font-extrabold text-[#2818cf] font-mono">
+            <strong className="text-2xl font-extrabold text-[#2012ad] font-mono">
               ₹{payroll.netSalary.toLocaleString('en-IN')}
             </strong>
           </div>

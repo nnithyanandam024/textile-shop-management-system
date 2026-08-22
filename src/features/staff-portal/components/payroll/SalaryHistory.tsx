@@ -74,7 +74,7 @@ export const SalaryHistory: React.FC<SalaryHistoryProps> = ({ salaryHistory }) =
 
                 <div className="text-right bg-white px-3 py-1.5 rounded-xl border border-slate-100">
                   <span className="text-[10px] font-bold text-indigo-900 block">Gross Package</span>
-                  <strong className="text-sm font-extrabold text-[#2818cf] font-mono">
+                  <strong className="text-sm font-extrabold text-[#2012ad] font-mono">
                     ₹{sh.grossSalary.toLocaleString('en-IN')}
                   </strong>
                 </div>

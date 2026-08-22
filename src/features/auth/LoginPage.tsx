@@ -54,7 +54,7 @@ export const LoginPage: React.FC = () => {
       <div className="w-full max-w-md bg-white rounded-2xl border border-slate-200/80 shadow-xl shadow-slate-200/50 p-8 my-auto relative z-10">
         {/* Brand Header */}
         <div className="text-center mb-6">
-          <div className="w-14 h-14 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-3 text-[#2818cf] shadow-sm">
+          <div className="w-14 h-14 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-3 text-[#2012ad] shadow-sm">
             <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
             </svg>
@@ -88,7 +88,7 @@ export const LoginPage: React.FC = () => {
                 }}
                 placeholder="e.g. admin, STF-0001, arun.cashier"
                 disabled={loading}
-                className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2818cf] focus:bg-white transition-all disabled:opacity-50"
+                className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2012ad] focus:bg-white transition-all disabled:opacity-50"
               />
             </div>
           </div>
@@ -108,7 +108,7 @@ export const LoginPage: React.FC = () => {
                 }}
                 placeholder="Enter your password"
                 disabled={loading}
-                className="w-full pl-11 pr-11 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2818cf] focus:bg-white transition-all disabled:opacity-50"
+                className="w-full pl-11 pr-11 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2012ad] focus:bg-white transition-all disabled:opacity-50"
               />
               <button
                 type="button"
@@ -123,7 +123,7 @@ export const LoginPage: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 px-4 bg-[#2818cf] hover:bg-[#2012ad] active:bg-[#1a0e91] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2818cf]/20 transition-all flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer mt-2"
+            className="w-full py-3.5 px-4 bg-[#2012ad] hover:bg-[#1a0e91] active:bg-[#1a0e91] text-white text-sm font-semibold rounded-xl shadow-lg shadow-[#2012ad]/20 transition-all flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer mt-2"
           >
             {loading ? (
               <>

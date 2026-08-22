@@ -24,7 +24,7 @@ export const UpcomingShifts: React.FC<UpcomingShiftsProps> = ({ shifts }) => {
       <div>
         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2818cf] flex items-center justify-center border border-indigo-100 shadow-sm">
+            <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2012ad] flex items-center justify-center border border-indigo-100 shadow-sm">
               <Calendar className="w-4 h-4" />
             </div>
             <h3 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider">
@@ -44,8 +44,8 @@ export const UpcomingShifts: React.FC<UpcomingShiftsProps> = ({ shifts }) => {
                   <p className="text-xs font-extrabold text-slate-800 mt-0.5">{shift.name}</p>
                 </div>
                 <div className="text-right">
-                  <span className="inline-flex items-center gap-1 text-xs font-bold text-[#2818cf] font-mono bg-indigo-50/70 px-2 py-0.5 rounded-lg border border-indigo-100/70">
-                    <Clock className="w-3 h-3 text-[#2818cf]" />
+                  <span className="inline-flex items-center gap-1 text-xs font-bold text-[#2012ad] font-mono bg-indigo-50/70 px-2 py-0.5 rounded-lg border border-indigo-100/70">
+                    <Clock className="w-3 h-3 text-[#2012ad]" />
                     {shift.timeRange}
                   </span>
                 </div>
@@ -65,7 +65,7 @@ export const UpcomingShifts: React.FC<UpcomingShiftsProps> = ({ shifts }) => {
       <div className="mt-5 pt-3 border-t border-slate-100">
         <button
           onClick={() => navigate('/staff/shifts')}
-          className="w-full flex items-center justify-center gap-1.5 py-2 px-3 bg-slate-50 hover:bg-indigo-50/80 text-slate-700 hover:text-[#2818cf] border border-slate-200/80 hover:border-indigo-200 rounded-xl text-xs font-bold transition-all group"
+          className="w-full flex items-center justify-center gap-1.5 py-2 px-3 bg-slate-50 hover:bg-indigo-50/80 text-slate-700 hover:text-[#2012ad] border border-slate-200/80 hover:border-indigo-200 rounded-xl text-xs font-bold transition-all group"
         >
           <span>View All Shifts</span>
           <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />

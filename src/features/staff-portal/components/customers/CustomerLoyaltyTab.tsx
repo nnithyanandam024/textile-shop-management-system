@@ -136,7 +136,7 @@ export const CustomerLoyaltyTab: React.FC<CustomerLoyaltyTabProps> = ({
                         ? 'bg-emerald-50 text-emerald-600'
                         : tx.type === 'REDEEM'
                         ? 'bg-rose-50 text-rose-600'
-                        : 'bg-indigo-50 text-[#2818cf]'
+                        : 'bg-indigo-50 text-[#2012ad]'
                     }`}
                   >
                     {tx.type === 'EARN' ? (

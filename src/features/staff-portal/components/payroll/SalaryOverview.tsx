@@ -52,7 +52,7 @@ export const SalaryOverview: React.FC<SalaryOverviewProps> = ({
               <select
                 value={selectedPeriodId || periods[0]?.id}
                 onChange={(e) => onSelectPeriod(Number(e.target.value))}
-                className="appearance-none pl-3.5 pr-8 py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] cursor-pointer"
+                className="appearance-none pl-3.5 pr-8 py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] cursor-pointer"
               >
                 {periods.map((p) => (
                   <option key={p.id} value={p.id}>
@@ -67,7 +67,7 @@ export const SalaryOverview: React.FC<SalaryOverviewProps> = ({
           <button
             type="button"
             onClick={onViewPayslip}
-            className="px-4 py-2 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center gap-1.5"
+            className="px-4 py-2 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-200 flex items-center gap-1.5"
           >
             <FileText className="w-3.5 h-3.5" />
             <span>View Payslip</span>
@@ -76,7 +76,7 @@ export const SalaryOverview: React.FC<SalaryOverviewProps> = ({
       </div>
 
       {/* Net Salary Main Highlight Card */}
-      <div className="bg-linear-to-br from-[#1e147e] via-[#2818cf] to-[#4338ca] rounded-2xl p-6 text-white shadow-lg shadow-indigo-900/10 flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
+      <div className="bg-linear-to-br from-[#1e147e] via-[#2012ad] to-[#4338ca] rounded-2xl p-6 text-white shadow-lg shadow-indigo-900/10 flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
         {/* Subtle background decoration */}
         <div className="absolute right-0 top-0 translate-x-10 -translate-y-10 w-64 h-64 bg-white/5 rounded-full blur-2xl pointer-events-none" />
 

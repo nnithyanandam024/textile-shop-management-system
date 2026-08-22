@@ -13,7 +13,7 @@ export const EmploymentTab: React.FC<EmploymentTabProps> = ({ staff, onEdit }) =
     <Card className="space-y-6">
       <div className="flex items-center justify-between border-b border-slate-100 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+          <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
             <Briefcase className="w-4 h-4" />
           </div>
           <div>
@@ -30,7 +30,7 @@ export const EmploymentTab: React.FC<EmploymentTabProps> = ({ staff, onEdit }) =
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-xs font-semibold text-slate-700">
         <div>
           <p className="text-slate-400 uppercase tracking-wider text-[10px]">Staff Code / ID</p>
-          <p className="text-sm font-extrabold text-[#2818cf] font-mono mt-1">{staff.staff_code}</p>
+          <p className="text-sm font-extrabold text-[#2012ad] font-mono mt-1">{staff.staff_code}</p>
         </div>
 
         <div>

@@ -60,7 +60,7 @@ export const SystemHealthPage: React.FC = () => {
           <button
             onClick={handleRunIntegrityCheck}
             disabled={checking}
-            className="px-4 py-2.5 bg-[#2818cf] hover:bg-[#2012ad] text-white text-xs font-bold rounded-xl shadow-lg shadow-[#2818cf]/20 transition-all flex items-center gap-2"
+            className="px-4 py-2.5 bg-[#2012ad] hover:bg-[#1a0e91] text-white text-xs font-bold rounded-xl shadow-lg shadow-[#2012ad]/20 transition-all flex items-center gap-2"
           >
             <RefreshCw className={`w-4 h-4 ${checking ? 'animate-spin' : ''}`} />
             <span>Run Integrity Check</span>
@@ -92,7 +92,7 @@ export const SystemHealthPage: React.FC = () => {
 
         <Card className="border-l-4 border-l-indigo-500">
           <div className="flex items-center justify-between">
-            <Lock className="w-5 h-5 text-[#2818cf]" />
+            <Lock className="w-5 h-5 text-[#2012ad]" />
             <span className="text-[10px] font-bold text-slate-400 uppercase">FOREIGN KEYS</span>
           </div>
           <div className="mt-3">

@@ -48,7 +48,7 @@ export const MySalesDashboard: React.FC<MySalesDashboardProps> = ({ onOpenReceip
               onClick={() => setPeriod(p.id as any)}
               className={`px-3 py-1.5 rounded-xl transition-all ${
                 period === p.id
-                  ? 'bg-[#2818cf] text-white shadow-xs'
+                  ? 'bg-[#2012ad] text-white shadow-xs'
                   : 'text-slate-500 hover:text-slate-800'
               }`}
             >
@@ -62,7 +62,7 @@ export const MySalesDashboard: React.FC<MySalesDashboardProps> = ({ onOpenReceip
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Sales Volume */}
         <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2818cf] flex items-center justify-center shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-[#2012ad] flex items-center justify-center shrink-0">
             <DollarSign className="w-6 h-6" />
           </div>
           <div>
@@ -151,7 +151,7 @@ export const MySalesDashboard: React.FC<MySalesDashboardProps> = ({ onOpenReceip
               <tbody className="divide-y divide-slate-100 font-semibold text-slate-700">
                 {summary?.recentSales.map((s) => (
                   <tr key={s.id} className="hover:bg-slate-50/60 transition-colors">
-                    <td className="px-6 py-3.5 font-bold font-mono text-[#2818cf]">
+                    <td className="px-6 py-3.5 font-bold font-mono text-[#2012ad]">
                       {s.invoiceNumber}
                     </td>
                     <td className="px-6 py-3.5 text-slate-900">{s.customerName}</td>
@@ -172,7 +172,7 @@ export const MySalesDashboard: React.FC<MySalesDashboardProps> = ({ onOpenReceip
                         <button
                           type="button"
                           onClick={() => onOpenReceipt(s.id)}
-                          className="p-1.5 hover:bg-indigo-50 text-slate-400 hover:text-[#2818cf] rounded-xl transition-colors inline-flex items-center gap-1 text-[11px] font-bold"
+                          className="p-1.5 hover:bg-indigo-50 text-slate-400 hover:text-[#2012ad] rounded-xl transition-colors inline-flex items-center gap-1 text-[11px] font-bold"
                           title="View & Print Receipt"
                         >
                           <Eye className="w-3.5 h-3.5" />

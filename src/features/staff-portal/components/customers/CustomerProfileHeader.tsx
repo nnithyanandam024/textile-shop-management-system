@@ -53,7 +53,7 @@ export const CustomerProfileHeader: React.FC<CustomerProfileHeaderProps> = ({
           <button
             type="button"
             onClick={() => navigate('/staff/pos')}
-            className="px-4 py-2 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-2xl text-xs font-extrabold flex items-center gap-1.5 shadow-lg shadow-indigo-600/25 transition-all"
+            className="px-4 py-2 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-2xl text-xs font-extrabold flex items-center gap-1.5 shadow-lg shadow-indigo-600/25 transition-all"
           >
             <ShoppingCart className="w-3.5 h-3.5" />
             <span>Launch POS Sale</span>
@@ -64,7 +64,7 @@ export const CustomerProfileHeader: React.FC<CustomerProfileHeaderProps> = ({
       {/* Customer Info Card */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pt-2">
         <div className="flex items-start gap-4">
-          <div className="w-16 h-16 rounded-3xl bg-indigo-50 text-[#2818cf] font-black text-xl flex items-center justify-center shrink-0 shadow-inner">
+          <div className="w-16 h-16 rounded-3xl bg-indigo-50 text-[#2012ad] font-black text-xl flex items-center justify-center shrink-0 shadow-inner">
             {customer.name.slice(0, 2).toUpperCase()}
           </div>
           <div className="space-y-1">
@@ -134,7 +134,7 @@ export const CustomerProfileHeader: React.FC<CustomerProfileHeaderProps> = ({
             <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">
               Loyalty Points
             </span>
-            <span className="text-lg font-black text-[#2818cf] font-mono">
+            <span className="text-lg font-black text-[#2012ad] font-mono">
               {customer.loyaltyPoints}
             </span>
           </div>

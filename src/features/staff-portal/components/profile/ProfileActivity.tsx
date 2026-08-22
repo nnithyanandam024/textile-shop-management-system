@@ -12,7 +12,7 @@ export const ProfileActivity: React.FC<ProfileActivityProps> = ({ activities }) 
     if (action.includes('PHOTO')) return <Camera className="w-3.5 h-3.5 text-indigo-600" />;
     if (action.includes('EMERGENCY')) return <PhoneCall className="w-3.5 h-3.5 text-rose-600" />;
     if (action.includes('REQUEST')) return <FileText className="w-3.5 h-3.5 text-amber-600" />;
-    return <UserCheck className="w-3.5 h-3.5 text-[#2818cf]" />;
+    return <UserCheck className="w-3.5 h-3.5 text-[#2012ad]" />;
   };
 
   const formatTimestamp = (ts: string) => {
@@ -35,7 +35,7 @@ export const ProfileActivity: React.FC<ProfileActivityProps> = ({ activities }) 
       {/* Header */}
       <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2818cf] flex items-center justify-center font-bold">
+          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2012ad] flex items-center justify-center font-bold">
             <History className="w-4 h-4" />
           </div>
           <div>
@@ -64,7 +64,7 @@ export const ProfileActivity: React.FC<ProfileActivityProps> = ({ activities }) 
               </div>
 
               <div>
-                <p className="text-xs font-bold text-slate-800 group-hover:text-[#2818cf] transition-colors">
+                <p className="text-xs font-bold text-slate-800 group-hover:text-[#2012ad] transition-colors">
                   {act.description}
                 </p>
                 <span className="text-[10px] font-semibold text-slate-400">

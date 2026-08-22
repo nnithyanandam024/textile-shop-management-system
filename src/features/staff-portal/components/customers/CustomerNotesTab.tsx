@@ -36,7 +36,7 @@ export const CustomerNotesTab: React.FC<CustomerNotesTabProps> = ({
       {/* Add Note Card */}
       <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-4">
         <h4 className="text-xs font-extrabold text-slate-900 flex items-center gap-2">
-          <FileText className="w-4 h-4 text-[#2818cf]" />
+          <FileText className="w-4 h-4 text-[#2012ad]" />
           <span>Add Staff Note / Customer Remarks</span>
         </h4>
 
@@ -46,7 +46,7 @@ export const CustomerNotesTab: React.FC<CustomerNotesTabProps> = ({
             value={newNote}
             onChange={(e) => setNewNote(e.target.value)}
             placeholder="e.g. Requested notification when festive silk sarees arrive; Prefers lightweight fabrics."
-            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2818cf] placeholder:text-slate-400"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#2012ad] placeholder:text-slate-400"
           />
 
           {error && (
@@ -57,7 +57,7 @@ export const CustomerNotesTab: React.FC<CustomerNotesTabProps> = ({
             <button
               type="submit"
               disabled={submitting || !newNote.trim()}
-              className="px-5 py-2 bg-[#2818cf] hover:bg-indigo-700 text-white rounded-2xl text-xs font-extrabold flex items-center gap-1.5 shadow-lg shadow-indigo-600/25 transition-all disabled:opacity-50"
+              className="px-5 py-2 bg-[#2012ad] hover:bg-indigo-700 text-white rounded-2xl text-xs font-extrabold flex items-center gap-1.5 shadow-lg shadow-indigo-600/25 transition-all disabled:opacity-50"
             >
               <Send className="w-3.5 h-3.5" />
               <span>{submitting ? 'Saving...' : 'Post Note'}</span>
@@ -85,7 +85,7 @@ export const CustomerNotesTab: React.FC<CustomerNotesTabProps> = ({
               <div key={n.id} className="p-6 space-y-2 hover:bg-slate-50/40 transition-colors">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-indigo-50 text-[#2818cf] flex items-center justify-center text-[10px] font-bold">
+                    <div className="w-6 h-6 rounded-full bg-indigo-50 text-[#2012ad] flex items-center justify-center text-[10px] font-bold">
                       <User className="w-3.5 h-3.5" />
                     </div>
                     <span className="text-xs font-extrabold text-slate-900">

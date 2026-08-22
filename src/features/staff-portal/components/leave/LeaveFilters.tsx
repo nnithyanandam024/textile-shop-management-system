@@ -37,7 +37,7 @@ export const LeaveFilters: React.FC<LeaveFiltersProps> = ({
         <select
           value={selectedType || ''}
           onChange={(e) => onTypeChange(e.target.value ? Number(e.target.value) : undefined)}
-          className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] cursor-pointer"
+          className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] cursor-pointer"
         >
           <option value="">All Leave Types</option>
           {leaveTypes.map((t) => (
@@ -51,7 +51,7 @@ export const LeaveFilters: React.FC<LeaveFiltersProps> = ({
         <select
           value={selectedStatus}
           onChange={(e) => onStatusChange(e.target.value)}
-          className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] cursor-pointer"
+          className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] cursor-pointer"
         >
           <option value="ALL">All Statuses</option>
           <option value="PENDING">Pending Review</option>
@@ -64,7 +64,7 @@ export const LeaveFilters: React.FC<LeaveFiltersProps> = ({
         <select
           value={selectedYear}
           onChange={(e) => onYearChange(Number(e.target.value))}
-          className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2818cf]/20 focus:border-[#2818cf] cursor-pointer"
+          className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad] cursor-pointer"
         >
           <option value={currentYear - 1}>{currentYear - 1}</option>
           <option value={currentYear}>{currentYear}</option>

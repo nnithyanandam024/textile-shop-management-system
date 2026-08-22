@@ -77,7 +77,7 @@ export const SalesHistoryPage: React.FC = () => {
       {/* Top Header Card */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2818cf]">
+          <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center text-[#2012ad]">
             <ShoppingCart className="w-6 h-6" />
           </div>
           <div>
@@ -124,7 +124,7 @@ export const SalesHistoryPage: React.FC = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search by Invoice Number or Customer Name..."
-            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2818cf]"
+            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]"
           />
         </div>
       </div>
@@ -133,7 +133,7 @@ export const SalesHistoryPage: React.FC = () => {
       <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden">
         {loading ? (
           <div className="p-12 text-center text-slate-500">
-            <RefreshCw className="w-8 h-8 animate-spin text-[#2818cf] mx-auto mb-2" />
+            <RefreshCw className="w-8 h-8 animate-spin text-[#2012ad] mx-auto mb-2" />
             <span className="text-sm font-medium">Loading sales history...</span>
           </div>
         ) : filteredSales.length === 0 ? (
@@ -162,7 +162,7 @@ export const SalesHistoryPage: React.FC = () => {
                   <td className="px-6 py-4 font-semibold text-slate-800">
                     {s.customer_name || 'Walk-in Customer'}
                   </td>
-                  <td className="px-6 py-4 font-extrabold text-[#2818cf]">
+                  <td className="px-6 py-4 font-extrabold text-[#2012ad]">
                     ₹{s.total.toLocaleString('en-IN')}
                   </td>
                   <td className="px-6 py-4">
@@ -179,7 +179,7 @@ export const SalesHistoryPage: React.FC = () => {
                   <td className="px-6 py-4 text-right space-x-2">
                     <button
                       onClick={() => setSelectedSaleId(s.id)}
-                      className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-[#2818cf] border border-indigo-200 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1"
+                      className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-[#2012ad] border border-indigo-200 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1"
                     >
                       <Eye className="w-3.5 h-3.5" />
                       <span>View Receipt</span>

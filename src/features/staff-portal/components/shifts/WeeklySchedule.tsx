@@ -33,7 +33,7 @@ export const WeeklySchedule: React.FC<WeeklyScheduleProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between pb-3 border-b border-slate-100">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2818cf] flex items-center justify-center font-bold">
+          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-[#2012ad] flex items-center justify-center font-bold">
             <CalendarDays className="w-4 h-4" />
           </div>
           <div>
@@ -60,7 +60,7 @@ export const WeeklySchedule: React.FC<WeeklyScheduleProps> = ({
               onClick={() => onSelectDay(day)}
               className={`p-3.5 rounded-2xl border text-left transition-all hover:scale-[1.02] hover:shadow-sm active:scale-95 flex flex-col justify-between h-32 relative ${
                 isToday
-                  ? 'border-[#2818cf] bg-indigo-50/50 ring-2 ring-[#2818cf]/20'
+                  ? 'border-[#2012ad] bg-indigo-50/50 ring-2 ring-[#2012ad]/20'
                   : `${statusCfg.bgLight} ${statusCfg.borderColor}`
               }`}
             >
@@ -69,13 +69,13 @@ export const WeeklySchedule: React.FC<WeeklyScheduleProps> = ({
                 <div className="flex items-center justify-between">
                   <span
                     className={`text-[11px] font-extrabold uppercase ${
-                      isToday ? 'text-[#2818cf]' : 'text-slate-500'
+                      isToday ? 'text-[#2012ad]' : 'text-slate-500'
                     }`}
                   >
                     {day.shortDayName}
                   </span>
                   {isToday && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#2818cf] animate-ping" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#2012ad] animate-ping" />
                   )}
                 </div>
                 <p className="text-xs font-bold text-slate-900 mt-0.5">

@@ -10,7 +10,7 @@ export const HistoryTab: React.FC<HistoryTabProps> = ({ history }) => {
   return (
     <Card className="space-y-6">
       <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-        <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2818cf]">
+        <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad]">
           <History className="w-4 h-4" />
         </div>
         <div>
@@ -27,15 +27,15 @@ export const HistoryTab: React.FC<HistoryTabProps> = ({ history }) => {
         <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
           {history.map((h, idx) => (
             <div key={h.id || idx} className="relative flex items-start gap-4 group">
-              <div className="w-5 h-5 rounded-full bg-white border-2 border-[#2818cf] flex items-center justify-center shrink-0 -ml-8 group-hover:scale-110 transition-all">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#2818cf]" />
+              <div className="w-5 h-5 rounded-full bg-white border-2 border-[#2012ad] flex items-center justify-center shrink-0 -ml-8 group-hover:scale-110 transition-all">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#2012ad]" />
               </div>
 
               <div className="flex-1 p-4 bg-slate-50 border border-slate-100 rounded-2xl space-y-2">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                   <div className="flex items-center gap-2">
                     <h4 className="text-sm font-bold text-slate-900">{h.designation_name}</h4>
-                    <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-indigo-50 text-[#2818cf]">
+                    <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-indigo-50 text-[#2012ad]">
                       {h.department_name}
                     </span>
                   </div>

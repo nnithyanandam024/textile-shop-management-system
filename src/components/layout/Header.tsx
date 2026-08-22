@@ -3,6 +3,7 @@ import { Search, History, Lock, LogOut, KeyRound, ChevronDown } from 'lucide-rea
 import { useAuth } from '../../features/auth/AuthContext';
 import { ChangePasswordModal } from '../../features/auth/ChangePasswordModal';
 import { NotificationBell } from './NotificationBell';
+import { ConnectionStatusIndicator } from '../common/ConnectionStatusIndicator';
 
 export const Header: React.FC = () => {
   const { currentUser, lockScreen, logout } = useAuth();
@@ -25,6 +26,9 @@ export const Header: React.FC = () => {
 
       {/* Right: Actions & User Profile */}
       <div className="flex items-center gap-3">
+        {/* Real-time Status Indicator */}
+        <ConnectionStatusIndicator />
+
         {/* Quick History Button */}
         <button
           className="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-xl transition-all border border-transparent hover:border-slate-200"

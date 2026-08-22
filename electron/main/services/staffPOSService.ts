@@ -5,6 +5,7 @@ import { CustomerRepository, CustomerRow } from '../repositories/customerReposit
 import { SaleRepository, SaleRow, SaleItemRow, PaymentRow } from '../repositories/saleRepository';
 import { StockRepository } from '../repositories/stockRepository';
 import { AuditRepository } from '../repositories/auditRepository';
+import { eventBus } from '../realtime/eventBus';
 import log from '../logger';
 
 export interface StaffPOSProductItem {
@@ -565,7 +566,67 @@ export class StaffPOSService {
     });
 
     const createdSaleId = transaction();
-    return this.getSaleInvoice(createdSaleId);
+    const invoice = this.getSaleInvoice(createdSaleId);
+
+    // Emit Realtime Events
+    try {
+      eventBus.publish('SALE_CREATED', {
+        saleId: invoice.id,
+        invoiceNumber: invoice.invoiceNumber,
+        totalAmount: invoice.totalAmount,
+        itemsCount: invoice.items.length,
+        customerName: invoice.customerName,
+        paymentMethod: invoice.paymentMethod,
+        staffName: invoice.staffName,
+        items: invoice.items.map((i) => ({
+          variantId: i.variantId,
+          sku: i.sku,
+          productName: i.productName,
+          quantity: i.quantity,
+          unitPrice: i.unitPrice,
+        })),
+      }, {
+        actorUserId: session?.userId,
+        actorStaffId: staffId,
+        actorName: staff.fullName,
+      });
+
+      for (const item of input.items) {
+        const v = this.productRepo.getVariantById(item.variantId);
+        if (v) {
+          eventBus.publish('INVENTORY_UPDATED', {
+            variantId: v.id,
+            sku: v.sku,
+            productName: v.product_name,
+            currentStock: v.current_stock,
+            minimumStock: v.minimum_stock,
+            changeQuantity: -item.quantity,
+            reason: `Sold in Invoice ${invoice.invoiceNumber}`,
+            status: v.current_stock <= 0 ? 'OUT_OF_STOCK' : (v.current_stock <= v.minimum_stock ? 'LOW_STOCK' : 'IN_STOCK'),
+          });
+
+          if (v.current_stock <= 0) {
+            eventBus.publish('OUT_OF_STOCK', {
+              variantId: v.id,
+              sku: v.sku,
+              productName: v.product_name,
+            });
+          } else if (v.current_stock <= v.minimum_stock) {
+            eventBus.publish('LOW_STOCK_DETECTED', {
+              variantId: v.id,
+              sku: v.sku,
+              productName: v.product_name,
+              currentStock: v.current_stock,
+              minimumStock: v.minimum_stock,
+            });
+          }
+        }
+      }
+    } catch (evtErr) {
+      log.warn('[StaffPOSService] Realtime event emission error:', evtErr);
+    }
+
+    return invoice;
   }
 
   /**
@@ -936,6 +997,42 @@ export class StaffPOSService {
     });
 
     const returnId = transaction();
+
+    // Emit Realtime Events
+    try {
+      eventBus.publish('SALE_RETURNED', {
+        returnId,
+        returnNumber,
+        saleId: input.saleId,
+        refundAmount: totalRefund,
+        itemsCount: input.items.length,
+        reason: input.items[0]?.reason || 'Customer Return',
+      }, {
+        actorUserId: session?.userId,
+        actorStaffId: staffId,
+      });
+
+      for (const item of input.items) {
+        if (item.condition === 'GOOD') {
+          const v = this.productRepo.getVariantById(item.variantId);
+          if (v) {
+            eventBus.publish('INVENTORY_UPDATED', {
+              variantId: v.id,
+              sku: v.sku,
+              productName: v.product_name,
+              currentStock: v.current_stock,
+              minimumStock: v.minimum_stock,
+              changeQuantity: item.quantity,
+              reason: `Restocked from Return ${returnNumber}`,
+              status: v.current_stock <= 0 ? 'OUT_OF_STOCK' : (v.current_stock <= v.minimum_stock ? 'LOW_STOCK' : 'IN_STOCK'),
+            });
+          }
+        }
+      }
+    } catch (evtErr) {
+      log.warn('[StaffPOSService] Realtime return event error:', evtErr);
+    }
+
     return {
       success: true,
       returnId,

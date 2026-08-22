@@ -4,6 +4,7 @@ import { ProductRepository, VariantRow, ProductRow } from '../repositories/produ
 import { StockRepository, StockTransactionRow } from '../repositories/stockRepository';
 import { PurchaseRepository, PurchaseRow, PurchaseItemRow } from '../repositories/purchaseRepository';
 import { AuditRepository } from '../repositories/auditRepository';
+import { eventBus } from '../realtime/eventBus';
 import log from '../logger';
 
 export type StockStatusType = 'IN_STOCK' | 'LOW_STOCK' | 'OUT_OF_STOCK' | 'RESERVED';
@@ -389,6 +390,23 @@ export class StaffInventoryService {
       entity_id: countId,
       new_value: `Submitted count for SKU ${variant.sku}: System=${systemQty}, Physical=${input.physical_quantity}, Diff=${difference}`,
     });
+
+    try {
+      eventBus.publish('STOCK_ADJUSTED', {
+        variantId: variant.id,
+        sku: variant.sku,
+        productName: variant.product_name,
+        systemQuantity: systemQty,
+        physicalQuantity: input.physical_quantity,
+        difference,
+        reason: input.reason,
+      }, {
+        actorUserId: SessionService.getSession()?.userId,
+        actorStaffId: staffId,
+      });
+    } catch (evtErr) {
+      log.warn('[StaffInventoryService] EventBus emit error:', evtErr);
+    }
 
     return {
       success: true,

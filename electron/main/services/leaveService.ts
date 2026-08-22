@@ -2,6 +2,7 @@ import Database from 'better-sqlite3';
 import { LeaveRepository, LeaveTypeRow, LeaveBalanceRow, LeaveRequestRow } from '../repositories/leaveRepository';
 import { AttendanceRepository } from '../repositories/attendanceRepository';
 import { AuditRepository } from '../repositories/auditRepository';
+import { eventBus } from '../realtime/eventBus';
 
 export class LeaveService {
   private leaveRepo: LeaveRepository;
@@ -286,6 +287,22 @@ export class LeaveService {
       new_value: `Approved leave request #${requestId} for staff #${req.staff_id}`,
     });
 
+    try {
+      const staffFullName = [req.first_name, req.last_name].filter(Boolean).join(' ') || 'Staff Member';
+      eventBus.publish('LEAVE_APPROVED', {
+        leaveRequestId: requestId,
+        staffId: req.staff_id,
+        staffName: staffFullName,
+        startDate: req.start_date,
+        endDate: req.end_date,
+        leaveType: req.leave_name || 'Leave',
+        status: 'APPROVED',
+      }, {
+        actorUserId: validActor,
+        targetStaffId: req.staff_id,
+      });
+    } catch {}
+
     return { success: true };
   }
 
@@ -309,6 +326,22 @@ export class LeaveService {
       entity_id: requestId,
       new_value: `Rejected leave request #${requestId}: ${rejectionReason}`,
     });
+
+    try {
+      const staffFullName = [req.first_name, req.last_name].filter(Boolean).join(' ') || 'Staff Member';
+      eventBus.publish('LEAVE_REJECTED', {
+        leaveRequestId: requestId,
+        staffId: req.staff_id,
+        staffName: staffFullName,
+        startDate: req.start_date,
+        endDate: req.end_date,
+        leaveType: req.leave_name || 'Leave',
+        status: 'REJECTED',
+      }, {
+        actorUserId: validActor,
+        targetStaffId: req.staff_id,
+      });
+    } catch {}
 
     return { success: true };
   }

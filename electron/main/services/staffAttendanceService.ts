@@ -3,6 +3,7 @@ import { SessionService } from './auth/sessionService';
 import { AuditRepository } from '../repositories/auditRepository';
 import { ShiftService } from './shiftService';
 import { timeToMinutes, formatMinutesToHours, getTodayDateStr, getCurrentTimeStr } from './attendanceService';
+import { eventBus } from '../realtime/eventBus';
 import log from '../logger';
 
 export interface TodayAttendanceData {
@@ -290,9 +291,28 @@ export class StaffAttendanceService {
     });
 
     log.info(`Staff #${staffId} checked in at ${checkInTime} for ${todayStr}.`);
+    const todayData = this.getTodayAttendance();
+
+    try {
+      eventBus.publish('ATTENDANCE_CHECKED_IN', {
+        attendanceId: todayData.id || 0,
+        staffId,
+        staffName: todayData.staffName,
+        attendanceDate: todayStr,
+        checkIn: checkInTime,
+        status,
+      }, {
+        actorUserId: session?.userId,
+        actorStaffId: staffId,
+        actorName: todayData.staffName,
+      });
+    } catch (evtErr) {
+      log.warn('[StaffAttendanceService] EventBus check-in emit error:', evtErr);
+    }
+
     return {
       success: true,
-      data: this.getTodayAttendance(),
+      data: todayData,
       message: lateMinutes > 0
         ? `Checked in at ${checkInTime}. (Late by ${lateMinutes} mins)`
         : `Checked in successfully at ${checkInTime}.`,
@@ -360,9 +380,27 @@ export class StaffAttendanceService {
     });
 
     log.info(`Staff #${staffId} checked out at ${checkOutTime}. Worked: ${workedMinutes}m.`);
+    const todayData = this.getTodayAttendance();
+
+    try {
+      eventBus.publish('ATTENDANCE_CHECKED_OUT', {
+        attendanceId: todayData.id || 0,
+        staffId,
+        staffName: todayData.staffName,
+        attendanceDate: todayStr,
+        checkOut: checkOutTime,
+        status: todayData.status,
+      }, {
+        actorUserId: session?.userId,
+        actorStaffId: staffId,
+      });
+    } catch (evtErr) {
+      log.warn('[StaffAttendanceService] EventBus check-out emit error:', evtErr);
+    }
+
     return {
       success: true,
-      data: this.getTodayAttendance(),
+      data: todayData,
       message: `Checked out successfully at ${checkOutTime}. Total work time: ${formatMinutesToHours(workedMinutes)}.`,
     };
   }

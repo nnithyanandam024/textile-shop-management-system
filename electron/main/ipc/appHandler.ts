@@ -52,10 +52,12 @@ import { registerStaffCustomerHandlers } from './staffCustomerHandler';
 import { registerStaffReportsHandlers } from './staffReportsHandler';
 import { registerStaffSettingsHandlers } from './staffSettingsHandler';
 import { registerStaffNotificationCenterHandlers } from './staffNotificationHandler';
+import { registerRealtimeHandlers } from './realtimeHandler';
 import log from '../logger';
 
 export function registerIpcHandlers() {
   const db = getDatabase();
+  registerRealtimeHandlers();
   registerStaffHandlers(db);
   registerAttendanceHandlers(db);
   registerShiftHandlers(db);

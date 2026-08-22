@@ -2,6 +2,7 @@ import Database from 'better-sqlite3';
 import { SessionService } from './auth/sessionService';
 import { CustomerRepository, CustomerRow } from '../repositories/customerRepository';
 import { AuditRepository } from '../repositories/auditRepository';
+import { eventBus } from '../realtime/eventBus';
 import log from '../logger';
 
 export interface StaffCustomerListItem {
@@ -401,7 +402,22 @@ export class StaffCustomerService {
     });
 
     const newCustomerId = transaction();
-    return this.getCustomerDetails(newCustomerId);
+    const details = this.getCustomerDetails(newCustomerId);
+
+    try {
+      eventBus.publish('CUSTOMER_CREATED', {
+        customerId: details.id,
+        name: details.name,
+        phone: details.phone,
+        tier: details.tier || 'BRONZE',
+      }, {
+        actorUserId: session?.userId,
+      });
+    } catch (evtErr) {
+      log.warn('[StaffCustomerService] EventBus emit error:', evtErr);
+    }
+
+    return details;
   }
 
   /**

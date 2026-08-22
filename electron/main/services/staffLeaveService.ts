@@ -2,6 +2,7 @@ import Database from 'better-sqlite3';
 import { SessionService } from './auth/sessionService';
 import { AuditRepository } from '../repositories/auditRepository';
 import { LeaveRepository, LeaveTypeRow, LeaveBalanceRow, LeaveRequestRow } from '../repositories/leaveRepository';
+import { eventBus } from '../realtime/eventBus';
 import log from '../logger';
 
 export interface StaffLeaveBalanceItem {
@@ -275,6 +276,23 @@ export class StaffLeaveService {
       entity_id: requestId,
       new_value: `Applied ${leaveType.name} (${durationDays} days) from ${input.start_date} to ${input.end_date}`,
     });
+
+    try {
+      eventBus.publish('LEAVE_CREATED', {
+        leaveRequestId: requestId,
+        staffId,
+        staffName: SessionService.getSession()?.displayName || 'Staff Member',
+        startDate: input.start_date,
+        endDate: input.end_date,
+        leaveType: leaveType.name,
+        status: 'PENDING',
+      }, {
+        actorUserId: SessionService.getSession()?.userId,
+        actorStaffId: staffId,
+      });
+    } catch (evtErr) {
+      log.warn('[StaffLeaveService] EventBus emit error:', evtErr);
+    }
 
     return {
       success: true,

@@ -457,6 +457,10 @@ export interface ElectronAPI {
     update: (token: string, id: number, input: any) => Promise<{ success: boolean; error?: string }>;
     deactivate: (token: string, id: number) => Promise<{ success: boolean; activeStaffCount?: number; error?: string }>;
   };
+  realtime: {
+    onEvent: (callback: (event: any) => void) => () => void;
+    publishEvent: (event: any) => Promise<{ success: boolean; error?: string }>;
+  };
 }
 
 const api: ElectronAPI = {
@@ -866,6 +870,16 @@ const api: ElectronAPI = {
     create: (token, input) => ipcRenderer.invoke('designation:create', token, input),
     update: (token, id, input) => ipcRenderer.invoke('designation:update', token, id, input),
     deactivate: (token, id) => ipcRenderer.invoke('designation:deactivate', token, id),
+  },
+  realtime: {
+    onEvent: (callback) => {
+      const handler = (_: any, event: any) => callback(event);
+      ipcRenderer.on('realtime:event', handler);
+      return () => {
+        ipcRenderer.removeListener('realtime:event', handler);
+      };
+    },
+    publishEvent: (event) => ipcRenderer.invoke('realtime:publish', event),
   },
 };
 

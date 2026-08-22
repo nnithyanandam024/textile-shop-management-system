@@ -1,5 +1,6 @@
 import Database from 'better-sqlite3';
 import { SessionService } from './auth/sessionService';
+import { eventBus } from '../realtime/eventBus';
 
 export interface StaffNotificationItem {
   id: number;
@@ -158,6 +159,23 @@ export class StaffNotificationCenterService {
       input.referenceId || null
     );
 
-    return Number(res.lastInsertRowid);
+    const notifId = Number(res.lastInsertRowid);
+
+    try {
+      eventBus.publish('NOTIFICATION_CREATED', {
+        id: notifId,
+        title: input.title,
+        message: input.message,
+        type: input.type,
+        recipientStaffId: input.recipientStaffId,
+        recipientUserId: input.recipientUserId,
+        createdAt: new Date().toISOString(),
+      }, {
+        targetStaffId: input.recipientStaffId,
+        targetUserId: input.recipientUserId,
+      });
+    } catch {}
+
+    return notifId;
   }
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useStaffAuth } from '../hooks/useStaffAuth';
 import { ProfileDropdown } from './ProfileDropdown';
 import { LogoutDialog } from './LogoutDialog';
+import { ConnectionStatusIndicator } from '../../../components/common/ConnectionStatusIndicator';
 import { Bell, ChevronDown, Sparkles } from 'lucide-react';
 
 export const StaffHeader: React.FC = () => {
@@ -40,6 +41,9 @@ export const StaffHeader: React.FC = () => {
 
         {/* Right Actions */}
         <div className="flex items-center gap-4">
+          {/* Real-time Status Indicator */}
+          <ConnectionStatusIndicator />
+
           {/* Notifications Placeholder */}
           <div className="relative flex items-center justify-center p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer">
             <Bell className="w-4 h-4" />

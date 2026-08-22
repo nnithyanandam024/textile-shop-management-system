@@ -6,15 +6,37 @@ export interface AppEnvironment {
   API_TIMEOUT_MS: number;
 }
 
-const isProduction = process.env.NODE_ENV === 'production';
-const isTest = process.env.NODE_ENV === 'test';
+const getEnvVar = (key: string): string | undefined => {
+  if (typeof window !== 'undefined' && (window as any).env?.[key]) {
+    return (window as any).env[key];
+  }
+  try {
+    const metaEnv = (import.meta as any)?.env;
+    if (metaEnv) {
+      return metaEnv[key] || metaEnv[`VITE_${key}`];
+    }
+  } catch {}
+  try {
+    if (typeof process !== 'undefined' && process.env) {
+      return (process.env as any)[key] || (process.env as any)[`VITE_${key}`];
+    }
+  } catch {}
+  return undefined;
+};
+
+const metaMode = (import.meta as any)?.env?.MODE;
+const processMode = typeof process !== 'undefined' ? (process.env as any)?.NODE_ENV : undefined;
+const mode = metaMode || processMode || 'development';
+
+const isProduction = mode === 'production';
+const isTest = mode === 'test';
 
 export const env: AppEnvironment = {
-  API_BASE_URL: (typeof window !== 'undefined' && (window as any).env?.API_BASE_URL) ||
-    process.env.VITE_API_BASE_URL ||
+  API_BASE_URL: getEnvVar('API_BASE_URL') ||
+    getEnvVar('VITE_API_BASE_URL') ||
     (isProduction ? 'https://production-api/api' : 'http://localhost:5000/api'),
-  WS_BASE_URL: (typeof window !== 'undefined' && (window as any).env?.WS_BASE_URL) ||
-    process.env.VITE_WS_BASE_URL ||
+  WS_BASE_URL: getEnvVar('WS_BASE_URL') ||
+    getEnvVar('VITE_WS_BASE_URL') ||
     (isProduction ? 'wss://production-api' : 'ws://localhost:5000'),
   APP_ENV: isTest ? 'test' : isProduction ? 'production' : 'development',
   APP_VERSION: '1.0.0',

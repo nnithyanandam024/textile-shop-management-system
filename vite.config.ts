@@ -13,6 +13,9 @@ export default defineConfig({
   optimizeDeps: {
     include: ['react-is', 'recharts', 'lucide-react', 'react-router-dom'],
   },
+  define: {
+    'process.env': {},
+  },
   server: {
     port: 5173,
     strictPort: true,

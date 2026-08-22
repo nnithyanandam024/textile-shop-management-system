@@ -2105,6 +2105,50 @@ function runMigrations(db: Database.Database) {
           CREATE INDEX IF NOT EXISTS idx_customers_phone ON customers(phone);
         `);
       }
+    },
+    {
+      version: 20,
+      name: 'staff_module_production_reports_and_settings',
+      up: (database: Database.Database) => {
+        database.exec(`
+          -- 1. Staff POS & Application Preferences
+          CREATE TABLE IF NOT EXISTS staff_preferences (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            staff_id INTEGER NOT NULL UNIQUE REFERENCES staff(id) ON DELETE CASCADE,
+            default_payment_method TEXT DEFAULT 'CASH',
+            auto_print_receipt INTEGER DEFAULT 1,
+            scan_sound_enabled INTEGER DEFAULT 1,
+            auto_focus_search INTEGER DEFAULT 1,
+            receipt_printer TEXT DEFAULT 'EPSON TM-T82 Thermal',
+            invoice_printer TEXT DEFAULT 'HP LaserJet Pro A4',
+            theme TEXT DEFAULT 'LIGHT',
+            language TEXT DEFAULT 'en',
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- 2. Hardware Printer Configurations Table
+          CREATE TABLE IF NOT EXISTS printer_configs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            printer_name TEXT NOT NULL UNIQUE,
+            printer_type TEXT NOT NULL CHECK (printer_type IN ('RECEIPT', 'INVOICE', 'BARCODE', 'REPORT')),
+            is_default INTEGER DEFAULT 0,
+            paper_width TEXT DEFAULT '80mm',
+            connection_type TEXT DEFAULT 'USB',
+            status TEXT DEFAULT 'ONLINE',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- Seed Default Printers
+          INSERT OR IGNORE INTO printer_configs (printer_name, printer_type, is_default, paper_width, connection_type, status) VALUES
+            ('EPSON TM-T82 Thermal', 'RECEIPT', 1, '80mm', 'USB', 'ONLINE'),
+            ('HP LaserJet Pro A4', 'INVOICE', 1, 'A4', 'NETWORK', 'ONLINE'),
+            ('TSC TE244 Barcode', 'BARCODE', 1, '50x25mm', 'USB', 'ONLINE');
+
+          -- Indexes for Settings & Preferences
+          CREATE INDEX IF NOT EXISTS idx_staff_preferences_staff ON staff_preferences(staff_id);
+          CREATE INDEX IF NOT EXISTS idx_printer_configs_type ON printer_configs(printer_type);
+        `);
+      }
     }
   ];
 

@@ -57,6 +57,9 @@ import { StaffPOS } from './features/staff-portal/pages/StaffPOS';
 import { StaffMySales } from './features/staff-portal/pages/StaffMySales';
 import { StaffCustomers } from './features/staff-portal/pages/StaffCustomers';
 import { StaffCustomerProfile } from './features/staff-portal/pages/StaffCustomerProfile';
+import { StaffReports } from './features/staff-portal/pages/StaffReports';
+import { StaffNotifications } from './features/staff-portal/pages/StaffNotifications';
+import { StaffSettings } from './features/staff-portal/pages/StaffSettings';
 import { StaffProtectedRoute } from './features/staff-portal/components/StaffProtectedRoute';
 
 const MainAppRouter: React.FC = () => {
@@ -164,6 +167,30 @@ const MainAppRouter: React.FC = () => {
         element={
           <StaffProtectedRoute>
             <StaffCustomerProfile />
+          </StaffProtectedRoute>
+        }
+      />
+      <Route
+        path="/staff/reports"
+        element={
+          <StaffProtectedRoute>
+            <StaffReports />
+          </StaffProtectedRoute>
+        }
+      />
+      <Route
+        path="/staff/notifications"
+        element={
+          <StaffProtectedRoute>
+            <StaffNotifications />
+          </StaffProtectedRoute>
+        }
+      />
+      <Route
+        path="/staff/settings"
+        element={
+          <StaffProtectedRoute>
+            <StaffSettings />
           </StaffProtectedRoute>
         }
       />

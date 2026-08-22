@@ -49,6 +49,9 @@ import { registerStaffPayrollHandlers } from './staffPayrollHandler';
 import { registerStaffInventoryHandlers } from './staffInventoryHandler';
 import { registerStaffPOSHandlers } from './staffPOSHandler';
 import { registerStaffCustomerHandlers } from './staffCustomerHandler';
+import { registerStaffReportsHandlers } from './staffReportsHandler';
+import { registerStaffSettingsHandlers } from './staffSettingsHandler';
+import { registerStaffNotificationCenterHandlers } from './staffNotificationHandler';
 import log from '../logger';
 
 export function registerIpcHandlers() {
@@ -72,6 +75,9 @@ export function registerIpcHandlers() {
   registerStaffInventoryHandlers(db);
   registerStaffPOSHandlers(db);
   registerStaffCustomerHandlers(db);
+  registerStaffReportsHandlers(db);
+  registerStaffSettingsHandlers(db);
+  registerStaffNotificationCenterHandlers(db);
 
   // App Info
   ipcMain.handle('app:get-version', () => app.getVersion() || '0.1.0');

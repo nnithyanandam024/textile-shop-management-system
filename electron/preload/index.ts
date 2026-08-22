@@ -313,6 +313,25 @@ export interface ElectronAPI {
     getNotes: (customerId: number) => Promise<{ success: boolean; data?: any[]; error?: string }>;
     updatePreferences: (customerId: number, preferences: any) => Promise<{ success: boolean; data?: any; error?: string }>;
   };
+  staffReports: {
+    sales: (staffId?: number, filters?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    attendance: (staffId?: number, monthYear?: string) => Promise<{ success: boolean; data?: any; error?: string }>;
+    commission: (staffId?: number, period?: string) => Promise<{ success: boolean; data?: any; error?: string }>;
+    inventoryTasks: (staffId?: number) => Promise<{ success: boolean; data?: any; error?: string }>;
+  };
+  staffSettings: {
+    getPreferences: (staffId?: number) => Promise<{ success: boolean; data?: any; error?: string }>;
+    updatePreferences: (staffId: number, preferences: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getPrinters: () => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    testPrint: (printerName: string, printerType: string) => Promise<{ success: boolean; data?: any; error?: string }>;
+    updatePassword: (userId: number, oldPass: string, newPass: string) => Promise<{ success: boolean; message?: string; error?: string }>;
+    getVersion: () => Promise<{ success: boolean; data?: any; error?: string }>;
+  };
+  staffNotificationCenter: {
+    getAll: (staffId?: number, filters?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    markRead: (notificationId: number, staffId?: number) => Promise<{ success: boolean; data?: boolean; error?: string }>;
+    markAllRead: (staffId?: number) => Promise<{ success: boolean; data?: boolean; error?: string }>;
+  };
   products: {
     getAll: () => Promise<any[]>;
     create: (product: any) => Promise<{ success: boolean; id?: number; error?: string }>;
@@ -703,6 +722,25 @@ const api: ElectronAPI = {
     addNote: (customerId, note) => ipcRenderer.invoke('staff-customer:add-note', customerId, note),
     getNotes: (customerId) => ipcRenderer.invoke('staff-customer:get-notes', customerId),
     updatePreferences: (customerId, preferences) => ipcRenderer.invoke('staff-customer:update-preferences', customerId, preferences),
+  },
+  staffReports: {
+    sales: (staffId, filters) => ipcRenderer.invoke('staff-reports:sales', staffId, filters),
+    attendance: (staffId, monthYear) => ipcRenderer.invoke('staff-reports:attendance', staffId, monthYear),
+    commission: (staffId, period) => ipcRenderer.invoke('staff-reports:commission', staffId, period),
+    inventoryTasks: (staffId) => ipcRenderer.invoke('staff-reports:inventory-tasks', staffId),
+  },
+  staffSettings: {
+    getPreferences: (staffId) => ipcRenderer.invoke('staff-settings:get-preferences', staffId),
+    updatePreferences: (staffId, preferences) => ipcRenderer.invoke('staff-settings:update-preferences', staffId, preferences),
+    getPrinters: () => ipcRenderer.invoke('staff-settings:get-printers'),
+    testPrint: (printerName, printerType) => ipcRenderer.invoke('staff-settings:test-print', printerName, printerType),
+    updatePassword: (userId, oldPass, newPass) => ipcRenderer.invoke('staff-settings:update-password', userId, oldPass, newPass),
+    getVersion: () => ipcRenderer.invoke('staff-settings:get-version'),
+  },
+  staffNotificationCenter: {
+    getAll: (staffId, filters) => ipcRenderer.invoke('staff-notifications:get-all', staffId, filters),
+    markRead: (notificationId, staffId) => ipcRenderer.invoke('staff-notifications:mark-read', notificationId, staffId),
+    markAllRead: (staffId) => ipcRenderer.invoke('staff-notifications:mark-all-read', staffId),
   },
   products: {
     getAll: () => ipcRenderer.invoke('products:get-all'),

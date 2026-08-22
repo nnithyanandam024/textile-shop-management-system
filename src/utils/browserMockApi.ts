@@ -11,6 +11,8 @@ const STORAGE_KEYS = {
   BRANDS: 'texora_demo_brands',
   SUPPLIERS: 'texora_demo_suppliers',
   CUSTOMERS: 'texora_demo_customers',
+  SALES: 'texora_demo_sales',
+  HELD_CARTS: 'texora_demo_held_carts',
 };
 
 // Initial Demo Categories
@@ -364,7 +366,18 @@ export function initBrowserMockApi() {
 
     // --- VARIANTS API ---
     variants: {
-      getAll: async () => loadStorage(STORAGE_KEYS.VARIANTS, DEFAULT_VARIANTS),
+      getAll: async () => {
+        const vList = loadStorage(STORAGE_KEYS.VARIANTS, DEFAULT_VARIANTS);
+        const pList = loadStorage(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS);
+        return vList.map((v: any) => {
+          const p = pList.find((prod: any) => prod.id === v.product_id);
+          return {
+            ...v,
+            product_name: p?.name || 'Textile Item',
+            material: p?.material || 'Cotton',
+          };
+        });
+      },
       getByProductId: async (productId: number) => {
         const list = loadStorage(STORAGE_KEYS.VARIANTS, DEFAULT_VARIANTS);
         return list.filter((v: any) => v.product_id === productId);
@@ -517,6 +530,299 @@ export function initBrowserMockApi() {
       },
     },
 
+    // --- SALES & POS API ---
+    sales: {
+      getAll: async () => loadStorage(STORAGE_KEYS.SALES, []),
+      getDailySummary: async () => ({
+        totalSales: 24590,
+        ordersCount: 8,
+        discountTotal: 850,
+        netTax: 1170,
+      }),
+      create: async (data: any) => {
+        const salesList = loadStorage<any[]>(STORAGE_KEYS.SALES, []);
+        const varList = loadStorage(STORAGE_KEYS.VARIANTS, DEFAULT_VARIANTS);
+        const prodList = loadStorage(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS);
+        const custList = loadStorage(STORAGE_KEYS.CUSTOMERS, DEFAULT_CUSTOMERS);
+
+        const newSaleId = salesList.length > 0 ? Math.max(...salesList.map((s: any) => s.id)) + 1 : 1001;
+        const invoiceNum = `INV-2026-${String(newSaleId).padStart(4, '0')}`;
+        const saleDate = new Date().toISOString();
+        const customer = custList.find((c: any) => c.id === data.customer_id) || custList[0];
+
+        // Deduct inventory
+        const detailedItems = (data.items || []).map((item: any) => {
+          const v = varList.find((variant: any) => variant.id === (item.product_variant_id || item.variantId));
+          const p = prodList.find((prod: any) => prod.id === v?.product_id);
+          if (v) {
+            v.current_stock = Math.max(0, v.current_stock - item.quantity);
+          }
+          return {
+            id: Date.now() + Math.random(),
+            variantId: v?.id || item.product_variant_id,
+            productName: p?.name || 'Textile Item',
+            sku: v?.sku || 'SKU-ITEM',
+            size: v?.size || 'Free Size',
+            color: v?.color || 'Standard',
+            quantity: item.quantity,
+            unitPrice: item.unit_price || item.unitPrice || 0,
+            discount: item.discount || 0,
+            tax: item.tax || 0,
+            total: (item.unit_price || item.unitPrice || 0) * item.quantity - (item.discount || 0),
+          };
+        });
+        saveStorage(STORAGE_KEYS.VARIANTS, varList);
+
+        const newSale = {
+          id: newSaleId,
+          invoice_number: invoiceNum,
+          invoiceNumber: invoiceNum,
+          saleDate,
+          sale_date: saleDate,
+          staffId: 1,
+          staffName: 'Store Administrator',
+          staffCode: 'STF-0001',
+          customerId: customer.id,
+          customer_id: customer.id,
+          customerName: customer.name,
+          customer_name: customer.name,
+          customerPhone: customer.phone,
+          subtotal: data.subtotal || data.total,
+          discount: data.discount || 0,
+          discountAmount: data.discount || 0,
+          tax: data.tax || 0,
+          taxAmount: data.tax || 0,
+          total: data.total,
+          totalAmount: data.total,
+          paidAmount: data.total,
+          changeAmount: 0,
+          paymentMethod: data.payments?.[0]?.payment_method || data.payments?.[0]?.method || 'CASH',
+          items: detailedItems,
+          payments: data.payments || [{ method: 'CASH', amount: data.total }],
+        };
+
+        salesList.unshift(newSale);
+        saveStorage(STORAGE_KEYS.SALES, salesList);
+
+        return { success: true, saleId: newSaleId, invoice: newSale };
+      },
+      getDetails: async (saleId: number) => {
+        const salesList = loadStorage(STORAGE_KEYS.SALES, []);
+        const s = salesList.find((item: any) => item.id === saleId);
+        if (s) {
+          return { success: true, data: s };
+        }
+        // Fallback demo invoice
+        return {
+          success: true,
+          data: {
+            id: saleId,
+            invoice_number: `INV-2026-${String(saleId).padStart(4, '0')}`,
+            invoiceNumber: `INV-2026-${String(saleId).padStart(4, '0')}`,
+            sale_date: new Date().toISOString(),
+            saleDate: new Date().toISOString(),
+            customer_name: 'Walk-in Customer',
+            customerName: 'Walk-in Customer',
+            customerPhone: '+91 94433 11223',
+            items: [
+              { id: 1, productName: 'Kanchipuram Silk Saree', sku: 'KAN-SLK-MRN-01', size: 'Free Size', color: 'Royal Maroon & Gold', quantity: 1, unitPrice: 8499, discount: 0, total: 8499 },
+              { id: 2, productName: 'Raymond Cotton Shirt', sku: 'RAY-SHT-BLU-40', size: '40 (M)', color: 'Sky Blue', quantity: 1, unitPrice: 1499, discount: 0, total: 1499 },
+            ],
+            subtotal: 9998,
+            discount: 0,
+            discountAmount: 0,
+            tax: 500,
+            taxAmount: 500,
+            total: 10498,
+            totalAmount: 10498,
+            paidAmount: 10498,
+            changeAmount: 0,
+            paymentMethod: 'UPI',
+            payments: [{ method: 'UPI', amount: 10498, referenceNumber: 'UPI77889900' }],
+          },
+        };
+      },
+    },
+
+    // --- POS BILLING COUNTER BRIDGE ---
+    staffPOS: {
+      searchProducts: async (query?: string, categoryId?: number) => {
+        const vList = loadStorage(STORAGE_KEYS.VARIANTS, DEFAULT_VARIANTS);
+        const pList = loadStorage(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS);
+        const cList = loadStorage(STORAGE_KEYS.CATEGORIES, DEFAULT_CATEGORIES);
+        const bList = loadStorage(STORAGE_KEYS.BRANDS, DEFAULT_BRANDS);
+
+        let formatted = vList
+          .filter((v: any) => v.is_active === 1)
+          .map((v: any) => {
+            const p = pList.find((prod: any) => prod.id === v.product_id);
+            const cat = cList.find((c: any) => c.id === p?.category_id);
+            const br = bList.find((b: any) => b.id === p?.brand_id);
+            return {
+              id: v.id,
+              productId: p?.id || v.product_id,
+              productName: p?.name || 'Textile Item',
+              sku: v.sku,
+              barcode: v.barcode,
+              categoryName: cat?.name || 'General',
+              brandName: br?.name || 'Generic',
+              color: v.color,
+              size: v.size,
+              sellingPrice: v.selling_price,
+              taxRate: 5.0,
+              currentStock: v.current_stock,
+              status: v.current_stock <= 0 ? 'OUT_OF_STOCK' : v.current_stock <= v.minimum_stock ? 'LOW_STOCK' : 'IN_STOCK',
+            };
+          });
+
+        if (categoryId) {
+          formatted = formatted.filter((item: any) => {
+            const p = pList.find((prod: any) => prod.id === item.productId);
+            return p?.category_id === categoryId;
+          });
+        }
+
+        if (query && query.trim()) {
+          const q = query.trim().toLowerCase();
+          formatted = formatted.filter(
+            (item: any) =>
+              item.productName.toLowerCase().includes(q) ||
+              item.sku.toLowerCase().includes(q) ||
+              (item.barcode && item.barcode.includes(q)) ||
+              (item.color && item.color.toLowerCase().includes(q))
+          );
+        }
+
+        return { success: true, data: formatted };
+      },
+      getByBarcode: async (barcode: string) => {
+        const vList = loadStorage(STORAGE_KEYS.VARIANTS, DEFAULT_VARIANTS);
+        const pList = loadStorage(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS);
+        const v = vList.find((item: any) => item.barcode === barcode);
+        if (v) {
+          const p = pList.find((prod: any) => prod.id === v.product_id);
+          return {
+            success: true,
+            data: {
+              id: v.id,
+              productId: v.product_id,
+              productName: p?.name || 'Textile Item',
+              sku: v.sku,
+              barcode: v.barcode,
+              sellingPrice: v.selling_price,
+              taxRate: 5.0,
+              currentStock: v.current_stock,
+              color: v.color,
+              size: v.size,
+              status: v.current_stock <= 0 ? 'OUT_OF_STOCK' : 'IN_STOCK',
+            },
+          };
+        }
+        return { success: false, error: 'Barcode not recognized.' };
+      },
+      getCustomers: async (query?: string) => {
+        const list = loadStorage(STORAGE_KEYS.CUSTOMERS, DEFAULT_CUSTOMERS);
+        if (query && query.trim()) {
+          const q = query.trim().toLowerCase();
+          return { success: true, data: list.filter((c: any) => c.name.toLowerCase().includes(q) || (c.phone && c.phone.includes(q))) };
+        }
+        return { success: true, data: list };
+      },
+      quickCustomer: async (input: any) => {
+        const list = loadStorage(STORAGE_KEYS.CUSTOMERS, DEFAULT_CUSTOMERS);
+        const newId = list.length > 0 ? Math.max(...list.map((c: any) => c.id)) + 1 : 1;
+        const newCust = { id: newId, customer_code: `CUST-000${newId}`, loyalty_points: 0, total_spent: 0, ...input };
+        list.push(newCust);
+        saveStorage(STORAGE_KEYS.CUSTOMERS, list);
+        return { success: true, customer: newCust };
+      },
+      customerHistory: async (customerId: number) => {
+        const custList = loadStorage(STORAGE_KEYS.CUSTOMERS, DEFAULT_CUSTOMERS);
+        const c = custList.find((item: any) => item.id === customerId);
+        return {
+          success: true,
+          data: {
+            orderCount: 6,
+            lifetimeSpend: c?.total_spent || 15400,
+            lastPurchaseDate: '2026-08-15',
+          },
+        };
+      },
+      calculateTotals: async (input: any) => {
+        const items = input.items || [];
+        let subtotal = 0;
+        let lineDiscountTotal = 0;
+
+        const itemBreakdowns = items.map((i: any) => {
+          const lineSub = i.unitPrice * i.quantity;
+          const disc = i.discountPercent ? (lineSub * i.discountPercent) / 100 : 0;
+          const afterDisc = lineSub - disc;
+          const tax = (afterDisc * 5) / 100;
+          subtotal += lineSub;
+          lineDiscountTotal += disc;
+          return {
+            variantId: i.variantId,
+            lineSubtotal: lineSub,
+            lineDiscount: disc,
+            lineTax: tax,
+            lineTotal: afterDisc + tax,
+          };
+        });
+
+        let billDisc = 0;
+        if (input.discountType === 'PERCENT' && input.discountValue) {
+          billDisc = ((subtotal - lineDiscountTotal) * input.discountValue) / 100;
+        } else if (input.discountType === 'FIXED' && input.discountValue) {
+          billDisc = input.discountValue;
+        }
+
+        const totalDiscount = lineDiscountTotal + billDisc;
+        const taxableAmount = Math.max(0, subtotal - totalDiscount);
+        const taxAmount = (taxableAmount * 5) / 100;
+        const totalAmount = Math.round(taxableAmount + taxAmount);
+
+        return {
+          success: true,
+          data: {
+            subtotal,
+            discountAmount: totalDiscount,
+            taxAmount,
+            totalAmount,
+            itemBreakdowns,
+          },
+        };
+      },
+      completeSale: async (input: any) => {
+        const salesRes = await mockApi.sales.create({
+          customer_id: input.customerId,
+          items: input.items.map((i: any) => ({
+            product_variant_id: i.variantId,
+            quantity: i.quantity,
+            unit_price: i.unitPrice,
+            discount: i.discount || 0,
+          })),
+          payments: input.payments,
+          subtotal: input.subtotal,
+          discount: input.discountValue,
+          tax: input.taxAmount,
+          total: input.totalAmount || input.payments?.reduce((acc: number, p: any) => acc + (p.amount || 0), 0),
+        });
+        return { success: true, data: salesRes.invoice };
+      },
+      getHeldSales: async () => {
+        return loadStorage<any[]>(STORAGE_KEYS.HELD_CARTS, []);
+      },
+      holdSale: async (input: any) => {
+        const held = loadStorage<any[]>(STORAGE_KEYS.HELD_CARTS, []);
+        held.push({ id: Date.now(), ...input });
+        saveStorage(STORAGE_KEYS.HELD_CARTS, held);
+        return { success: true };
+      },
+      processReturn: async (_input: any) => {
+        return { success: true, refundAmount: 1499, message: 'Return processed and refund issued.' };
+      },
+    },
+
     // --- AUTH & USER API ---
     auth: {
       checkSetup: async () => ({ setupRequired: false }),
@@ -572,5 +878,5 @@ export function initBrowserMockApi() {
 
   // Attach mock to window
   (window as any).api = mockApi;
-  console.log('⚡ [BrowserMockApi] Texora Demo Mock Services initialized on window.api with rich textile catalog.');
+  console.log('⚡ [BrowserMockApi] Texora Demo Mock Services initialized on window.api with rich textile catalog & POS billing.');
 }

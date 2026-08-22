@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useStaffAuth } from '../hooks/useStaffAuth';
 import { LogoutDialog } from './LogoutDialog';
+import { checkPermissionMatch } from '../../../auth/permissions';
 import {
   LayoutDashboard,
   User,
@@ -24,29 +25,36 @@ interface SidebarItem {
   name: string;
   path: string;
   icon: React.ElementType;
+  permission?: string;
   isPhase1Active?: boolean;
 }
 
 const navItems: SidebarItem[] = [
-  { name: 'Dashboard', path: '/staff/dashboard', icon: LayoutDashboard, isPhase1Active: true },
-  { name: 'POS & Billing', path: '/staff/pos', icon: ShoppingCart, isPhase1Active: true },
-  { name: 'My Sales', path: '/staff/sales', icon: TrendingUp, isPhase1Active: true },
-  { name: 'Customers', path: '/staff/customers', icon: Users, isPhase1Active: true },
-  { name: 'My Inventory', path: '/staff/inventory', icon: Package, isPhase1Active: true },
-  { name: 'Attendance', path: '/staff/attendance', icon: CalendarCheck, isPhase1Active: true },
-  { name: 'My Shifts', path: '/staff/shifts', icon: Clock, isPhase1Active: true },
-  { name: 'My Leave', path: '/staff/leave', icon: Calendar, isPhase1Active: true },
-  { name: 'My Payroll', path: '/staff/payroll', icon: DollarSign, isPhase1Active: true },
-  { name: 'Reports', path: '/staff/reports', icon: BarChart3, isPhase1Active: true },
-  { name: 'Notifications', path: '/staff/notifications', icon: Bell, isPhase1Active: true },
-  { name: 'Settings', path: '/staff/settings', icon: Settings, isPhase1Active: true },
-  { name: 'My Profile', path: '/staff/profile', icon: User, isPhase1Active: true },
+  { name: 'Dashboard', path: '/staff/dashboard', icon: LayoutDashboard, permission: 'DASHBOARD_VIEW', isPhase1Active: true },
+  { name: 'POS & Billing', path: '/staff/pos', icon: ShoppingCart, permission: 'POS_VIEW', isPhase1Active: true },
+  { name: 'My Sales', path: '/staff/sales', icon: TrendingUp, permission: 'SALES_VIEW_SELF', isPhase1Active: true },
+  { name: 'Customers', path: '/staff/customers', icon: Users, permission: 'CUSTOMER_VIEW', isPhase1Active: true },
+  { name: 'My Inventory', path: '/staff/inventory', icon: Package, permission: 'INVENTORY_VIEW', isPhase1Active: true },
+  { name: 'Attendance', path: '/staff/attendance', icon: CalendarCheck, permission: 'ATTENDANCE_VIEW_SELF', isPhase1Active: true },
+  { name: 'My Shifts', path: '/staff/shifts', icon: Clock, permission: 'SHIFT_VIEW', isPhase1Active: true },
+  { name: 'My Leave', path: '/staff/leave', icon: Calendar, permission: 'LEAVE_VIEW_SELF', isPhase1Active: true },
+  { name: 'My Payroll', path: '/staff/payroll', icon: DollarSign, permission: 'PAYROLL_VIEW_SELF', isPhase1Active: true },
+  { name: 'Reports', path: '/staff/reports', icon: BarChart3, permission: 'REPORT_VIEW', isPhase1Active: true },
+  { name: 'Notifications', path: '/staff/notifications', icon: Bell, permission: 'COMMUNICATION_VIEW', isPhase1Active: true },
+  { name: 'Settings', path: '/staff/settings', icon: Settings, permission: 'SETTINGS_VIEW', isPhase1Active: true },
+  { name: 'My Profile', path: '/staff/profile', icon: User, permission: 'STAFF_VIEW_PROFILE', isPhase1Active: true },
 ];
 
 export const StaffSidebar: React.FC = () => {
-  const { logout } = useStaffAuth();
+  const { currentStaffUser, logout } = useStaffAuth();
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const filteredNavItems = navItems.filter((item) => {
+    if (!item.permission) return true;
+    if (!currentStaffUser?.permissions) return true; // fallback
+    return checkPermissionMatch(currentStaffUser.permissions, item.permission);
+  });
 
   const handleConfirmLogout = async () => {
     setIsLoggingOut(true);
@@ -78,7 +86,7 @@ export const StaffSidebar: React.FC = () => {
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Employee Workspace</p>
           </div>
 
-          {navItems.map((item) => (
+          {filteredNavItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}

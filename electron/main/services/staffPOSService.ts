@@ -1,5 +1,6 @@
 import Database from 'better-sqlite3';
 import { SessionService } from './auth/sessionService';
+import { AuthorizationService } from './auth/authorizationService';
 import { ProductRepository, VariantRow } from '../repositories/productRepository';
 import { CustomerRepository, CustomerRow } from '../repositories/customerRepository';
 import { SaleRepository, SaleRow, SaleItemRow, PaymentRow } from '../repositories/saleRepository';
@@ -408,6 +409,7 @@ export class StaffPOSService {
     payments: StaffPOSPaymentInput[];
     notes?: string;
   }): StaffPOSInvoiceData {
+    AuthorizationService.requirePermission('POS_CREATE_SALE');
     const staffId = this.getAuthenticatedStaffId();
     const staff = this.getStaffDetails(staffId);
     const session = SessionService.getSession();
@@ -641,6 +643,7 @@ export class StaffPOSService {
     taxAmount: number;
     totalAmount: number;
   }): { success: boolean; heldId: number; message: string } {
+    AuthorizationService.requirePermission('POS_HOLD_SALE');
     const staffId = this.getAuthenticatedStaffId();
     const ref = input.referenceName?.trim() || `Cart - ${new Date().toLocaleTimeString()}`;
 
@@ -670,6 +673,7 @@ export class StaffPOSService {
    * Retrieve active held sales
    */
   getHeldSales(): StaffPOSHeldSaleItem[] {
+    AuthorizationService.requirePermission('POS_VIEW');
     const staffId = this.getAuthenticatedStaffId();
     const rows = this.db.prepare(`
       SELECT hs.*, c.name as customer_name
@@ -699,6 +703,7 @@ export class StaffPOSService {
    * Resume held sale
    */
   resumeSale(heldId: number): StaffPOSHeldSaleItem {
+    AuthorizationService.requirePermission('POS_RESUME_SALE');
     const staffId = this.getAuthenticatedStaffId();
     const row = this.db.prepare(`
       SELECT hs.*, c.name as customer_name
@@ -889,6 +894,7 @@ export class StaffPOSService {
     items: Array<{ saleItemId: number; variantId: number; quantity: number; reason: string; condition?: string }>;
     notes?: string;
   }): { success: boolean; returnId: number; returnNumber: string; refundAmount: number; message: string } {
+    AuthorizationService.requirePermission('RETURN_CREATE');
     const staffId = this.getAuthenticatedStaffId();
     const session = SessionService.getSession();
     const sale = this.saleRepo.getSaleById(input.saleId);

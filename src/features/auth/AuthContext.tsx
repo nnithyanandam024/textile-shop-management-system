@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { authApi } from '../../api/authApi';
 import { StorageManager, UserSessionData } from '../../utils/storage';
+import { checkPermissionMatch } from '../../auth/permissions';
 
 export interface AuthUser {
   userId: number;
@@ -166,8 +167,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const hasPermission = (permissionCode: string): boolean => {
     if (!currentUser) return false;
-    if (currentUser.roleId === 1 || currentUser.roleName === 'Owner' || currentUser.permissions.includes('*')) return true;
-    return currentUser.permissions.includes(permissionCode);
+    if (currentUser.roleId === 1 || currentUser.roleName === 'Owner' || currentUser.roleName === 'SUPER_ADMIN' || currentUser.permissions.includes('*')) {
+      return true;
+    }
+    return checkPermissionMatch(currentUser.permissions, permissionCode);
   };
 
   return (

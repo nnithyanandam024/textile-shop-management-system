@@ -1,5 +1,6 @@
 import Database from 'better-sqlite3';
 import { SessionService } from './auth/sessionService';
+import { AuthorizationService } from './auth/authorizationService';
 import { AuditRepository } from '../repositories/auditRepository';
 import { LeaveRepository, LeaveTypeRow, LeaveBalanceRow, LeaveRequestRow } from '../repositories/leaveRepository';
 import { eventBus } from '../realtime/eventBus';
@@ -183,6 +184,7 @@ export class StaffLeaveService {
     reason: string;
     attachment_path?: string;
   }): { success: boolean; id: number; message: string } {
+    AuthorizationService.requirePermission('LEAVE_CREATE');
     const staffId = this.getStaffIdOrThrow();
 
     if (!input.start_date || !input.end_date) {

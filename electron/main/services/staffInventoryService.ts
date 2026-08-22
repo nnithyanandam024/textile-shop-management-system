@@ -1,5 +1,6 @@
 import Database from 'better-sqlite3';
 import { SessionService } from './auth/sessionService';
+import { AuthorizationService } from './auth/authorizationService';
 import { ProductRepository, VariantRow, ProductRow } from '../repositories/productRepository';
 import { StockRepository, StockTransactionRow } from '../repositories/stockRepository';
 import { PurchaseRepository, PurchaseRow, PurchaseItemRow } from '../repositories/purchaseRepository';
@@ -351,6 +352,7 @@ export class StaffInventoryService {
     reason: string;
     location_name?: string;
   }): { success: boolean; id: number; difference: number; message: string } {
+    AuthorizationService.requirePermission('INVENTORY_ADJUST');
     const staffId = this.getAuthenticatedStaffId();
     const variant = this.productRepo.getVariantById(input.product_variant_id);
 

@@ -1,5 +1,6 @@
 import Database from 'better-sqlite3';
 import { SessionService } from './auth/sessionService';
+import { AuthorizationService } from './auth/authorizationService';
 import { AuditRepository } from '../repositories/auditRepository';
 import { ShiftService } from './shiftService';
 import { timeToMinutes, formatMinutesToHours, getTodayDateStr, getCurrentTimeStr } from './attendanceService';
@@ -231,6 +232,7 @@ export class StaffAttendanceService {
   }
 
   checkIn(customTime?: string): { success: boolean; data: TodayAttendanceData; message: string } {
+    AuthorizationService.requirePermission('ATTENDANCE_CHECK_IN');
     const staffId = this.getStaffIdOrThrow();
     const session = SessionService.getSession();
     const todayStr = getTodayDateStr();
@@ -320,6 +322,7 @@ export class StaffAttendanceService {
   }
 
   checkOut(customTime?: string): { success: boolean; data: TodayAttendanceData; message: string } {
+    AuthorizationService.requirePermission('ATTENDANCE_CHECK_OUT');
     const staffId = this.getStaffIdOrThrow();
     const session = SessionService.getSession();
     const todayStr = getTodayDateStr();

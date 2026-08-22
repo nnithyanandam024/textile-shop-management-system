@@ -50,6 +50,20 @@ export function initDatabase(customDbPath?: string): Database.Database {
 
     runMigrations(instance);
 
+    // Auto-seed development database if empty
+    if (!customDbPath || (!customDbPath.includes('.test_db') && !customDbPath.includes('test_'))) {
+      try {
+        const prodCount = (instance.prepare('SELECT COUNT(*) as count FROM products').get() as any)?.count || 0;
+        if (prodCount === 0) {
+          log.info('Empty product catalog detected on primary database. Auto-running initial seed script...');
+          const { seedDatabase } = require('./seed');
+          seedDatabase(instance);
+        }
+      } catch (seedErr) {
+        log.warn('Auto-seeding skipped or failed:', seedErr);
+      }
+    }
+
     if (!customDbPath) {
       dbInstance = instance;
     }

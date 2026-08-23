@@ -13,6 +13,8 @@
     "dev": "vite",
     "dev:electron": "tsc -p tsconfig.electron.json && concurrently \"vite\" \"electron .\"",
     "build": "tsc && vite build && tsc -p tsconfig.electron.json",
+    "build:web": "tsc && vite build",
+    "vercel-build": "npm run build:web",
     "build:renderer": "vite build",
     "build:electron": "tsc -p tsconfig.electron.json",
     "test": "vitest run --fileParallelism=false",

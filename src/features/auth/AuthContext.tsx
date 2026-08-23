@@ -66,6 +66,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
               permissions: user.permissions,
             };
             StorageManager.setCurrentUser(userSession);
+          } else {
+            setCurrentUser(null);
+            StorageManager.removeCurrentUser();
+            StorageManager.removeToken();
           }
         }
       } else {
@@ -81,11 +85,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             roleName: uRole,
             permissions: res.data.permissions || [],
           });
+        } else {
+          setCurrentUser(null);
+          StorageManager.removeCurrentUser();
+          StorageManager.removeToken();
         }
         setSetupRequired(false);
       }
     } catch (err) {
       console.error('Failed to check auth status:', err);
+      setCurrentUser(null);
     } finally {
       setIsLoading(false);
     }
@@ -136,6 +145,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const logout = async () => {
+    StorageManager.removeCurrentUser();
+    StorageManager.removeToken();
     await authApi.logout();
     if (window.api && window.api.auth) {
       try {

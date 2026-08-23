@@ -334,11 +334,6 @@ export const authApi = {
       }
     } catch {}
 
-    // Fallback: return default admin in demo mode if token exists
-    if (localUser) {
-      return { success: true, data: localUser };
-    }
-
     return {
       success: false,
       error: {

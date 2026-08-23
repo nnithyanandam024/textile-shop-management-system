@@ -942,20 +942,14 @@ export function initBrowserMockApi() {
     auth: {
       checkSetup: async () => ({ setupRequired: false }),
       getCurrentUser: async () => {
-        const raw = localStorage.getItem('texora_current_user');
-        if (raw) {
+        const token = localStorage.getItem('texora_auth_token') || localStorage.getItem('texora_token');
+        const raw = localStorage.getItem('texora_current_user') || localStorage.getItem('texora_auth_user');
+        if (token && raw) {
           try {
             return JSON.parse(raw);
           } catch {}
         }
-        return {
-          userId: 1,
-          username: 'admin',
-          displayName: 'Store Administrator',
-          roleId: 1,
-          roleName: 'Owner',
-          permissions: ['*'],
-        };
+        return null;
       },
       login: async (username: string) => {
         const key = (username || 'admin').trim().toLowerCase();
@@ -1104,11 +1098,26 @@ export function initBrowserMockApi() {
           ],
         };
 
+        const token = `texora_token_${Date.now()}`;
         localStorage.setItem('texora_current_user', JSON.stringify(matchedUser));
+        localStorage.setItem('texora_token', token);
+        localStorage.setItem('texora_auth_token', token);
+        localStorage.setItem('texora_auth_user', JSON.stringify({
+          id: matchedUser.userId,
+          username: matchedUser.username,
+          name: matchedUser.displayName,
+          role: matchedUser.roleName,
+          roleId: matchedUser.roleId,
+          permissions: matchedUser.permissions,
+        }));
         return { success: true, user: matchedUser };
       },
       logout: async () => {
         localStorage.removeItem('texora_current_user');
+        localStorage.removeItem('texora_auth_user');
+        localStorage.removeItem('texora_token');
+        localStorage.removeItem('texora_auth_token');
+        localStorage.removeItem('texora_user');
         return { success: true };
       },
     },

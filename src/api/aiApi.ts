@@ -164,4 +164,82 @@ export class AiApi {
     // Fallback to REST endpoint
     return await apiClient.get<any>(`/ai/summary/daily${dateStr ? `?date=${dateStr}` : ''}`);
   }
+
+  /**
+   * Retrieves AI Inventory Intelligence and Reorder Summary
+   */
+  public static async getInventoryIntelligence(): Promise<ApiResponse<any>> {
+    const userSession = StorageManager.getCurrentUser();
+    const userContext = userSession ? {
+      userId: Number(userSession.id) || 1,
+      username: userSession.username,
+      roleName: userSession.role,
+      roleId: userSession.roleId,
+      permissions: userSession.permissions || [],
+    } : undefined;
+
+    if (typeof window !== 'undefined' && (window as any).api?.ai?.getInventoryIntelligence) {
+      try {
+        const res = await (window as any).api.ai.getInventoryIntelligence(userContext);
+        return res;
+      } catch (err: any) {
+        return { success: false, error: { code: 'AI_ERROR', message: err.message } };
+      }
+    }
+
+    // Fallback to REST endpoint
+    return await apiClient.get<any>('/ai/forecast/inventory');
+  }
+
+  /**
+   * Retrieves single product detailed demand forecast
+   */
+  public static async getProductForecast(variantId: number): Promise<ApiResponse<any>> {
+    const userSession = StorageManager.getCurrentUser();
+    const userContext = userSession ? {
+      userId: Number(userSession.id) || 1,
+      username: userSession.username,
+      roleName: userSession.role,
+      roleId: userSession.roleId,
+      permissions: userSession.permissions || [],
+    } : undefined;
+
+    if (typeof window !== 'undefined' && (window as any).api?.ai?.getProductForecast) {
+      try {
+        const res = await (window as any).api.ai.getProductForecast(variantId, userContext);
+        return res;
+      } catch (err: any) {
+        return { success: false, error: { code: 'AI_ERROR', message: err.message } };
+      }
+    }
+
+    // Fallback to REST endpoint
+    return await apiClient.get<any>(`/ai/forecast/products/${variantId}`);
+  }
+
+  /**
+   * Retrieves Dead Stock analysis list
+   */
+  public static async getDeadStock(): Promise<ApiResponse<any>> {
+    const userSession = StorageManager.getCurrentUser();
+    const userContext = userSession ? {
+      userId: Number(userSession.id) || 1,
+      username: userSession.username,
+      roleName: userSession.role,
+      roleId: userSession.roleId,
+      permissions: userSession.permissions || [],
+    } : undefined;
+
+    if (typeof window !== 'undefined' && (window as any).api?.ai?.getDeadStock) {
+      try {
+        const res = await (window as any).api.ai.getDeadStock(userContext);
+        return res;
+      } catch (err: any) {
+        return { success: false, error: { code: 'AI_ERROR', message: err.message } };
+      }
+    }
+
+    // Fallback to REST endpoint
+    return await apiClient.get<any>('/ai/inventory/dead-stock');
+  }
 }

@@ -468,6 +468,9 @@ export interface ElectronAPI {
     getStats: () => Promise<any>;
     getSalesInsights: (timeframe?: string, userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
     getDailySummary: (dateStr?: string, userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getInventoryIntelligence: (userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getProductForecast: (variantId: number, userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getDeadStock: (userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
   };
 }
 
@@ -896,6 +899,9 @@ const api: ElectronAPI = {
     getStats: () => ipcRenderer.invoke('ai:getStats'),
     getSalesInsights: (timeframe?: string, userContext?: any) => ipcRenderer.invoke('ai:getSalesInsights', { timeframe, userContext }),
     getDailySummary: (dateStr?: string, userContext?: any) => ipcRenderer.invoke('ai:getDailySummary', { dateStr, userContext }),
+    getInventoryIntelligence: (userContext?: any) => ipcRenderer.invoke('ai:getInventoryIntelligence', { userContext }),
+    getProductForecast: (variantId: number, userContext?: any) => ipcRenderer.invoke('ai:getProductForecast', { variantId, userContext }),
+    getDeadStock: (userContext?: any) => ipcRenderer.invoke('ai:getDeadStock', { userContext }),
   },
 };
 

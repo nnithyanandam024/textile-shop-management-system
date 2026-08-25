@@ -6,6 +6,8 @@ import { UserAuthContext, AiRbacGuard } from '../services/ai/aiRbacGuard';
 import { InsightGenerator } from '../services/ai/analytics/insightGenerator';
 import { DailySummaryService } from '../services/ai/analytics/dailySummaryService';
 import { AnalyticsTimeframe } from '../services/ai/analytics/analyticsTypes';
+import { ReorderRecommendationEngine } from '../services/ai/forecasting/reorderRecommendationEngine';
+import { DeadStockDetector } from '../services/ai/forecasting/deadStockDetector';
 
 export function registerAiHandlers() {
   // 1. Process AI Chat query
@@ -46,6 +48,36 @@ export function registerAiHandlers() {
       return { success: false, error: rbac.reason };
     }
     const data = DailySummaryService.getDailyExecutiveSummary(payload?.dateStr);
+    return { success: true, data };
+  });
+
+  // 7. Get AI Inventory Intelligence & Demand Forecasting Summary
+  ipcMain.handle('ai:getInventoryIntelligence', async (_event, payload: { userContext?: UserAuthContext }) => {
+    const rbac = AiRbacGuard.canExecuteTool('getInventorySummary', payload?.userContext);
+    if (!rbac.allowed) {
+      return { success: false, error: rbac.reason };
+    }
+    const data = ReorderRecommendationEngine.generateInventoryIntelligence();
+    return { success: true, data };
+  });
+
+  // 8. Get Single Product Forecast Details
+  ipcMain.handle('ai:getProductForecast', async (_event, payload: { variantId: number; userContext?: UserAuthContext }) => {
+    const rbac = AiRbacGuard.canExecuteTool('getInventorySummary', payload?.userContext);
+    if (!rbac.allowed) {
+      return { success: false, error: rbac.reason };
+    }
+    const data = ReorderRecommendationEngine.getProductForecast(payload.variantId);
+    return { success: true, data };
+  });
+
+  // 9. Get Dead Stock List
+  ipcMain.handle('ai:getDeadStock', async (_event, payload: { userContext?: UserAuthContext }) => {
+    const rbac = AiRbacGuard.canExecuteTool('getInventorySummary', payload?.userContext);
+    if (!rbac.allowed) {
+      return { success: false, error: rbac.reason };
+    }
+    const data = DeadStockDetector.detectDeadStock();
     return { success: true, data };
   });
 }

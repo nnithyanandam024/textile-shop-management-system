@@ -2347,6 +2347,148 @@ export function initBrowserMockApi() {
           },
         };
       },
+
+      getSmartReport: async (period: string) => {
+        const isMonthly = period === 'monthly';
+        const isWeekly = period === 'weekly';
+
+        const totalRev = isMonthly ? 2480000 : isWeekly ? 582400 : 84250;
+        const prevRev = isMonthly ? 2171600 : isWeekly ? 522800 : 75220;
+        const pctChange = isMonthly ? 14.2 : isWeekly ? 11.4 : 12.0;
+        const txCount = isMonthly ? 3842 : isWeekly ? 890 : 126;
+        const aov = isMonthly ? 645 : isWeekly ? 654 : 669;
+
+        const periodLabel = isMonthly
+          ? 'Monthly Management Report — August 2026'
+          : isWeekly
+          ? 'Weekly Business Report — Aug 17 to Aug 23, 2026'
+          : 'Daily Business Summary — August 25, 2026';
+
+        const executiveSummary = isMonthly
+          ? 'Monthly showroom performance reached ₹24,80,000 (+14.2% growth) with 3,842 transactions and an Average Order Value of ₹645. Kanchipuram Silks & Sarees was the highest earning category (42% share), whereas Accessories exhibited slower movement (5% share). Working capital of ₹64,800 is currently tied up in 4 dead stock variants. Five operational anomalies require administrative review. Overall business health remains strongly positive with expanding customer retention.'
+          : isWeekly
+          ? 'Weekly sales performance achieved ₹5,82,400 (+11.4% vs previous week) across 890 transactions. Returning customers generated 71.5% of total revenue, reflecting high loyalty retention. Demand for bridal and festive sarees continues to surge (+15% projected 30d run-rate). Key managerial action items include replenishing 8 depleting SKUs and reviewing open risk alerts.'
+          : 'Showroom operations completed today with gross sales of ₹84,250 across 126 transactions (AOV: ₹669). Kanchipuram Silks & Sarees led revenue contribution (42%), while 8 product variants require replenishment attention before upcoming weekend footfall. 2 operational anomaly flags remain open for manager sign-off.';
+
+        return {
+          success: true,
+          data: {
+            id: `REP-${period.toUpperCase()}-20260825`,
+            period,
+            periodLabel,
+            startDate: isMonthly ? '2026-08-01' : isWeekly ? '2026-08-17' : '2026-08-25',
+            endDate: isMonthly ? '2026-08-31' : isWeekly ? '2026-08-23' : '2026-08-25',
+            executiveSummary,
+            overallHealthBadge: 'STRONG_GROWTH',
+            overallHealthLabel: '🚀 Strong Growth & Healthy Operations',
+            sales: {
+              totalRevenue: totalRev,
+              revenueComparison: { current: totalRev, previous: prevRev, percentageChange: pctChange, trend: 'up' },
+              transactionCount: txCount,
+              transactionsComparison: { current: txCount, previous: Math.round(txCount * 0.9), percentageChange: 9.6, trend: 'up' },
+              unitsSold: Math.round(txCount * 1.8),
+              averageOrderValue: aov,
+              aovComparison: { current: aov, previous: Math.round(aov * 0.96), percentageChange: 4.1, trend: 'up' },
+              totalDiscountAmount: Math.round(totalRev * 0.08),
+              discountRatePercent: 8.0,
+              totalReturnAmount: Math.round(totalRev * 0.02),
+              returnRatePercent: 2.0,
+            },
+            topProducts: [
+              { variantId: 1, productName: 'Bridal Kanchipuram Pure Silk Saree', sku: 'SAR-KAN-001-RED-FS', categoryName: 'Sarees', unitsSold: isMonthly ? 342 : 42, revenue: isMonthly ? 6497658 : 797958, trend: 'up' },
+              { variantId: 2, productName: 'Soft Handloom Cotton Saree', sku: 'SAR-COT-002-BLU-FS', categoryName: 'Sarees', unitsSold: isMonthly ? 298 : 68, revenue: isMonthly ? 744702 : 169932, trend: 'up' },
+              { variantId: 3, productName: 'Premium Egyptian Giza Cotton Shirt', sku: 'MSH-EGY-002-WHT-40', categoryName: 'Men’s Wear', unitsSold: isMonthly ? 182 : 35, revenue: isMonthly ? 454818 : 87465, trend: 'stable' },
+            ],
+            slowProducts: [
+              { variantId: 4, productName: 'Traditional Raw Silk Men’s Kurta', sku: 'MKU-RAW-004-GLD-L', categoryName: 'Men’s Wear', unitsSold: 1, revenue: 3299, trend: 'down' },
+            ],
+            categories: [
+              { categoryId: 1, categoryName: 'Kanchipuram Silks & Sarees', revenue: Math.round(totalRev * 0.42), revenueSharePercent: 42.0, trend: 'up' },
+              { categoryId: 2, categoryName: 'Men’s Wear & Shirts', revenue: Math.round(totalRev * 0.28), revenueSharePercent: 28.0, trend: 'stable' },
+              { categoryId: 3, categoryName: 'Dress Materials & Blouses', revenue: Math.round(totalRev * 0.16), revenueSharePercent: 16.0, trend: 'up' },
+              { categoryId: 4, categoryName: 'Traditional Dhotis & Kurtas', revenue: Math.round(totalRev * 0.09), revenueSharePercent: 9.0, trend: 'stable' },
+              { categoryId: 5, categoryName: 'Accessories & Shapewear', revenue: Math.round(totalRev * 0.05), revenueSharePercent: 5.0, trend: 'down' },
+            ],
+            customers: {
+              newCustomersCount: Math.round(txCount * 0.38),
+              returningCustomersCount: Math.round(txCount * 0.62),
+              repeatPurchaseRatePercent: 62.0,
+              returningRevenueSharePercent: 71.5,
+              averageBuyingIntervalDays: 42,
+            },
+            inventory: {
+              criticalReorderCount: 8,
+              monitorBufferCount: 12,
+              healthyStockCount: 141,
+              deadStockCount: 4,
+              capitalTiedInDeadStock: 64800,
+              totalStockValuation: 1845000,
+            },
+            forecast: [
+              { categoryName: 'Sarees & Silk Collections', expected30DayDemandUnits: 380, growthPercentage: 15.0, confidence: 'HIGH' },
+              { categoryName: 'Men’s Formal & Casual Wear', expected30DayDemandUnits: 210, growthPercentage: 4.5, confidence: 'HIGH' },
+              { categoryName: 'Dress Materials & Fabrics', expected30DayDemandUnits: 145, growthPercentage: 8.0, confidence: 'MEDIUM' },
+              { categoryName: 'Accessories & Tailoring', expected30DayDemandUnits: 90, growthPercentage: -2.5, confidence: 'MEDIUM' },
+            ],
+            risk: {
+              overallRiskScore: 38,
+              criticalAnomalies: 1,
+              highAnomalies: 2,
+              mediumAnomalies: 1,
+              unresolvedCount: 2,
+              primaryRiskFactor: 'Large manual stock adjustments & unusual manual discounts',
+            },
+            actionItems: [
+              {
+                id: 'ACT-01',
+                priority: 'HIGH',
+                title: 'Restock 8 Depleting SKUs Approaching Stockout',
+                description: 'Bridal Silk Sarees and other top-sellers have supply buffers below supplier lead time (4 days remaining).',
+                department: 'Inventory',
+                suggestedAction: 'Review AI Suggested Reorders and create draft POs in Inventory Intelligence tab.',
+              },
+              {
+                id: 'ACT-02',
+                priority: 'HIGH',
+                title: 'Audit & Sign-off on 2 Open Risk Anomalies',
+                description: 'Unusual 42% manual discount on Silk Saree and large stock adjustment write-offs require formal manager sign-off.',
+                department: 'Risk / Audit',
+                suggestedAction: 'Open Anomaly Details Modal on Executive Dashboard and document approval rationale.',
+              },
+              {
+                id: 'ACT-03',
+                priority: 'MEDIUM',
+                title: 'Liquidate ₹64,800 Dead Stock Capital',
+                description: 'Traditional Raw Silk Kurtas and slow-moving fabrics have had no sales in 60 days.',
+                department: 'Marketing',
+                suggestedAction: 'Launch festive bundle promotions (e.g. Kurta + Silk Dhoti combo gift).',
+              },
+              {
+                id: 'ACT-04',
+                priority: 'LOW',
+                title: 'Capitalize on 30-Day Bridal Silk Demand Surge (+15%)',
+                description: 'AI Forecasting indicates strong upcoming wedding season demand for Kanchipuram Silk Sarees.',
+                department: 'Sales',
+                suggestedAction: 'Verify supplier pre-orders and prime front-of-store mannequin displays.',
+              },
+            ],
+            generatedAt: new Date().toISOString(),
+            generatedBy: 'Texora AI Management Engine',
+          },
+        };
+      },
+
+      getReportHistory: async () => {
+        return {
+          success: true,
+          data: [
+            { id: 'rep-m-aug-2026', period: 'monthly', label: 'Monthly Management Report — August 2026', date: '2026-08-25', revenue: 2480000 },
+            { id: 'rep-w-aug-w3', period: 'weekly', label: 'Weekly Business Report — Aug 17 to Aug 23, 2026', date: '2026-08-23', revenue: 582400 },
+            { id: 'rep-d-aug-25', period: 'daily', label: 'Daily Business Summary — Aug 25, 2026', date: '2026-08-25', revenue: 84250 },
+            { id: 'rep-d-aug-24', period: 'daily', label: 'Daily Business Summary — Aug 24, 2026', date: '2026-08-24', revenue: 91400 },
+          ],
+        };
+      },
     },
   };
 

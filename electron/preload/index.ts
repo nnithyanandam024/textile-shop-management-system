@@ -479,6 +479,8 @@ export interface ElectronAPI {
     getAnomalyDetails: (anomalyId: string, userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
     reviewAnomaly: (request: any, userContext?: any) => Promise<{ success: boolean; anomaly?: any; error?: string }>;
     getRiskSummary: (userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getSmartReport: (period: string, dateStr?: string, userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getReportHistory: (userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
   };
 }
 
@@ -918,6 +920,8 @@ const api: ElectronAPI = {
     getAnomalyDetails: (anomalyId: string, userContext?: any) => ipcRenderer.invoke('ai:getAnomalyDetails', { anomalyId, userContext }),
     reviewAnomaly: (request: any, userContext?: any) => ipcRenderer.invoke('ai:reviewAnomaly', { request, userContext }),
     getRiskSummary: (userContext?: any) => ipcRenderer.invoke('ai:getRiskSummary', { userContext }),
+    getSmartReport: (period: string, dateStr?: string, userContext?: any) => ipcRenderer.invoke('ai:getSmartReport', { period, dateStr, userContext }),
+    getReportHistory: (userContext?: any) => ipcRenderer.invoke('ai:getReportHistory', { userContext }),
   },
 };
 

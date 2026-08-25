@@ -14,6 +14,8 @@ import { RecommendationTracker } from '../services/ai/recommendations/recommenda
 import { CartRecommendationRequest } from '../services/ai/recommendations/recommendationTypes';
 import { AnomalyDetectionEngine } from '../services/ai/anomalies/anomalyDetectionEngine';
 import { AnomalyReviewService } from '../services/ai/anomalies/anomalyReviewService';
+import { ReportHistoryService } from '../services/ai/reports/reportHistoryService';
+import { ReportPeriod } from '../services/ai/reports/reportTypes';
 
 export function registerAiHandlers() {
   // 1. Process AI Chat query
@@ -147,11 +149,31 @@ export function registerAiHandlers() {
 
   // 17. Get Store Risk Summary
   ipcMain.handle('ai:getRiskSummary', async (_event, payload?: { userContext?: UserAuthContext }) => {
-    const rbac = AiRbacGuard.canExecuteTool('getAuditLogs', payload?.userContext);
+    const rbac = AiRbacGuard.canExecuteTool('getRiskSummary', payload?.userContext);
     if (!rbac.allowed) {
       return { success: false, error: rbac.reason };
     }
     const data = AnomalyDetectionEngine.getRiskSummary();
+    return { success: true, data };
+  });
+
+  // 18. Get Smart Executive Business Report
+  ipcMain.handle('ai:getSmartReport', async (_event, payload: { period: ReportPeriod; dateStr?: string; userContext?: UserAuthContext }) => {
+    const rbac = AiRbacGuard.canExecuteTool('getDailyReport', payload?.userContext);
+    if (!rbac.allowed) {
+      return { success: false, error: rbac.reason };
+    }
+    const data = ReportHistoryService.getReport(payload.period, payload.dateStr);
+    return { success: true, data };
+  });
+
+  // 19. Get Report History Archive
+  ipcMain.handle('ai:getReportHistory', async (_event, payload?: { userContext?: UserAuthContext }) => {
+    const rbac = AiRbacGuard.canExecuteTool('getDailyReport', payload?.userContext);
+    if (!rbac.allowed) {
+      return { success: false, error: rbac.reason };
+    }
+    const data = ReportHistoryService.getReportHistory();
     return { success: true, data };
   });
 }

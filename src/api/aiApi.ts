@@ -437,4 +437,56 @@ export class AiApi {
     // Fallback to REST endpoint
     return await apiClient.get<any>('/ai/anomalies/risk-summary');
   }
+
+  /**
+   * Retrieves Smart Business Report for period
+   */
+  public static async getSmartReport(period: string, dateStr?: string): Promise<ApiResponse<any>> {
+    const userSession = StorageManager.getCurrentUser();
+    const userContext = userSession ? {
+      userId: Number(userSession.id) || 1,
+      username: userSession.username,
+      roleName: userSession.role,
+      roleId: userSession.roleId,
+      permissions: userSession.permissions || [],
+    } : undefined;
+
+    if (typeof window !== 'undefined' && (window as any).api?.ai?.getSmartReport) {
+      try {
+        const res = await (window as any).api.ai.getSmartReport(period, dateStr, userContext);
+        return res;
+      } catch (err: any) {
+        return { success: false, error: { code: 'AI_ERROR', message: err.message } };
+      }
+    }
+
+    // Fallback to REST endpoint
+    return await apiClient.get<any>('/ai/reports/smart', { params: { period, dateStr } });
+  }
+
+  /**
+   * Retrieves historical report archive list
+   */
+  public static async getReportHistory(): Promise<ApiResponse<any>> {
+    const userSession = StorageManager.getCurrentUser();
+    const userContext = userSession ? {
+      userId: Number(userSession.id) || 1,
+      username: userSession.username,
+      roleName: userSession.role,
+      roleId: userSession.roleId,
+      permissions: userSession.permissions || [],
+    } : undefined;
+
+    if (typeof window !== 'undefined' && (window as any).api?.ai?.getReportHistory) {
+      try {
+        const res = await (window as any).api.ai.getReportHistory(userContext);
+        return res;
+      } catch (err: any) {
+        return { success: false, error: { code: 'AI_ERROR', message: err.message } };
+      }
+    }
+
+    // Fallback to REST endpoint
+    return await apiClient.get<any>('/ai/reports/history');
+  }
 }

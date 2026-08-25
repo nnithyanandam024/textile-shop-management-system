@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, History, Lock, LogOut, KeyRound, ChevronDown } from 'lucide-react';
+import { Search, History, Lock, LogOut, KeyRound, ChevronDown, Bot } from 'lucide-react';
 import { useAuth } from '../../features/auth/AuthContext';
 import { ChangePasswordModal } from '../../features/auth/ChangePasswordModal';
 import { NotificationBell } from './NotificationBell';
 import { ConnectionStatusIndicator } from '../common/ConnectionStatusIndicator';
+import { AiChatModal } from '../ai/AiChatModal';
 
 export const Header: React.FC = () => {
   const navigate = useNavigate();
   const { currentUser, lockScreen, logout } = useAuth();
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const [showChangePass, setShowChangePass] = useState<boolean>(false);
+  const [showAiModal, setShowAiModal] = useState<boolean>(false);
 
   return (
     <header className="h-16 bg-white border-b border-slate-200/80 px-6 flex items-center justify-between sticky top-0 z-30 shadow-sm/50">
@@ -28,6 +30,19 @@ export const Header: React.FC = () => {
 
       {/* Right: Actions & User Profile */}
       <div className="flex items-center gap-3">
+        {/* AI Assistant Quick Header Button */}
+        <button
+          onClick={() => setShowAiModal(true)}
+          className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-indigo-50 to-purple-50 hover:from-indigo-100 hover:to-purple-100 border border-indigo-200/80 rounded-xl text-xs font-bold text-[#2012ad] transition-all shadow-xs"
+          title="Open AI Business Assistant (Ctrl + J)"
+        >
+          <Bot className="w-4 h-4 text-[#2012ad]" />
+          <span className="hidden md:inline">AI Assistant</span>
+          <span className="text-[10px] font-semibold bg-white px-1.5 py-0.2 rounded border border-indigo-200 text-indigo-700">
+            Ctrl+J
+          </span>
+        </button>
+
         {/* Real-time Status Indicator */}
         <ConnectionStatusIndicator />
 
@@ -114,6 +129,7 @@ export const Header: React.FC = () => {
       </div>
 
       <ChangePasswordModal isOpen={showChangePass} onClose={() => setShowChangePass(false)} />
+      <AiChatModal isOpen={showAiModal} onClose={() => setShowAiModal(false)} />
     </header>
   );
 };

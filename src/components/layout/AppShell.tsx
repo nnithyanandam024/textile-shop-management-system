@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
+import { AiFloatingButton } from '../ai/AiFloatingButton';
 
 export interface AppShellProps {
   children?: React.ReactNode;
@@ -9,7 +10,7 @@ export interface AppShellProps {
 
 export function AppShell({ children }: AppShellProps): React.ReactElement {
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#f9fafc] text-slate-800 print:block print:overflow-visible print:h-auto print:bg-white">
+    <div className="flex h-screen w-screen overflow-hidden bg-[#f9fafc] text-slate-800 print:block print:overflow-visible print:h-auto print:bg-white relative">
       <div className="print:hidden">
         <Sidebar />
       </div>
@@ -20,6 +21,11 @@ export function AppShell({ children }: AppShellProps): React.ReactElement {
         <main className="flex-1 overflow-y-auto p-8 bg-grid-pattern print:p-0 print:overflow-visible print:bg-white print:h-auto">
           {children || <Outlet />}
         </main>
+      </div>
+
+      {/* Persistent AI Business Assistant Floating Action Button */}
+      <div className="print:hidden">
+        <AiFloatingButton />
       </div>
     </div>
   );

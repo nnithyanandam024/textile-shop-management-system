@@ -53,11 +53,13 @@ import { registerStaffReportsHandlers } from './staffReportsHandler';
 import { registerStaffSettingsHandlers } from './staffSettingsHandler';
 import { registerStaffNotificationCenterHandlers } from './staffNotificationHandler';
 import { registerRealtimeHandlers } from './realtimeHandler';
+import { registerAiHandlers } from './aiHandler';
 import log from '../logger';
 
 export function registerIpcHandlers() {
   const db = getDatabase();
   registerRealtimeHandlers();
+  registerAiHandlers();
   registerStaffHandlers(db);
   registerAttendanceHandlers(db);
   registerShiftHandlers(db);

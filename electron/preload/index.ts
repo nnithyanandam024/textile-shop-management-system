@@ -461,6 +461,12 @@ export interface ElectronAPI {
     onEvent: (callback: (event: any) => void) => () => void;
     publishEvent: (event: any) => Promise<{ success: boolean; error?: string }>;
   };
+  ai: {
+    chat: (request: any, userContext?: any) => Promise<any>;
+    getQuickPrompts: (userContext?: any) => Promise<any[]>;
+    getLogs: (limit?: number) => Promise<any[]>;
+    getStats: () => Promise<any>;
+  };
 }
 
 const api: ElectronAPI = {
@@ -880,6 +886,12 @@ const api: ElectronAPI = {
       };
     },
     publishEvent: (event) => ipcRenderer.invoke('realtime:publish', event),
+  },
+  ai: {
+    chat: (request: any, userContext?: any) => ipcRenderer.invoke('ai:chat', { request, userContext }),
+    getQuickPrompts: (userContext?: any) => ipcRenderer.invoke('ai:getQuickPrompts', userContext),
+    getLogs: (limit?: number) => ipcRenderer.invoke('ai:getLogs', limit),
+    getStats: () => ipcRenderer.invoke('ai:getStats'),
   },
 };
 

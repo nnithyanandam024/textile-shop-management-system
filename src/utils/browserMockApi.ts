@@ -1252,9 +1252,427 @@ export function initBrowserMockApi() {
             { name: 'Customer Satisfaction', score: '96%' },
             { name: 'Billing Accuracy', score: '99.8%' },
             { name: 'Punctuality Score', score: '98%' },
-          ]
+          ],
         };
       },
+    },
+
+    // --- AI BUSINESS ASSISTANT API ---
+    ai: {
+      chat: async (request: any, userContext?: any) => {
+        const query = (request?.message || '').toLowerCase().trim();
+        const rawUser = localStorage.getItem('texora_current_user');
+        let user = userContext;
+        if (!user && rawUser) {
+          try { user = JSON.parse(rawUser); } catch {}
+        }
+        const role = (user?.roleName || user?.role || 'Cashier').toLowerCase();
+        const now = new Date().toISOString();
+
+        // 1. Sensitive Payroll Check
+        if (query.includes('salary') || query.includes('salaries') || query.includes('payroll') || query.includes('wage')) {
+          if (role !== 'owner' && role !== 'super_admin' && role !== 'hr staff') {
+            return {
+              answer: "🔒 **Access Restricted**\n\nYou don't have permission to access staff salary or payroll information. Please contact your store administrator.",
+              data: {
+                type: 'permission_denied',
+                title: 'Access Restricted',
+                aiInsight: 'Request rejected by RBAC security guard.',
+              },
+              source: 'Texora Security & RBAC Guard',
+              sourcesUsed: ['Role Permission Matrix'],
+              generatedAt: now,
+              confidence: 1.0,
+              requiresPermission: 'Restricted',
+            };
+          }
+        }
+
+        // 2. Executive Business Summary
+        if (
+          query.includes('business summary') ||
+          query.includes('daily summary') ||
+          query.includes('daily report') ||
+          query.includes('store overview') ||
+          query.includes('shop overview') ||
+          query.includes('executive summary')
+        ) {
+          if (role !== 'owner' && role !== 'super_admin' && role !== 'manager') {
+            return {
+              answer: "🔒 **Access Restricted**\n\nYou don't have permission to access executive business summary reports.",
+              data: { type: 'permission_denied', title: 'Access Restricted' },
+              source: 'Texora Security & RBAC Guard',
+              sourcesUsed: ['Role Permission Matrix'],
+              generatedAt: now,
+              confidence: 1.0,
+            };
+          }
+
+          const vList = loadStorage(STORAGE_KEYS.VARIANTS, DEFAULT_VARIANTS);
+          const lowCount = vList.filter((v: any) => v.current_stock > 0 && v.current_stock <= (v.minimum_stock || 10)).length;
+          const outCount = vList.filter((v: any) => v.current_stock === 0).length;
+
+          return {
+            answer: `### 📊 Today's Business Summary\n\n` +
+              `**Sales:** **₹84,250**  \n` +
+              `**Transactions:** **126**  \n` +
+              `**Average Bill:** **₹669**  \n` +
+              `**Top Category:** **Kanchipuram Silks & Sarees**  \n` +
+              `**Low Stock Alerts:** **${lowCount} products** (${outCount} out of stock)  \n` +
+              `**Staff On Duty:** **5 / 6 present**  \n\n` +
+              `💡 **AI Insight:** Today's revenue is ₹84,250, which is **12% higher** than yesterday. Footfall peaked during afternoon festive bridal enquiries.`,
+            data: {
+              type: 'daily_business_report',
+              title: "Today's Business Summary",
+              metrics: {
+                'Sales': '₹84,250',
+                'Transactions': 126,
+                'Average Bill': '₹669',
+                'Top Category': 'Kanchipuram Silks & Sarees',
+                'Low Stock': `${lowCount} products`,
+                'Staff Present': '5/6',
+              },
+              aiInsight: "Sales are 12% higher than yesterday. Strong customer interest in bridal silk sarees.",
+            },
+            source: 'Consolidated Executive Business Intelligence Register',
+            sourcesUsed: ['Sales Records', 'Warehouse Stock Matrix', 'Customer CRM', 'Staff Attendance Terminal'],
+            generatedAt: now,
+            confidence: 1.0,
+            toolExecuted: 'getDailyReport',
+          };
+        }
+
+        // 3. Sales Queries
+        if (
+          query.includes('sale') ||
+          query.includes('sold') ||
+          query.includes('revenue') ||
+          query.includes('turnover') ||
+          query.includes('collection') ||
+          query.includes('bill') ||
+          query.includes('yesterday') ||
+          query.includes('transaction')
+        ) {
+          const isYesterday = query.includes('yesterday');
+          const salesVal = isYesterday ? 75200 : 84250;
+          const txCount = isYesterday ? 112 : 126;
+          const avgBill = isYesterday ? 671 : 669;
+          const period = isYesterday ? 'Yesterday' : 'Today';
+
+          return {
+            answer: `### 📊 ${period}'s Sales Summary\n\n` +
+              `• **Total Revenue:** **₹${salesVal.toLocaleString()}**${!isYesterday ? ' (📈 **+12%** higher than yesterday)' : ''}\n` +
+              `• **Completed Invoices:** **${txCount}** transactions\n` +
+              `• **Average Bill Value:** **₹${avgBill}**\n` +
+              `• **Top Category:** **Kanchipuram Silks & Sarees**`,
+            data: {
+              type: 'sales_summary',
+              title: `${period}'s Sales`,
+              metrics: {
+                'Total Revenue': `₹${salesVal.toLocaleString()}`,
+                'Transactions': txCount,
+                'Average Ticket': `₹${avgBill}`,
+                'Leading Category': 'Kanchipuram Silks & Sarees',
+              },
+              aiInsight: isYesterday
+                ? 'Yesterday finished with healthy billings across men formal wear and festive silks.'
+                : 'Today’s sales are ₹84,250 from 126 transactions (+12% vs yesterday).',
+            },
+            source: 'Sales Engine & POS Billing Invoices',
+            sourcesUsed: ['Sales Records', `${period} POS Invoices`, 'Register Balances'],
+            generatedAt: now,
+            confidence: 1.0,
+            toolExecuted: 'getSalesSummary',
+          };
+        }
+
+        // 4. Top Selling Products
+        if (
+          query.includes('top selling') ||
+          query.includes('top product') ||
+          query.includes('best seller') ||
+          query.includes('fast moving') ||
+          query.includes('popular') ||
+          query.includes('most sold') ||
+          query.includes('top category')
+        ) {
+          const topItems = [
+            { rank: 1, name: 'Bridal Kanchipuram Pure Silk Saree', category: 'Sarees', unitsSold: 18, revenue: 323982, sku: 'SAR-KAN-001-RED-FS', variantInfo: 'Crimson Red / Free Size' },
+            { rank: 2, name: 'Premium Egyptian Giza Cotton Shirt', category: 'Men’s Wear', unitsSold: 24, revenue: 59976, sku: 'MSH-EGY-002-WHT-40', variantInfo: 'Pure White / 40 (M)' },
+            { rank: 3, name: 'Banarasi Brocade Silk Saree', category: 'Sarees', unitsSold: 12, revenue: 143988, sku: 'SAR-BAN-003-NVY-FS', variantInfo: 'Navy Gold / Free Size' },
+            { rank: 4, name: 'Designer Soft Silk Partywear Saree', category: 'Sarees', unitsSold: 15, revenue: 112485, sku: 'SAR-SFT-004-PNK-FS', variantInfo: 'Rose Pink / Free Size' },
+            { rank: 5, name: 'Pure Linen Formal Trouser', category: 'Men’s Wear', unitsSold: 16, revenue: 36784, sku: 'MTR-LIN-005-BEI-32', variantInfo: 'Beige / 32' },
+          ];
+
+          let answer = `### 🏆 Top Selling Products & Fast Movers\n\n`;
+          topItems.forEach((p) => {
+            answer += `${p.rank}. **${p.name}** (${p.category})\n` +
+              `   • Units Sold: **${p.unitsSold} units** | Revenue: **₹${p.revenue.toLocaleString()}**\n` +
+              `   • Variant: \`${p.sku}\` (${p.variantInfo})\n\n`;
+          });
+
+          return {
+            answer,
+            data: {
+              type: 'top_products',
+              title: 'Top Fast-Moving Products',
+              items: topItems,
+              aiInsight: 'Bridal Silk Sarees and Giza Cotton Shirts represent 68% of today’s volume.',
+            },
+            source: 'Product Variant & Sales Item Aggregates',
+            sourcesUsed: ['Sale Items Database', 'Barcode Records', 'Inventory Movement Register'],
+            generatedAt: now,
+            confidence: 1.0,
+            toolExecuted: 'getTopSellingProducts',
+          };
+        }
+
+        // 5. Low Stock & Out of Stock Queries
+        if (
+          query.includes('low stock') ||
+          query.includes('out of stock') ||
+          query.includes('reorder') ||
+          query.includes('shortage') ||
+          query.includes('empty stock') ||
+          query.includes('stock alert')
+        ) {
+          const vList = loadStorage(STORAGE_KEYS.VARIANTS, DEFAULT_VARIANTS);
+          const pList = loadStorage(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS);
+
+          const lowStockVariants = vList.filter((v: any) => v.current_stock <= (v.minimum_stock || 10));
+          const outOfStock = lowStockVariants.filter((v: any) => v.current_stock === 0);
+          const lowStock = lowStockVariants.filter((v: any) => v.current_stock > 0);
+
+          let answer = `### 🚨 Inventory Stock Alerts\n\n` +
+            `• **Low Stock Warnings:** **${lowStock.length} items**\n` +
+            `• **Out of Stock Items:** **${outOfStock.length} items**\n\n`;
+
+          if (outOfStock.length > 0) {
+            answer += `#### ⛔ Out of Stock (Urgent Re-order Required):\n`;
+            outOfStock.slice(0, 4).forEach((v: any) => {
+              const p = pList.find((x: any) => x.id === v.product_id);
+              answer += `• **${p?.name || 'Textile Item'}** (\`${v.sku}\`) — ${v.color || 'Standard'}, ${v.size || 'Free Size'} (Min threshold: ${v.minimum_stock})\n`;
+            });
+            answer += '\n';
+          }
+
+          if (lowStock.length > 0) {
+            answer += `#### ⚠️ Low Stock (Below Minimum Threshold):\n`;
+            lowStock.slice(0, 4).forEach((v: any) => {
+              const p = pList.find((x: any) => x.id === v.product_id);
+              answer += `• **${p?.name || 'Textile Item'}** (\`${v.sku}\`) — **${v.current_stock} units left** (Min: ${v.minimum_stock})\n`;
+            });
+          }
+
+          return {
+            answer,
+            data: {
+              type: 'low_stock',
+              title: 'Stock Re-order Alerts',
+              metrics: {
+                'Low Stock Items': lowStock.length,
+                'Out of Stock': outOfStock.length,
+                'Total Alerts': lowStockVariants.length,
+              },
+              aiInsight: `${outOfStock.length} out-of-stock SKUs require immediate supplier purchase orders.`,
+            },
+            source: 'Warehouse Inventory & Variant Threshold Engine',
+            sourcesUsed: ['Product Variants Ledger', 'Minimum Stock Rules', 'Warehouse Stock Matrix'],
+            generatedAt: now,
+            confidence: 1.0,
+            toolExecuted: 'getLowStockProducts',
+          };
+        }
+
+        // 6. Master Inventory Overview
+        if (
+          query.includes('inventory') ||
+          query.includes('total stock') ||
+          query.includes('stock valuation') ||
+          query.includes('stock value') ||
+          query.includes('warehouse') ||
+          query.includes('how many products') ||
+          query.includes('how many items')
+        ) {
+          const pList = loadStorage(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS);
+          const vList = loadStorage(STORAGE_KEYS.VARIANTS, DEFAULT_VARIANTS);
+          const totalUnits = vList.reduce((acc: number, v: any) => acc + (Number(v.current_stock) || 0), 0);
+          const costVal = vList.reduce((acc: number, v: any) => acc + ((Number(v.current_stock) || 0) * (Number(v.purchase_price) || 0)), 0);
+          const retailVal = vList.reduce((acc: number, v: any) => acc + ((Number(v.current_stock) || 0) * (Number(v.selling_price) || 0)), 0);
+          const lowCount = vList.filter((v: any) => v.current_stock > 0 && v.current_stock <= (v.minimum_stock || 10)).length;
+          const outCount = vList.filter((v: any) => v.current_stock === 0).length;
+
+          return {
+            answer: `### 📦 Warehouse & Inventory Overview\n\n` +
+              `• **Active Products:** **${pList.length} products** (${vList.length} SKUs)\n` +
+              `• **Total Stock in Store:** **${totalUnits.toLocaleString()} units**\n` +
+              `• **Stock Valuation (Cost):** **₹${costVal.toLocaleString()}**\n` +
+              `• **Estimated Retail Value:** **₹${retailVal.toLocaleString()}** (Potential Gross Margin: **₹${(retailVal - costVal).toLocaleString()}**)\n` +
+              `• **Alerts:** ${lowCount} Low Stock, ${outCount} Out of Stock`,
+            data: {
+              type: 'inventory_summary',
+              title: 'Inventory Valuation & Metrics',
+              metrics: {
+                'Total Products': pList.length,
+                'Total SKUs': vList.length,
+                'In-Stock Units': totalUnits.toLocaleString(),
+                'Cost Valuation': `₹${costVal.toLocaleString()}`,
+                'Retail Valuation': `₹${retailVal.toLocaleString()}`,
+                'Gross Margin': `₹${(retailVal - costVal).toLocaleString()}`,
+              },
+              aiInsight: `Total store inventory health is strong across ${totalUnits.toLocaleString()} units.`,
+            },
+            source: 'Master Warehouse Stock Balance & Costing Registry',
+            sourcesUsed: ['Product Variants Table', 'Purchase Cost Master', 'Active SKU Inventory'],
+            generatedAt: now,
+            confidence: 1.0,
+            toolExecuted: 'getInventorySummary',
+          };
+        }
+
+        // 7. Customers & Loyalty
+        if (
+          query.includes('customer') ||
+          query.includes('client') ||
+          query.includes('patron') ||
+          query.includes('loyalty') ||
+          query.includes('buyer')
+        ) {
+          const cList = loadStorage(STORAGE_KEYS.CUSTOMERS, DEFAULT_CUSTOMERS);
+          return {
+            answer: `### 👥 Customer CRM & Loyalty Insights\n\n` +
+              `• **Total Registered Customers:** **${cList.length}**\n` +
+              `• **New Customers Today:** **+3**\n\n` +
+              `#### 🌟 Top Loyalty Customers:\n` +
+              `1. **Dr. Sundaram Meenakshi** — Lifetime Spend: **₹54,990** (480 pts)\n` +
+              `2. **Mrs. Radhika Natarajan** — Lifetime Spend: **₹24,500** (210 pts)\n` +
+              `3. **Karthik Subramanian** — Lifetime Spend: **₹12,890** (95 pts)`,
+            data: {
+              type: 'customer_summary',
+              title: 'Customer Directory & Loyalty',
+              metrics: {
+                'Total Customers': cList.length,
+                'New Today': 3,
+                'Top Customer': 'Dr. Sundaram Meenakshi',
+              },
+              aiInsight: 'High customer retention with top loyalty members contributing 38% of monthly repeat billings.',
+            },
+            source: 'Customer CRM Database & Loyalty Engine',
+            sourcesUsed: ['Customer Accounts', 'Loyalty Balance Register', 'Sales Invoices by Customer'],
+            generatedAt: now,
+            confidence: 1.0,
+            toolExecuted: 'getCustomerSummary',
+          };
+        }
+
+        // 8. Attendance & Staff
+        if (
+          query.includes('attendance') ||
+          query.includes('present') ||
+          query.includes('on duty') ||
+          query.includes('who is working') ||
+          query.includes('staff on floor')
+        ) {
+          return {
+            answer: `### ⏱️ Staff Attendance & On-Duty Summary\n\n` +
+              `• **Total Active Staff:** **6**\n` +
+              `• **Present On Duty:** **5 staff** (Arun Kumar, Priya Sharma, Rajesh Kumar, Karthik Raja, Anitha Ramesh)\n` +
+              `• **Late Arrivals:** **1** (Arun Kumar - 15 mins)\n` +
+              `• **On Leave:** **1** (Muthu Vel - Casual Leave)`,
+            data: {
+              type: 'attendance_summary',
+              title: 'Staff On-Duty Attendance',
+              metrics: {
+                'Active Staff': 6,
+                'Present Today': 5,
+                'Late Arrivals': 1,
+                'On Leave': 1,
+              },
+              aiInsight: '5 out of 6 store associates are on duty. Sales counter and billing POS are fully staffed.',
+            },
+            source: 'Biometric & Terminal Staff Attendance Register',
+            sourcesUsed: ['Staff Master', 'Attendance Log', 'Shift Schedules'],
+            generatedAt: now,
+            confidence: 1.0,
+            toolExecuted: 'getAttendanceSummary',
+          };
+        }
+
+        // 9. Forecasting / Future (Anti-Hallucination & Scope protection)
+        const isForecast = query.includes('forecast') || query.includes('predict') || query.includes('next month') || query.includes('future') || query.includes('next year');
+        if (isForecast) {
+          return {
+            answer: `🔮 **Demand & Sales Forecasting Notice**\n\n` +
+              `I am currently operating in **AI Phase 1 (Foundation & Business Assistant)**. ` +
+              `Predictive sales forecasting, AI demand planning, and replenishment models are scheduled for **AI Phase 2**.\n\n` +
+              `Right now, I can provide real-time reporting on:\n` +
+              `• Today's / Yesterday's sales & transactions\n` +
+              `• Top-selling fast movers & categories\n` +
+              `• Current low stock & out-of-stock items\n` +
+              `• Customer loyalty & on-duty staff attendance`,
+            data: {
+              type: 'out_of_scope',
+              title: 'Assistant Scope Notice',
+              aiInsight: 'Query is outside current Phase 1 capabilities.',
+            },
+            source: 'Texora AI Capability Registry',
+            sourcesUsed: ['AI Capability Definition'],
+            generatedAt: now,
+            confidence: 1.0,
+          };
+        }
+
+        // Default General Guidance Response
+        return {
+          answer: `🤖 **Texora Business Assistant**\n\n` +
+            `I specialize in answering questions about your textile showroom's **Sales, Inventory, Customers, Products, and Staff Attendance**.\n\n` +
+            `Try asking:\n` +
+            `• *"How much did we sell today?"*\n` +
+            `• *"What are today's top-selling products?"*\n` +
+            `• *"Which items are low in stock?"*\n` +
+            `• *"Give me today's business summary"*`,
+          data: {
+            type: 'general_answer',
+            title: 'Assistant Help',
+          },
+          source: 'Texora AI Assistant',
+          sourcesUsed: ['Textile Business Intelligence Guide'],
+          generatedAt: now,
+          confidence: 1.0,
+        };
+      },
+
+      getQuickPrompts: async (userContext?: any) => {
+        const rawUser = localStorage.getItem('texora_current_user');
+        let user = userContext;
+        if (!user && rawUser) {
+          try { user = JSON.parse(rawUser); } catch {}
+        }
+        const role = (user?.roleName || user?.role || 'Cashier').toLowerCase();
+
+        const prompts = [
+          { id: 'sales_today', label: '📊 Sales Today', prompt: 'How much did we sell today?', category: 'sales' },
+          { id: 'top_sellers', label: '🏆 Top Selling Items', prompt: 'What are today’s top-selling products?', category: 'sales' },
+          { id: 'low_stock', label: '🚨 Low Stock Alerts', prompt: 'Which products are low or out of stock?', category: 'inventory' },
+          { id: 'business_summary', label: '📈 Business Summary', prompt: 'Give me today’s executive business summary.', category: 'reports' },
+          { id: 'inventory_overview', label: '📦 Inventory Overview', prompt: 'What is our total stock and inventory valuation?', category: 'inventory' },
+          { id: 'top_customers', label: '👥 Customer Insights', prompt: 'How many customers purchased today and who are the top patrons?', category: 'customers' },
+          { id: 'attendance_check', label: '⏱️ Staff on Duty', prompt: 'How many staff members are present on duty today?', category: 'staff' },
+        ];
+
+        if (role === 'cashier') {
+          return prompts.filter((p) => p.id !== 'business_summary');
+        }
+        return prompts;
+      },
+
+      getLogs: async () => [],
+      getStats: async () => ({
+        totalRequests: 1,
+        successfulRequests: 1,
+        averageLatencyMs: 45,
+        rateLimitRule: '30 reqs/min',
+      }),
     },
   };
 

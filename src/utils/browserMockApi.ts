@@ -1342,7 +1342,62 @@ export function initBrowserMockApi() {
           };
         }
 
-        // 3. Sales Queries
+        // 3. Cashier Personal Shift / Register Query
+        if (
+          query.includes('my register') ||
+          query.includes('my shift') ||
+          query.includes('my sales') ||
+          query.includes('my counter') ||
+          query.includes('my drawer') ||
+          query.includes('my bills')
+        ) {
+          return {
+            answer: `### 💳 Cashier Shift Summary — Tuesday, Aug 25\n\n` +
+              `• **Your Terminal Sales:** **₹18,450**\n` +
+              `• **Bills Processed:** **24 transactions**\n` +
+              `• **Average Bill Value:** **₹768**\n` +
+              `• **Discounts Given:** **₹850**\n\n` +
+              `*Register drawer is reconciled and balanced.*`,
+            data: {
+              type: 'sales_summary',
+              title: 'Cashier Shift Summary',
+              metrics: {
+                'Your Sales': '₹18,450',
+                'Bills Processed': 24,
+                'Avg Bill': '₹768',
+                'Discounts': '₹850',
+              },
+              aiInsight: 'Your shift drawer is balanced across 24 completed invoices.',
+            },
+            source: 'POS Terminal Register Ledger',
+            sourcesUsed: ['Cashier Terminal Sales', 'Completed Invoices'],
+            generatedAt: now,
+            confidence: 1.0,
+            toolExecuted: 'getCashierShiftSummary',
+          };
+        }
+
+        // 4. Profit & Gross Margins (RBAC Protected for Admin/Manager)
+        if (
+          query.includes('profit') ||
+          query.includes('margin') ||
+          query.includes('gross profit') ||
+          query.includes('net profit')
+        ) {
+          if (role !== 'owner' && role !== 'super_admin' && role !== 'manager') {
+            return {
+              answer: "🔒 **Access Restricted**\n\nStorewide profit margins and financial statements require **Store Manager** or **Admin** authorization.\n\nAs a Cashier, you can check:\n• *\"Show my register sales today\"*\n• *\"Check stock for Bridal Silk Saree\"*\n• *\"What accessories pair with this saree?\"*",
+              data: { type: 'permission_denied', title: 'Permission Denied' },
+              source: 'Texora Security & RBAC Guard',
+              sourcesUsed: ['Role Permission Matrix'],
+              generatedAt: now,
+              confidence: 1.0,
+              requiresPermission: 'sales.view',
+            };
+          }
+        }
+
+        // 5. Storewide Sales Queries
         if (
           query.includes('sale') ||
           query.includes('sold') ||
@@ -1353,6 +1408,18 @@ export function initBrowserMockApi() {
           query.includes('yesterday') ||
           query.includes('transaction')
         ) {
+          if (role !== 'owner' && role !== 'super_admin' && role !== 'manager') {
+            return {
+              answer: "🔒 **Access Restricted**\n\nStorewide sales totals and financial revenue require **Store Manager** or **Admin** authorization.\n\nTo view your own terminal sales, ask: *\"Show my register sales today\"*.",
+              data: { type: 'permission_denied', title: 'Permission Denied' },
+              source: 'Texora Security & RBAC Guard',
+              sourcesUsed: ['Role Permission Matrix'],
+              generatedAt: now,
+              confidence: 1.0,
+              requiresPermission: 'sales.view',
+            };
+          }
+
           const isYesterday = query.includes('yesterday');
           const salesVal = isYesterday ? 75200 : 84250;
           const txCount = isYesterday ? 112 : 126;
@@ -1650,20 +1717,24 @@ export function initBrowserMockApi() {
         }
         const role = (user?.roleName || user?.role || 'Cashier').toLowerCase();
 
-        const prompts = [
-          { id: 'sales_today', label: '📊 Sales Today', prompt: 'How much did we sell today?', category: 'sales' },
+        if (role === 'cashier' || role === 'staff') {
+          return [
+            { id: 'cashier_shift_sales', label: '💳 My Register Total', prompt: 'Show my shift sales and bills processed today.', category: 'sales' },
+            { id: 'saree_cross_sell', label: '👗 Cross-Sell Match', prompt: 'What accessories pair best with Bridal Silk Sarees?', category: 'inventory' },
+            { id: 'low_stock', label: '🚨 Low Stock Alerts', prompt: 'Which products are low or out of stock?', category: 'inventory' },
+            { id: 'attendance_check', label: '⏱️ Staff on Duty', prompt: 'How many staff members are present on duty today?', category: 'staff' },
+          ];
+        }
+
+        return [
+          { id: 'sales_today', label: '📊 Store Sales Today', prompt: 'How much did the store sell today?', category: 'sales' },
           { id: 'top_sellers', label: '🏆 Top Selling Items', prompt: 'What are today’s top-selling products?', category: 'sales' },
           { id: 'low_stock', label: '🚨 Low Stock Alerts', prompt: 'Which products are low or out of stock?', category: 'inventory' },
-          { id: 'business_summary', label: '📈 Business Summary', prompt: 'Give me today’s executive business summary.', category: 'reports' },
-          { id: 'inventory_overview', label: '📦 Inventory Overview', prompt: 'What is our total stock and inventory valuation?', category: 'inventory' },
-          { id: 'top_customers', label: '👥 Customer Insights', prompt: 'How many customers purchased today and who are the top patrons?', category: 'customers' },
+          { id: 'business_summary', label: '📈 Executive Summary', prompt: 'Give me today’s executive business summary.', category: 'reports' },
+          { id: 'inventory_overview', label: '📦 Inventory Overview', prompt: 'What is our total stock and replenishment status?', category: 'inventory' },
+          { id: 'top_customers', label: '👥 Customer Loyalty', prompt: 'How many customers purchased today and who are the top patrons?', category: 'customers' },
           { id: 'attendance_check', label: '⏱️ Staff on Duty', prompt: 'How many staff members are present on duty today?', category: 'staff' },
         ];
-
-        if (role === 'cashier') {
-          return prompts.filter((p) => p.id !== 'business_summary');
-        }
-        return prompts;
       },
 
       getLogs: async () => [],

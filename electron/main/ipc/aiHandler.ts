@@ -163,7 +163,7 @@ export function registerAiHandlers() {
     if (!rbac.allowed) {
       return { success: false, error: rbac.reason };
     }
-    const data = ReportHistoryService.getReport(payload.period, payload.dateStr);
+    const data = ReportHistoryService.getReport(payload.period, payload.dateStr, payload?.userContext);
     return { success: true, data };
   });
 

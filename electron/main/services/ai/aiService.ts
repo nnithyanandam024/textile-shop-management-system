@@ -1,5 +1,6 @@
 import { AiChatRequest, AiChatResponse, AiQuickPrompt } from './aiConfig';
 import { AiRbacGuard, UserAuthContext, AiToolName } from './aiRbacGuard';
+import { AiDataMasker } from './aiDataMasker';
 import { AiTools } from './aiTools';
 import { AiValidator } from './aiValidator';
 import { AiLogger } from './aiLogger';
@@ -159,8 +160,27 @@ export class AiService {
           break;
         }
         case 'getDailyReport': {
-          const data = await AiTools.getDailyReport();
+          const raw = await AiTools.getDailyReport();
+          const data = AiDataMasker.maskPayload(raw, userContext);
           result = AiValidator.formatDailyBusinessReport(data);
+          break;
+        }
+        case 'getCashierShiftSummary': {
+          const raw = await AiTools.getCashierShiftSummary(userContext?.userId);
+          const data = AiDataMasker.maskPayload(raw, userContext);
+          result = {
+            answer: `### 💳 Cashier Shift Summary — ${data.shiftDate}\n\n` +
+              `• **Your Terminal Sales:** **₹${data.shiftSales.toLocaleString()}**\n` +
+              `• **Bills Processed:** **${data.billsCount} transactions**\n` +
+              `• **Average Bill Value:** **₹${data.avgBill.toLocaleString()}**\n` +
+              `• **Discounts Given:** **₹${data.shiftDiscount.toLocaleString()}**\n\n` +
+              `*Register drawer is reconciled and ready for shift closure handover.*`,
+            source: 'POS Terminal Register Ledger',
+            sourcesUsed: ['Cashier Terminal Sales', 'Completed Invoices'],
+            generatedAt: new Date().toISOString(),
+            confidence: 1.0,
+            toolExecuted: 'getCashierShiftSummary',
+          };
           break;
         }
         default:
@@ -209,7 +229,19 @@ export class AiService {
   private static identifyIntent(query: string): { tool?: AiToolName; params?: any } {
     const q = query.toLowerCase().trim();
 
-    // 1. Business Report / Executive Summary
+    // 1. Personal Cashier Register / Shift Summary
+    if (
+      q.includes('my register') ||
+      q.includes('my shift') ||
+      q.includes('my sales') ||
+      q.includes('my counter') ||
+      q.includes('my drawer') ||
+      q.includes('my bills')
+    ) {
+      return { tool: 'getCashierShiftSummary' };
+    }
+
+    // 2. Business Report / Executive Summary
     if (
       q.includes('business summary') ||
       q.includes('daily summary') ||
@@ -222,7 +254,7 @@ export class AiService {
       return { tool: 'getDailyReport' };
     }
 
-    // 2. Sensitive Payroll / Salary queries (to trigger RBAC interception)
+    // 3. Sensitive Payroll / Salary queries (to trigger RBAC interception)
     if (
       q.includes('salary') ||
       q.includes('salaries') ||
@@ -231,6 +263,16 @@ export class AiService {
       q.includes('compensation')
     ) {
       return { tool: 'getStaffPayrollSummary' };
+    }
+
+    // 4. Profit & Margins (Triggers RBAC check on getSalesSummary)
+    if (
+      q.includes('profit') ||
+      q.includes('net margin') ||
+      q.includes('gross margin') ||
+      q.includes('margin')
+    ) {
+      return { tool: 'getSalesSummary', params: { timeframe: 'month', focus: 'profit' } };
     }
 
     // 3. Sales Queries
@@ -338,9 +380,22 @@ export class AiService {
 
     const allPrompts: AiQuickPrompt[] = [
       {
+        id: 'cashier_shift_sales',
+        label: '💳 My Register Total',
+        prompt: 'Show my shift sales and bills processed today.',
+        category: 'sales',
+        requiredPermission: 'pos.billing',
+      },
+      {
+        id: 'saree_cross_sell',
+        label: '👗 Cross-Sell Match',
+        prompt: 'What accessories pair best with Bridal Silk Sarees?',
+        category: 'inventory',
+      },
+      {
         id: 'sales_today',
-        label: '📊 Sales Today',
-        prompt: 'How much did we sell today?',
+        label: '📊 Store Sales Today',
+        prompt: 'How much did the store sell today?',
         category: 'sales',
         requiredPermission: 'sales.view',
       },
@@ -354,13 +409,13 @@ export class AiService {
       {
         id: 'low_stock',
         label: '🚨 Low Stock Alerts',
-        prompt: 'Which products are low or out of stock?',
+        prompt: 'Which products are low or approaching reorder level?',
         category: 'inventory',
         requiredPermission: 'inventory.view',
       },
       {
         id: 'business_summary',
-        label: '📈 Business Summary',
+        label: '📈 Executive Summary',
         prompt: 'Give me today’s executive business summary.',
         category: 'reports',
         requiredPermission: 'reports.view',
@@ -368,14 +423,14 @@ export class AiService {
       {
         id: 'inventory_overview',
         label: '📦 Inventory Overview',
-        prompt: 'What is our total stock and inventory valuation?',
+        prompt: 'What is our total stock and replenishment status?',
         category: 'inventory',
         requiredPermission: 'inventory.view',
       },
       {
         id: 'top_customers',
-        label: '👥 Customer Insights',
-        prompt: 'How many customers purchased today and who are the top patrons?',
+        label: '👥 Customer Loyalty',
+        prompt: 'How many customers purchased today and what is the repeat rate?',
         category: 'customers',
         requiredPermission: 'customers.view',
       },

@@ -7,6 +7,7 @@ export interface UserAuthContext {
 
 export type AiToolName =
   | 'getSalesSummary'
+  | 'getCashierShiftSummary'
   | 'getTopSellingProducts'
   | 'getLowStockProducts'
   | 'getInventorySummary'
@@ -27,28 +28,33 @@ interface ToolPermissionRule {
 const TOOL_PERMISSIONS: Record<AiToolName, ToolPermissionRule> = {
   getSalesSummary: {
     requiredPermission: 'sales.view',
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
+    restrictedMessage: "🔒 Access Restricted: Storewide sales totals and financial revenue require Manager or Admin authorization.",
+  },
+  getCashierShiftSummary: {
+    requiredPermission: 'pos.billing',
     allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Cashier'],
-    restrictedMessage: "You don't have permission to access sales financial data. Please contact your store administrator.",
+    restrictedMessage: "You don't have permission to access POS register summary.",
   },
   getTopSellingProducts: {
     requiredPermission: 'sales.view',
-    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Cashier'],
-    restrictedMessage: "You don't have permission to view top-selling product analytics.",
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
+    restrictedMessage: "🔒 Access Restricted: Executive top-selling product revenue analytics require Manager or Admin authorization.",
   },
   getLowStockProducts: {
     requiredPermission: 'inventory.view',
-    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Cashier', 'Inventory Staff'],
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Inventory Staff', 'Supervisor'],
     restrictedMessage: "You don't have permission to access inventory stock levels.",
   },
   getInventorySummary: {
     requiredPermission: 'inventory.view',
-    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Cashier', 'Inventory Staff'],
-    restrictedMessage: "You don't have permission to access master inventory metrics.",
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Inventory Staff', 'Supervisor'],
+    restrictedMessage: "You don't have permission to access master inventory valuation metrics.",
   },
   getCustomerSummary: {
     requiredPermission: 'customers.view',
-    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Cashier'],
-    restrictedMessage: "You don't have permission to view customer profiles and loyalty metrics.",
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
+    restrictedMessage: "You don't have permission to view aggregated customer lifetime analytics.",
   },
   getAttendanceSummary: {
     requiredPermission: 'attendance.view',
@@ -63,22 +69,22 @@ const TOOL_PERMISSIONS: Record<AiToolName, ToolPermissionRule> = {
   getDailyReport: {
     requiredPermission: 'reports.view',
     allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
-    restrictedMessage: "You don't have permission to access executive business summary reports.",
+    restrictedMessage: "🔒 Access Restricted: Storewide executive reports and profit statements require Manager or Admin authorization.",
   },
   getStaffPayrollSummary: {
     requiredPermission: 'payroll.view',
     allowedRoles: ['Owner', 'SUPER_ADMIN', 'HR Staff'],
-    restrictedMessage: "You don't have permission to access staff salary or payroll information.",
+    restrictedMessage: "🔒 Access Restricted: Staff salary and payroll information is strictly restricted to Owner and HR.",
   },
   getAuditLogs: {
     requiredPermission: 'audit.view',
     allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
-    restrictedMessage: "You don't have permission to view security and operational anomaly logs.",
+    restrictedMessage: "🔒 Access Restricted: Security and operational anomaly logs require Manager or Admin authorization.",
   },
   getRiskSummary: {
     requiredPermission: 'audit.view',
     allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
-    restrictedMessage: "You don't have permission to access store risk monitoring dashboards.",
+    restrictedMessage: "🔒 Access Restricted: Store risk monitoring dashboards require Manager or Admin authorization.",
   },
 };
 

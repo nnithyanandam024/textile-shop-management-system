@@ -1,16 +1,19 @@
 import { ReportPeriod, SmartBusinessReport } from './reportTypes';
 import { ReportSynthesisEngine } from './reportSynthesisEngine';
+import { UserAuthContext } from '../aiRbacGuard';
+import { AiDataMasker } from '../aiDataMasker';
 
 export class ReportHistoryService {
   private static reportCache: Map<string, SmartBusinessReport> = new Map();
 
-  public static getReport(period: ReportPeriod, dateStr?: string): SmartBusinessReport {
-    const key = `${period}_${dateStr || 'latest'}`;
+  public static getReport(period: ReportPeriod, dateStr?: string, userContext?: UserAuthContext): SmartBusinessReport {
+    const key = `${period}_${dateStr || 'latest'}_${userContext?.roleName || 'guest'}`;
     if (this.reportCache.has(key)) {
       return this.reportCache.get(key)!;
     }
 
-    const report = ReportSynthesisEngine.generateReport(period, dateStr);
+    const raw = ReportSynthesisEngine.generateReport(period, dateStr);
+    const report = AiDataMasker.maskPayload(raw, userContext);
     this.reportCache.set(key, report);
     return report;
   }

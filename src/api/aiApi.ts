@@ -242,4 +242,95 @@ export class AiApi {
     // Fallback to REST endpoint
     return await apiClient.get<any>('/ai/inventory/dead-stock');
   }
+
+  /**
+   * Retrieves Real-Time POS Cart Recommendations
+   */
+  public static async getCartRecommendations(cartVariantIds: number[], customerId?: number): Promise<ApiResponse<any>> {
+    const userSession = StorageManager.getCurrentUser();
+    const userContext = userSession ? {
+      userId: Number(userSession.id) || 1,
+      username: userSession.username,
+      roleName: userSession.role,
+      roleId: userSession.roleId,
+      permissions: userSession.permissions || [],
+    } : undefined;
+
+    const request = { cartVariantIds, customerId, limit: 3 };
+
+    if (typeof window !== 'undefined' && (window as any).api?.ai?.getCartRecommendations) {
+      try {
+        const res = await (window as any).api.ai.getCartRecommendations(request, userContext);
+        return res;
+      } catch (err: any) {
+        return { success: false, error: { code: 'AI_ERROR', message: err.message } };
+      }
+    }
+
+    // Fallback to REST endpoint
+    return await apiClient.post<any>('/ai/recommendations/cart', request);
+  }
+
+  /**
+   * Retrieves Customer Purchasing & Persona Intelligence Profile
+   */
+  public static async getCustomerIntelligence(customerId: number): Promise<ApiResponse<any>> {
+    const userSession = StorageManager.getCurrentUser();
+    const userContext = userSession ? {
+      userId: Number(userSession.id) || 1,
+      username: userSession.username,
+      roleName: userSession.role,
+      roleId: userSession.roleId,
+      permissions: userSession.permissions || [],
+    } : undefined;
+
+    if (typeof window !== 'undefined' && (window as any).api?.ai?.getCustomerIntelligence) {
+      try {
+        const res = await (window as any).api.ai.getCustomerIntelligence(customerId, userContext);
+        return res;
+      } catch (err: any) {
+        return { success: false, error: { code: 'AI_ERROR', message: err.message } };
+      }
+    }
+
+    // Fallback to REST endpoint
+    return await apiClient.get<any>(`/ai/recommendations/customer/${customerId}`);
+  }
+
+  /**
+   * Retrieves Similar and Complementary Product Recommendations
+   */
+  public static async getProductRecommendations(productId: number): Promise<ApiResponse<any>> {
+    const userSession = StorageManager.getCurrentUser();
+    const userContext = userSession ? {
+      userId: Number(userSession.id) || 1,
+      username: userSession.username,
+      roleName: userSession.role,
+      roleId: userSession.roleId,
+      permissions: userSession.permissions || [],
+    } : undefined;
+
+    if (typeof window !== 'undefined' && (window as any).api?.ai?.getProductRecommendations) {
+      try {
+        const res = await (window as any).api.ai.getProductRecommendations(productId, userContext);
+        return res;
+      } catch (err: any) {
+        return { success: false, error: { code: 'AI_ERROR', message: err.message } };
+      }
+    }
+
+    // Fallback to REST endpoint
+    return await apiClient.get<any>(`/ai/recommendations/product/${productId}`);
+  }
+
+  /**
+   * Tracks recommendation click and conversion feedback
+   */
+  public static async trackRecommendationFeedback(event: any): Promise<void> {
+    if (typeof window !== 'undefined' && (window as any).api?.ai?.trackRecommendationFeedback) {
+      try {
+        await (window as any).api.ai.trackRecommendationFeedback(event);
+      } catch {}
+    }
+  }
 }

@@ -2082,6 +2082,134 @@ export function initBrowserMockApi() {
         const res = await (mockApi.ai as any).getInventoryIntelligence();
         return { success: true, data: res.data?.deadStockList || [] };
       },
+
+      getCartRecommendations: async (request: any) => {
+        const cartIds = request?.cartVariantIds || [];
+        const customerId = request?.customerId;
+
+        const allCandidates = [
+          {
+            variantId: 101,
+            productId: 101,
+            productName: 'Matching Brocade Silk Blouse Piece (1 Meter)',
+            sku: 'ACC-BLU-001-RED-1M',
+            categoryName: 'Dress Materials',
+            sellingPrice: 850,
+            currentStock: 42,
+            strategy: 'frequently_bought_together',
+            strategyLabel: 'Frequently Bought Together',
+            confidenceScore: 0.94,
+            aiReasoning: '64% of customers buying Bridal Silk Sarees also add this Matching Brocade Blouse piece.',
+            triggerProductName: 'Bridal Kanchipuram Pure Silk Saree',
+          },
+          {
+            variantId: 102,
+            productId: 102,
+            productName: 'Cotton Saree Shapewear / Petticoat',
+            sku: 'ACC-PET-003-GLD-FS',
+            categoryName: 'Accessories',
+            sellingPrice: 450,
+            currentStock: 56,
+            strategy: 'frequently_bought_together',
+            strategyLabel: 'Complementary Accessory',
+            confidenceScore: 0.88,
+            aiReasoning: 'High co-occurrence with saree purchases (added in 48% of saree bills).',
+            triggerProductName: 'Handloom Cotton Saree',
+          },
+          {
+            variantId: 103,
+            productId: 103,
+            productName: 'Pure Linen Formal Trouser',
+            sku: 'MTR-LIN-005-BEI-32',
+            categoryName: 'Men’s Wear',
+            sellingPrice: 2299,
+            currentStock: 28,
+            strategy: 'frequently_bought_together',
+            strategyLabel: 'Complete The Look',
+            confidenceScore: 0.91,
+            aiReasoning: 'Frequently paired with Egyptian Giza Cotton Shirts.',
+            triggerProductName: 'Giza Cotton Shirt',
+          },
+          {
+            variantId: 104,
+            productId: 104,
+            productName: 'Pure Silk Dhoti with Gold Zari Border',
+            sku: 'DHO-SILK-001-WHT-FS',
+            categoryName: 'Men’s Wear',
+            sellingPrice: 1899,
+            currentStock: 34,
+            strategy: 'personalized_affinity',
+            strategyLabel: 'Personalized Festive Pick',
+            confidenceScore: 0.86,
+            aiReasoning: 'Matches customer’s historical affinity for festive traditional wear.',
+          },
+        ];
+
+        let selected = allCandidates;
+        if (cartIds.length > 0) {
+          const firstId = cartIds[0];
+          if (firstId === 1) {
+            selected = [allCandidates[0], allCandidates[1]];
+          } else if (firstId === 3) {
+            selected = [allCandidates[2]];
+          } else if (firstId === 4) {
+            selected = [allCandidates[3]];
+          }
+        } else if (customerId === 1) {
+          selected = [allCandidates[3], allCandidates[0]];
+        }
+
+        return {
+          success: true,
+          data: {
+            recommendations: selected,
+            activeCartItemCount: cartIds.length,
+            suggestedBundleSavings: selected.length >= 2 ? 150 : 0,
+            generatedAt: new Date().toISOString(),
+          },
+        };
+      },
+
+      getCustomerIntelligence: async (customerId: number) => {
+        const isVip = customerId === 1 || customerId === 2;
+        return {
+          success: true,
+          data: {
+            customerId,
+            customerCode: `CUST-${String(customerId).padStart(4, '0')}`,
+            customerName: isVip ? 'Meenakshi Sundaram' : 'Rajesh Kannan',
+            segment: isVip ? 'vip_high_value' : 'returning_regular',
+            segmentLabel: isVip ? '👑 VIP High-Value Patron' : '🔄 Returning Regular',
+            totalLifetimeSpend: isVip ? 78450 : 18200,
+            totalVisits: isVip ? 8 : 3,
+            averageOrderValue: isVip ? 9800 : 6066,
+            preferredCategory: 'Kanchipuram Silks & Sarees',
+            categoryAffinities: [
+              { categoryId: 1, categoryName: 'Kanchipuram Silks & Sarees', purchaseCount: isVip ? 6 : 2, totalSpent: isVip ? 64000 : 14000, percentageOfSpend: 81.5 },
+              { categoryId: 2, categoryName: 'Dress Materials & Blouses', purchaseCount: isVip ? 4 : 1, totalSpent: isVip ? 8450 : 2200, percentageOfSpend: 10.7 },
+              { categoryId: 3, categoryName: 'Accessories', purchaseCount: isVip ? 3 : 1, totalSpent: isVip ? 6000 : 2000, percentageOfSpend: 7.8 },
+            ],
+            frequentlyPurchasedSkus: [
+              'Bridal Kanchipuram Pure Silk Saree (SAR-KAN-001-RED-FS)',
+              'Matching Brocade Silk Blouse Piece (ACC-BLU-001-RED-1M)',
+            ],
+            averageDaysBetweenPurchases: 42,
+            daysSinceLastPurchase: 38,
+            isDueForVisit: true,
+            estimatedNextVisitDate: 'Within 4-7 Days (Festive Season)',
+            suggestedAction: 'Customer usually visits every ~42 days (last visit was 38 days ago). Introduce newly arrived Wedding Silk Saree collections.',
+          },
+        };
+      },
+
+      getProductRecommendations: async (productId: number) => {
+        const res = await (mockApi.ai as any).getCartRecommendations({ cartVariantIds: [productId] });
+        return { success: true, data: res.data?.recommendations || [] };
+      },
+
+      trackRecommendationFeedback: async () => {
+        return { success: true };
+      },
     },
   };
 

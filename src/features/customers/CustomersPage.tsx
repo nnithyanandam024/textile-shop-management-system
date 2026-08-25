@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Users, Plus, Search, RefreshCw, Eye, AlertCircle, Loader2 } from 'lucide-react';
+import { Users, Plus, Search, RefreshCw, Eye, AlertCircle, Loader2, Sparkles } from 'lucide-react';
 import { CustomerProfileModal } from './CustomerProfileModal';
+import { CustomerIntelligenceModal } from '../../components/ai/recommendations/CustomerIntelligenceModal';
 
 interface Customer {
   id: number;
@@ -21,6 +22,7 @@ export const CustomersPage: React.FC = () => {
   // Modals
   const [showAddModal, setShowAddModal] = useState<boolean>(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
+  const [selectedAiCustomerId, setSelectedAiCustomerId] = useState<number | null>(null);
 
   // Form Inputs
   const [name, setName] = useState<string>('');
@@ -175,13 +177,21 @@ export const CustomersPage: React.FC = () => {
                     <div className="text-[10px] text-slate-400">{c.email || ''}</div>
                   </td>
                   <td className="px-6 py-4 font-semibold text-slate-900">₹{c.credit_limit || 0}</td>
-                  <td className="px-6 py-4 text-right">
+                  <td className="px-6 py-4 text-right space-x-2">
+                    <button
+                      onClick={() => setSelectedAiCustomerId(c.id)}
+                      className="px-3 py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1 shadow-2xs"
+                      title="View AI Buying Profile & Recommendations"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+                      <span>AI Profile</span>
+                    </button>
                     <button
                       onClick={() => setSelectedCustomerId(c.id)}
-                      className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-[#2012ad] border border-indigo-200 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1"
+                      className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-[#2012ad] border border-indigo-200 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1 shadow-2xs"
                     >
                       <Eye className="w-3.5 h-3.5" />
-                      <span>View Profile</span>
+                      <span>View Ledger</span>
                     </button>
                   </td>
                 </tr>
@@ -260,6 +270,13 @@ export const CustomersPage: React.FC = () => {
         customerId={selectedCustomerId}
         onClose={() => setSelectedCustomerId(null)}
         onRefresh={() => fetchCustomers()}
+      />
+
+      {/* AI Customer Intelligence Modal */}
+      <CustomerIntelligenceModal
+        isOpen={!!selectedAiCustomerId}
+        customerId={selectedAiCustomerId}
+        onClose={() => setSelectedAiCustomerId(null)}
       />
     </div>
   );

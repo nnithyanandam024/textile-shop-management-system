@@ -8,6 +8,10 @@ import { DailySummaryService } from '../services/ai/analytics/dailySummaryServic
 import { AnalyticsTimeframe } from '../services/ai/analytics/analyticsTypes';
 import { ReorderRecommendationEngine } from '../services/ai/forecasting/reorderRecommendationEngine';
 import { DeadStockDetector } from '../services/ai/forecasting/deadStockDetector';
+import { RecommendationEngine } from '../services/ai/recommendations/recommendationEngine';
+import { CustomerIntelligenceService } from '../services/ai/recommendations/customerIntelligenceService';
+import { RecommendationTracker } from '../services/ai/recommendations/recommendationTracker';
+import { CartRecommendationRequest } from '../services/ai/recommendations/recommendationTypes';
 
 export function registerAiHandlers() {
   // 1. Process AI Chat query
@@ -79,5 +83,33 @@ export function registerAiHandlers() {
     }
     const data = DeadStockDetector.detectDeadStock();
     return { success: true, data };
+  });
+
+  // 10. Get POS Cart Recommendations
+  ipcMain.handle('ai:getCartRecommendations', async (_event, payload: { request: CartRecommendationRequest; userContext?: UserAuthContext }) => {
+    const data = RecommendationEngine.getCartRecommendations(payload.request);
+    return { success: true, data };
+  });
+
+  // 11. Get Customer Intelligence Profile
+  ipcMain.handle('ai:getCustomerIntelligence', async (_event, payload: { customerId: number; userContext?: UserAuthContext }) => {
+    const rbac = AiRbacGuard.canExecuteTool('getCustomerSummary', payload?.userContext);
+    if (!rbac.allowed) {
+      return { success: false, error: rbac.reason };
+    }
+    const data = CustomerIntelligenceService.getCustomerProfile(payload.customerId);
+    return { success: true, data };
+  });
+
+  // 12. Get Product Similar / Complementary Recommendations
+  ipcMain.handle('ai:getProductRecommendations', async (_event, payload: { productId: number; userContext?: UserAuthContext }) => {
+    const data = RecommendationEngine.getProductRecommendations(payload.productId);
+    return { success: true, data };
+  });
+
+  // 13. Track Recommendation Feedback
+  ipcMain.handle('ai:trackRecommendationFeedback', async (_event, payload: { event: any }) => {
+    RecommendationTracker.trackEvent(payload.event);
+    return { success: true };
   });
 }

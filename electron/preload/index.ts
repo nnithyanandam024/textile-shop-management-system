@@ -471,6 +471,10 @@ export interface ElectronAPI {
     getInventoryIntelligence: (userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
     getProductForecast: (variantId: number, userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
     getDeadStock: (userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getCartRecommendations: (request: any, userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getCustomerIntelligence: (customerId: number, userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getProductRecommendations: (productId: number, userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    trackRecommendationFeedback: (event: any) => Promise<{ success: boolean }>;
   };
 }
 
@@ -902,6 +906,10 @@ const api: ElectronAPI = {
     getInventoryIntelligence: (userContext?: any) => ipcRenderer.invoke('ai:getInventoryIntelligence', { userContext }),
     getProductForecast: (variantId: number, userContext?: any) => ipcRenderer.invoke('ai:getProductForecast', { variantId, userContext }),
     getDeadStock: (userContext?: any) => ipcRenderer.invoke('ai:getDeadStock', { userContext }),
+    getCartRecommendations: (request: any, userContext?: any) => ipcRenderer.invoke('ai:getCartRecommendations', { request, userContext }),
+    getCustomerIntelligence: (customerId: number, userContext?: any) => ipcRenderer.invoke('ai:getCustomerIntelligence', { customerId, userContext }),
+    getProductRecommendations: (productId: number, userContext?: any) => ipcRenderer.invoke('ai:getProductRecommendations', { productId, userContext }),
+    trackRecommendationFeedback: (event: any) => ipcRenderer.invoke('ai:trackRecommendationFeedback', { event }),
   },
 };
 

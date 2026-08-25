@@ -2247,6 +2247,57 @@ function runMigrations(db: Database.Database) {
           );
         `);
       }
+    },
+    {
+      version: 23,
+      name: 'billing_enterprise_enhancements',
+      up: (database: Database.Database) => {
+        database.exec(`
+          -- 1. Sequential Invoice Generator Table
+          CREATE TABLE IF NOT EXISTS invoice_sequences (
+            year INTEGER NOT NULL,
+            prefix TEXT NOT NULL DEFAULT 'INV',
+            current_seq INTEGER NOT NULL DEFAULT 0,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (year, prefix)
+          );
+
+          -- Initialize current year sequence if not existing
+          INSERT OR IGNORE INTO invoice_sequences (year, prefix, current_seq)
+          VALUES (strftime('%Y', 'now'), 'INV', 0);
+        `);
+
+        // Safe column additions using helper
+        const addColSafe = (tbl: string, col: string, typeDef: string) => {
+          try {
+            database.exec(`ALTER TABLE ${tbl} ADD COLUMN ${col} ${typeDef}`);
+          } catch (e: any) {
+            // Ignore if column already exists
+          }
+        };
+
+        addColSafe('sales', 'discount_type', "TEXT DEFAULT 'FIXED'");
+        addColSafe('sales', 'discount_reason', 'TEXT');
+        addColSafe('sales', 'round_off_amount', 'REAL DEFAULT 0.0');
+        addColSafe('sales', 'cgst_amount', 'REAL DEFAULT 0.0');
+        addColSafe('sales', 'sgst_amount', 'REAL DEFAULT 0.0');
+        addColSafe('sales', 'igst_amount', 'REAL DEFAULT 0.0');
+        addColSafe('sales', 'is_tax_invoice', 'INTEGER DEFAULT 0');
+        addColSafe('sales', 'approved_by', 'INTEGER');
+
+        addColSafe('sale_items', 'product_name_snapshot', 'TEXT');
+        addColSafe('sale_items', 'sku_snapshot', 'TEXT');
+        addColSafe('sale_items', 'hsn_code_snapshot', "TEXT DEFAULT '5208'");
+        addColSafe('sale_items', 'discount_amount', 'REAL DEFAULT 0.0');
+        addColSafe('sale_items', 'tax_rate', 'REAL DEFAULT 5.0');
+        addColSafe('sale_items', 'tax_amount', 'REAL DEFAULT 0.0');
+
+        database.exec(`
+          CREATE INDEX IF NOT EXISTS idx_sales_invoice_num ON sales(invoice_number);
+          CREATE INDEX IF NOT EXISTS idx_sales_created_at ON sales(created_at);
+          CREATE INDEX IF NOT EXISTS idx_payments_sale_id ON payments(sale_id);
+        `);
+      }
     }
   ];
 

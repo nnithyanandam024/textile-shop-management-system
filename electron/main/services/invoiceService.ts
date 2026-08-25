@@ -4,6 +4,7 @@ import fs from 'fs';
 import { getBackupDirectoryPath } from '../database';
 import { SaleRepository } from '../repositories/saleRepository';
 import { SettingsRepository } from '../repositories/settingsRepository';
+import { BillingCalculationEngine } from './billing/billingCalculationEngine';
 import log from '../logger';
 
 export class InvoiceService {
@@ -36,10 +37,13 @@ export class InvoiceService {
       return {
         success: true,
         data: {
-          shopName: settings.shop_name || 'Texora Textile Shop',
-          shopAddress: settings.shop_address || '123 Textile Bazaar Road, Main Market',
+          shopName: settings.shop_name || 'TEXORA TEXTILE HUB',
+          shopAddress: settings.shop_address || '123 Cross Cut Road, Gandhipuram, Coimbatore, TN - 641012',
           shopPhone: settings.shop_phone || '+91 98765 43210',
+          shopEmail: settings.shop_email || 'contact@texora.shop',
           shopGst: settings.shop_gst || '33AAAAA0000A1Z5',
+          currencySymbol: settings.currency_symbol || '₹',
+          amountInWords: BillingCalculationEngine.amountToWords(sale.total),
           sale,
           items,
           payments,

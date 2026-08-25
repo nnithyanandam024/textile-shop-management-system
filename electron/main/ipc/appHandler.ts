@@ -30,6 +30,8 @@ import { ProductService, CreateProductInput } from '../services/productService';
 import { InventoryService } from '../services/inventoryService';
 import { AuthorizationService } from '../services/auth/authorizationService';
 import { SessionService } from '../services/auth/sessionService';
+import { BillingService } from '../services/billing/billingService';
+import { BillingCalculationEngine } from '../services/billing/billingCalculationEngine';
 import { registerStaffHandlers } from './staffHandler';
 import { registerAttendanceHandlers } from './attendanceHandler';
 import { registerShiftHandlers } from './shiftHandler';
@@ -416,6 +418,16 @@ export function registerIpcHandlers() {
     AuthorizationService.requirePermission('sales.view');
     const service = new InvoiceService(getDatabase());
     return service.getInvoiceData(saleId);
+  });
+
+  ipcMain.handle('sales:calculate', (_, input: any) => {
+    return BillingCalculationEngine.calculateBill(input);
+  });
+
+  ipcMain.handle('sales:checkout', (_, request: any) => {
+    AuthorizationService.requirePermission('billing.create');
+    const session = SessionService.getSession();
+    return BillingService.checkoutSale({ ...request, userId: session?.userId });
   });
 
   ipcMain.handle('sales:create', (_, input: CreateSaleInput) => {

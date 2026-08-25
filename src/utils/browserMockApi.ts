@@ -3,6 +3,7 @@
  * Automatically provides persistent, reactive mock services on `window.api`
  * when previewing the application in standard web browser mode (Vite dev server).
  */
+import { BillingCalculationEngine } from '../features/pos/billingCalculation';
 
 const STORAGE_KEYS = {
   PRODUCTS: 'texora_demo_products',
@@ -649,11 +650,104 @@ export function initBrowserMockApi() {
     sales: {
       getAll: async () => loadStorage(STORAGE_KEYS.SALES, []),
       getDailySummary: async () => ({
-        totalSales: 24590,
-        ordersCount: 8,
-        discountTotal: 850,
-        netTax: 1170,
+        totalSales: 84250,
+        ordersCount: 126,
+        discountTotal: 2450,
+        netTax: 4210,
       }),
+      calculate: async (input: any) => {
+        return (BillingCalculationEngine as any).calculateBill(input);
+      },
+      checkout: async (request: any) => {
+        const calcResult = (BillingCalculationEngine as any).calculateBill(request.calculationInput);
+        const salesList = loadStorage<any[]>(STORAGE_KEYS.SALES, []);
+        const varList = loadStorage(STORAGE_KEYS.VARIANTS, DEFAULT_VARIANTS);
+        const prodList = loadStorage(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS);
+        const custList = loadStorage(STORAGE_KEYS.CUSTOMERS, DEFAULT_CUSTOMERS);
+
+        const newSaleId = salesList.length > 0 ? Math.max(...salesList.map((s: any) => s.id)) + 1 : 1001;
+        const invoiceNum = `INV-2026-${String(newSaleId).padStart(5, '0')}`;
+        const saleDate = new Date().toISOString();
+        const customer = custList.find((c: any) => c.id === request.customerId) || { id: 0, name: 'Walk-in Retail Customer' };
+
+        // Deduct inventory
+        const detailedItems = (calcResult.items || []).map((item: any) => {
+          const v = varList.find((variant: any) => variant.id === item.variantId);
+          const p = prodList.find((prod: any) => prod.id === v?.product_id);
+          if (v) {
+            v.current_stock = Math.max(0, v.current_stock - item.quantity);
+          }
+          return {
+            id: Date.now() + Math.random(),
+            variantId: item.variantId,
+            product_variant_id: item.variantId,
+            productName: item.productName || p?.name || 'Textile Item',
+            product_name: item.productName || p?.name || 'Textile Item',
+            product_name_snapshot: item.productName || p?.name || 'Textile Item',
+            sku: item.sku || v?.sku || 'SKU-ITEM',
+            sku_snapshot: item.sku || v?.sku || 'SKU-ITEM',
+            hsn_code_snapshot: item.hsnCode || '5208',
+            size: v?.size || 'Free Size',
+            color: v?.color || 'Standard',
+            quantity: item.quantity,
+            unitPrice: item.unitPrice,
+            unit_price: item.unitPrice,
+            discount: item.discountAmount,
+            discount_amount: item.discountAmount,
+            tax: item.taxAmount,
+            tax_rate: item.taxRate,
+            tax_amount: item.taxAmount,
+            total: item.lineTotal,
+          };
+        });
+        saveStorage(STORAGE_KEYS.VARIANTS, varList);
+
+        const totalPaid = (request.payments || []).reduce((sum: number, p: any) => sum + (p.amount || 0), 0);
+
+        const newSale = {
+          id: newSaleId,
+          invoice_number: invoiceNum,
+          invoiceNumber: invoiceNum,
+          saleDate,
+          sale_date: saleDate,
+          staffId: 1,
+          staffName: 'Store Administrator',
+          customerId: customer.id,
+          customer_id: customer.id,
+          customerName: customer.name,
+          customer_name: customer.name,
+          customerPhone: (customer as any).phone || '',
+          customer_phone: (customer as any).phone || '',
+          subtotal: calcResult.subtotal,
+          discount: calcResult.totalDiscount,
+          discount_amount: calcResult.totalDiscount,
+          tax: calcResult.totalTaxAmount,
+          tax_amount: calcResult.totalTaxAmount,
+          round_off_amount: calcResult.roundOffAmount,
+          cgst_amount: calcResult.cgstAmount,
+          sgst_amount: calcResult.sgstAmount,
+          igst_amount: calcResult.igstAmount,
+          total: calcResult.grandTotal,
+          totalAmount: calcResult.grandTotal,
+          paid_amount: totalPaid,
+          paidAmount: totalPaid,
+          balance_amount: Math.max(0, calcResult.grandTotal - totalPaid),
+          status: 'COMPLETED',
+          items: detailedItems,
+          payments: request.payments || [{ payment_method: 'CASH', amount: calcResult.grandTotal }],
+        };
+
+        salesList.unshift(newSale);
+        saveStorage(STORAGE_KEYS.SALES, salesList);
+
+        return {
+          success: true,
+          saleId: newSaleId,
+          invoiceNumber: invoiceNum,
+          grandTotal: calcResult.grandTotal,
+          invoice: newSale,
+        };
+      },
       create: async (data: any) => {
         const salesList = loadStorage<any[]>(STORAGE_KEYS.SALES, []);
         const varList = loadStorage(STORAGE_KEYS.VARIANTS, DEFAULT_VARIANTS);
@@ -661,7 +755,7 @@ export function initBrowserMockApi() {
         const custList = loadStorage(STORAGE_KEYS.CUSTOMERS, DEFAULT_CUSTOMERS);
 
         const newSaleId = salesList.length > 0 ? Math.max(...salesList.map((s: any) => s.id)) + 1 : 1001;
-        const invoiceNum = `INV-2026-${String(newSaleId).padStart(4, '0')}`;
+        const invoiceNum = `INV-2026-${String(newSaleId).padStart(5, '0')}`;
         const saleDate = new Date().toISOString();
         const customer = custList.find((c: any) => c.id === data.customer_id) || custList[0];
 
@@ -675,12 +769,18 @@ export function initBrowserMockApi() {
           return {
             id: Date.now() + Math.random(),
             variantId: v?.id || item.product_variant_id,
+            product_variant_id: v?.id || item.product_variant_id,
             productName: p?.name || 'Textile Item',
+            product_name: p?.name || 'Textile Item',
+            product_name_snapshot: p?.name || 'Textile Item',
             sku: v?.sku || 'SKU-ITEM',
+            sku_snapshot: v?.sku || 'SKU-ITEM',
+            hsn_code_snapshot: '5208',
             size: v?.size || 'Free Size',
             color: v?.color || 'Standard',
             quantity: item.quantity,
             unitPrice: item.unit_price || item.unitPrice || 0,
+            unit_price: item.unit_price || item.unitPrice || 0,
             discount: item.discount || 0,
             tax: item.tax || 0,
             total: (item.unit_price || item.unitPrice || 0) * item.quantity - (item.discount || 0),
@@ -696,24 +796,26 @@ export function initBrowserMockApi() {
           sale_date: saleDate,
           staffId: 1,
           staffName: 'Store Administrator',
-          staffCode: 'STF-0001',
           customerId: customer.id,
           customer_id: customer.id,
           customerName: customer.name,
           customer_name: customer.name,
           customerPhone: customer.phone,
+          customer_phone: customer.phone,
           subtotal: data.subtotal || data.total,
           discount: data.discount || 0,
-          discountAmount: data.discount || 0,
+          discount_amount: data.discount || 0,
           tax: data.tax || 0,
-          taxAmount: data.tax || 0,
+          tax_amount: data.tax || 0,
           total: data.total,
           totalAmount: data.total,
+          paid_amount: data.total,
           paidAmount: data.total,
-          changeAmount: 0,
+          balance_amount: 0,
           paymentMethod: data.payments?.[0]?.payment_method || data.payments?.[0]?.method || 'CASH',
+          status: 'COMPLETED',
           items: detailedItems,
-          payments: data.payments || [{ method: 'CASH', amount: data.total }],
+          payments: data.payments || [{ payment_method: 'CASH', amount: data.total }],
         };
 
         salesList.unshift(newSale);
@@ -724,38 +826,49 @@ export function initBrowserMockApi() {
       getDetails: async (saleId: number) => {
         const salesList = loadStorage(STORAGE_KEYS.SALES, []);
         const s = salesList.find((item: any) => item.id === saleId);
-        if (s) {
-          return { success: true, data: s };
-        }
-        // Fallback demo invoice
+        const saleObj = s || {
+          id: saleId,
+          invoice_number: `INV-2026-${String(saleId).padStart(5, '0')}`,
+          invoiceNumber: `INV-2026-${String(saleId).padStart(5, '0')}`,
+          sale_date: new Date().toISOString(),
+          customer_name: 'Walk-in Retail Customer',
+          subtotal: 9998,
+          discount: 0,
+          tax: 500,
+          total: 10498,
+          status: 'COMPLETED',
+          items: [
+            { id: 1, product_name: 'Kanchipuram Silk Saree', sku: 'KAN-SLK-MRN-01', size: 'Free Size', color: 'Royal Maroon & Gold', quantity: 1, unit_price: 8499, discount_amount: 0, total: 8499, hsn_code_snapshot: '5208' },
+            { id: 2, product_name: 'Raymond Cotton Shirt', sku: 'RAY-SHT-BLU-40', size: '40 (M)', color: 'Sky Blue', quantity: 1, unit_price: 1499, discount_amount: 0, total: 1499, hsn_code_snapshot: '5208' },
+          ],
+          payments: [{ payment_method: 'UPI', amount: 10498, reference_number: 'UPI77889900' }],
+        };
+
         return {
           success: true,
           data: {
-            id: saleId,
-            invoice_number: `INV-2026-${String(saleId).padStart(4, '0')}`,
-            invoiceNumber: `INV-2026-${String(saleId).padStart(4, '0')}`,
-            sale_date: new Date().toISOString(),
-            saleDate: new Date().toISOString(),
-            customer_name: 'Walk-in Customer',
-            customerName: 'Walk-in Customer',
-            customerPhone: '+91 94433 11223',
-            items: [
-              { id: 1, productName: 'Kanchipuram Silk Saree', sku: 'KAN-SLK-MRN-01', size: 'Free Size', color: 'Royal Maroon & Gold', quantity: 1, unitPrice: 8499, discount: 0, total: 8499 },
-              { id: 2, productName: 'Raymond Cotton Shirt', sku: 'RAY-SHT-BLU-40', size: '40 (M)', color: 'Sky Blue', quantity: 1, unitPrice: 1499, discount: 0, total: 1499 },
-            ],
-            subtotal: 9998,
-            discount: 0,
-            discountAmount: 0,
-            tax: 500,
-            taxAmount: 500,
-            total: 10498,
-            totalAmount: 10498,
-            paidAmount: 10498,
-            changeAmount: 0,
-            paymentMethod: 'UPI',
-            payments: [{ method: 'UPI', amount: 10498, referenceNumber: 'UPI77889900' }],
+            sale: saleObj,
+            items: saleObj.items || [],
+            payments: saleObj.payments || [{ payment_method: 'CASH', amount: saleObj.total }],
+            shopName: 'TEXORA TEXTILE HUB',
+            shopAddress: '123 Cross Cut Road, Gandhipuram, Coimbatore, TN - 641012',
+            shopPhone: '+91 98765 43210',
+            shopEmail: 'contact@texora.shop',
+            shopGst: '33AAAAA0000A1Z5',
+            currencySymbol: '₹',
+            amountInWords: (BillingCalculationEngine as any).amountToWords(saleObj.total || 0),
           },
         };
+      },
+      cancel: async (saleId: number) => {
+        const salesList = loadStorage<any[]>(STORAGE_KEYS.SALES, []);
+        const s = salesList.find((item: any) => item.id === saleId);
+        if (s) {
+          s.status = 'CANCELLED';
+          saveStorage(STORAGE_KEYS.SALES, salesList);
+          return { success: true };
+        }
+        return { success: false, error: 'Sale not found.' };
       },
     },
 

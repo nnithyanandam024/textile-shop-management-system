@@ -374,6 +374,8 @@ export interface ElectronAPI {
   sales: {
     getAll: () => Promise<any[]>;
     getDetails: (saleId: number) => Promise<{ success: boolean; data?: any; error?: string }>;
+    calculate: (input: any) => Promise<any>;
+    checkout: (request: any) => Promise<{ success: boolean; saleId?: number; invoiceNumber?: string; grandTotal?: number; error?: string }>;
     create: (sale: any) => Promise<{ success: boolean; saleId?: number; invoiceNumber?: string; error?: string }>;
     cancel: (saleId: number) => Promise<{ success: boolean; error?: string }>;
   };
@@ -814,6 +816,8 @@ const api: ElectronAPI = {
   sales: {
     getAll: () => ipcRenderer.invoke('sales:get-all'),
     getDetails: (saleId) => ipcRenderer.invoke('sales:get-details', saleId),
+    calculate: (input) => ipcRenderer.invoke('sales:calculate', input),
+    checkout: (request) => ipcRenderer.invoke('sales:checkout', request),
     create: (sale) => ipcRenderer.invoke('sales:create', sale),
     cancel: (saleId) => ipcRenderer.invoke('sales:cancel', saleId),
   },

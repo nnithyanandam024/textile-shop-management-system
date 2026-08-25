@@ -14,7 +14,9 @@ export type AiToolName =
   | 'getAttendanceSummary'
   | 'getLeaveSummary'
   | 'getDailyReport'
-  | 'getStaffPayrollSummary';
+  | 'getStaffPayrollSummary'
+  | 'getAuditLogs'
+  | 'getRiskSummary';
 
 interface ToolPermissionRule {
   requiredPermission: string;
@@ -67,6 +69,16 @@ const TOOL_PERMISSIONS: Record<AiToolName, ToolPermissionRule> = {
     requiredPermission: 'payroll.view',
     allowedRoles: ['Owner', 'SUPER_ADMIN', 'HR Staff'],
     restrictedMessage: "You don't have permission to access staff salary or payroll information.",
+  },
+  getAuditLogs: {
+    requiredPermission: 'audit.view',
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
+    restrictedMessage: "You don't have permission to view security and operational anomaly logs.",
+  },
+  getRiskSummary: {
+    requiredPermission: 'audit.view',
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
+    restrictedMessage: "You don't have permission to access store risk monitoring dashboards.",
   },
 };
 

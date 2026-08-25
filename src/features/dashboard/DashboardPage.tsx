@@ -24,6 +24,7 @@ import {
 import { DailySummaryBanner } from '../../components/ai/DailySummaryBanner';
 import { AiInsightsWidget } from '../../components/ai/AiInsightsWidget';
 import { AiSalesAnalyticsModal } from '../../components/ai/AiSalesAnalyticsModal';
+import { AiRiskMonitoringWidget } from '../../components/ai/anomalies/AiRiskMonitoringWidget';
 
 export const DashboardPage: React.FC = () => {
   const [kpis, setKpis] = useState<any>(null);
@@ -200,6 +201,9 @@ export const DashboardPage: React.FC = () => {
 
       {/* Proactive AI Sales Analytics & Insights Widget */}
       <AiInsightsWidget onOpenDetailedAnalytics={() => setShowAnalyticsModal(true)} />
+
+      {/* AI Operational Anomaly Detection & Risk Monitoring Widget */}
+      <AiRiskMonitoringWidget />
 
       {/* Sales Trend Chart & Low Stock Side Panel */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">

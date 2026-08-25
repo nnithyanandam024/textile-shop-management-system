@@ -12,6 +12,8 @@ import { RecommendationEngine } from '../services/ai/recommendations/recommendat
 import { CustomerIntelligenceService } from '../services/ai/recommendations/customerIntelligenceService';
 import { RecommendationTracker } from '../services/ai/recommendations/recommendationTracker';
 import { CartRecommendationRequest } from '../services/ai/recommendations/recommendationTypes';
+import { AnomalyDetectionEngine } from '../services/ai/anomalies/anomalyDetectionEngine';
+import { AnomalyReviewService } from '../services/ai/anomalies/anomalyReviewService';
 
 export function registerAiHandlers() {
   // 1. Process AI Chat query
@@ -111,5 +113,45 @@ export function registerAiHandlers() {
   ipcMain.handle('ai:trackRecommendationFeedback', async (_event, payload: { event: any }) => {
     RecommendationTracker.trackEvent(payload.event);
     return { success: true };
+  });
+
+  // 14. Get Operational Anomalies List
+  ipcMain.handle('ai:getAnomalies', async (_event, payload: { filter?: any; userContext?: UserAuthContext }) => {
+    const rbac = AiRbacGuard.canExecuteTool('getAuditLogs', payload?.userContext);
+    if (!rbac.allowed) {
+      return { success: false, error: rbac.reason };
+    }
+    const data = AnomalyReviewService.getAnomalies(payload?.filter);
+    return { success: true, data };
+  });
+
+  // 15. Get Anomaly Details
+  ipcMain.handle('ai:getAnomalyDetails', async (_event, payload: { anomalyId: string; userContext?: UserAuthContext }) => {
+    const rbac = AiRbacGuard.canExecuteTool('getAuditLogs', payload?.userContext);
+    if (!rbac.allowed) {
+      return { success: false, error: rbac.reason };
+    }
+    const data = AnomalyReviewService.getAnomalyById(payload.anomalyId);
+    return { success: true, data };
+  });
+
+  // 16. Manager Review Anomaly
+  ipcMain.handle('ai:reviewAnomaly', async (_event, payload: { request: any; userContext?: UserAuthContext }) => {
+    const rbac = AiRbacGuard.canExecuteTool('getAuditLogs', payload?.userContext);
+    if (!rbac.allowed) {
+      return { success: false, error: rbac.reason };
+    }
+    const res = AnomalyReviewService.reviewAnomaly(payload.request);
+    return res;
+  });
+
+  // 17. Get Store Risk Summary
+  ipcMain.handle('ai:getRiskSummary', async (_event, payload?: { userContext?: UserAuthContext }) => {
+    const rbac = AiRbacGuard.canExecuteTool('getAuditLogs', payload?.userContext);
+    if (!rbac.allowed) {
+      return { success: false, error: rbac.reason };
+    }
+    const data = AnomalyDetectionEngine.getRiskSummary();
+    return { success: true, data };
   });
 }

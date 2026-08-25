@@ -2210,6 +2210,143 @@ export function initBrowserMockApi() {
       trackRecommendationFeedback: async () => {
         return { success: true };
       },
+
+      getAnomalies: async (filter?: any) => {
+        const list = [
+          {
+            id: 'AN-DISC-10482',
+            type: 'UNUSUAL_DISCOUNT',
+            title: 'Unusual 42% Manual Discount on Bridal Silk Saree',
+            severity: 'high',
+            status: 'open',
+            entityType: 'sale',
+            entityId: 'INV-10482',
+            entityName: 'Invoice #INV-10482 (Cashier Terminal 2)',
+            riskScore: 78,
+            evidence: {
+              metricName: 'Discount Percentage',
+              detectedValue: '42% (₹7,980)',
+              expectedBaseline: '5% – 15%',
+              deviationMultiplier: 3.8,
+              additionalContext: 'Item: Bridal Kanchipuram Pure Silk Saree. No promotional code tagged.',
+            },
+            aiExplanation: 'The 42% discount exceeds the store baseline (5–15%) by 3.8x. This may be an approved special wedding party concession or an unauthorized discount.',
+            suggestedAction: 'Verify manager approval signature and customer wedding registration card.',
+            detectedAt: new Date(Date.now() - 3600000 * 2).toISOString(),
+          },
+          {
+            id: 'AN-STK-00912',
+            type: 'LARGE_STOCK_ADJUSTMENT',
+            title: 'High-Volume Stock Adjustment (-350 units) on Handloom Cotton Sarees',
+            severity: 'critical',
+            status: 'open',
+            entityType: 'stock_adjustment',
+            entityId: 'ADJ-00912',
+            entityName: 'Soft Handloom Cotton Saree (SAR-COT-002)',
+            riskScore: 92,
+            evidence: {
+              metricName: 'Stock Reduction',
+              detectedValue: '-350 units (₹8,74,650 retail value)',
+              expectedBaseline: '±5 to ±20 units',
+              deviationMultiplier: 17.5,
+              additionalContext: 'Adjustment reason logged as "Stock count correction".',
+            },
+            aiExplanation: 'A sudden stock reduction of -350 units was logged for Handloom Cotton Sarees. Such a major write-off requires physical inventory verification.',
+            suggestedAction: 'Immediate physical count in rack section B4 and review warehouse dispatch notes.',
+            detectedAt: new Date(Date.now() - 3600000 * 5).toISOString(),
+          },
+          {
+            id: 'AN-RET-00411',
+            type: 'ABNORMAL_RETURN_VOLUME',
+            title: 'Unusual Spike in Return Activity (31 returns vs 4 avg/day)',
+            severity: 'medium',
+            status: 'open',
+            entityType: 'store_day',
+            entityId: 'RET-DAY-TODAY',
+            entityName: 'Customer Service Counter 1',
+            riskScore: 68,
+            evidence: {
+              metricName: 'Daily Returns Count',
+              detectedValue: '31 returns today',
+              expectedBaseline: '3 – 8 returns / day',
+              deviationMultiplier: 4.8,
+              additionalContext: '19 of 31 returns were on Men’s Formal Shirts citing sizing discrepancy.',
+            },
+            aiExplanation: 'Return volume is 4.8x higher than usual. Analysis shows 61% of returns are concentrated in a single shirt batch, suggesting possible manufacturing tag mislabeling.',
+            suggestedAction: 'Inspect supplier batch #B-881 for shirt collar size misprints.',
+            detectedAt: new Date(Date.now() - 3600000 * 7).toISOString(),
+          },
+          {
+            id: 'AN-AUTH-00823',
+            type: 'AFTER_HOURS_ACTIVITY',
+            title: 'After-Hours System Login & Stock Query at 3:18 AM',
+            severity: 'medium',
+            status: 'under_review',
+            entityType: 'auth_log',
+            entityId: 'LOG-00823',
+            entityName: 'User: manager_ramesh (IP: 192.168.1.45)',
+            riskScore: 62,
+            evidence: {
+              metricName: 'Timestamp of Activity',
+              detectedValue: '03:18:42 AM',
+              expectedBaseline: '09:00 AM – 09:30 PM (Showroom Hours)',
+              additionalContext: 'Manager credentials used from in-store terminal.',
+            },
+            aiExplanation: 'A system login occurred at 3:18 AM outside normal operating hours. This is flagged to ensure account credentials were not misused.',
+            suggestedAction: 'Confirm with store manager whether an authorized after-hours inventory audit was taking place.',
+            detectedAt: new Date(Date.now() - 3600000 * 18).toISOString(),
+          },
+        ];
+
+        let results = list;
+        if (filter?.severity) {
+          results = results.filter((a) => a.severity === filter.severity);
+        }
+        if (filter?.status) {
+          results = results.filter((a) => a.status === filter.status);
+        }
+
+        return { success: true, data: results };
+      },
+
+      getAnomalyDetails: async (anomalyId: string) => {
+        const res = await (mockApi.ai as any).getAnomalies();
+        const found = res.data?.find((a: any) => a.id === anomalyId);
+        return { success: true, data: found || res.data?.[0] };
+      },
+
+      reviewAnomaly: async (request: any) => {
+        return {
+          success: true,
+          anomaly: {
+            id: request?.anomalyId,
+            status: request?.action === 'resolve' ? 'resolved' : request?.action === 'dismiss' ? 'dismissed' : 'under_review',
+            reviewedBy: request?.reviewerName || 'Store Manager',
+            reviewedAt: new Date().toISOString(),
+            reviewNotes: request?.notes || 'Reviewed and documented.',
+          },
+        };
+      },
+
+      getRiskSummary: async () => {
+        const res = await (mockApi.ai as any).getAnomalies();
+        const list = res.data || [];
+        return {
+          success: true,
+          data: {
+            overallRiskScore: 38,
+            riskLabel: '🟡 Moderate Risk — 2 Critical Items Pending Review',
+            criticalCount: list.filter((a: any) => a.severity === 'critical' && a.status !== 'resolved').length,
+            highCount: list.filter((a: any) => a.severity === 'high' && a.status !== 'resolved').length,
+            mediumCount: list.filter((a: any) => a.severity === 'medium' && a.status !== 'resolved').length,
+            lowCount: list.filter((a: any) => a.severity === 'low' && a.status !== 'resolved').length,
+            openCount: list.filter((a: any) => a.status === 'open').length,
+            resolvedCount: list.filter((a: any) => a.status === 'resolved').length,
+            recentAnomalies: list,
+            generatedAt: new Date().toISOString(),
+          },
+        };
+      },
     },
   };
 

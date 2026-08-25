@@ -475,6 +475,10 @@ export interface ElectronAPI {
     getCustomerIntelligence: (customerId: number, userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
     getProductRecommendations: (productId: number, userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
     trackRecommendationFeedback: (event: any) => Promise<{ success: boolean }>;
+    getAnomalies: (filter?: any, userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getAnomalyDetails: (anomalyId: string, userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    reviewAnomaly: (request: any, userContext?: any) => Promise<{ success: boolean; anomaly?: any; error?: string }>;
+    getRiskSummary: (userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
   };
 }
 
@@ -910,6 +914,10 @@ const api: ElectronAPI = {
     getCustomerIntelligence: (customerId: number, userContext?: any) => ipcRenderer.invoke('ai:getCustomerIntelligence', { customerId, userContext }),
     getProductRecommendations: (productId: number, userContext?: any) => ipcRenderer.invoke('ai:getProductRecommendations', { productId, userContext }),
     trackRecommendationFeedback: (event: any) => ipcRenderer.invoke('ai:trackRecommendationFeedback', { event }),
+    getAnomalies: (filter?: any, userContext?: any) => ipcRenderer.invoke('ai:getAnomalies', { filter, userContext }),
+    getAnomalyDetails: (anomalyId: string, userContext?: any) => ipcRenderer.invoke('ai:getAnomalyDetails', { anomalyId, userContext }),
+    reviewAnomaly: (request: any, userContext?: any) => ipcRenderer.invoke('ai:reviewAnomaly', { request, userContext }),
+    getRiskSummary: (userContext?: any) => ipcRenderer.invoke('ai:getRiskSummary', { userContext }),
   },
 };
 

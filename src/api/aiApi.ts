@@ -333,4 +333,108 @@ export class AiApi {
       } catch {}
     }
   }
+
+  /**
+   * Retrieves detected operational anomalies
+   */
+  public static async getAnomalies(filter?: any): Promise<ApiResponse<any>> {
+    const userSession = StorageManager.getCurrentUser();
+    const userContext = userSession ? {
+      userId: Number(userSession.id) || 1,
+      username: userSession.username,
+      roleName: userSession.role,
+      roleId: userSession.roleId,
+      permissions: userSession.permissions || [],
+    } : undefined;
+
+    if (typeof window !== 'undefined' && (window as any).api?.ai?.getAnomalies) {
+      try {
+        const res = await (window as any).api.ai.getAnomalies(filter, userContext);
+        return res;
+      } catch (err: any) {
+        return { success: false, error: { code: 'AI_ERROR', message: err.message } };
+      }
+    }
+
+    // Fallback to REST endpoint
+    return await apiClient.get<any>('/ai/anomalies', { params: filter });
+  }
+
+  /**
+   * Retrieves single anomaly details
+   */
+  public static async getAnomalyDetails(anomalyId: string): Promise<ApiResponse<any>> {
+    const userSession = StorageManager.getCurrentUser();
+    const userContext = userSession ? {
+      userId: Number(userSession.id) || 1,
+      username: userSession.username,
+      roleName: userSession.role,
+      roleId: userSession.roleId,
+      permissions: userSession.permissions || [],
+    } : undefined;
+
+    if (typeof window !== 'undefined' && (window as any).api?.ai?.getAnomalyDetails) {
+      try {
+        const res = await (window as any).api.ai.getAnomalyDetails(anomalyId, userContext);
+        return res;
+      } catch (err: any) {
+        return { success: false, error: { code: 'AI_ERROR', message: err.message } };
+      }
+    }
+
+    // Fallback to REST endpoint
+    return await apiClient.get<any>(`/ai/anomalies/${anomalyId}`);
+  }
+
+  /**
+   * Performs manager review on an anomaly
+   */
+  public static async reviewAnomaly(request: any): Promise<ApiResponse<any>> {
+    const userSession = StorageManager.getCurrentUser();
+    const userContext = userSession ? {
+      userId: Number(userSession.id) || 1,
+      username: userSession.username,
+      roleName: userSession.role,
+      roleId: userSession.roleId,
+      permissions: userSession.permissions || [],
+    } : undefined;
+
+    if (typeof window !== 'undefined' && (window as any).api?.ai?.reviewAnomaly) {
+      try {
+        const res = await (window as any).api.ai.reviewAnomaly(request, userContext);
+        return res;
+      } catch (err: any) {
+        return { success: false, error: { code: 'AI_ERROR', message: err.message } };
+      }
+    }
+
+    // Fallback to REST endpoint
+    return await apiClient.post<any>(`/ai/anomalies/${request.anomalyId}/review`, request);
+  }
+
+  /**
+   * Retrieves executive risk health summary
+   */
+  public static async getRiskSummary(): Promise<ApiResponse<any>> {
+    const userSession = StorageManager.getCurrentUser();
+    const userContext = userSession ? {
+      userId: Number(userSession.id) || 1,
+      username: userSession.username,
+      roleName: userSession.role,
+      roleId: userSession.roleId,
+      permissions: userSession.permissions || [],
+    } : undefined;
+
+    if (typeof window !== 'undefined' && (window as any).api?.ai?.getRiskSummary) {
+      try {
+        const res = await (window as any).api.ai.getRiskSummary(userContext);
+        return res;
+      } catch (err: any) {
+        return { success: false, error: { code: 'AI_ERROR', message: err.message } };
+      }
+    }
+
+    // Fallback to REST endpoint
+    return await apiClient.get<any>('/ai/anomalies/risk-summary');
+  }
 }

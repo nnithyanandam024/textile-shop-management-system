@@ -234,14 +234,16 @@ export const ReportsPage: React.FC = () => {
           >
             Inventory Valuation
           </button>
-          <button
-            onClick={() => setActiveTab('FINANCIAL')}
-            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
-              activeTab === 'FINANCIAL' ? 'bg-white text-[#2012ad] shadow-sm' : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            Financial P&L
-          </button>
+          {isOwnerOrAdmin && (
+            <button
+              onClick={() => setActiveTab('FINANCIAL')}
+              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
+                activeTab === 'FINANCIAL' ? 'bg-white text-[#2012ad] shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              Financial P&L Statement
+            </button>
+          )}
           <button
             onClick={() => setActiveTab('CUSTOMERS')}
             className={`px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${

@@ -32,6 +32,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { useAuth } from '../../features/auth/AuthContext';
+import { checkPermissionMatch } from '../../auth/permissions';
 
 interface NavItem {
   name: string;
@@ -50,104 +51,253 @@ interface NavSection {
 export const Sidebar: React.FC = () => {
   const { currentUser, hasPermission } = useAuth();
 
-  const roleName = (currentUser?.roleName || '').toLowerCase();
-  const isOwner =
+  const roleName = (currentUser?.roleName || '').toLowerCase().trim();
+  const permissions = currentUser?.permissions || [];
+
+  const isOwnerOrAdmin =
     currentUser?.roleId === 1 ||
     roleName.includes('owner') ||
     roleName.includes('admin') ||
     roleName.includes('super');
 
-  // --- Section 1: Main Store Operations ---
-  const mainNavItems: NavItem[] = [
-    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, permission: 'dashboard.view' },
-    { name: 'Business AI', path: '/business-ai', icon: Sparkles, badge: 'AI' },
-    { name: 'POS Billing', path: '/billing', icon: ShoppingCart, permission: 'billing.create' },
-    { name: 'Sales History', path: '/sales', icon: Receipt, permission: 'sales.view' },
-    { name: 'Customers', path: '/customers', icon: Users, permission: 'customers.view' },
-    { name: 'Products', path: '/products', icon: Package, permission: 'products.view' },
-    { name: 'Categories & Brands', path: '/categories', icon: Layers, permission: 'products.manage' },
-    { name: 'Inventory', path: '/inventory', icon: Boxes, permission: 'inventory.view' },
-    { name: 'Suppliers', path: '/suppliers', icon: Truck, permission: 'suppliers.view' },
-    { name: 'Purchases (GRN)', path: '/purchases', icon: Building2, permission: 'purchases.view' },
-    { name: 'Sales Returns', path: '/returns', icon: RotateCcw, permission: 'returns.create' },
-    { name: 'Reports', path: '/reports', icon: BarChart3, permission: 'reports.view' },
-  ];
+  const isManager = roleName.includes('manager');
+  const isSupervisor = roleName.includes('supervisor') || roleName.includes('lead') || roleName.includes('floor');
+  const isCashier = roleName.includes('cashier') || roleName.includes('billing');
+  const isStaff = !isOwnerOrAdmin && !isManager && !isSupervisor && !isCashier;
 
-  // --- Section 2: Staff & HR Governance ---
-  const staffNavItems: NavItem[] = [
-    { name: 'Staff Directory', path: '/staff', icon: Users2, permission: 'staff.view' },
-    { name: 'Attendance', path: '/staff/attendance', icon: CalendarCheck, permission: 'attendance.view' },
-    { name: 'Shifts', path: '/staff/shifts', icon: Clock, permission: 'shift.view' },
-    { name: 'Leave Approvals', path: '/staff/leave', icon: Calendar, permission: 'leave.view' },
-    { name: 'Payroll & Salaries', path: '/staff/payroll', icon: DollarSign, permission: 'payroll.view' },
-    { name: 'Departments', path: '/staff/departments', icon: Briefcase, permission: 'staff.organization' },
-    { name: 'Designations', path: '/staff/designations', icon: BadgeCheck, permission: 'staff.organization' },
-    { name: 'Staff Documents', path: '/staff/documents', icon: FileText, permission: 'documents.view' },
-    { name: 'Notice Board', path: '/staff/communication', icon: Bell, permission: 'communication.view' },
-    { name: 'Performance KPIs', path: '/staff/performance', icon: Award, permission: 'performance.view' },
-  ];
+  // Helper to check permissions
+  const can = (permCode: string) => {
+    if (isOwnerOrAdmin) return true;
+    return hasPermission(permCode) || checkPermissionMatch(permissions, permCode);
+  };
 
-  // --- Section 3: System Administration ---
-  const systemNavItems: NavItem[] = [
-    { name: 'Roles & Access', path: '/roles', icon: ShieldCheck, permission: 'role.view' },
-    { name: 'Users & Accounts', path: '/users', icon: UserCheck, permission: 'users.view' },
-    { name: 'Backup & Restore', path: '/backup', icon: Database, permission: 'backup.create' },
-    { name: 'System Health', path: '/health', icon: Activity, permission: 'settings.view' },
-    { name: 'Settings', path: '/settings', icon: Settings, permission: 'settings.view' },
-  ];
+  // --- Dynamic Section Generation based on Role and Permissions ---
+  const sections: NavSection[] = [];
 
-  // --- Section 4: Employee Self-Service (for staff employees only) ---
-  const selfServiceNavItems: NavItem[] = [
-    { name: 'My Workspace', path: '/self-service/dashboard', icon: Home, permission: 'self.profile.view' },
-    { name: 'My Profile', path: '/self-service/profile', icon: User, permission: 'self.profile.view' },
-    { name: 'My Attendance', path: '/self-service/attendance', icon: CalendarCheck, permission: 'self.attendance.view' },
-    { name: 'My Shifts', path: '/self-service/shifts', icon: Clock, permission: 'self.shift.view' },
-    { name: 'My Leave', path: '/self-service/leave', icon: Calendar, permission: 'self.leave.view' },
-    { name: 'My Payslips', path: '/self-service/payroll', icon: DollarSign, permission: 'self.payroll.view' },
-    { name: 'My Documents', path: '/self-service/documents', icon: FileText, permission: 'self.documents.view' },
-  ];
+  // ==========================================
+  // SECTION 1: ROLE-SPECIFIC PRIMARY OPERATIONS
+  // ==========================================
+  const storeOpsItems: NavItem[] = [];
 
-  const filterItems = (items: NavItem[]) =>
-    items.filter((item) => !item.permission || hasPermission(item.permission));
+  // 1. Dashboard (Exposed to Admin, Manager, Supervisor, Cashier)
+  if (!isStaff && can('dashboard.view')) {
+    let dashName = 'Executive Dashboard';
+    if (isManager) dashName = 'Management Dashboard';
+    else if (isSupervisor) dashName = 'Operations Dashboard';
+    else if (isCashier) dashName = 'Billing Dashboard';
 
-  const filteredMain = filterItems(mainNavItems);
-  const filteredStaff = filterItems(staffNavItems);
-  const filteredSystem = isOwner
-    ? systemNavItems // Owner has full access to all system tools
-    : filterItems(systemNavItems);
-  const filteredSelfService = !isOwner ? filterItems(selfServiceNavItems) : [];
+    storeOpsItems.push({
+      name: dashName,
+      path: '/dashboard',
+      icon: LayoutDashboard,
+    });
+  }
 
-  const sections: NavSection[] = [
-    ...(filteredSelfService.length > 0
-      ? [{ id: 'self_service', title: 'My Workspace', items: filteredSelfService }]
-      : []),
-    ...(filteredMain.length > 0
-      ? [{ id: 'main', items: filteredMain }]
-      : []),
-    ...(filteredStaff.length > 0
-      ? [{ id: 'staff', title: 'Staff Management', items: filteredStaff }]
-      : []),
-    ...(filteredSystem.length > 0
-      ? [{ id: 'system', title: 'System', items: filteredSystem }]
-      : []),
-  ];
+  // 2. Business AI (Exposed to Admin, Manager, and Supervisor only)
+  if ((isOwnerOrAdmin || isManager || isSupervisor) && can('ai.assistant.use')) {
+    storeOpsItems.push({
+      name: 'Business AI',
+      path: '/business-ai',
+      icon: Sparkles,
+      badge: 'AI',
+    });
+  }
+
+  // 3. POS Billing Terminal (Exposed to Cashier, Supervisor, Manager, Admin)
+  if (!isStaff && can('billing.create')) {
+    storeOpsItems.push({
+      name: 'POS Billing',
+      path: '/billing',
+      icon: ShoppingCart,
+      badge: 'POS',
+    });
+  }
+
+  // 4. Sales History (Exposed to Cashier, Supervisor, Manager, Admin)
+  if (!isStaff && can('sales.view')) {
+    storeOpsItems.push({
+      name: 'Sales History',
+      path: '/sales',
+      icon: Receipt,
+    });
+  }
+
+  // 5. Products Catalog (Exposed to All Roles)
+  if (can('products.view')) {
+    storeOpsItems.push({
+      name: 'Products',
+      path: '/products',
+      icon: Package,
+    });
+  }
+
+  // 6. Categories & Brands (Exposed to Admin & Manager only)
+  if ((isOwnerOrAdmin || isManager) && can('products.manage')) {
+    storeOpsItems.push({
+      name: 'Categories & Brands',
+      path: '/categories',
+      icon: Layers,
+    });
+  }
+
+  // 7. Inventory (Exposed to Staff, Supervisor, Manager, Admin)
+  if (can('inventory.view')) {
+    storeOpsItems.push({
+      name: isStaff ? 'Assigned Stock' : 'Inventory',
+      path: '/inventory',
+      icon: Boxes,
+    });
+  }
+
+  // 8. Customers Directory (Exposed to All Roles)
+  if (can('customers.view')) {
+    storeOpsItems.push({
+      name: 'Customers',
+      path: '/customers',
+      icon: Users,
+    });
+  }
+
+  // 9. Suppliers & Mills (Exposed to Admin & Manager only)
+  if ((isOwnerOrAdmin || isManager) && can('suppliers.view')) {
+    storeOpsItems.push({
+      name: 'Suppliers',
+      path: '/suppliers',
+      icon: Truck,
+    });
+  }
+
+  // 10. Purchases / GRN Inwarding (Exposed to Admin & Manager only)
+  if ((isOwnerOrAdmin || isManager) && can('purchases.view')) {
+    storeOpsItems.push({
+      name: 'Purchases (GRN)',
+      path: '/purchases',
+      icon: Building2,
+    });
+  }
+
+  // 11. Sales Returns (Exposed to Cashier, Supervisor, Manager, Admin)
+  if (!isStaff && can('returns.create')) {
+    storeOpsItems.push({
+      name: 'Sales Returns',
+      path: '/returns',
+      icon: RotateCcw,
+    });
+  }
+
+  // 12. Reports & Analytics (Exposed to Supervisor, Manager, Admin only)
+  if (!isStaff && !isCashier && can('reports.view')) {
+    storeOpsItems.push({
+      name: 'Reports',
+      path: '/reports',
+      icon: BarChart3,
+    });
+  }
+
+  if (storeOpsItems.length > 0) {
+    sections.push({
+      id: 'main_ops',
+      title: isStaff ? 'Store Operations' : 'Main Operations',
+      items: storeOpsItems,
+    });
+  }
+
+  // ==========================================
+  // SECTION 2: STAFF & HR MANAGEMENT (Admin, Manager, Supervisor)
+  // ==========================================
+  const staffGovernanceItems: NavItem[] = [];
+
+  if (isOwnerOrAdmin || isManager || isSupervisor) {
+    if (can('staff.view')) {
+      staffGovernanceItems.push({ name: 'Staff Directory', path: '/staff', icon: Users2 });
+    }
+    if (can('attendance.view')) {
+      staffGovernanceItems.push({ name: 'Attendance Roster', path: '/staff/attendance', icon: CalendarCheck });
+    }
+    if (can('shift.view')) {
+      staffGovernanceItems.push({ name: 'Shifts & Rosters', path: '/staff/shifts', icon: Clock });
+    }
+    if (isOwnerOrAdmin || isManager) {
+      if (can('leave.view')) {
+        staffGovernanceItems.push({ name: 'Leave Approvals', path: '/staff/leave', icon: Calendar });
+      }
+      if (isOwnerOrAdmin && can('payroll.view')) {
+        staffGovernanceItems.push({ name: 'Payroll & Salaries', path: '/staff/payroll', icon: DollarSign });
+      }
+      if (can('staff.organization')) {
+        staffGovernanceItems.push({ name: 'Departments', path: '/staff/departments', icon: Briefcase });
+        staffGovernanceItems.push({ name: 'Designations', path: '/staff/designations', icon: BadgeCheck });
+      }
+      staffGovernanceItems.push({ name: 'Staff Documents', path: '/staff/documents', icon: FileText });
+    }
+    staffGovernanceItems.push({ name: 'Notice Board', path: '/staff/communication', icon: Bell });
+    if (isOwnerOrAdmin || isManager) {
+      staffGovernanceItems.push({ name: 'Performance KPIs', path: '/staff/performance', icon: Award });
+    }
+  }
+
+  if (staffGovernanceItems.length > 0) {
+    sections.push({
+      id: 'staff_governance',
+      title: 'Staff Management',
+      items: staffGovernanceItems,
+    });
+  }
+
+  // ==========================================
+  // SECTION 3: EMPLOYEE SELF-SERVICE (Staff, Cashier, Supervisor)
+  // ==========================================
+  if (!isOwnerOrAdmin) {
+    const selfServiceItems: NavItem[] = [
+      { name: 'Work Dashboard', path: '/self-service/dashboard', icon: Home },
+      { name: 'My Profile', path: '/self-service/profile', icon: User },
+      { name: 'My Attendance', path: '/self-service/attendance', icon: CalendarCheck },
+      { name: 'My Shifts', path: '/self-service/shifts', icon: Clock },
+      { name: 'My Leave', path: '/self-service/leave', icon: Calendar },
+      { name: 'My Payslips', path: '/self-service/payroll', icon: DollarSign },
+      { name: 'My Documents', path: '/self-service/documents', icon: FileText },
+    ];
+
+    sections.push({
+      id: 'self_service',
+      title: 'My Workspace',
+      items: selfServiceItems,
+    });
+  }
+
+  // ==========================================
+  // SECTION 4: SYSTEM ADMINISTRATION (Admin / Owner Only)
+  // ==========================================
+  if (isOwnerOrAdmin) {
+    sections.push({
+      id: 'system_admin',
+      title: 'System Administration',
+      items: [
+        { name: 'Roles & Access', path: '/roles', icon: ShieldCheck },
+        { name: 'Users & Accounts', path: '/users', icon: UserCheck },
+        { name: 'Backup & Restore', path: '/backup', icon: Database },
+        { name: 'System Health', path: '/health', icon: Activity },
+        { name: 'Settings', path: '/settings', icon: Settings },
+      ],
+    });
+  }
 
   return (
-    <aside className="w-64 bg-white border-r border-slate-200/80 flex flex-col h-screen select-none shrink-0 shadow-sm">
+    <aside className="w-64 bg-white border-r border-slate-200/80 flex flex-col h-screen select-none shrink-0 shadow-xs">
       {/* Brand Header */}
       <div className="h-16 px-5 flex items-center justify-between border-b border-slate-200/80 bg-slate-50/50">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-[#2012ad] shadow-sm">
+          <div className="w-9 h-9 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-[#2012ad] shadow-xs">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
             </svg>
           </div>
           <div>
-            <h1 className="text-base font-bold text-slate-900 tracking-tight leading-tight">TEXORA</h1>
-            <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Textile Manager</p>
+            <h1 className="text-base font-black text-slate-900 tracking-tight leading-tight">TEXORA</h1>
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Textile ERP</p>
           </div>
         </div>
-        <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-indigo-50 text-[#2012ad] border border-indigo-100 uppercase">
+        <span className="text-[9px] font-mono font-black px-2 py-0.5 rounded bg-indigo-50 text-[#2012ad] border border-indigo-100 uppercase">
           {currentUser?.roleName || 'Staff'}
         </span>
       </div>
@@ -158,7 +308,7 @@ export const Sidebar: React.FC = () => {
           <div key={section.id} className={sIdx > 0 ? 'pt-1' : ''}>
             {section.title && (
               <div className="px-3 pb-1.5 flex items-center justify-between">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
                   {section.title}
                 </p>
               </div>
@@ -171,9 +321,9 @@ export const Sidebar: React.FC = () => {
                   to={item.path}
                   end
                   className={({ isActive }) =>
-                    `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+                    `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
                       isActive
-                        ? 'bg-indigo-50/90 text-[#2012ad] shadow-sm border border-indigo-100/90 font-bold'
+                        ? 'bg-indigo-50 text-[#2012ad] shadow-xs border border-indigo-100 font-extrabold'
                         : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                     }`
                   }
@@ -181,7 +331,7 @@ export const Sidebar: React.FC = () => {
                   <item.icon className="w-4 h-4 shrink-0" />
                   <span className="truncate flex-1">{item.name}</span>
                   {item.badge && (
-                    <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-indigo-100 text-[#2012ad]">
+                    <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-indigo-100 text-[#2012ad]">
                       {item.badge}
                     </span>
                   )}
@@ -194,4 +344,3 @@ export const Sidebar: React.FC = () => {
     </aside>
   );
 };
-

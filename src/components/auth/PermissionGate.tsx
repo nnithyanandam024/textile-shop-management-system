@@ -1,59 +1,68 @@
-/**
- * Phase 15 — PermissionGate Component
- * Granular UI Authorization Wrapper for conditional element/button rendering.
- */
 import React from 'react';
 import { useAuth } from '../../features/auth/AuthContext';
+import { checkPermissionMatch } from '../../auth/permissions';
 
-export interface PermissionGateProps {
-  permission?: string;
-  anyPermissions?: string[];
-  allPermissions?: string[];
+interface PermissionGateProps {
+  permission: string | string[];
+  requireAll?: boolean;
   fallback?: React.ReactNode;
-  disableOnly?: boolean;
-  disabledTooltip?: string;
+  hideIfUnauthorized?: boolean;
   children: React.ReactNode;
 }
 
 export const PermissionGate: React.FC<PermissionGateProps> = ({
   permission,
-  anyPermissions,
-  allPermissions,
+  requireAll = false,
   fallback = null,
-  disableOnly = false,
-  disabledTooltip = 'You do not have permission to perform this action.',
+  hideIfUnauthorized = true,
   children,
 }) => {
-  const { hasPermission } = useAuth();
+  const { currentUser, hasPermission } = useAuth();
 
-  let isAuthorized = true;
+  const roleName = (currentUser?.roleName || '').toLowerCase().trim();
+  const permissions = currentUser?.permissions || [];
 
-  if (permission) {
-    isAuthorized = hasPermission(permission);
+  const isOwnerOrAdmin =
+    currentUser?.roleId === 1 ||
+    roleName.includes('owner') ||
+    roleName.includes('admin') ||
+    roleName.includes('super');
+
+  if (isOwnerOrAdmin) {
+    return <>{children}</>;
   }
 
-  if (isAuthorized && anyPermissions && anyPermissions.length > 0) {
-    isAuthorized = anyPermissions.some((p) => hasPermission(p));
-  }
+  const permArray = Array.isArray(permission) ? permission : [permission];
 
-  if (isAuthorized && allPermissions && allPermissions.length > 0) {
-    isAuthorized = allPermissions.every((p) => hasPermission(p));
-  }
+  const hasAccess = requireAll
+    ? permArray.every((p) => hasPermission(p) || checkPermissionMatch(permissions, p))
+    : permArray.some((p) => hasPermission(p) || checkPermissionMatch(permissions, p));
 
-  if (!isAuthorized) {
-    if (disableOnly) {
-      return (
-        <div className="relative inline-flex group cursor-not-allowed" title={disabledTooltip}>
-          <div className="pointer-events-none opacity-50 select-none">
-            {children}
-          </div>
-        </div>
-      );
-    }
-    return <>{fallback}</>;
+  if (!hasAccess) {
+    return hideIfUnauthorized ? null : <>{fallback}</>;
   }
 
   return <>{children}</>;
 };
 
-export default PermissionGate;
+/**
+ * React hook to evaluate permission inside components
+ */
+export function usePermission(permission: string | string[]): boolean {
+  const { currentUser, hasPermission } = useAuth();
+
+  const roleName = (currentUser?.roleName || '').toLowerCase().trim();
+  const permissions = currentUser?.permissions || [];
+
+  if (
+    currentUser?.roleId === 1 ||
+    roleName.includes('owner') ||
+    roleName.includes('admin') ||
+    roleName.includes('super')
+  ) {
+    return true;
+  }
+
+  const permArray = Array.isArray(permission) ? permission : [permission];
+  return permArray.some((p) => hasPermission(p) || checkPermissionMatch(permissions, p));
+}

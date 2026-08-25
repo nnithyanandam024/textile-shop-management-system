@@ -373,21 +373,29 @@ export const InventoryPage: React.FC = () => {
                       <span className="text-[10px] font-semibold text-slate-400 block">Selling Price</span>
                       <span className="font-extrabold text-[#2012ad] text-sm">₹{v.selling_price.toLocaleString()}</span>
                     </div>
-                    <div className="text-right">
-                      <span className="text-[10px] font-semibold text-slate-400 block">Purchase Cost</span>
-                      <span className="font-semibold text-slate-600">₹{v.purchase_price.toLocaleString()}</span>
-                    </div>
+                    {(isOwnerOrAdmin || role === 'manager') && (
+                      <div className="text-right">
+                        <span className="text-[10px] font-semibold text-slate-400 block">Purchase Cost</span>
+                        <span className="font-semibold text-slate-600">₹{v.purchase_price.toLocaleString()}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
                 {/* Card Actions */}
                 <div className="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2">
-                  <button
-                    onClick={() => setSelectedVariantForAdjust(v)}
-                    className="flex-1 py-2 bg-[#2012ad] hover:bg-[#1a0e91] active:bg-[#150b74] text-white rounded-xl text-xs font-semibold transition-all shadow-xs"
-                  >
-                    Adjust Stock
-                  </button>
+                  {(isOwnerOrAdmin || role === 'manager') ? (
+                    <button
+                      onClick={() => setSelectedVariantForAdjust(v)}
+                      className="flex-1 py-2 bg-[#2012ad] hover:bg-[#1a0e91] active:bg-[#150b74] text-white rounded-xl text-xs font-semibold transition-all shadow-xs"
+                    >
+                      Adjust Stock
+                    </button>
+                  ) : (
+                    <div className="flex-1 py-1.5 px-2 bg-slate-50 border border-slate-100 text-slate-400 text-[11px] font-semibold rounded-xl text-center">
+                      View Only
+                    </div>
+                  )}
                   <button
                     onClick={() => setSelectedVariantForHistory(v)}
                     className="p-2 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl border border-slate-200 transition-all shrink-0"
@@ -439,12 +447,18 @@ export const InventoryPage: React.FC = () => {
                     <td className="py-4 px-6 whitespace-nowrap">{getStatusBadge(v.current_stock, v.minimum_stock)}</td>
                     <td className="py-4 px-6 text-right whitespace-nowrap">
                       <div className="inline-flex items-center justify-end gap-2 whitespace-nowrap">
-                        <button
-                          onClick={() => setSelectedVariantForAdjust(v)}
-                          className="px-3.5 py-1.5 bg-[#2012ad] hover:bg-[#1a0e91] active:bg-[#150b74] text-white rounded-xl text-xs font-bold transition-all shadow-xs inline-flex items-center gap-1.5"
-                        >
-                          Adjust Stock
-                        </button>
+                        {(isOwnerOrAdmin || role === 'manager') ? (
+                          <button
+                            onClick={() => setSelectedVariantForAdjust(v)}
+                            className="px-3.5 py-1.5 bg-[#2012ad] hover:bg-[#1a0e91] active:bg-[#150b74] text-white rounded-xl text-xs font-bold transition-all shadow-xs inline-flex items-center gap-1.5"
+                          >
+                            Adjust Stock
+                          </button>
+                        ) : (
+                          <span className="px-2.5 py-1 bg-slate-50 border border-slate-100 text-slate-400 text-[11px] font-semibold rounded-lg">
+                            View Only
+                          </span>
+                        )}
                         <button
                           onClick={() => setSelectedVariantForHistory(v)}
                           className="p-2 bg-slate-50 hover:bg-slate-100 active:bg-slate-200 text-slate-600 rounded-xl border border-slate-200 transition-all inline-flex items-center justify-center shadow-2xs"

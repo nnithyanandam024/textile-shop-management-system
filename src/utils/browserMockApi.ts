@@ -327,6 +327,41 @@ function loadStorage<T>(key: string, defaultVal: T): T {
   }
 }
 
+const DEFAULT_SALES = [
+  {
+    id: 1,
+    invoice_number: 'INV-2026-00001',
+    customer_id: 1,
+    customer_name: 'Anand Sundaram',
+    sale_date: new Date().toISOString(),
+    subtotal: 7500,
+    discount: 375,
+    tax: 356.25,
+    round_off_amount: -0.25,
+    total: 7481,
+    paid_amount: 7481,
+    balance_amount: 0,
+    payment_method: 'UPI',
+    status: 'COMPLETED',
+  },
+  {
+    id: 2,
+    invoice_number: 'INV-2026-00002',
+    customer_id: 2,
+    customer_name: 'Pooja Hegde',
+    sale_date: new Date().toISOString(),
+    subtotal: 12400,
+    discount: 500,
+    tax: 595,
+    round_off_amount: 0,
+    total: 12495,
+    paid_amount: 12495,
+    balance_amount: 0,
+    payment_method: 'CASH',
+    status: 'COMPLETED',
+  },
+];
+
 function saveStorage<T>(key: string, value: T): void {
   try {
     localStorage.setItem(key, JSON.stringify(value));
@@ -379,6 +414,93 @@ export function initBrowserMockApi() {
 
   const mockApi: any = {
     __isMock: true,
+
+    // --- DASHBOARD API ---
+    dashboard: {
+      getKPIs: async () => {
+        const sales = loadStorage(STORAGE_KEYS.SALES, DEFAULT_SALES);
+        const variants = loadStorage(STORAGE_KEYS.VARIANTS, DEFAULT_VARIANTS);
+        const products = loadStorage(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS);
+        const customers = loadStorage(STORAGE_KEYS.CUSTOMERS, DEFAULT_CUSTOMERS);
+
+        const today = new Date().toISOString().slice(0, 10);
+        const todaySalesList = sales.filter((s: any) => (s.sale_date || '').startsWith(today));
+        const todaySales = todaySalesList.reduce((acc: number, s: any) => acc + (Number(s.total) || 0), 0);
+        const todayBills = todaySalesList.length;
+
+        const totalRevenue = sales.reduce((acc: number, s: any) => acc + (Number(s.total) || 0), 0);
+        const grossProfit = Math.round(totalRevenue * 0.32);
+
+        const totalUnits = variants.reduce((acc: number, v: any) => acc + (Number(v.current_stock) || 0), 0);
+        const lowStock = variants.filter((v: any) => Number(v.current_stock) > 0 && Number(v.current_stock) <= (Number(v.minimum_stock) || 5)).length;
+        const outOfStock = variants.filter((v: any) => (Number(v.current_stock) || 0) === 0).length;
+        const inventoryValuation = variants.reduce((acc: number, v: any) => acc + (Number(v.current_stock) || 0) * (Number(v.purchase_price) || 0), 0);
+
+        return {
+          today_sales: todaySales > 0 ? todaySales : 24590,
+          today_bills: todayBills > 0 ? todayBills : 8,
+          total_revenue: totalRevenue > 0 ? totalRevenue : 142500,
+          total_cogs: Math.round(totalRevenue * 0.68),
+          gross_profit: grossProfit > 0 ? grossProfit : 45600,
+          total_expenses: 12500,
+          net_operating_result: 33100,
+          products_in_stock: totalUnits,
+          total_products: products.length,
+          total_stock_units: totalUnits,
+          low_stock_count: lowStock,
+          out_of_stock_count: outOfStock,
+          inventory_value: inventoryValuation > 0 ? inventoryValuation : 845000,
+          total_customers: customers.length,
+          active_staff_count: 6,
+          total_staff_count: 6,
+        };
+      },
+      getSalesTrend: async (_days: number = 7) => {
+        return [
+          { date: 'Mon', sales: 18500 },
+          { date: 'Tue', sales: 22400 },
+          { date: 'Wed', sales: 19800 },
+          { date: 'Thu', sales: 28900 },
+          { date: 'Fri', sales: 34200 },
+          { date: 'Sat', sales: 48500 },
+          { date: 'Sun', sales: 52100 },
+        ];
+      },
+      getBestSellers: async (_limit: number = 5) => {
+        return [
+          { name: 'Kanchipuram Pure Silk Saree', sku: 'KAN-SLK-001', units_sold: 14, total_revenue: 105000 },
+          { name: 'Formal Linen Full Sleeve Shirt', sku: 'MSH-LIN-001', units_sold: 28, total_revenue: 44800 },
+          { name: 'Pure Cotton Ethnic Kurti', sku: 'WKT-COT-001', units_sold: 22, total_revenue: 28600 },
+          { name: 'Zari Border Traditional Dhoti', sku: 'MDH-ZAR-001', units_sold: 19, total_revenue: 17100 },
+          { name: 'Embroidered Festive Lehenga', sku: 'KLH-EMB-001', units_sold: 7, total_revenue: 38500 },
+        ];
+      },
+      getLowStockAlerts: async (_limit: number = 5) => {
+        const variants = loadStorage(STORAGE_KEYS.VARIANTS, DEFAULT_VARIANTS);
+        const products = loadStorage(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS);
+        const low = variants
+          .filter((v: any) => Number(v.current_stock) <= (Number(v.minimum_stock) || 5))
+          .map((v: any) => {
+            const p = products.find((prod: any) => prod.id === v.product_id);
+            return {
+              product_name: p?.name || 'Textile SKU',
+              sku: v.sku,
+              color: v.color,
+              current_stock: v.current_stock,
+              minimum_stock: v.minimum_stock || 5,
+            };
+          });
+        return low.length > 0 ? low.slice(0, 5) : [
+          { product_name: 'Kanchipuram Silk Saree (Gold)', sku: 'KAN-SLK-001', color: 'Gold & Crimson', current_stock: 2, minimum_stock: 5 },
+          { product_name: 'Formal Linen Shirt (Sky Blue)', sku: 'MSH-LIN-002', color: 'Sky Blue', current_stock: 3, minimum_stock: 8 },
+          { product_name: 'Silk Blend Fancy Dupatta', sku: 'DUP-SLK-001', color: 'Magenta', current_stock: 1, minimum_stock: 6 },
+        ];
+      },
+      getRecentTransactions: async (_limit: number = 5) => {
+        const sales = loadStorage(STORAGE_KEYS.SALES, DEFAULT_SALES);
+        return sales.slice(0, 5);
+      },
+    },
 
     // --- PRODUCTS API ---
     products: {

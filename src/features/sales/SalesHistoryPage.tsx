@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Search, RefreshCw, AlertCircle, CheckCircle2, FileText, Receipt } from 'lucide-react';
 import { InvoiceModal } from '../pos/InvoiceModal';
+import { useAuth } from '../auth/AuthContext';
 
 interface Sale {
   id: number;
@@ -17,9 +18,17 @@ interface Sale {
 }
 
 export const SalesHistoryPage: React.FC = () => {
+  const { currentUser } = useAuth();
   const [sales, setSales] = useState<Sale[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>('');
+
+  const role = (currentUser?.roleName || '').toLowerCase().trim();
+  const canCancelSales =
+    currentUser?.roleId === 1 ||
+    role.includes('owner') ||
+    role.includes('admin') ||
+    role.includes('manager');
 
   // Modals & Template Mode
   const [selectedSaleId, setSelectedSaleId] = useState<number | null>(null);
@@ -201,7 +210,7 @@ export const SalesHistoryPage: React.FC = () => {
                       <span>Tax Invoice</span>
                     </button>
 
-                    {s.status === 'COMPLETED' && (
+                    {canCancelSales && s.status === 'COMPLETED' && (
                       <button
                         onClick={() => handleCancelSale(s.id, s.invoice_number)}
                         className="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-[11px] font-bold transition-all"

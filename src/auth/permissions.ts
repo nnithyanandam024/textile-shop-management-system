@@ -1,409 +1,72 @@
 /**
- * Phase 15 — Frontend Standardized Permissions & Role Matrix
+ * Standardized Permissions & Role Matrix
+ * Connects frontend authorization with backend RBAC & Data Scopes.
  */
 
-export const PERMISSIONS = {
-  // Dashboard
-  DASHBOARD_VIEW: 'DASHBOARD_VIEW',
-  DASHBOARD_VIEW_SALES: 'DASHBOARD_VIEW_SALES',
-  DASHBOARD_VIEW_INVENTORY: 'DASHBOARD_VIEW_INVENTORY',
-  DASHBOARD_VIEW_STAFF: 'DASHBOARD_VIEW_STAFF',
-  DASHBOARD_VIEW_FINANCIALS: 'DASHBOARD_VIEW_FINANCIALS',
+import { PERMISSION_CATALOG, DataScope, getDefaultDataScopeForRole } from './permissionCatalog';
 
-  // POS & Billing Terminal
-  POS_VIEW: 'POS_VIEW',
-  POS_CREATE_SALE: 'POS_CREATE_SALE',
-  POS_HOLD_SALE: 'POS_HOLD_SALE',
-  POS_RESUME_SALE: 'POS_RESUME_SALE',
-  POS_APPLY_DISCOUNT: 'POS_APPLY_DISCOUNT',
-  POS_APPLY_MANAGER_DISCOUNT: 'POS_APPLY_MANAGER_DISCOUNT',
-  POS_CANCEL_SALE: 'POS_CANCEL_SALE',
-  POS_RETURN: 'POS_RETURN',
-  POS_PRINT_RECEIPT: 'POS_PRINT_RECEIPT',
+export { PERMISSION_CATALOG, getDefaultDataScopeForRole };
+export type { DataScope };
 
-  // Sales History & Transactions
-  SALES_VIEW: 'SALES_VIEW',
-  SALES_VIEW_ALL: 'SALES_VIEW_ALL',
-  SALES_VIEW_SELF: 'SALES_VIEW_SELF',
-  SALES_CANCEL: 'SALES_CANCEL',
-  SALES_RETURN: 'SALES_RETURN',
-  SALES_EXPORT: 'SALES_EXPORT',
+export const PERMISSIONS = PERMISSION_CATALOG.reduce((acc, curr) => {
+  acc[curr.code] = curr.code;
+  return acc;
+}, {} as Record<string, string>);
 
-  // Returns & Exchanges
-  RETURN_CREATE: 'RETURN_CREATE',
-  RETURN_APPROVE: 'RETURN_APPROVE',
-  RETURN_CANCEL: 'RETURN_CANCEL',
-  RETURN_REFUND: 'RETURN_REFUND',
-
-  // Inventory & Stock Ledger
-  INVENTORY_VIEW: 'INVENTORY_VIEW',
-  INVENTORY_CREATE: 'INVENTORY_CREATE',
-  INVENTORY_UPDATE: 'INVENTORY_UPDATE',
-  INVENTORY_ADJUST: 'INVENTORY_ADJUST',
-  INVENTORY_TRANSFER: 'INVENTORY_TRANSFER',
-  INVENTORY_DELETE: 'INVENTORY_DELETE',
-  INVENTORY_EXPORT: 'INVENTORY_EXPORT',
-
-  // Products & Catalogs
-  PRODUCT_VIEW: 'PRODUCT_VIEW',
-  PRODUCT_CREATE: 'PRODUCT_CREATE',
-  PRODUCT_UPDATE: 'PRODUCT_UPDATE',
-  PRODUCT_DELETE: 'PRODUCT_DELETE',
-  PRODUCT_IMPORT: 'PRODUCT_IMPORT',
-  PRODUCT_EXPORT: 'PRODUCT_EXPORT',
-
-  // Customers & Loyalty
-  CUSTOMER_VIEW: 'CUSTOMER_VIEW',
-  CUSTOMER_CREATE: 'CUSTOMER_CREATE',
-  CUSTOMER_UPDATE: 'CUSTOMER_UPDATE',
-  CUSTOMER_DELETE: 'CUSTOMER_DELETE',
-  CUSTOMER_VIEW_HISTORY: 'CUSTOMER_VIEW_HISTORY',
-  CUSTOMER_EXPORT: 'CUSTOMER_EXPORT',
-
-  // Staff & HR Management
-  STAFF_VIEW: 'STAFF_VIEW',
-  STAFF_CREATE: 'STAFF_CREATE',
-  STAFF_UPDATE: 'STAFF_UPDATE',
-  STAFF_DELETE: 'STAFF_DELETE',
-  STAFF_VIEW_PROFILE: 'STAFF_VIEW_PROFILE',
-  STAFF_UPDATE_PROFILE: 'STAFF_UPDATE_PROFILE',
-  STAFF_VIEW_ATTENDANCE: 'STAFF_VIEW_ATTENDANCE',
-  STAFF_ORGANIZATION: 'STAFF_ORGANIZATION',
-
-  // Attendance
-  ATTENDANCE_VIEW_SELF: 'ATTENDANCE_VIEW_SELF',
-  ATTENDANCE_VIEW_ALL: 'ATTENDANCE_VIEW_ALL',
-  ATTENDANCE_CHECK_IN: 'ATTENDANCE_CHECK_IN',
-  ATTENDANCE_CHECK_OUT: 'ATTENDANCE_CHECK_OUT',
-  ATTENDANCE_EDIT: 'ATTENDANCE_EDIT',
-  ATTENDANCE_EXPORT: 'ATTENDANCE_EXPORT',
-
-  // Shifts & Rosters
-  SHIFT_VIEW: 'SHIFT_VIEW',
-  SHIFT_MANAGE: 'SHIFT_MANAGE',
-
-  // Leave Management
-  LEAVE_CREATE: 'LEAVE_CREATE',
-  LEAVE_VIEW_SELF: 'LEAVE_VIEW_SELF',
-  LEAVE_VIEW_ALL: 'LEAVE_VIEW_ALL',
-  LEAVE_APPROVE: 'LEAVE_APPROVE',
-  LEAVE_REJECT: 'LEAVE_REJECT',
-  LEAVE_CANCEL: 'LEAVE_CANCEL',
-
-  // Payroll
-  PAYROLL_VIEW_SELF: 'PAYROLL_VIEW_SELF',
-  PAYROLL_VIEW_ALL: 'PAYROLL_VIEW_ALL',
-  PAYROLL_CREATE: 'PAYROLL_CREATE',
-  PAYROLL_UPDATE: 'PAYROLL_UPDATE',
-  PAYROLL_APPROVE: 'PAYROLL_APPROVE',
-  PAYROLL_EXPORT: 'PAYROLL_EXPORT',
-
-  // Performance & Documents
-  PERFORMANCE_VIEW: 'PERFORMANCE_VIEW',
-  PERFORMANCE_MANAGE: 'PERFORMANCE_MANAGE',
-  DOCUMENTS_VIEW: 'DOCUMENTS_VIEW',
-  DOCUMENTS_MANAGE: 'DOCUMENTS_MANAGE',
-  COMMUNICATION_VIEW: 'COMMUNICATION_VIEW',
-
-  // Reports
-  REPORT_VIEW: 'REPORT_VIEW',
-  REPORT_VIEW_SALES: 'REPORT_VIEW_SALES',
-  REPORT_VIEW_INVENTORY: 'REPORT_VIEW_INVENTORY',
-  REPORT_VIEW_STAFF: 'REPORT_VIEW_STAFF',
-  REPORT_VIEW_FINANCIAL: 'REPORT_VIEW_FINANCIAL',
-  REPORT_EXPORT: 'REPORT_EXPORT',
-
-  // Settings & System
-  SETTINGS_VIEW: 'SETTINGS_VIEW',
-  SETTINGS_UPDATE: 'SETTINGS_UPDATE',
-  STORE_SETTINGS_UPDATE: 'STORE_SETTINGS_UPDATE',
-  TAX_SETTINGS_UPDATE: 'TAX_SETTINGS_UPDATE',
-  PRINTER_SETTINGS_UPDATE: 'PRINTER_SETTINGS_UPDATE',
-  USER_SETTINGS_UPDATE: 'USER_SETTINGS_UPDATE',
-  SECURITY_SETTINGS_UPDATE: 'SECURITY_SETTINGS_UPDATE',
-  BACKUP_CREATE: 'BACKUP_CREATE',
-  BACKUP_RESTORE: 'BACKUP_RESTORE',
-  ROLE_VIEW: 'ROLE_VIEW',
-  ROLE_MANAGE: 'ROLE_MANAGE',
-  USERS_VIEW: 'USERS_VIEW',
-  USERS_MANAGE: 'USERS_MANAGE',
-} as const;
-
-export type PermissionCode = keyof typeof PERMISSIONS;
-
+/**
+ * Normalizes legacy dotted permission strings (e.g. 'dashboard.view' -> 'DASHBOARD_EXECUTIVE_VIEW')
+ */
 export const PERMISSION_ALIASES: Record<string, string[]> = {
-  // Dashboard
-  'dashboard.view': ['DASHBOARD_VIEW'],
-  'DASHBOARD_VIEW': ['dashboard.view'],
-
-  // Products
+  'dashboard.view': ['DASHBOARD_EXECUTIVE_VIEW', 'DASHBOARD_MANAGEMENT_VIEW', 'DASHBOARD_OPERATIONS_VIEW', 'DASHBOARD_BILLING_VIEW', 'DASHBOARD_WORK_VIEW'],
+  'billing.create': ['POS_CREATE_SALE', 'POS_VIEW'],
+  'sales.view': ['SALES_VIEW_ALL', 'SALES_VIEW_SELF'],
   'products.view': ['PRODUCT_VIEW'],
-  'PRODUCT_VIEW': ['products.view'],
-  'products.manage': ['PRODUCT_CREATE', 'PRODUCT_UPDATE', 'PRODUCT_DELETE'],
-  'PRODUCT_CREATE': ['products.manage'],
-  'PRODUCT_UPDATE': ['products.manage'],
-  'PRODUCT_DELETE': ['products.manage'],
-
-  // Inventory
-  'inventory.view': ['INVENTORY_VIEW'],
-  'INVENTORY_VIEW': ['inventory.view'],
-  'inventory.adjust': ['INVENTORY_ADJUST'],
-  'INVENTORY_ADJUST': ['inventory.adjust'],
-  'inventory.manage': ['INVENTORY_CREATE', 'INVENTORY_UPDATE', 'INVENTORY_TRANSFER', 'INVENTORY_DELETE'],
-  'self.inventory.view': ['INVENTORY_VIEW', 'INVENTORY_ADJUST'],
-  'staff.inventory': ['INVENTORY_VIEW', 'INVENTORY_ADJUST', 'PRODUCT_VIEW'],
-
-  // POS & Billing
-  'billing.create': ['POS_VIEW', 'POS_CREATE_SALE', 'POS_HOLD_SALE', 'POS_RESUME_SALE', 'POS_PRINT_RECEIPT'],
-  'POS_VIEW': ['billing.create', 'staff.pos'],
-  'POS_CREATE_SALE': ['billing.create', 'staff.pos'],
-  'POS_HOLD_SALE': ['billing.create', 'staff.pos'],
-  'POS_RESUME_SALE': ['billing.create', 'staff.pos'],
-  'POS_PRINT_RECEIPT': ['billing.create', 'staff.pos'],
-  'staff.pos': ['POS_VIEW', 'POS_CREATE_SALE', 'POS_HOLD_SALE', 'POS_RESUME_SALE', 'RETURN_CREATE', 'CUSTOMER_VIEW', 'CUSTOMER_CREATE'],
-
-  // Sales
-  'sales.view': ['SALES_VIEW', 'SALES_VIEW_ALL', 'SALES_VIEW_SELF'],
-  'SALES_VIEW': ['sales.view'],
-  'SALES_VIEW_ALL': ['sales.view'],
-  'SALES_VIEW_SELF': ['sales.view'],
-  'sales.manage': ['SALES_CANCEL', 'SALES_RETURN', 'SALES_EXPORT'],
-
-  // Customers
-  'customers.view': ['CUSTOMER_VIEW', 'CUSTOMER_VIEW_HISTORY'],
-  'CUSTOMER_VIEW': ['customers.view'],
-  'customers.manage': ['CUSTOMER_CREATE', 'CUSTOMER_UPDATE', 'CUSTOMER_DELETE'],
-  'CUSTOMER_CREATE': ['customers.manage'],
-  'CUSTOMER_UPDATE': ['customers.manage'],
-  'CUSTOMER_DELETE': ['customers.manage'],
-
-  // Staff & HR
-  'staff.view': ['STAFF_VIEW', 'STAFF_VIEW_PROFILE'],
-  'STAFF_VIEW': ['staff.view'],
-  'staff.organization': ['STAFF_ORGANIZATION'],
-  'STAFF_ORGANIZATION': ['staff.organization'],
-
-  // Attendance
+  'products.manage': ['PRODUCT_CREATE', 'PRODUCT_EDIT', 'PRODUCT_DELETE'],
+  'inventory.view': ['INVENTORY_VIEW_ALL', 'INVENTORY_VIEW_ASSIGNED'],
+  'inventory.manage': ['INVENTORY_ADJUST', 'INVENTORY_REORDER_PLAN'],
+  'customers.view': ['CUSTOMER_VIEW_BASIC', 'CUSTOMER_VIEW_FINANCIALS'],
+  'suppliers.view': ['SUPPLIER_VIEW'],
+  'purchases.view': ['PURCHASE_VIEW'],
+  'returns.create': ['RETURN_CREATE'],
+  'reports.view': ['REPORT_SALES_VIEW', 'REPORT_INVENTORY_VIEW', 'REPORT_FINANCIAL_VIEW'],
+  'staff.view': ['STAFF_VIEW_ALL'],
+  'staff.organization': ['STAFF_MANAGE'],
   'attendance.view': ['ATTENDANCE_VIEW_ALL', 'ATTENDANCE_VIEW_SELF'],
-  'ATTENDANCE_VIEW_ALL': ['attendance.view'],
-  'ATTENDANCE_VIEW_SELF': ['attendance.view'],
-  'staff.attendance': ['ATTENDANCE_VIEW_SELF', 'ATTENDANCE_CHECK_IN', 'ATTENDANCE_CHECK_OUT'],
-
-  // Shift & Leave
   'shift.view': ['SHIFT_VIEW'],
-  'SHIFT_VIEW': ['shift.view'],
-  'leave.view': ['LEAVE_VIEW_ALL', 'LEAVE_VIEW_SELF'],
-  'LEAVE_VIEW_ALL': ['leave.view'],
-  'LEAVE_VIEW_SELF': ['leave.view'],
-  'self.leave.apply': ['LEAVE_CREATE', 'LEAVE_VIEW_SELF'],
-  'staff.leave': ['LEAVE_VIEW_SELF', 'LEAVE_CREATE'],
-
-  // Payroll
+  'leave.view': ['LEAVE_APPROVE'],
   'payroll.view': ['PAYROLL_VIEW_ALL', 'PAYROLL_VIEW_SELF'],
-  'PAYROLL_VIEW_ALL': ['payroll.view'],
-  'PAYROLL_VIEW_SELF': ['payroll.view'],
-
-  // Self Service & Staff Portal
-  'self.profile.view': ['STAFF_VIEW_PROFILE'],
-  'self.attendance.view': ['ATTENDANCE_VIEW_SELF', 'ATTENDANCE_CHECK_IN', 'ATTENDANCE_CHECK_OUT'],
+  'role.view': ['ROLE_MANAGE'],
+  'users.view': ['USER_MANAGE'],
+  'backup.create': ['BACKUP_MANAGE'],
+  'settings.view': ['SETTINGS_MANAGE'],
+  'self.profile.view': ['DASHBOARD_WORK_VIEW', 'ATTENDANCE_VIEW_SELF'],
+  'self.attendance.view': ['ATTENDANCE_VIEW_SELF'],
   'self.shift.view': ['SHIFT_VIEW'],
-  'self.leave.view': ['LEAVE_VIEW_SELF', 'LEAVE_CREATE'],
+  'self.leave.view': ['DASHBOARD_WORK_VIEW'],
   'self.payroll.view': ['PAYROLL_VIEW_SELF'],
-  'self.documents.view': ['DOCUMENTS_VIEW'],
-  'self.performance.view': ['PERFORMANCE_VIEW'],
-  'self.notifications.view': ['COMMUNICATION_VIEW'],
-  'self.settings.manage': ['SETTINGS_VIEW'],
-  'staff.portal': [
-    'POS_VIEW', 'POS_CREATE_SALE', 'POS_HOLD_SALE', 'POS_RESUME_SALE', 'RETURN_CREATE',
-    'INVENTORY_VIEW', 'INVENTORY_ADJUST',
-    'ATTENDANCE_VIEW_SELF', 'ATTENDANCE_CHECK_IN', 'ATTENDANCE_CHECK_OUT',
-    'LEAVE_VIEW_SELF', 'LEAVE_CREATE',
-    'PAYROLL_VIEW_SELF', 'STAFF_VIEW_PROFILE', 'COMMUNICATION_VIEW', 'SHIFT_VIEW'
-  ],
-
-  // Reports & Settings
-  'reports.view': ['REPORT_VIEW', 'REPORT_VIEW_SALES', 'REPORT_VIEW_INVENTORY', 'REPORT_VIEW_STAFF', 'REPORT_VIEW_FINANCIAL'],
-  'REPORT_VIEW': ['reports.view'],
-  'settings.view': ['SETTINGS_VIEW', 'STORE_SETTINGS_UPDATE', 'TAX_SETTINGS_UPDATE', 'PRINTER_SETTINGS_UPDATE'],
-  'SETTINGS_VIEW': ['settings.view'],
-  'users.view': ['USERS_VIEW', 'USERS_MANAGE'],
-  'USERS_VIEW': ['users.view'],
-  'role.view': ['ROLE_VIEW', 'ROLE_MANAGE'],
-  'ROLE_VIEW': ['role.view'],
-  'backup.create': ['BACKUP_CREATE', 'BACKUP_RESTORE'],
+  'self.documents.view': ['DASHBOARD_WORK_VIEW'],
+  'self.performance.view': ['DASHBOARD_WORK_VIEW'],
+  'self.notifications.view': ['DASHBOARD_WORK_VIEW'],
+  'self.settings.manage': ['DASHBOARD_WORK_VIEW'],
+  'ai.assistant.use': ['AI_USE_ASSISTANT'],
 };
 
-export const ROLE_PERMISSION_TEMPLATES: Record<string, string[]> = {
-  SUPER_ADMIN: ['*'],
-  Owner: ['*'],
-  ADMIN: ['*'],
-
-  MANAGER: [
-    'DASHBOARD_VIEW', 'DASHBOARD_VIEW_SALES', 'DASHBOARD_VIEW_INVENTORY', 'DASHBOARD_VIEW_STAFF',
-    'POS_VIEW', 'POS_CREATE_SALE', 'POS_HOLD_SALE', 'POS_RESUME_SALE', 'POS_APPLY_DISCOUNT', 'POS_APPLY_MANAGER_DISCOUNT', 'POS_RETURN', 'POS_PRINT_RECEIPT',
-    'SALES_VIEW_ALL', 'SALES_RETURN', 'SALES_EXPORT',
-    'RETURN_CREATE', 'RETURN_APPROVE', 'RETURN_REFUND',
-    'INVENTORY_VIEW', 'INVENTORY_CREATE', 'INVENTORY_UPDATE', 'INVENTORY_ADJUST', 'INVENTORY_TRANSFER', 'INVENTORY_EXPORT',
-    'PRODUCT_VIEW', 'PRODUCT_CREATE', 'PRODUCT_UPDATE', 'PRODUCT_EXPORT',
-    'CUSTOMER_VIEW', 'CUSTOMER_CREATE', 'CUSTOMER_UPDATE', 'CUSTOMER_VIEW_HISTORY', 'CUSTOMER_EXPORT',
-    'STAFF_VIEW', 'STAFF_VIEW_PROFILE', 'STAFF_VIEW_ATTENDANCE', 'STAFF_ORGANIZATION',
-    'ATTENDANCE_VIEW_ALL', 'ATTENDANCE_VIEW_SELF', 'ATTENDANCE_CHECK_IN', 'ATTENDANCE_CHECK_OUT', 'ATTENDANCE_EDIT', 'ATTENDANCE_EXPORT',
-    'SHIFT_VIEW', 'SHIFT_MANAGE',
-    'LEAVE_VIEW_ALL', 'LEAVE_VIEW_SELF', 'LEAVE_CREATE', 'LEAVE_APPROVE', 'LEAVE_REJECT', 'LEAVE_CANCEL',
-    'PAYROLL_VIEW_ALL', 'PAYROLL_VIEW_SELF',
-    'REPORT_VIEW', 'REPORT_VIEW_SALES', 'REPORT_VIEW_INVENTORY', 'REPORT_VIEW_STAFF', 'REPORT_EXPORT',
-    'SETTINGS_VIEW', 'STORE_SETTINGS_UPDATE', 'PRINTER_SETTINGS_UPDATE',
-  ],
-
-  Manager: [
-    'DASHBOARD_VIEW', 'DASHBOARD_VIEW_SALES', 'DASHBOARD_VIEW_INVENTORY', 'DASHBOARD_VIEW_STAFF',
-    'POS_VIEW', 'POS_CREATE_SALE', 'POS_HOLD_SALE', 'POS_RESUME_SALE', 'POS_APPLY_DISCOUNT', 'POS_APPLY_MANAGER_DISCOUNT', 'POS_RETURN', 'POS_PRINT_RECEIPT',
-    'SALES_VIEW_ALL', 'SALES_RETURN', 'SALES_EXPORT',
-    'RETURN_CREATE', 'RETURN_APPROVE', 'RETURN_REFUND',
-    'INVENTORY_VIEW', 'INVENTORY_CREATE', 'INVENTORY_UPDATE', 'INVENTORY_ADJUST', 'INVENTORY_TRANSFER', 'INVENTORY_EXPORT',
-    'PRODUCT_VIEW', 'PRODUCT_CREATE', 'PRODUCT_UPDATE', 'PRODUCT_EXPORT',
-    'CUSTOMER_VIEW', 'CUSTOMER_CREATE', 'CUSTOMER_UPDATE', 'CUSTOMER_VIEW_HISTORY', 'CUSTOMER_EXPORT',
-    'STAFF_VIEW', 'STAFF_VIEW_PROFILE', 'STAFF_VIEW_ATTENDANCE', 'STAFF_ORGANIZATION',
-    'ATTENDANCE_VIEW_ALL', 'ATTENDANCE_VIEW_SELF', 'ATTENDANCE_CHECK_IN', 'ATTENDANCE_CHECK_OUT', 'ATTENDANCE_EDIT', 'ATTENDANCE_EXPORT',
-    'SHIFT_VIEW', 'SHIFT_MANAGE',
-    'LEAVE_VIEW_ALL', 'LEAVE_VIEW_SELF', 'LEAVE_CREATE', 'LEAVE_APPROVE', 'LEAVE_REJECT', 'LEAVE_CANCEL',
-    'PAYROLL_VIEW_ALL', 'PAYROLL_VIEW_SELF',
-    'REPORT_VIEW', 'REPORT_VIEW_SALES', 'REPORT_VIEW_INVENTORY', 'REPORT_VIEW_STAFF', 'REPORT_EXPORT',
-    'SETTINGS_VIEW', 'STORE_SETTINGS_UPDATE', 'PRINTER_SETTINGS_UPDATE',
-  ],
-
-  SUPERVISOR: [
-    'DASHBOARD_VIEW', 'DASHBOARD_VIEW_SALES', 'DASHBOARD_VIEW_INVENTORY',
-    'POS_VIEW', 'POS_CREATE_SALE', 'POS_HOLD_SALE', 'POS_RESUME_SALE', 'POS_APPLY_DISCOUNT', 'POS_PRINT_RECEIPT',
-    'SALES_VIEW', 'SALES_VIEW_ALL',
-    'RETURN_CREATE',
-    'INVENTORY_VIEW', 'INVENTORY_ADJUST', 'INVENTORY_TRANSFER',
-    'PRODUCT_VIEW',
-    'CUSTOMER_VIEW', 'CUSTOMER_CREATE', 'CUSTOMER_VIEW_HISTORY',
-    'STAFF_VIEW', 'STAFF_VIEW_PROFILE',
-    'ATTENDANCE_VIEW_ALL', 'ATTENDANCE_VIEW_SELF', 'ATTENDANCE_CHECK_IN', 'ATTENDANCE_CHECK_OUT',
-    'SHIFT_VIEW',
-    'LEAVE_VIEW_ALL', 'LEAVE_VIEW_SELF', 'LEAVE_CREATE',
-    'PAYROLL_VIEW_SELF',
-    'REPORT_VIEW', 'REPORT_VIEW_SALES',
-  ],
-
-  Supervisor: [
-    'DASHBOARD_VIEW', 'DASHBOARD_VIEW_SALES', 'DASHBOARD_VIEW_INVENTORY',
-    'POS_VIEW', 'POS_CREATE_SALE', 'POS_HOLD_SALE', 'POS_RESUME_SALE', 'POS_APPLY_DISCOUNT', 'POS_PRINT_RECEIPT',
-    'SALES_VIEW', 'SALES_VIEW_ALL',
-    'RETURN_CREATE',
-    'INVENTORY_VIEW', 'INVENTORY_ADJUST', 'INVENTORY_TRANSFER',
-    'PRODUCT_VIEW',
-    'CUSTOMER_VIEW', 'CUSTOMER_CREATE', 'CUSTOMER_VIEW_HISTORY',
-    'STAFF_VIEW', 'STAFF_VIEW_PROFILE',
-    'ATTENDANCE_VIEW_ALL', 'ATTENDANCE_VIEW_SELF', 'ATTENDANCE_CHECK_IN', 'ATTENDANCE_CHECK_OUT',
-    'SHIFT_VIEW',
-    'LEAVE_VIEW_ALL', 'LEAVE_VIEW_SELF', 'LEAVE_CREATE',
-    'PAYROLL_VIEW_SELF',
-    'REPORT_VIEW', 'REPORT_VIEW_SALES',
-  ],
-
-  CASHIER: [
-    'DASHBOARD_VIEW',
-    'POS_VIEW', 'POS_CREATE_SALE', 'POS_HOLD_SALE', 'POS_RESUME_SALE', 'POS_APPLY_DISCOUNT', 'POS_PRINT_RECEIPT',
-    'SALES_VIEW_SELF',
-    'RETURN_CREATE',
-    'PRODUCT_VIEW',
-    'CUSTOMER_VIEW', 'CUSTOMER_CREATE', 'CUSTOMER_VIEW_HISTORY',
-    'ATTENDANCE_VIEW_SELF', 'ATTENDANCE_CHECK_IN', 'ATTENDANCE_CHECK_OUT',
-    'SHIFT_VIEW',
-    'LEAVE_VIEW_SELF', 'LEAVE_CREATE',
-    'PAYROLL_VIEW_SELF',
-    'STAFF_VIEW_PROFILE',
-    'COMMUNICATION_VIEW',
-  ],
-
-  Cashier: [
-    'DASHBOARD_VIEW',
-    'POS_VIEW', 'POS_CREATE_SALE', 'POS_HOLD_SALE', 'POS_RESUME_SALE', 'POS_APPLY_DISCOUNT', 'POS_PRINT_RECEIPT',
-    'SALES_VIEW_SELF',
-    'RETURN_CREATE',
-    'PRODUCT_VIEW',
-    'CUSTOMER_VIEW', 'CUSTOMER_CREATE', 'CUSTOMER_VIEW_HISTORY',
-    'ATTENDANCE_VIEW_SELF', 'ATTENDANCE_CHECK_IN', 'ATTENDANCE_CHECK_OUT',
-    'SHIFT_VIEW',
-    'LEAVE_VIEW_SELF', 'LEAVE_CREATE',
-    'PAYROLL_VIEW_SELF',
-    'STAFF_VIEW_PROFILE',
-    'COMMUNICATION_VIEW',
-  ],
-
-  INVENTORY_STAFF: [
-    'DASHBOARD_VIEW',
-    'INVENTORY_VIEW', 'INVENTORY_CREATE', 'INVENTORY_UPDATE', 'INVENTORY_ADJUST', 'INVENTORY_TRANSFER', 'INVENTORY_EXPORT',
-    'PRODUCT_VIEW', 'PRODUCT_CREATE', 'PRODUCT_UPDATE',
-    'ATTENDANCE_VIEW_SELF', 'ATTENDANCE_CHECK_IN', 'ATTENDANCE_CHECK_OUT',
-    'SHIFT_VIEW',
-    'LEAVE_VIEW_SELF', 'LEAVE_CREATE',
-    'PAYROLL_VIEW_SELF',
-    'STAFF_VIEW_PROFILE',
-    'COMMUNICATION_VIEW',
-  ],
-
-  'Inventory Staff': [
-    'DASHBOARD_VIEW',
-    'INVENTORY_VIEW', 'INVENTORY_CREATE', 'INVENTORY_UPDATE', 'INVENTORY_ADJUST', 'INVENTORY_TRANSFER', 'INVENTORY_EXPORT',
-    'PRODUCT_VIEW', 'PRODUCT_CREATE', 'PRODUCT_UPDATE',
-    'ATTENDANCE_VIEW_SELF', 'ATTENDANCE_CHECK_IN', 'ATTENDANCE_CHECK_OUT',
-    'SHIFT_VIEW',
-    'LEAVE_VIEW_SELF', 'LEAVE_CREATE',
-    'PAYROLL_VIEW_SELF',
-    'STAFF_VIEW_PROFILE',
-    'COMMUNICATION_VIEW',
-  ],
-
-  STAFF: [
-    'DASHBOARD_VIEW',
-    'POS_VIEW', 'POS_CREATE_SALE', 'POS_HOLD_SALE', 'POS_RESUME_SALE', 'POS_APPLY_DISCOUNT', 'POS_PRINT_RECEIPT',
-    'SALES_VIEW_SELF',
-    'RETURN_CREATE',
-    'CUSTOMER_VIEW', 'CUSTOMER_CREATE', 'CUSTOMER_VIEW_HISTORY',
-    'INVENTORY_VIEW',
-    'ATTENDANCE_VIEW_SELF', 'ATTENDANCE_CHECK_IN', 'ATTENDANCE_CHECK_OUT',
-    'SHIFT_VIEW',
-    'LEAVE_VIEW_SELF', 'LEAVE_CREATE',
-    'PAYROLL_VIEW_SELF',
-    'STAFF_VIEW_PROFILE',
-    'DOCUMENTS_VIEW',
-    'PERFORMANCE_VIEW',
-    'COMMUNICATION_VIEW',
-  ],
-
-  Staff: [
-    'DASHBOARD_VIEW',
-    'POS_VIEW', 'POS_CREATE_SALE', 'POS_HOLD_SALE', 'POS_RESUME_SALE', 'POS_APPLY_DISCOUNT', 'POS_PRINT_RECEIPT',
-    'SALES_VIEW_SELF',
-    'RETURN_CREATE',
-    'CUSTOMER_VIEW', 'CUSTOMER_CREATE', 'CUSTOMER_VIEW_HISTORY',
-    'INVENTORY_VIEW',
-    'ATTENDANCE_VIEW_SELF', 'ATTENDANCE_CHECK_IN', 'ATTENDANCE_CHECK_OUT',
-    'SHIFT_VIEW',
-    'LEAVE_VIEW_SELF', 'LEAVE_CREATE',
-    'PAYROLL_VIEW_SELF',
-    'STAFF_VIEW_PROFILE',
-    'DOCUMENTS_VIEW',
-    'PERFORMANCE_VIEW',
-    'COMMUNICATION_VIEW',
-  ],
-};
-
+/**
+ * Determines whether a user's permissions grant access to a required permission.
+ */
 export function checkPermissionMatch(userPermissions: string[], requiredPermission: string): boolean {
   if (!userPermissions || userPermissions.length === 0) return false;
   if (userPermissions.includes('*')) return true;
 
   if (userPermissions.includes(requiredPermission)) return true;
 
+  // Check direct alias mapping
   const aliases = PERMISSION_ALIASES[requiredPermission] || [];
   for (const alias of aliases) {
     if (userPermissions.includes(alias)) return true;
   }
 
+  // Check reverse alias mapping
   for (const userPerm of userPermissions) {
     const userAliases = PERMISSION_ALIASES[userPerm] || [];
     if (userAliases.includes(requiredPermission)) return true;
@@ -415,35 +78,35 @@ export function checkPermissionMatch(userPermissions: string[], requiredPermissi
 /**
  * Resolves the primary authorized landing route for any given user role/permissions
  */
-export function getDefaultRouteForUser(user?: { roleId?: number; roleName?: string; role?: string; permissions?: string[] } | null): string {
+export function getDefaultRouteForUser(
+  user?: { roleId?: number; roleName?: string; role?: string; permissions?: string[] } | null
+): string {
   if (!user) return '/dashboard';
-  const roleName = (user.roleName || user.role || '').toLowerCase();
+
+  const roleName = (user.roleName || user.role || '').toLowerCase().trim();
   const permissions = user.permissions || [];
   const hasWildcard = permissions.includes('*') || user.roleId === 1;
 
-  if (hasWildcard || roleName.includes('owner') || roleName.includes('manager') || roleName.includes('admin') || checkPermissionMatch(permissions, 'dashboard.view')) {
+  // 1. Admin / Owner -> Executive Dashboard
+  if (hasWildcard || roleName.includes('owner') || roleName.includes('admin') || roleName.includes('super')) {
     return '/dashboard';
   }
 
-  // Cashier / POS
-  if (roleName.includes('cashier') || checkPermissionMatch(permissions, 'billing.create') || checkPermissionMatch(permissions, 'POS_VIEW')) {
+  // 2. Manager -> Management Dashboard
+  if (roleName.includes('manager')) {
+    return '/dashboard';
+  }
+
+  // 3. Supervisor -> Operations Dashboard
+  if (roleName.includes('supervisor') || roleName.includes('lead') || roleName.includes('floor')) {
+    return '/dashboard';
+  }
+
+  // 4. Cashier -> POS Billing Register
+  if (roleName.includes('cashier') || roleName.includes('billing')) {
     return '/billing';
   }
 
-  // Inventory Specialist
-  if (roleName.includes('inventory') || checkPermissionMatch(permissions, 'inventory.view') || checkPermissionMatch(permissions, 'products.view')) {
-    return '/inventory';
-  }
-
-  // HR / Staff / Accounts
-  if (roleName.includes('hr') || roleName.includes('account') || checkPermissionMatch(permissions, 'staff.view') || checkPermissionMatch(permissions, 'payroll.view')) {
-    return '/staff';
-  }
-
-  // Self-Service
-  if (checkPermissionMatch(permissions, 'self.profile.view')) {
-    return '/self-service/dashboard';
-  }
-
-  return '/dashboard';
+  // 5. Staff Employee -> Personal Work & Self-Service Dashboard
+  return '/self-service/dashboard';
 }

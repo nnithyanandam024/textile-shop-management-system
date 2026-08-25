@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { X, ShieldCheck, CheckSquare, Square } from 'lucide-react';
+import { PERMISSION_CATALOG } from '../../auth/permissionCatalog';
 
 interface RoleFormModalProps {
   isOpen: boolean;
@@ -43,9 +44,12 @@ export const RoleFormModal: React.FC<RoleFormModalProps> = ({
 
   if (!isOpen) return null;
 
+  // Use allPermissions or PERMISSION_CATALOG
+  const sourcePermissions = allPermissions && allPermissions.length > 0 ? allPermissions : PERMISSION_CATALOG;
+
   // Group permissions by module
   const groupedPermissions: Record<string, any[]> = {};
-  allPermissions.forEach((p) => {
+  sourcePermissions.forEach((p) => {
     const mod = p.module || 'General';
     if (!groupedPermissions[mod]) groupedPermissions[mod] = [];
     groupedPermissions[mod].push(p);

@@ -3,6 +3,7 @@ import { Boxes, AlertTriangle, AlertCircle, CheckCircle2, Search, RefreshCw, Lay
 import { StockAdjustmentModal } from './StockAdjustmentModal';
 import { StockHistoryModal } from './StockHistoryModal';
 import { AiInventoryIntelligence } from '../../components/ai/inventory/AiInventoryIntelligence';
+import { useAuth } from '../auth/AuthContext';
 
 interface Variant {
   id: number;
@@ -29,6 +30,7 @@ interface Metrics {
 }
 
 export const InventoryPage: React.FC = () => {
+  const { currentUser, hasPermission } = useAuth();
   const [variants, setVariants] = useState<Variant[]>([]);
   const [metrics, setMetrics] = useState<Metrics>({
     totalVariants: 0,
@@ -36,6 +38,15 @@ export const InventoryPage: React.FC = () => {
     lowStockCount: 0,
     outOfStockCount: 0,
   });
+
+  const role = (currentUser?.roleName || 'Cashier').toLowerCase().trim();
+  const isOwnerOrAdmin = role === 'owner' || role === 'admin' || role === 'super_admin';
+  const canViewForecast =
+    isOwnerOrAdmin ||
+    role === 'manager' ||
+    role === 'supervisor' ||
+    hasPermission('ai.forecast.view') ||
+    hasPermission('ai.reorders.view');
 
   const [loading, setLoading] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<'ALL' | 'LOW' | 'OUT' | 'AI_FORECAST'>('ALL');
@@ -214,17 +225,19 @@ export const InventoryPage: React.FC = () => {
           >
             Out of Stock ({metrics.outOfStockCount})
           </button>
-          <button
-            onClick={() => setActiveTab('AI_FORECAST')}
-            className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap flex items-center gap-1.5 ${
-              activeTab === 'AI_FORECAST'
-                ? 'bg-gradient-to-r from-[#2012ad] to-[#4331e8] text-white shadow-sm font-bold'
-                : 'text-indigo-700 hover:text-indigo-900 font-semibold'
-            }`}
-          >
-            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-            <span>🤖 AI Demand & Reorder</span>
-          </button>
+          {canViewForecast && (
+            <button
+              onClick={() => setActiveTab('AI_FORECAST')}
+              className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap flex items-center gap-1.5 ${
+                activeTab === 'AI_FORECAST'
+                  ? 'bg-gradient-to-r from-[#2012ad] to-[#4331e8] text-white shadow-sm font-bold'
+                  : 'text-indigo-700 hover:text-indigo-900 font-semibold'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+              <span>🤖 AI Demand & Reorder</span>
+            </button>
+          )}
         </div>
 
         {/* Live Search & View Mode Switcher */}

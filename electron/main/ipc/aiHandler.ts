@@ -19,6 +19,7 @@ import { ReportPeriod } from '../services/ai/reports/reportTypes';
 import { BiOrchestrator } from '../services/ai/bi/biOrchestrator';
 import { BiConversationManager } from '../services/ai/bi/biConversationManager';
 import { BiQueryRequest } from '../services/ai/bi/biTypes';
+import { AiDashboardService } from '../services/ai/rbac/aiDashboardService';
 
 export function registerAiHandlers() {
   // 1. Process AI Chat query
@@ -201,5 +202,11 @@ export function registerAiHandlers() {
   ipcMain.handle('ai:clearBiConversation', async (_event, payload: { conversationId: string; userContext?: UserAuthContext }) => {
     const success = BiConversationManager.clearConversation(payload.conversationId);
     return { success };
+  });
+
+  // 24. Get Personalized AI Dashboard Config
+  ipcMain.handle('ai:getDashboardConfig', async (_event, payload?: { userContext?: UserAuthContext }) => {
+    const data = AiDashboardService.getDashboardConfig(payload?.userContext);
+    return { success: true, data };
   });
 }

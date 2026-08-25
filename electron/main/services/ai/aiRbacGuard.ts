@@ -1,3 +1,6 @@
+import { AI_PERMISSIONS, AiPermissionKey, hasDefaultAiPermission } from './rbac/aiPermissions';
+import { AI_FEATURES } from './rbac/aiFeatureRegistry';
+
 export interface UserAuthContext {
   userId?: number;
   roleId?: number;
@@ -17,10 +20,13 @@ export type AiToolName =
   | 'getDailyReport'
   | 'getStaffPayrollSummary'
   | 'getAuditLogs'
-  | 'getRiskSummary';
+  | 'getRiskSummary'
+  | 'getForecast'
+  | 'getReorders';
 
 interface ToolPermissionRule {
   requiredPermission: string;
+  aiPermissionKey?: AiPermissionKey;
   allowedRoles: string[];
   restrictedMessage: string;
 }
@@ -28,6 +34,7 @@ interface ToolPermissionRule {
 const TOOL_PERMISSIONS: Record<AiToolName, ToolPermissionRule> = {
   getSalesSummary: {
     requiredPermission: 'sales.view',
+    aiPermissionKey: AI_PERMISSIONS.SALES_VIEW,
     allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
     restrictedMessage: "🔒 Access Restricted: Storewide sales totals and financial revenue require Manager or Admin authorization.",
   },
@@ -38,6 +45,7 @@ const TOOL_PERMISSIONS: Record<AiToolName, ToolPermissionRule> = {
   },
   getTopSellingProducts: {
     requiredPermission: 'sales.view',
+    aiPermissionKey: AI_PERMISSIONS.SALES_VIEW,
     allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
     restrictedMessage: "🔒 Access Restricted: Executive top-selling product revenue analytics require Manager or Admin authorization.",
   },
@@ -53,6 +61,7 @@ const TOOL_PERMISSIONS: Record<AiToolName, ToolPermissionRule> = {
   },
   getCustomerSummary: {
     requiredPermission: 'customers.view',
+    aiPermissionKey: AI_PERMISSIONS.CUSTOMER_VIEW,
     allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
     restrictedMessage: "You don't have permission to view aggregated customer lifetime analytics.",
   },
@@ -68,6 +77,7 @@ const TOOL_PERMISSIONS: Record<AiToolName, ToolPermissionRule> = {
   },
   getDailyReport: {
     requiredPermission: 'reports.view',
+    aiPermissionKey: AI_PERMISSIONS.REPORTS_VIEW,
     allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
     restrictedMessage: "🔒 Access Restricted: Storewide executive reports and profit statements require Manager or Admin authorization.",
   },
@@ -78,13 +88,27 @@ const TOOL_PERMISSIONS: Record<AiToolName, ToolPermissionRule> = {
   },
   getAuditLogs: {
     requiredPermission: 'audit.view',
+    aiPermissionKey: AI_PERMISSIONS.ANOMALIES_VIEW,
     allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
     restrictedMessage: "🔒 Access Restricted: Security and operational anomaly logs require Manager or Admin authorization.",
   },
   getRiskSummary: {
     requiredPermission: 'audit.view',
+    aiPermissionKey: AI_PERMISSIONS.RISK_VIEW,
     allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
     restrictedMessage: "🔒 Access Restricted: Store risk monitoring dashboards require Manager or Admin authorization.",
+  },
+  getForecast: {
+    requiredPermission: 'inventory.view',
+    aiPermissionKey: AI_PERMISSIONS.FORECAST_VIEW,
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
+    restrictedMessage: "🔒 Access Restricted: Demand forecasting is restricted to Store Managers and Inventory Planners.",
+  },
+  getReorders: {
+    requiredPermission: 'inventory.view',
+    aiPermissionKey: AI_PERMISSIONS.REORDERS_VIEW,
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Supervisor'],
+    restrictedMessage: "🔒 Access Restricted: Smart Reorder Point (ROP) analytics require Manager or Supervisor authorization.",
   },
 };
 
@@ -101,7 +125,13 @@ export class AiRbacGuard {
     const userPermissions = user.permissions || [];
 
     // Owner / Super Admin with wildcard permission has unrestricted access
-    if (roleName === 'Owner' || roleName === 'SUPER_ADMIN' || user.roleId === 1 || userPermissions.includes('*')) {
+    if (
+      roleName.toLowerCase() === 'owner' ||
+      roleName.toLowerCase() === 'super_admin' ||
+      roleName.toLowerCase() === 'admin' ||
+      user.roleId === 1 ||
+      userPermissions.includes('*')
+    ) {
       return { allowed: true };
     }
 
@@ -115,8 +145,11 @@ export class AiRbacGuard {
       (r) => r.toLowerCase() === roleName.toLowerCase()
     );
 
-    // Permission-level match
-    const permMatches = userPermissions.includes(rule.requiredPermission);
+    // Permission-level match (traditional or granular AI permission)
+    const permMatches =
+      userPermissions.includes(rule.requiredPermission) ||
+      (rule.aiPermissionKey && userPermissions.includes(rule.aiPermissionKey)) ||
+      (rule.aiPermissionKey && hasDefaultAiPermission(roleName, rule.aiPermissionKey));
 
     if (roleMatches || permMatches) {
       return { allowed: true };
@@ -125,6 +158,37 @@ export class AiRbacGuard {
     return {
       allowed: false,
       reason: rule.restrictedMessage,
+    };
+  }
+
+  /**
+   * Evaluates whether the user context can access a specific high-level AI feature.
+   */
+  public static canAccessFeature(featureId: string, user?: UserAuthContext): { allowed: boolean; reason?: string } {
+    if (!user) {
+      return { allowed: false, reason: 'Authentication required.' };
+    }
+
+    const roleName = (user.roleName || 'Cashier').toLowerCase().trim();
+    if (roleName === 'owner' || roleName === 'admin' || roleName === 'super_admin' || user.roleId === 1) {
+      return { allowed: true };
+    }
+
+    const feature = Object.values(AI_FEATURES).find((f) => f.featureId === featureId);
+    if (!feature) {
+      return { allowed: false, reason: `Unknown AI feature: ${featureId}` };
+    }
+
+    const hasExplicitPerm = user.permissions && user.permissions.includes(feature.requiredPermission);
+    const hasDefaultPerm = hasDefaultAiPermission(roleName, feature.requiredPermission);
+
+    if (hasExplicitPerm || hasDefaultPerm) {
+      return { allowed: true };
+    }
+
+    return {
+      allowed: false,
+      reason: `Access Restricted: ${feature.name} requires [${feature.requiredPermission}] permission.`,
     };
   }
 
@@ -139,3 +203,4 @@ export class AiRbacGuard {
     });
   }
 }
+

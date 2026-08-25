@@ -2208,6 +2208,45 @@ function runMigrations(db: Database.Database) {
           CREATE INDEX IF NOT EXISTS idx_stock_tx_variant_created ON stock_transactions(product_variant_id, created_at);
         `);
       }
+    },
+    {
+      version: 22,
+      name: 'ai_suite_rbac_permissions',
+      up: (database: Database.Database) => {
+        database.exec(`
+          -- Seed AI Permissions into Permissions Table
+          INSERT OR IGNORE INTO permissions (code, module, description) VALUES
+            ('ai.sales.view', 'AI Capabilities', 'View AI Sales Insights, velocity, and trend analytics'),
+            ('ai.forecast.view', 'AI Capabilities', 'View 30-day product demand forecasting and seasonal surge predictions'),
+            ('ai.reorders.view', 'AI Capabilities', 'View Smart Reorder Point (ROP) and supplier replenishment suggestions'),
+            ('ai.customer.view', 'AI Capabilities', 'View AI Customer CRM Intelligence and lifetime value cohorts'),
+            ('ai.anomalies.view', 'AI Capabilities', 'View AI operational anomaly detection and audit flags'),
+            ('ai.risk.view', 'AI Capabilities', 'View Showroom Operational Risk Monitor and threat radar'),
+            ('ai.reports.view', 'AI Capabilities', 'View AI Executive Daily/Weekly/Monthly Smart Reports'),
+            ('ai.chat.use', 'AI Capabilities', 'Access Business AI Assistant & Conversational Chatbot'),
+            ('ai.cross_sell.use', 'AI Capabilities', 'View real-time POS complementary cross-sell pairings'),
+            ('ai.alerts.receive', 'AI Capabilities', 'Receive high-priority AI operational and security push notifications');
+
+          -- Assign Default AI Permissions to Roles
+          -- Role 1: Owner (All AI Permissions)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 1, id FROM permissions WHERE code LIKE 'ai.%';
+
+          -- Role 2: Manager (All AI Permissions)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 2, id FROM permissions WHERE code LIKE 'ai.%';
+
+          -- Role 3: Cashier (POS Cross-Sell, Business Assistant, Personal Sales Insights)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 3, id FROM permissions WHERE code IN ('ai.cross_sell.use', 'ai.chat.use', 'ai.sales.view');
+
+          -- Role 4: Inventory Staff (Reorders, Forecasting, Sales Insights, Business Assistant)
+          INSERT OR IGNORE INTO role_permissions (role_id, permission_id)
+          SELECT 4, id FROM permissions WHERE code IN (
+            'ai.reorders.view', 'ai.forecast.view', 'ai.sales.view', 'ai.chat.use', 'ai.cross_sell.use'
+          );
+        `);
+      }
     }
   ];
 

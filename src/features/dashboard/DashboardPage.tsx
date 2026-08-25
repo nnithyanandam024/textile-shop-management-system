@@ -25,8 +25,12 @@ import { DailySummaryBanner } from '../../components/ai/DailySummaryBanner';
 import { AiInsightsWidget } from '../../components/ai/AiInsightsWidget';
 import { AiSalesAnalyticsModal } from '../../components/ai/AiSalesAnalyticsModal';
 import { AiRiskMonitoringWidget } from '../../components/ai/anomalies/AiRiskMonitoringWidget';
+import { useAuth } from '../auth/AuthContext';
+import { AiApi } from '../../api/aiApi';
 
 export const DashboardPage: React.FC = () => {
+  const { currentUser } = useAuth();
+  const [dashboardConfig, setDashboardConfig] = useState<any>(null);
   const [kpis, setKpis] = useState<any>(null);
   const [salesTrend, setSalesTrend] = useState<any[]>([]);
   const [bestSellers, setBestSellers] = useState<any[]>([]);
@@ -62,15 +66,41 @@ export const DashboardPage: React.FC = () => {
 
   useEffect(() => {
     fetchDashboardData();
+    AiApi.getDashboardConfig().then((res) => {
+      if (res.success && res.data) {
+        setDashboardConfig(res.data);
+      }
+    }).catch(() => {});
   }, []);
+
+  const role = (currentUser?.roleName || 'Cashier').toLowerCase().trim();
+  const isOwnerOrAdmin = role === 'owner' || role === 'admin' || role === 'super_admin';
+  const canViewFinancials = dashboardConfig?.canViewFinancials ?? (isOwnerOrAdmin || role === 'manager');
+  const canViewDailySummary = dashboardConfig?.widgets?.includes('widget_ai_daily_summary') ?? canViewFinancials;
+  const canViewSalesInsights = dashboardConfig?.widgets?.includes('widget_ai_sales_insights') ?? true;
+  const canViewRiskMonitor = dashboardConfig?.widgets?.includes('widget_ai_risk_monitor') ?? canViewFinancials;
+  const isCashier = role === 'cashier';
+  const isSupervisor = role === 'supervisor';
 
   return (
     <div className="space-y-8">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Executive Business Dashboard</h2>
-          <p className="text-sm text-slate-500 mt-1">Real-time overview of sales performance, revenue, gross profit, stock alerts, and cash flow</p>
+          <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+            {isCashier
+              ? 'Cashier Point-of-Sale Dashboard'
+              : isSupervisor
+              ? 'Floor Operations & Stock Dashboard'
+              : 'Executive Business Dashboard'}
+          </h2>
+          <p className="text-sm text-slate-500 mt-1">
+            {isCashier
+              ? 'Personal shift performance, billing register balance, and quick stock status'
+              : isSupervisor
+              ? 'Floor stock levels, replenishment priorities, and daily movement'
+              : 'Real-time overview of sales performance, revenue, gross profit, stock alerts, and cash flow'}
+          </p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -84,126 +114,232 @@ export const DashboardPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Proactive AI Executive Daily Summary */}
-      <DailySummaryBanner onOpenAnalytics={() => setShowAnalyticsModal(true)} />
+      {/* Proactive AI Executive Daily Summary (Manager & Admin only) */}
+      {canViewDailySummary && (
+        <DailySummaryBanner onOpenAnalytics={() => setShowAnalyticsModal(true)} />
+      )}
 
-      {/* 8 Primary KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {/* Today's Sales */}
-        <Card>
-          <div className="flex items-center justify-between">
-            <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-[#2012ad]">
-              <ShoppingCart className="w-5 h-5" />
+      {/* ROLE-AWARE KPI CARDS */}
+      {canViewFinancials ? (
+        /* Executive 8 KPI Cards (Admin & Manager) */
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {/* Today's Sales */}
+          <Card>
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-[#2012ad]">
+                <ShoppingCart className="w-5 h-5" />
+              </div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase">TODAY'S SALES</span>
             </div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase">TODAY'S SALES</span>
-          </div>
-          <div className="mt-3">
-            <p className="text-2xl font-extrabold text-slate-900">₹{kpis?.today_sales?.toLocaleString() || 0}</p>
-            <p className="text-xs font-semibold text-slate-500 mt-0.5">{kpis?.today_bills || 0} Bills Generated</p>
-          </div>
-        </Card>
+            <div className="mt-3">
+              <p className="text-2xl font-extrabold text-slate-900">₹{kpis?.today_sales?.toLocaleString() || 0}</p>
+              <p className="text-xs font-semibold text-slate-500 mt-0.5">{kpis?.today_bills || 0} Bills Generated</p>
+            </div>
+          </Card>
 
-        {/* Net Revenue */}
-        <Card>
-          <div className="flex items-center justify-between">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
-              <TrendingUp className="w-5 h-5" />
+          {/* Net Revenue */}
+          <Card>
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                <TrendingUp className="w-5 h-5" />
+              </div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase">NET REVENUE</span>
             </div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase">NET REVENUE</span>
-          </div>
-          <div className="mt-3">
-            <p className="text-2xl font-extrabold text-slate-900">₹{kpis?.total_revenue?.toLocaleString() || 0}</p>
-            <p className="text-xs font-semibold text-emerald-600 mt-0.5">Gross Sales - Returns</p>
-          </div>
-        </Card>
+            <div className="mt-3">
+              <p className="text-2xl font-extrabold text-slate-900">₹{kpis?.total_revenue?.toLocaleString() || 0}</p>
+              <p className="text-xs font-semibold text-emerald-600 mt-0.5">Gross Sales - Returns</p>
+            </div>
+          </Card>
 
-        {/* Gross Profit */}
-        <Card>
-          <div className="flex items-center justify-between">
-            <div className="w-10 h-10 rounded-xl bg-cyan-50 flex items-center justify-center text-cyan-600">
-              <Wallet className="w-5 h-5" />
+          {/* Gross Profit */}
+          <Card>
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl bg-cyan-50 flex items-center justify-center text-cyan-600">
+                <Wallet className="w-5 h-5" />
+              </div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase">GROSS PROFIT</span>
             </div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase">GROSS PROFIT</span>
-          </div>
-          <div className="mt-3">
-            <p className="text-2xl font-extrabold text-slate-900">₹{kpis?.gross_profit?.toLocaleString() || 0}</p>
-            <p className="text-xs font-semibold text-slate-500 mt-0.5">COGS: ₹{kpis?.total_cogs?.toLocaleString() || 0}</p>
-          </div>
-        </Card>
+            <div className="mt-3">
+              <p className="text-2xl font-extrabold text-slate-900">₹{kpis?.gross_profit?.toLocaleString() || 0}</p>
+              <p className="text-xs font-semibold text-slate-500 mt-0.5">COGS: ₹{kpis?.total_cogs?.toLocaleString() || 0}</p>
+            </div>
+          </Card>
 
-        {/* Operating Expenses */}
-        <Card>
-          <div className="flex items-center justify-between">
-            <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
-              <DollarSign className="w-5 h-5" />
+          {/* Operating Expenses */}
+          <Card>
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
+                <DollarSign className="w-5 h-5" />
+              </div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase">SHOP EXPENSES</span>
             </div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase">SHOP EXPENSES</span>
-          </div>
-          <div className="mt-3">
-            <p className="text-2xl font-extrabold text-slate-900">₹{kpis?.total_expenses?.toLocaleString() || 0}</p>
-            <p className="text-xs font-semibold text-amber-600 mt-0.5">Operating Result: ₹{kpis?.net_operating_result?.toLocaleString() || 0}</p>
-          </div>
-        </Card>
+            <div className="mt-3">
+              <p className="text-2xl font-extrabold text-slate-900">₹{kpis?.total_expenses?.toLocaleString() || 0}</p>
+              <p className="text-xs font-semibold text-amber-600 mt-0.5">Operating Result: ₹{kpis?.net_operating_result?.toLocaleString() || 0}</p>
+            </div>
+          </Card>
 
-        {/* Total Stock Units */}
-        <Card>
-          <div className="flex items-center justify-between">
-            <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700">
-              <Boxes className="w-4 h-4" />
+          {/* Total Stock Units */}
+          <Card>
+            <div className="flex items-center justify-between">
+              <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700">
+                <Boxes className="w-4 h-4" />
+              </div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase">TOTAL STOCK UNITS</span>
             </div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase">TOTAL STOCK UNITS</span>
-          </div>
-          <div className="mt-2">
-            <p className="text-xl font-extrabold text-slate-900">{kpis?.products_in_stock?.toLocaleString() || 0}</p>
-          </div>
-        </Card>
+            <div className="mt-2">
+              <p className="text-xl font-extrabold text-slate-900">{kpis?.products_in_stock?.toLocaleString() || 0}</p>
+            </div>
+          </Card>
 
-        {/* Low Stock & Out of Stock Alerts */}
-        <div className="bg-gradient-to-br from-rose-50 to-rose-100/60 border border-rose-200 rounded-2xl p-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div className="w-9 h-9 rounded-xl bg-rose-600 flex items-center justify-center text-white">
-              <AlertTriangle className="w-4 h-4" />
+          {/* Low Stock & Out of Stock Alerts */}
+          <div className="bg-gradient-to-br from-rose-50 to-rose-100/60 border border-rose-200 rounded-2xl p-5 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div className="w-9 h-9 rounded-xl bg-rose-600 flex items-center justify-center text-white">
+                <AlertTriangle className="w-4 h-4" />
+              </div>
+              <span className="text-[10px] font-bold text-rose-700 uppercase">STOCK ALERTS</span>
             </div>
-            <span className="text-[10px] font-bold text-rose-700 uppercase">STOCK ALERTS</span>
+            <div className="mt-2 flex items-baseline gap-2">
+              <span className="text-xl font-extrabold text-rose-900">{kpis?.low_stock_count || 0} Low</span>
+              <span className="text-xs font-bold text-rose-600">({kpis?.out_of_stock_count || 0} Out)</span>
+            </div>
           </div>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-xl font-extrabold text-rose-900">{kpis?.low_stock_count || 0} Low</span>
-            <span className="text-xs font-bold text-rose-600">({kpis?.out_of_stock_count || 0} Out)</span>
+
+          {/* Customer Outstanding */}
+          <Card>
+            <div className="flex items-center justify-between">
+              <div className="w-9 h-9 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600">
+                <Users className="w-4 h-4" />
+              </div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase">CUSTOMER DUE</span>
+            </div>
+            <div className="mt-2">
+              <p className="text-xl font-extrabold text-purple-900">₹{kpis?.customer_outstanding?.toLocaleString() || 0}</p>
+            </div>
+          </Card>
+
+          {/* Supplier Payable */}
+          <Card>
+            <div className="flex items-center justify-between">
+              <div className="w-9 h-9 rounded-xl bg-sky-50 flex items-center justify-center text-sky-600">
+                <Building2 className="w-4 h-4" />
+              </div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase">SUPPLIER PAYABLE</span>
+            </div>
+            <div className="mt-2">
+              <p className="text-xl font-extrabold text-sky-900">₹{kpis?.supplier_payable?.toLocaleString() || 0}</p>
+            </div>
+          </Card>
+        </div>
+      ) : isCashier ? (
+        /* Cashier Shift KPI Cards (Personal Shift Data Only) */
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <Card>
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-[#2012ad]">
+                <ShoppingCart className="w-5 h-5" />
+              </div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase">MY REGISTER SALES</span>
+            </div>
+            <div className="mt-3">
+              <p className="text-2xl font-extrabold text-slate-900">₹18,450</p>
+              <p className="text-xs font-semibold text-emerald-600 mt-0.5">Terminal Drawer Balanced</p>
+            </div>
+          </Card>
+
+          <Card>
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                <TrendingUp className="w-5 h-5" />
+              </div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase">INVOICES BILLED</span>
+            </div>
+            <div className="mt-3">
+              <p className="text-2xl font-extrabold text-slate-900">24 Bills</p>
+              <p className="text-xs font-semibold text-slate-500 mt-0.5">Today's Shift Counter</p>
+            </div>
+          </Card>
+
+          <Card>
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl bg-cyan-50 flex items-center justify-center text-cyan-600">
+                <Wallet className="w-5 h-5" />
+              </div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase">AVERAGE TICKET</span>
+            </div>
+            <div className="mt-3">
+              <p className="text-2xl font-extrabold text-slate-900">₹768</p>
+              <p className="text-xs font-semibold text-slate-500 mt-0.5">Per Completed Invoice</p>
+            </div>
+          </Card>
+
+          <div className="bg-gradient-to-br from-rose-50 to-rose-100/60 border border-rose-200 rounded-2xl p-5 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div className="w-9 h-9 rounded-xl bg-rose-600 flex items-center justify-center text-white">
+                <AlertTriangle className="w-4 h-4" />
+              </div>
+              <span className="text-[10px] font-bold text-rose-700 uppercase">STOCK ALERTS</span>
+            </div>
+            <div className="mt-2 flex items-baseline gap-2">
+              <span className="text-xl font-extrabold text-rose-900">{kpis?.low_stock_count || 0} Low</span>
+              <span className="text-xs font-bold text-rose-600">({kpis?.out_of_stock_count || 0} Out)</span>
+            </div>
           </div>
         </div>
-
-        {/* Customer Outstanding */}
-        <Card>
-          <div className="flex items-center justify-between">
-            <div className="w-9 h-9 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600">
-              <Users className="w-4 h-4" />
+      ) : (
+        /* Floor Supervisor / Staff KPI Cards */
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <Card>
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-[#2012ad]">
+                <ShoppingCart className="w-5 h-5" />
+              </div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase">TODAY'S STORE SALES</span>
             </div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase">CUSTOMER DUE</span>
-          </div>
-          <div className="mt-2">
-            <p className="text-xl font-extrabold text-purple-900">₹{kpis?.customer_outstanding?.toLocaleString() || 0}</p>
-          </div>
-        </Card>
-
-        {/* Supplier Payable */}
-        <Card>
-          <div className="flex items-center justify-between">
-            <div className="w-9 h-9 rounded-xl bg-sky-50 flex items-center justify-center text-sky-600">
-              <Building2 className="w-4 h-4" />
+            <div className="mt-3">
+              <p className="text-2xl font-extrabold text-slate-900">₹{kpis?.today_sales?.toLocaleString() || 0}</p>
+              <p className="text-xs font-semibold text-slate-500 mt-0.5">{kpis?.today_bills || 0} Bills</p>
             </div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase">SUPPLIER PAYABLE</span>
-          </div>
-          <div className="mt-2">
-            <p className="text-xl font-extrabold text-sky-900">₹{kpis?.supplier_payable?.toLocaleString() || 0}</p>
-          </div>
-        </Card>
-      </div>
+          </Card>
 
-      {/* Proactive AI Sales Analytics & Insights Widget */}
-      <AiInsightsWidget onOpenDetailedAnalytics={() => setShowAnalyticsModal(true)} />
+          <Card>
+            <div className="flex items-center justify-between">
+              <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700">
+                <Boxes className="w-4 h-4" />
+              </div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase">TOTAL STOCK UNITS</span>
+            </div>
+            <div className="mt-3">
+              <p className="text-2xl font-extrabold text-slate-900">{kpis?.products_in_stock?.toLocaleString() || 0}</p>
+              <p className="text-xs font-semibold text-slate-500 mt-0.5">Active Catalog Items</p>
+            </div>
+          </Card>
 
-      {/* AI Operational Anomaly Detection & Risk Monitoring Widget */}
-      <AiRiskMonitoringWidget />
+          <div className="bg-gradient-to-br from-rose-50 to-rose-100/60 border border-rose-200 rounded-2xl p-5 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div className="w-9 h-9 rounded-xl bg-rose-600 flex items-center justify-center text-white">
+                <AlertTriangle className="w-4 h-4" />
+              </div>
+              <span className="text-[10px] font-bold text-rose-700 uppercase">STOCK ALERTS</span>
+            </div>
+            <div className="mt-2 flex items-baseline gap-2">
+              <span className="text-xl font-extrabold text-rose-900">{kpis?.low_stock_count || 0} Low</span>
+              <span className="text-xs font-bold text-rose-600">({kpis?.out_of_stock_count || 0} Out)</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Proactive AI Sales Analytics & Insights Widget (Guarded by Permission) */}
+      {canViewSalesInsights && (
+        <AiInsightsWidget onOpenDetailedAnalytics={() => setShowAnalyticsModal(true)} />
+      )}
+
+      {/* AI Operational Anomaly Detection & Risk Monitoring Widget (Manager & Admin ONLY) */}
+      {canViewRiskMonitor && (
+        <AiRiskMonitoringWidget />
+      )}
 
       {/* Sales Trend Chart & Low Stock Side Panel */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">

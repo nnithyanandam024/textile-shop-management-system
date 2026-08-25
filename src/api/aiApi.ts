@@ -588,4 +588,29 @@ export class AiApi {
 
     return { success: true };
   }
+
+  /**
+   * Retrieves personalized AI dashboard layout & authorized widget identifiers
+   */
+  public static async getDashboardConfig(): Promise<ApiResponse<any>> {
+    const userSession = StorageManager.getCurrentUser();
+    const userContext = userSession ? {
+      userId: Number(userSession.id) || 1,
+      username: userSession.username,
+      roleName: userSession.role,
+      roleId: userSession.roleId,
+      permissions: userSession.permissions || [],
+    } : undefined;
+
+    if (typeof window !== 'undefined' && (window as any).api?.ai?.getDashboardConfig) {
+      try {
+        const res = await (window as any).api.ai.getDashboardConfig(userContext);
+        return res;
+      } catch (err: any) {
+        return { success: false, error: { code: 'AI_ERROR', message: err.message } };
+      }
+    }
+
+    return await apiClient.get<any>('/ai/dashboard/config');
+  }
 }

@@ -979,7 +979,9 @@ export function initBrowserMockApi() {
             permissions: [
               'dashboard.view', 'billing.create', 'sales.view', 'customers.view', 'products.view', 'products.manage',
               'inventory.view', 'inventory.manage', 'suppliers.view', 'purchases.view', 'returns.create', 'reports.view',
-              'staff.view', 'attendance.view', 'shift.view', 'leave.view', 'payroll.view', 'settings.view'
+              'staff.view', 'attendance.view', 'shift.view', 'leave.view', 'payroll.view', 'settings.view',
+              'ai.sales.view', 'ai.forecast.view', 'ai.reorders.view', 'ai.customer.view', 'ai.anomalies.view',
+              'ai.risk.view', 'ai.reports.view', 'ai.chat.use', 'ai.cross_sell.use', 'ai.alerts.receive'
             ],
           },
           'stf-0001': {
@@ -991,7 +993,9 @@ export function initBrowserMockApi() {
             permissions: [
               'dashboard.view', 'billing.create', 'sales.view', 'customers.view', 'products.view', 'products.manage',
               'inventory.view', 'inventory.manage', 'suppliers.view', 'purchases.view', 'returns.create', 'reports.view',
-              'staff.view', 'attendance.view', 'shift.view', 'leave.view', 'payroll.view', 'settings.view'
+              'staff.view', 'attendance.view', 'shift.view', 'leave.view', 'payroll.view', 'settings.view',
+              'ai.sales.view', 'ai.forecast.view', 'ai.reorders.view', 'ai.customer.view', 'ai.anomalies.view',
+              'ai.risk.view', 'ai.reports.view', 'ai.chat.use', 'ai.cross_sell.use', 'ai.alerts.receive'
             ],
           },
           'arun.cashier': {
@@ -1002,7 +1006,8 @@ export function initBrowserMockApi() {
             roleName: 'Cashier',
             permissions: [
               'dashboard.view', 'billing.create', 'sales.view', 'customers.view', 'products.view', 'inventory.view', 'returns.create',
-              'self.profile.view', 'self.attendance.view', 'self.shift.view', 'self.leave.view', 'self.payroll.view'
+              'self.profile.view', 'self.attendance.view', 'self.shift.view', 'self.leave.view', 'self.payroll.view',
+              'ai.cross_sell.use', 'ai.chat.use', 'ai.sales.view'
             ],
           },
           'stf-0002': {
@@ -1013,7 +1018,8 @@ export function initBrowserMockApi() {
             roleName: 'Cashier',
             permissions: [
               'dashboard.view', 'billing.create', 'sales.view', 'customers.view', 'products.view', 'inventory.view', 'returns.create',
-              'self.profile.view', 'self.attendance.view', 'self.shift.view', 'self.leave.view', 'self.payroll.view'
+              'self.profile.view', 'self.attendance.view', 'self.shift.view', 'self.leave.view', 'self.payroll.view',
+              'ai.cross_sell.use', 'ai.chat.use', 'ai.sales.view'
             ],
           },
           'priya.sales': {
@@ -1024,7 +1030,8 @@ export function initBrowserMockApi() {
             roleName: 'Cashier',
             permissions: [
               'dashboard.view', 'billing.create', 'sales.view', 'customers.view', 'products.view', 'inventory.view', 'returns.create',
-              'self.profile.view', 'self.attendance.view', 'self.shift.view', 'self.leave.view', 'self.payroll.view'
+              'self.profile.view', 'self.attendance.view', 'self.shift.view', 'self.leave.view', 'self.payroll.view',
+              'ai.cross_sell.use', 'ai.chat.use', 'ai.sales.view'
             ],
           },
           'stf-0003': {
@@ -1035,7 +1042,8 @@ export function initBrowserMockApi() {
             roleName: 'Cashier',
             permissions: [
               'dashboard.view', 'billing.create', 'sales.view', 'customers.view', 'products.view', 'inventory.view', 'returns.create',
-              'self.profile.view', 'self.attendance.view', 'self.shift.view', 'self.leave.view', 'self.payroll.view'
+              'self.profile.view', 'self.attendance.view', 'self.shift.view', 'self.leave.view', 'self.payroll.view',
+              'ai.cross_sell.use', 'ai.chat.use', 'ai.sales.view'
             ],
           },
           'karthik.inventory': {
@@ -1046,7 +1054,8 @@ export function initBrowserMockApi() {
             roleName: 'Inventory Staff',
             permissions: [
               'dashboard.view', 'inventory.view', 'inventory.manage', 'products.view', 'products.manage', 'purchases.view', 'suppliers.view',
-              'self.profile.view', 'self.attendance.view', 'self.shift.view', 'self.leave.view', 'self.payroll.view'
+              'self.profile.view', 'self.attendance.view', 'self.shift.view', 'self.leave.view', 'self.payroll.view',
+              'ai.reorders.view', 'ai.forecast.view', 'ai.sales.view', 'ai.chat.use', 'ai.cross_sell.use'
             ],
           },
           'stf-0004': {
@@ -2967,6 +2976,92 @@ export function initBrowserMockApi() {
 
       clearBiConversation: async () => {
         return { success: true };
+      },
+
+      getDashboardConfig: async (userContext?: any) => {
+        const rawUser = localStorage.getItem('texora_current_user');
+        let user = userContext;
+        if (!user && rawUser) {
+          try { user = JSON.parse(rawUser); } catch {}
+        }
+        const role = (user?.roleName || user?.role || 'Cashier').toLowerCase().trim();
+        const isOwnerOrAdmin = role === 'owner' || role === 'admin' || role === 'super_admin';
+        const isManager = role === 'manager';
+        const isSupervisor = role === 'supervisor';
+        const isCashier = role === 'cashier';
+
+        const canViewFinancials = isOwnerOrAdmin || isManager;
+        const canViewAnomalies = isOwnerOrAdmin || isManager;
+        const canViewRiskMonitor = isOwnerOrAdmin || isManager;
+        const canViewForecast = isOwnerOrAdmin || isManager;
+        const canViewReorders = isOwnerOrAdmin || isManager || isSupervisor;
+        const canViewSmartReports = isOwnerOrAdmin || isManager;
+        const canViewSalesInsights = isOwnerOrAdmin || isManager || isSupervisor;
+        const canUseCrossSell = isOwnerOrAdmin || isManager || isSupervisor || isCashier;
+        const canUseChat = true;
+
+        const widgets: string[] = [];
+        const kpiCards: string[] = [];
+
+        if (canViewFinancials) {
+          kpiCards.push(
+            'kpi_today_sales',
+            'kpi_net_revenue',
+            'kpi_gross_profit',
+            'kpi_operating_expenses',
+            'kpi_inventory_value',
+            'kpi_total_products',
+            'kpi_active_customers',
+            'kpi_active_suppliers'
+          );
+        } else if (isSupervisor) {
+          kpiCards.push(
+            'kpi_today_sales',
+            'kpi_inventory_units',
+            'kpi_total_products',
+            'kpi_low_stock_count'
+          );
+        } else if (isCashier) {
+          kpiCards.push(
+            'kpi_cashier_shift_sales',
+            'kpi_cashier_bills_count',
+            'kpi_cashier_avg_ticket',
+            'kpi_cashier_shift_discounts'
+          );
+        } else {
+          kpiCards.push(
+            'kpi_assigned_tasks',
+            'kpi_shift_hours',
+            'kpi_store_inventory_status'
+          );
+        }
+
+        if (canViewSmartReports) widgets.push('widget_ai_daily_summary');
+        if (canViewSalesInsights) widgets.push('widget_ai_sales_insights');
+        if (canViewRiskMonitor && canViewAnomalies) widgets.push('widget_ai_risk_monitor');
+        if (canViewForecast) widgets.push('widget_ai_forecast');
+        if (canViewReorders) widgets.push('widget_ai_reorders');
+        if (canUseCrossSell && isCashier) widgets.push('widget_ai_pos_cross_sell');
+        widgets.push('panel_sales_trend_chart', 'panel_low_stock_alerts');
+
+        return {
+          success: true,
+          data: {
+            role,
+            isExecutive: isOwnerOrAdmin || isManager,
+            canViewFinancials,
+            canViewAnomalies,
+            canViewRiskMonitor,
+            canViewForecast,
+            canViewReorders,
+            canViewSmartReports,
+            canViewSalesInsights,
+            canUseCrossSell,
+            canUseChat,
+            widgets,
+            kpiCards,
+          },
+        };
       },
     },
   };

@@ -485,6 +485,7 @@ export interface ElectronAPI {
     getBiConversations: (userContext?: any) => Promise<{ success: boolean; data?: any[]; error?: string }>;
     getBiConversationMessages: (conversationId: string, userContext?: any) => Promise<{ success: boolean; data?: any[]; error?: string }>;
     clearBiConversation: (conversationId: string, userContext?: any) => Promise<{ success: boolean }>;
+    getDashboardConfig: (userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
   };
 }
 
@@ -930,6 +931,7 @@ const api: ElectronAPI = {
     getBiConversations: (userContext?: any) => ipcRenderer.invoke('ai:getBiConversations', { userContext }),
     getBiConversationMessages: (conversationId: string, userContext?: any) => ipcRenderer.invoke('ai:getBiConversationMessages', { conversationId, userContext }),
     clearBiConversation: (conversationId: string, userContext?: any) => ipcRenderer.invoke('ai:clearBiConversation', { conversationId, userContext }),
+    getDashboardConfig: (userContext?: any) => ipcRenderer.invoke('ai:getDashboardConfig', { userContext }),
   },
 };
 

@@ -2560,6 +2560,414 @@ export function initBrowserMockApi() {
           ],
         };
       },
+
+      biQuery: async (request: any, userContext?: any) => {
+        const rawQuery = (request?.message || '').trim();
+        const q = rawQuery.toLowerCase();
+        const conversationId = request?.conversationId || 'conv_general_today';
+        const rawUser = localStorage.getItem('texora_current_user');
+        let user = userContext;
+        if (!user && rawUser) {
+          try { user = JSON.parse(rawUser); } catch {}
+        }
+        const role = (user?.roleName || user?.role || 'Cashier').toLowerCase();
+        const isManagerOrAdmin = role === 'admin' || role === 'owner' || role === 'super_admin' || role === 'manager';
+        const now = new Date().toISOString();
+
+        // 1. TAMIL & BILINGUAL DETECTIONS
+        const isTamil = /[\u0B80-\u0BFF]/.test(rawQuery) || q.includes('innaiku') || q.includes('sales eppadi');
+
+        // 2. CASHIER PERSONAL REGISTER
+        if (
+          q.includes('my register') ||
+          q.includes('my shift') ||
+          q.includes('my sales') ||
+          q.includes('my counter') ||
+          q.includes('my drawer') ||
+          q.includes('my bills')
+        ) {
+          const msg = {
+            id: `msg_a_${Date.now()}`,
+            conversationId,
+            role: 'assistant',
+            content: `### 💳 Your Cashier Shift Summary — Tuesday, Aug 25\n\n` +
+              `• **Personal Terminal Sales:** **₹18,450**\n` +
+              `• **Invoices Billed:** **24 transactions**\n` +
+              `• **Average Bill Value:** **₹768**\n` +
+              `• **Discounts Applied:** **₹850**\n\n` +
+              `*Your register drawer is balanced and ready for shift handover.*`,
+            actions: [
+              { label: 'Go to POS Billing', route: '/billing', variant: 'primary' },
+              { label: 'View Sales History', route: '/sales', variant: 'secondary' },
+            ],
+            suggestedFollowUps: [
+              'What accessories pair with Bridal Silk Saree?',
+              'Which products are low in stock?',
+              'How many staff are on duty?',
+            ],
+            source: 'POS Terminal Register Ledger',
+            sourcesUsed: ['Cashier Terminal Sales', 'Completed Invoices'],
+            timestamp: now,
+            confidence: 1.0,
+          };
+          return { conversationId, message: msg };
+        }
+
+        // 3. RBAC RESTRICTION CHECK
+        if (
+          !isManagerOrAdmin &&
+          (q.includes('profit') ||
+            q.includes('margin') ||
+            q.includes('financial') ||
+            q.includes('p&l') ||
+            q.includes('salary') ||
+            q.includes('store sales') ||
+            q.includes('total revenue') ||
+            q.includes('executive summary') ||
+            q.includes('smart report'))
+        ) {
+          const msg = {
+            id: `msg_a_${Date.now()}`,
+            conversationId,
+            role: 'assistant',
+            content: `🔒 **Access Restricted by Security Policy**\n\n` +
+              `Viewing storewide financial revenue, profit margins, staff payroll, and executive management reports requires **Store Manager** or **Admin** privileges.\n\n` +
+              `As a team member, you can query:\n` +
+              `• *"Show my register sales today"*\n` +
+              `• *"Check stock for Bridal Silk Saree"*\n` +
+              `• *"What products are low in stock?"*\n` +
+              `• *"What accessories go with this saree?"*`,
+            requiresPermission: 'sales.view',
+            suggestedFollowUps: [
+              'Show my register sales today',
+              'Which products are low in stock?',
+              'What accessories pair with Bridal Silk Saree?',
+            ],
+            source: 'Texora RBAC Security Engine',
+            sourcesUsed: ['Role-Based Access Control Rules'],
+            timestamp: now,
+            confidence: 1.0,
+          };
+          return { conversationId, message: msg };
+        }
+
+        // 4. FAST MOVING WITH < 10 DAYS STOCK
+        if (
+          (q.includes('fast') && q.includes('stock')) ||
+          (q.includes('less than 10') || q.includes('< 10') || q.includes('10 days')) ||
+          (q.includes('run out') || q.includes('depleting soon'))
+        ) {
+          const msg = {
+            id: `msg_a_${Date.now()}`,
+            conversationId,
+            role: 'assistant',
+            content: `🚨 **Fast-Moving Products with < 10 Days of Stock Remaining**\n\n` +
+              `The AI evaluated daily sales velocity against current shelf balances. **2 high-velocity products** are depleting faster than supplier lead time:`,
+            table: {
+              title: 'Critical Stockout Risk (Supply < 10 Days)',
+              columns: [
+                { key: 'rank', label: '#' },
+                { key: 'productName', label: 'Product' },
+                { key: 'currentStock', label: 'Current Stock' },
+                { key: 'velocity', label: 'Sales Velocity' },
+                { key: 'daysOfSupply', label: 'Days Remaining' },
+                { key: 'leadTime', label: 'Supplier Lead Time' },
+              ],
+              rows: [
+                { rank: 1, productName: 'Bridal Kanchipuram Pure Silk Saree', currentStock: '18 units', velocity: '4.4/day', daysOfSupply: '4 days remaining', leadTime: '7d lead time' },
+                { rank: 2, productName: 'Soft Handloom Cotton Saree', currentStock: '14 units', velocity: '2.2/day', daysOfSupply: '6 days remaining', leadTime: '4d lead time' },
+              ],
+            },
+            actions: [
+              { label: 'Open Inventory Intelligence', route: '/inventory', variant: 'primary' },
+              { label: 'Create Supplier Purchase Order', route: '/purchases', variant: 'secondary' },
+            ],
+            suggestedFollowUps: [
+              'What are the suggested reorder quantities?',
+              'What will demand be in the next 30 days?',
+              'Show sales trend for last 7 days',
+            ],
+            source: 'Inventory Velocity & ROP Engine',
+            sourcesUsed: ['Sales Velocity 30-Day Run Rate', 'Warehouse Stock Matrix', 'Supplier Lead Time Master'],
+            timestamp: now,
+            confidence: 0.98,
+          };
+          return { conversationId, message: msg };
+        }
+
+        // 5. 7-DAY SALES TREND & CHART
+        if (
+          q.includes('trend') ||
+          q.includes('chart') ||
+          q.includes('graph') ||
+          q.includes('last 7 days') ||
+          q.includes('7 days sales') ||
+          q.includes('weekly curve')
+        ) {
+          const msg = {
+            id: `msg_a_${Date.now()}`,
+            conversationId,
+            role: 'assistant',
+            content: `📈 **7-Day Sales Trend & Revenue Trajectory**\n\n` +
+              `• **Total Past 7 Days Revenue:** **₹3,85,400** (+14% growth)\n` +
+              `• **Peak Sales Day:** **Saturday (₹81,000)** driven by festive bridal saree walk-ins\n` +
+              `• **Weekend Concentration:** **46.5% of total volume** occurred on Saturday & Sunday`,
+            chart: {
+              type: 'area',
+              title: 'Daily Revenue (Last 7 Days)',
+              data: [
+                { label: 'Mon', value: 42000 },
+                { label: 'Tue', value: 45000 },
+                { label: 'Wed', value: 41000 },
+                { label: 'Thu', value: 53000 },
+                { label: 'Fri', value: 58000 },
+                { label: 'Sat', value: 81000 },
+                { label: 'Sun', value: 76000 },
+              ],
+              xAxisKey: 'label',
+              dataKey: 'value',
+              unitPrefix: '₹',
+            },
+            actions: [
+              { label: 'View Full Sales History', route: '/sales', variant: 'primary' },
+              { label: 'View Smart Reports', route: '/reports', variant: 'secondary' },
+            ],
+            suggestedFollowUps: [
+              'Which category generated the most revenue?',
+              'Which products sold the most this month?',
+              'What is the 30-day demand forecast?',
+            ],
+            source: 'Sales Analytics Engine',
+            sourcesUsed: ['Completed POS Invoices', '7-Day Revenue Aggregate'],
+            timestamp: now,
+            confidence: 1.0,
+          };
+          return { conversationId, message: msg };
+        }
+
+        // 6. ROOT CAUSE WHY
+        if (
+          q.includes('why') &&
+          (q.includes('decrease') || q.includes('drop') || q.includes('fall') || q.includes('down') || q.includes('decline') || q.includes('low'))
+        ) {
+          const msg = {
+            id: `msg_a_${Date.now()}`,
+            conversationId,
+            role: 'assistant',
+            content: `🔍 **Root-Cause Sales Performance Diagnostic**\n\n` +
+              `The AI analyzed sales invoices, stockout events, and return records to identify primary contributors to recent volume shifts:\n\n` +
+              `1. **Stockouts on High-Demand Fast Movers (Primary Factor):**\n` +
+              `   • *Bridal Kanchipuram Silk Sarees* experienced 2 days with shelf stock $< 5$ units during peak weekend hours, leading to estimated uncaptured walk-in sales.\n\n` +
+              `2. **Sizing Return Spike in Men’s Formal Shirts:**\n` +
+              `   • *Giza Cotton Shirts* recorded an 11.7% return/exchange rate due to collar and sleeve length fit variances.\n\n` +
+              `3. **Weekday Morning Footfall Dip:**\n` +
+              `   • Tuesday and Wednesday morning traffic (10 AM – 2 PM) was 18% lower than regional seasonal averages.\n\n` +
+              `💡 **Recommended Remediation:** Restock critical saree buffers before Friday and cross-train floor associates on precise shirt fit consultation.`,
+            actions: [
+              { label: 'Review Inventory Buffers', route: '/inventory', variant: 'primary' },
+              { label: 'Inspect Return Logs', route: '/returns', variant: 'secondary' },
+            ],
+            suggestedFollowUps: [
+              'Which fast-moving products have less than 10 days of stock?',
+              'What is our return rate across categories?',
+              'What will sell well next month?',
+            ],
+            source: 'Multi-Domain Diagnostic Engine',
+            sourcesUsed: ['Sales Ledger', 'Stockout Timeline', 'Product Return Logs', 'Footfall Hourly Heatmap'],
+            timestamp: now,
+            confidence: 0.94,
+          };
+          return { conversationId, message: msg };
+        }
+
+        // 7. TAMIL QUERY
+        if (isTamil) {
+          const msg = {
+            id: `msg_a_${Date.now()}`,
+            conversationId,
+            role: 'assistant',
+            content: `### 📊 இன்றைய வியாபார நிலவரம் (Today's Sales Status)\n\n` +
+              `• **மொத்த விற்பனை (Total Revenue):** **₹84,250**\n` +
+              `• **பில் எண்ணிக்கை (Transactions):** **126 பில்கள்**\n` +
+              `• **சராசரி பில் மதிப்பு (Average Ticket):** **₹669**\n` +
+              `• **அதிகம் விற்பனையான பிரிவு (Top Category):** **காஞ்சிபுரம் பட்டு சேலைகள் (Kanchipuram Silks)**\n\n` +
+              `💡 **AI தகவல்:** நேற்றைய விற்பனையை விட இன்று விற்பனை **12% அதிகமாக** உள்ளது. திருமண பட்டுப் புடவைகள் பிரிவில் அதிக வரவு காணப்படுகிறது.`,
+            actions: [
+              { label: 'விற்பனை விவரம் பார்க்க (Sales)', route: '/sales', variant: 'primary' },
+              { label: 'இருப்பு விவரம் (Inventory)', route: '/inventory', variant: 'secondary' },
+            ],
+            suggestedFollowUps: [
+              'எந்த சேலை அதிகம் விக்குது?',
+              'stock குறைவா இருக்கிற பொருட்கள் எவை?',
+              'அடுத்த 30 நாள் விற்பனை கணிப்பு என்ன?',
+            ],
+            source: 'Texora Tamil Retail NLP Engine',
+            sourcesUsed: ['Sales Database', 'Inventory Status'],
+            timestamp: now,
+            confidence: 1.0,
+          };
+          return { conversationId, message: msg };
+        }
+
+        // 8. 30-DAY DEMAND FORECAST
+        if (
+          q.includes('forecast') ||
+          q.includes('next month') ||
+          q.includes('30 days') ||
+          q.includes('predict') ||
+          q.includes('upcoming season') ||
+          q.includes('festival')
+        ) {
+          const msg = {
+            id: `msg_a_${Date.now()}`,
+            conversationId,
+            role: 'assistant',
+            content: `🔮 **AI 30-Day Category Demand Projections & Festive Outlook**\n\n` +
+              `Based on historical seasonal trends, regional festival calendars, and current 30-day velocity, demand projections are:`,
+            table: {
+              title: '30-Day Forward Demand Projection',
+              columns: [
+                { key: 'category', label: 'Category' },
+                { key: 'projected', label: 'Expected Units' },
+                { key: 'growth', label: 'Growth %' },
+                { key: 'confidence', label: 'Confidence' },
+              ],
+              rows: [
+                { category: 'Kanchipuram Silk Sarees', projected: '380 units', growth: '+15.0%', confidence: 'HIGH' },
+                { category: 'Men’s Wear & Formal Shirts', projected: '210 units', growth: '+4.5%', confidence: 'HIGH' },
+                { category: 'Dress Materials & Blouse Pieces', projected: '145 units', growth: '+8.0%', confidence: 'MEDIUM' },
+                { category: 'Traditional Dhotis & Kurtas', projected: '110 units', growth: '+2.0%', confidence: 'MEDIUM' },
+                { category: 'Accessories & Shapewear', projected: '90 units', growth: '-2.5%', confidence: 'MEDIUM' },
+              ],
+            },
+            actions: [
+              { label: 'View Demand Forecasts', route: '/inventory', variant: 'primary' },
+              { label: 'Open Smart Reports', route: '/reports', variant: 'secondary' },
+            ],
+            suggestedFollowUps: [
+              'Which fast-moving products have less than 10 days of stock?',
+              'What are the top-selling products this month?',
+              'What is the dead stock capital tied up?',
+            ],
+            source: 'Demand Forecasting Engine',
+            sourcesUsed: ['Holt-Winters Seasonal Run Rate', 'Festival Calendar Multipliers'],
+            timestamp: now,
+            confidence: 0.95,
+          };
+          return { conversationId, message: msg };
+        }
+
+        // 9. TOP PRODUCTS
+        if (
+          q.includes('top selling') ||
+          q.includes('top product') ||
+          q.includes('best seller') ||
+          q.includes('sold the most')
+        ) {
+          const isLastMonth = q.includes('last month');
+          const periodLabel = isLastMonth ? 'Last Month' : 'This Month';
+          const msg = {
+            id: `msg_a_${Date.now()}`,
+            conversationId,
+            role: 'assistant',
+            content: `🏆 **Top-Selling Garments & Velocity Ranking (${periodLabel})**\n\n` +
+              `Silk Sarees and Handloom Cotton Sarees dominate the store's revenue contribution. Here is the ranked performance:`,
+            table: {
+              title: `Product Sales Leaderboard (${periodLabel})`,
+              columns: [
+                { key: 'rank', label: '#' },
+                { key: 'name', label: 'Garment Description' },
+                { key: 'units', label: 'Units Sold' },
+                { key: 'revenue', label: 'Revenue (₹)' },
+                { key: 'trend', label: 'Trend vs Prior' },
+              ],
+              rows: [
+                { rank: 1, name: 'Bridal Kanchipuram Pure Silk Saree', units: isLastMonth ? 312 : 342, revenue: isLastMonth ? '₹59,27,688' : '₹64,97,658', trend: '↑ +9.6%' },
+                { rank: 2, name: 'Soft Handloom Cotton Saree', units: isLastMonth ? 270 : 298, revenue: isLastMonth ? '₹6,74,730' : '₹7,44,702', trend: '↑ +10.3%' },
+                { rank: 3, name: 'Premium Egyptian Giza Cotton Shirt', units: isLastMonth ? 195 : 182, revenue: isLastMonth ? '₹4,87,305' : '₹4,54,818', trend: '↓ -6.6%' },
+                { rank: 4, name: 'Pure Linen Formal Trouser', units: isLastMonth ? 138 : 156, revenue: isLastMonth ? '₹3,17,262' : '₹3,58,644', trend: '↑ +13.0%' },
+                { rank: 5, name: 'Traditional Raw Silk Men’s Kurta', units: isLastMonth ? 4 : 1, revenue: isLastMonth ? '₹13,196' : '₹3,299', trend: '↓ -75.0%' },
+              ],
+            },
+            actions: [
+              { label: 'View Products Catalog', route: '/products', variant: 'primary' },
+              { label: 'View Inventory Health', route: '/inventory', variant: 'secondary' },
+            ],
+            suggestedFollowUps: isLastMonth
+              ? ['Which fast-moving products have less than 10 days of stock?', 'What is our top category this month?']
+              : ['What about last month?', 'Which of those need restocking now?', 'Show 7-day sales trend'],
+            source: 'Sales Item Velocity Database',
+            sourcesUsed: ['Completed Invoices Ledger', 'Product Variant Velocity Table'],
+            timestamp: now,
+            confidence: 1.0,
+          };
+          return { conversationId, message: msg };
+        }
+
+        // 10. DEFAULT SUMMARY
+        const msg = {
+          id: `msg_a_${Date.now()}`,
+          conversationId,
+          role: 'assistant',
+          content: `📊 **Store Business Overview — Today**\n\n` +
+            `• **Gross Sales Today:** **₹84,250** (+12% vs yesterday)\n` +
+            `• **Transactions Completed:** **126 invoices** (AOV: ₹669)\n` +
+            `• **Top Category:** **Kanchipuram Silks & Sarees**\n\n` +
+            `Ask me for specific deep-dives like *"Which fast-moving products have less than 10 days of stock?"*, *"Show 7-day sales trend"*, or *"Why did sales decrease last week?"*.`,
+          actions: [
+            { label: 'Open POS Billing', route: '/billing', variant: 'primary' },
+            { label: 'View Full Dashboard', route: '/dashboard', variant: 'secondary' },
+          ],
+          suggestedFollowUps: [
+            'Which fast-moving products have less than 10 days of stock?',
+            'Show sales trend for last 7 days',
+            'Compare this month with last month',
+            'Is there anything unusual today?',
+          ],
+          source: 'Texora Business Intelligence Layer',
+          sourcesUsed: ['Sales Database', 'Inventory Engine', 'Forecasting Matrix'],
+          timestamp: now,
+          confidence: 1.0,
+        };
+        return { conversationId, message: msg };
+      },
+
+      getBiConversations: async () => {
+        return {
+          success: true,
+          data: [
+            {
+              id: 'conv_general_today',
+              title: 'Executive Store Intelligence',
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              lastMessageSnippet: 'How can I assist your showroom management today?',
+              messageCount: 1,
+            },
+          ],
+        };
+      },
+
+      getBiConversationMessages: async (conversationId: string) => {
+        const welcome = {
+          id: 'msg_welcome',
+          conversationId: conversationId || 'conv_general_today',
+          role: 'assistant',
+          content: `👋 **Welcome to Texora Business AI!**\n\nI am your conversational store assistant. You can ask me anything about **Sales performance**, **Inventory restocking**, **Demand forecasts**, **Customer retention**, or **Operational risk alerts** in English or Tamil.\n\nTry asking:\n• *"How are sales today compared to yesterday?"*\n• *"Which fast-moving products have less than 10 days of stock?"*\n• *"Show sales trend for the last 7 days"*\n• *"இன்னைக்கு sales எப்படி இருக்கு?"*`,
+          timestamp: new Date().toISOString(),
+          suggestedFollowUps: [
+            'How much did we sell today?',
+            'Which products need restocking?',
+            'Show 7-day sales trend',
+            'Is there anything unusual today?',
+          ],
+        };
+        return { success: true, data: [welcome] };
+      },
+
+      clearBiConversation: async () => {
+        return { success: true };
+      },
     },
   };
 

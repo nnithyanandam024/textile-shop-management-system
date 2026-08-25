@@ -16,6 +16,7 @@ const RoleDefaultRedirect: React.FC = () => {
 
 // Pages
 import { DashboardPage } from './features/dashboard/DashboardPage';
+import { BusinessAiPage } from './features/ai/BusinessAiPage';
 import { ProductsPage } from './features/products/ProductsPage';
 import { InventoryPage } from './features/inventory/InventoryPage';
 import { PosPage } from './features/pos/PosPage';
@@ -86,6 +87,7 @@ const MainAppRouter: React.FC = () => {
                 <Routes>
                   <Route path="/" element={<RoleDefaultRedirect />} />
                   <Route path="/dashboard" element={<ProtectedRoute permission="dashboard.view"><DashboardPage /></ProtectedRoute>} />
+                  <Route path="/business-ai" element={<ProtectedRoute permission="dashboard.view"><BusinessAiPage /></ProtectedRoute>} />
                   <Route path="/products" element={<ProtectedRoute permission="products.view"><ProductsPage /></ProtectedRoute>} />
                   <Route path="/categories" element={<ProtectedRoute permission="products.manage"><CategoriesPage /></ProtectedRoute>} />
                   <Route path="/inventory" element={<ProtectedRoute permission="inventory.view"><InventoryPage /></ProtectedRoute>} />

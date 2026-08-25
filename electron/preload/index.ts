@@ -481,6 +481,10 @@ export interface ElectronAPI {
     getRiskSummary: (userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
     getSmartReport: (period: string, dateStr?: string, userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
     getReportHistory: (userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    biQuery: (request: any, userContext?: any) => Promise<{ conversationId: string; message: any }>;
+    getBiConversations: (userContext?: any) => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    getBiConversationMessages: (conversationId: string, userContext?: any) => Promise<{ success: boolean; data?: any[]; error?: string }>;
+    clearBiConversation: (conversationId: string, userContext?: any) => Promise<{ success: boolean }>;
   };
 }
 
@@ -922,6 +926,10 @@ const api: ElectronAPI = {
     getRiskSummary: (userContext?: any) => ipcRenderer.invoke('ai:getRiskSummary', { userContext }),
     getSmartReport: (period: string, dateStr?: string, userContext?: any) => ipcRenderer.invoke('ai:getSmartReport', { period, dateStr, userContext }),
     getReportHistory: (userContext?: any) => ipcRenderer.invoke('ai:getReportHistory', { userContext }),
+    biQuery: (request: any, userContext?: any) => ipcRenderer.invoke('ai:biQuery', { request, userContext }),
+    getBiConversations: (userContext?: any) => ipcRenderer.invoke('ai:getBiConversations', { userContext }),
+    getBiConversationMessages: (conversationId: string, userContext?: any) => ipcRenderer.invoke('ai:getBiConversationMessages', { conversationId, userContext }),
+    clearBiConversation: (conversationId: string, userContext?: any) => ipcRenderer.invoke('ai:clearBiConversation', { conversationId, userContext }),
   },
 };
 

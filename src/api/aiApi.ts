@@ -489,4 +489,103 @@ export class AiApi {
     // Fallback to REST endpoint
     return await apiClient.get<any>('/ai/reports/history');
   }
+
+  /**
+   * Submits a natural language query to the Conversational Business Intelligence Assistant
+   */
+  public static async biQuery(request: { conversationId?: string; message: string; language?: string }): Promise<{ conversationId: string; message: any }> {
+    const userSession = StorageManager.getCurrentUser();
+    const userContext = userSession ? {
+      userId: Number(userSession.id) || 1,
+      username: userSession.username,
+      roleName: userSession.role,
+      roleId: userSession.roleId,
+      permissions: userSession.permissions || [],
+    } : undefined;
+
+    if (typeof window !== 'undefined' && (window as any).api?.ai?.biQuery) {
+      try {
+        return await (window as any).api.ai.biQuery(request, userContext);
+      } catch (err: any) {
+        console.error('biQuery error:', err);
+      }
+    }
+
+    const fallbackRes = await (apiClient as any).post('/ai/bi/query', { request, userContext });
+    return fallbackRes.data || { conversationId: request.conversationId || 'default', message: { role: 'assistant', content: 'Unable to process query.' } };
+  }
+
+  /**
+   * Retrieves conversation threads list
+   */
+  public static async getBiConversations(): Promise<ApiResponse<any[]>> {
+    const userSession = StorageManager.getCurrentUser();
+    const userContext = userSession ? {
+      userId: Number(userSession.id) || 1,
+      username: userSession.username,
+      roleName: userSession.role,
+      roleId: userSession.roleId,
+      permissions: userSession.permissions || [],
+    } : undefined;
+
+    if (typeof window !== 'undefined' && (window as any).api?.ai?.getBiConversations) {
+      try {
+        const res = await (window as any).api.ai.getBiConversations(userContext);
+        return res;
+      } catch (err: any) {
+        return { success: false, error: { code: 'AI_ERROR', message: err.message } };
+      }
+    }
+
+    return await apiClient.get<any[]>('/ai/bi/conversations');
+  }
+
+  /**
+   * Retrieves messages for a specific conversation thread
+   */
+  public static async getBiConversationMessages(conversationId: string): Promise<ApiResponse<any[]>> {
+    const userSession = StorageManager.getCurrentUser();
+    const userContext = userSession ? {
+      userId: Number(userSession.id) || 1,
+      username: userSession.username,
+      roleName: userSession.role,
+      roleId: userSession.roleId,
+      permissions: userSession.permissions || [],
+    } : undefined;
+
+    if (typeof window !== 'undefined' && (window as any).api?.ai?.getBiConversationMessages) {
+      try {
+        const res = await (window as any).api.ai.getBiConversationMessages(conversationId, userContext);
+        return res;
+      } catch (err: any) {
+        return { success: false, error: { code: 'AI_ERROR', message: err.message } };
+      }
+    }
+
+    return await apiClient.get<any[]>(`/ai/bi/conversations/${conversationId}/messages`);
+  }
+
+  /**
+   * Clears messages in a conversation thread
+   */
+  public static async clearBiConversation(conversationId: string): Promise<{ success: boolean }> {
+    const userSession = StorageManager.getCurrentUser();
+    const userContext = userSession ? {
+      userId: Number(userSession.id) || 1,
+      username: userSession.username,
+      roleName: userSession.role,
+      roleId: userSession.roleId,
+      permissions: userSession.permissions || [],
+    } : undefined;
+
+    if (typeof window !== 'undefined' && (window as any).api?.ai?.clearBiConversation) {
+      try {
+        return await (window as any).api.ai.clearBiConversation(conversationId, userContext);
+      } catch (err: any) {
+        console.error('clearBiConversation error:', err);
+      }
+    }
+
+    return { success: true };
+  }
 }

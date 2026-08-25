@@ -29,6 +29,7 @@ import {
   User,
   Activity,
   Layers,
+  Sparkles,
 } from 'lucide-react';
 import { useAuth } from '../../features/auth/AuthContext';
 
@@ -59,6 +60,7 @@ export const Sidebar: React.FC = () => {
   // --- Section 1: Main Store Operations ---
   const mainNavItems: NavItem[] = [
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, permission: 'dashboard.view' },
+    { name: 'Business AI', path: '/business-ai', icon: Sparkles, badge: 'AI' },
     { name: 'POS Billing', path: '/billing', icon: ShoppingCart, permission: 'billing.create' },
     { name: 'Sales History', path: '/sales', icon: Receipt, permission: 'sales.view' },
     { name: 'Customers', path: '/customers', icon: Users, permission: 'customers.view' },

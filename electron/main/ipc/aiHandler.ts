@@ -16,6 +16,9 @@ import { AnomalyDetectionEngine } from '../services/ai/anomalies/anomalyDetectio
 import { AnomalyReviewService } from '../services/ai/anomalies/anomalyReviewService';
 import { ReportHistoryService } from '../services/ai/reports/reportHistoryService';
 import { ReportPeriod } from '../services/ai/reports/reportTypes';
+import { BiOrchestrator } from '../services/ai/bi/biOrchestrator';
+import { BiConversationManager } from '../services/ai/bi/biConversationManager';
+import { BiQueryRequest } from '../services/ai/bi/biTypes';
 
 export function registerAiHandlers() {
   // 1. Process AI Chat query
@@ -175,5 +178,28 @@ export function registerAiHandlers() {
     }
     const data = ReportHistoryService.getReportHistory();
     return { success: true, data };
+  });
+
+  // 20. Process Conversational BI Query (Natural Language Business Intelligence)
+  ipcMain.handle('ai:biQuery', async (_event, payload: { request: BiQueryRequest; userContext?: UserAuthContext }) => {
+    return await BiOrchestrator.processQuery(payload.request, payload.userContext);
+  });
+
+  // 21. Get BI Conversation Threads
+  ipcMain.handle('ai:getBiConversations', async (_event, payload?: { userContext?: UserAuthContext }) => {
+    const data = BiConversationManager.getConversations(payload?.userContext?.userId);
+    return { success: true, data };
+  });
+
+  // 22. Get BI Conversation Message History
+  ipcMain.handle('ai:getBiConversationMessages', async (_event, payload: { conversationId: string; userContext?: UserAuthContext }) => {
+    const data = BiConversationManager.getMessages(payload.conversationId);
+    return { success: true, data };
+  });
+
+  // 23. Clear BI Conversation Thread
+  ipcMain.handle('ai:clearBiConversation', async (_event, payload: { conversationId: string; userContext?: UserAuthContext }) => {
+    const success = BiConversationManager.clearConversation(payload.conversationId);
+    return { success };
   });
 }

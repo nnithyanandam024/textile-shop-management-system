@@ -21,6 +21,9 @@ import {
   CartesianGrid,
   Tooltip,
 } from 'recharts';
+import { DailySummaryBanner } from '../../components/ai/DailySummaryBanner';
+import { AiInsightsWidget } from '../../components/ai/AiInsightsWidget';
+import { AiSalesAnalyticsModal } from '../../components/ai/AiSalesAnalyticsModal';
 
 export const DashboardPage: React.FC = () => {
   const [kpis, setKpis] = useState<any>(null);
@@ -29,6 +32,7 @@ export const DashboardPage: React.FC = () => {
   const [lowStockAlerts, setLowStockAlerts] = useState<any[]>([]);
   const [recentTx, setRecentTx] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [showAnalyticsModal, setShowAnalyticsModal] = useState<boolean>(false);
 
   const fetchDashboardData = async () => {
     setLoading(true);
@@ -78,6 +82,9 @@ export const DashboardPage: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* Proactive AI Executive Daily Summary */}
+      <DailySummaryBanner onOpenAnalytics={() => setShowAnalyticsModal(true)} />
 
       {/* 8 Primary KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -190,6 +197,9 @@ export const DashboardPage: React.FC = () => {
           </div>
         </Card>
       </div>
+
+      {/* Proactive AI Sales Analytics & Insights Widget */}
+      <AiInsightsWidget onOpenDetailedAnalytics={() => setShowAnalyticsModal(true)} />
 
       {/* Sales Trend Chart & Low Stock Side Panel */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -324,6 +334,12 @@ export const DashboardPage: React.FC = () => {
           </div>
         </Card>
       </div>
+
+      {/* In-Depth AI Sales Analytics Explorer Modal */}
+      <AiSalesAnalyticsModal
+        isOpen={showAnalyticsModal}
+        onClose={() => setShowAnalyticsModal(false)}
+      />
     </div>
   );
 };

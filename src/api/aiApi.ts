@@ -112,4 +112,56 @@ export class AiApi {
       { id: 'business_summary', label: '📈 Business Summary', prompt: 'Give me today’s executive business summary.', category: 'reports' },
     ];
   }
+
+  /**
+   * Retrieves Proactive AI Sales Analytics & Insights
+   */
+  public static async getSalesInsights(timeframe: 'today' | 'week' | 'month' = 'week'): Promise<ApiResponse<any>> {
+    const userSession = StorageManager.getCurrentUser();
+    const userContext = userSession ? {
+      userId: Number(userSession.id) || 1,
+      username: userSession.username,
+      roleName: userSession.role,
+      roleId: userSession.roleId,
+      permissions: userSession.permissions || [],
+    } : undefined;
+
+    if (typeof window !== 'undefined' && (window as any).api?.ai?.getSalesInsights) {
+      try {
+        const res = await (window as any).api.ai.getSalesInsights(timeframe, userContext);
+        return res;
+      } catch (err: any) {
+        return { success: false, error: { code: 'AI_ERROR', message: err.message } };
+      }
+    }
+
+    // Fallback to REST endpoint
+    return await apiClient.get<any>(`/ai/insights/sales?timeframe=${timeframe}`);
+  }
+
+  /**
+   * Retrieves Daily Executive AI Summary
+   */
+  public static async getDailySummary(dateStr?: string): Promise<ApiResponse<any>> {
+    const userSession = StorageManager.getCurrentUser();
+    const userContext = userSession ? {
+      userId: Number(userSession.id) || 1,
+      username: userSession.username,
+      roleName: userSession.role,
+      roleId: userSession.roleId,
+      permissions: userSession.permissions || [],
+    } : undefined;
+
+    if (typeof window !== 'undefined' && (window as any).api?.ai?.getDailySummary) {
+      try {
+        const res = await (window as any).api.ai.getDailySummary(dateStr, userContext);
+        return res;
+      } catch (err: any) {
+        return { success: false, error: { code: 'AI_ERROR', message: err.message } };
+      }
+    }
+
+    // Fallback to REST endpoint
+    return await apiClient.get<any>(`/ai/summary/daily${dateStr ? `?date=${dateStr}` : ''}`);
+  }
 }

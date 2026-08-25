@@ -466,6 +466,8 @@ export interface ElectronAPI {
     getQuickPrompts: (userContext?: any) => Promise<any[]>;
     getLogs: (limit?: number) => Promise<any[]>;
     getStats: () => Promise<any>;
+    getSalesInsights: (timeframe?: string, userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
+    getDailySummary: (dateStr?: string, userContext?: any) => Promise<{ success: boolean; data?: any; error?: string }>;
   };
 }
 
@@ -892,6 +894,8 @@ const api: ElectronAPI = {
     getQuickPrompts: (userContext?: any) => ipcRenderer.invoke('ai:getQuickPrompts', userContext),
     getLogs: (limit?: number) => ipcRenderer.invoke('ai:getLogs', limit),
     getStats: () => ipcRenderer.invoke('ai:getStats'),
+    getSalesInsights: (timeframe?: string, userContext?: any) => ipcRenderer.invoke('ai:getSalesInsights', { timeframe, userContext }),
+    getDailySummary: (dateStr?: string, userContext?: any) => ipcRenderer.invoke('ai:getDailySummary', { dateStr, userContext }),
   },
 };
 

@@ -1673,6 +1673,171 @@ export function initBrowserMockApi() {
         averageLatencyMs: 45,
         rateLimitRule: '30 reqs/min',
       }),
+
+      getSalesInsights: async (timeframe = 'week') => {
+        const isToday = timeframe === 'today';
+        const isMonth = timeframe === 'month';
+        const now = new Date().toISOString();
+
+        const currentSales = isToday ? 84250 : isMonth ? 842000 : 385400;
+        const previousSales = isToday ? 75200 : isMonth ? 765000 : 338000;
+        const currentTx = isToday ? 126 : isMonth ? 1248 : 584;
+        const previousTx = isToday ? 112 : isMonth ? 1160 : 520;
+        const growthPct = isToday ? 12 : isMonth ? 10 : 14;
+
+        const payload = {
+          timeframe,
+          periodLabel: isToday ? 'Today' : isMonth ? 'This Month' : 'Last 7 Days',
+          comparisonLabel: isToday ? 'Yesterday' : isMonth ? 'Last Month' : 'Previous 7 Days',
+          periodMetrics: {
+            currentSales,
+            previousSales,
+            growthPercentage: growthPct,
+            growthDirection: 'higher' as const,
+            currentTransactions: currentTx,
+            previousTransactions: previousTx,
+            transactionGrowthPercentage: 12,
+            currentAOV: isToday ? 669 : 660,
+            previousAOV: isToday ? 671 : 650,
+            aovGrowthPercentage: 2,
+            totalUnitsSold: isToday ? 218 : 1120,
+            totalDiscounts: isToday ? 4200 : 32000,
+            discountRate: 4.8,
+            returnRate: 2.1,
+          },
+          categoryVelocity: [
+            { id: 1, categoryName: 'Kanchipuram Silks & Sarees', currentRevenue: Math.round(currentSales * 0.42), previousRevenue: Math.round(previousSales * 0.38), revenueContributionPct: 42, growthPercentage: 24, growthDirection: 'higher' as const, unitsSold: 94 },
+            { id: 2, categoryName: 'Men’s Formal & Ethnic Wear', currentRevenue: Math.round(currentSales * 0.26), previousRevenue: Math.round(previousSales * 0.28), revenueContributionPct: 26, growthPercentage: 6, growthDirection: 'lower' as const, unitsSold: 68 },
+            { id: 3, categoryName: 'Kids & Festive Wear', currentRevenue: Math.round(currentSales * 0.18), previousRevenue: Math.round(previousSales * 0.16), revenueContributionPct: 18, growthPercentage: 16, growthDirection: 'higher' as const, unitsSold: 46 },
+            { id: 4, categoryName: 'Designer Kurtis & Materials', currentRevenue: Math.round(currentSales * 0.14), previousRevenue: Math.round(previousSales * 0.18), revenueContributionPct: 14, growthPercentage: 8, growthDirection: 'higher' as const, unitsSold: 32 },
+          ],
+          hourlyDistribution: [
+            { hour: 10, hourLabel: '10 AM', salesTotal: 8400, transactionCount: 14, isPeakHour: false },
+            { hour: 11, hourLabel: '11 AM', salesTotal: 12500, transactionCount: 18, isPeakHour: false },
+            { hour: 12, hourLabel: '12 PM', salesTotal: 16200, transactionCount: 22, isPeakHour: false },
+            { hour: 13, hourLabel: '1 PM', salesTotal: 9800, transactionCount: 12, isPeakHour: false },
+            { hour: 14, hourLabel: '2 PM', salesTotal: 7200, transactionCount: 9, isPeakHour: false },
+            { hour: 15, hourLabel: '3 PM', salesTotal: 11400, transactionCount: 15, isPeakHour: false },
+            { hour: 16, hourLabel: '4 PM', salesTotal: 15800, transactionCount: 21, isPeakHour: false },
+            { hour: 17, hourLabel: '5 PM', salesTotal: 22400, transactionCount: 28, isPeakHour: false },
+            { hour: 18, hourLabel: '6 PM', salesTotal: 34500, transactionCount: 42, isPeakHour: true },
+            { hour: 19, hourLabel: '7 PM', salesTotal: 41200, transactionCount: 54, isPeakHour: true },
+            { hour: 20, hourLabel: '8 PM', salesTotal: 36800, transactionCount: 46, isPeakHour: true },
+            { hour: 21, hourLabel: '9 PM', salesTotal: 14200, transactionCount: 18, isPeakHour: false },
+          ],
+          dayOfWeekDistribution: [
+            { dayOfWeek: 0, dayName: 'Sunday', salesTotal: 76000, transactionCount: 115, percentageOfWeeklyTotal: 22.5, isWeekend: true },
+            { dayOfWeek: 1, dayName: 'Monday', salesTotal: 42000, transactionCount: 65, percentageOfWeeklyTotal: 12.4, isWeekend: false },
+            { dayOfWeek: 2, dayName: 'Tuesday', salesTotal: 45000, transactionCount: 68, percentageOfWeeklyTotal: 13.3, isWeekend: false },
+            { dayOfWeek: 3, dayName: 'Wednesday', salesTotal: 41000, transactionCount: 62, percentageOfWeeklyTotal: 12.1, isWeekend: false },
+            { dayOfWeek: 4, dayName: 'Thursday', salesTotal: 53000, transactionCount: 78, percentageOfWeeklyTotal: 15.6, isWeekend: false },
+            { dayOfWeek: 5, dayName: 'Friday', salesTotal: 58000, transactionCount: 84, percentageOfWeeklyTotal: 17.1, isWeekend: false },
+            { dayOfWeek: 6, dayName: 'Saturday', salesTotal: 81000, transactionCount: 124, percentageOfWeeklyTotal: 24.0, isWeekend: true },
+          ],
+          customerCohorts: {
+            totalActiveCustomers: 148,
+            newCustomersCount: 56,
+            newCustomerRevenue: Math.round(currentSales * 0.38),
+            newCustomerRevenuePct: 38,
+            returningCustomersCount: 92,
+            returningCustomerRevenue: Math.round(currentSales * 0.62),
+            returningCustomerRevenuePct: 62,
+            repeatPurchaseRate: 62,
+          },
+          productReturnRates: [
+            { productId: 1, productName: 'Premium Egyptian Giza Cotton Shirt', sku: 'MSH-EGY-002-WHT-40', categoryName: 'Men’s Wear', unitsSold: 120, unitsReturned: 14, returnRatePct: 11.7, refundAmount: 34986, commonReason: 'Sizing & collar fit variance', isHighRisk: true },
+            { productId: 2, productName: 'Pure Linen Formal Trouser', sku: 'MTR-LIN-005-BEI-32', categoryName: 'Men’s Wear', unitsSold: 85, unitsReturned: 5, returnRatePct: 5.8, refundAmount: 11495, commonReason: 'Waist alteration exchange', isHighRisk: false },
+            { productId: 3, productName: 'Bridal Kanchipuram Pure Silk Saree', sku: 'SAR-KAN-001-RED-FS', categoryName: 'Sarees', unitsSold: 64, unitsReturned: 1, returnRatePct: 1.5, refundAmount: 17999, commonReason: 'Color shade exchange', isHighRisk: false },
+          ],
+          insights: [
+            {
+              id: 'ins_trend_sales_main',
+              type: 'trend',
+              title: `Sales Increased by ${growthPct}% (${isToday ? 'Today' : isMonth ? 'This Month' : 'This Week'})`,
+              description: `Total revenue reached ₹${currentSales.toLocaleString()} with strong counter billings compared to ₹${previousSales.toLocaleString()} in the prior period.`,
+              metricChange: `+${growthPct}%`,
+              confidence: 'high',
+              actionableRecommendation: 'Maintain fast-moving stock levels and ensure sufficient cash register change for peak volumes.',
+              category: 'Sales Growth',
+              timestamp: now,
+            },
+            {
+              id: 'ins_opp_top_cat',
+              type: 'opportunity',
+              title: 'Kanchipuram Silk Sarees Lead Revenue (42% Share)',
+              description: 'Bridal silks and heavy brocade sarees are generating the highest gross margin and customer basket size (+24% growth).',
+              metricChange: '42% share',
+              confidence: 'high',
+              actionableRecommendation: 'Ensure premium showcase displays and maintain healthy inventory buffers for festival collections.',
+              category: 'Category Velocity',
+              timestamp: now,
+            },
+            {
+              id: 'ins_warn_product_return',
+              type: 'warning',
+              title: 'Men’s Formal Shirts Selling 6% Slower (11.7% Return Rate)',
+              description: '14 out of 120 Giza Cotton Shirts were returned for exchange/refund due to collar and shoulder sizing variance.',
+              metricChange: '11.7% return',
+              confidence: 'medium',
+              actionableRecommendation: 'Review batch size chart with your supplier and cross-train sales staff on precise fit consultation.',
+              category: 'Quality & Returns',
+              timestamp: now,
+            },
+            {
+              id: 'ins_rec_peak_hours',
+              type: 'recommendation',
+              title: 'Peak Store Rush Between 6:00 PM and 8:30 PM (46% Volume)',
+              description: 'Over 46% of daily billing volume is concentrated during the 3-hour evening window.',
+              metricChange: '6 PM - 8 PM',
+              confidence: 'high',
+              actionableRecommendation: 'Align associate dinner breaks and ensure all 3 POS checkout terminals are staffed from 6 PM to 9 PM.',
+              category: 'Store Operations',
+              timestamp: now,
+            },
+            {
+              id: 'ins_info_loyalty_cohort',
+              type: 'information',
+              title: 'Returning Patrons Drive 62% of Revenue',
+              description: 'Repeat loyalty members generate significantly higher ticket averages compared to first-time walk-ins.',
+              metricChange: '62% repeat',
+              confidence: 'high',
+              actionableRecommendation: 'Instruct cashiers to enroll 100% of walk-in buyers into loyalty rewards at checkout.',
+              category: 'Customer Loyalty',
+              timestamp: now,
+            },
+          ],
+          generatedAt: now,
+        };
+
+        return { success: true, data: payload };
+      },
+
+      getDailySummary: async () => {
+        return {
+          success: true,
+          data: {
+            date: '2026-08-25',
+            dateFormatted: 'Tuesday, August 25, 2026',
+            totalRevenue: 84250,
+            totalTransactions: 126,
+            averageOrderValue: 669,
+            topPerformingCategory: 'Kanchipuram Silks & Sarees',
+            bestSellingProduct: 'Bridal Kanchipuram Pure Silk Saree',
+            growthVsYesterdayPct: 12,
+            growthDirection: 'higher',
+            criticalAttentionItems: [
+              '4 product variants are approaching or below minimum stock threshold.',
+              'Giza Cotton Shirts recorded 2 returns today due to collar size variance.',
+            ],
+            keyHighlights: [
+              'Sales are 12% higher than yesterday’s total of ₹75,200.',
+              'Silk Sarees generated 42% of today’s turnover.',
+              'Evening rush from 6 PM to 8:30 PM contributed 46% of total transactions.',
+            ],
+            confidence: 'high',
+          },
+        };
+      },
     },
   };
 

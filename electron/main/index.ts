@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell } from 'electron';
+import { app, BrowserWindow, shell, Menu } from 'electron';
 import path from 'path';
 import { setupLogger } from './logger';
 import { initDatabase, closeDatabase } from './database';
@@ -12,12 +12,17 @@ let mainWindow: BrowserWindow | null = null;
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
 
 function createWindow() {
+  if (!isDev) {
+    Menu.setApplicationMenu(null);
+  }
+
   mainWindow = new BrowserWindow({
     title: envConfig.appName || 'Textile Shop Management System',
     width: 1366,
     height: 768,
     minWidth: 1024,
     minHeight: 640,
+    autoHideMenuBar: !isDev,
     backgroundColor: '#0f172a', // Tailwind slate-900
     show: false,
     webPreferences: {
@@ -29,6 +34,10 @@ function createWindow() {
       allowRunningInsecureContent: false,
     },
   });
+
+  if (!isDev) {
+    mainWindow.setMenuBarVisibility(false);
+  }
 
   mainWindow.once('ready-to-show', () => {
     mainWindow?.show();

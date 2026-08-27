@@ -26,13 +26,13 @@ export function seedDatabase(db: Database.Database) {
     // ----------------------------------------------------
     const users = [
       { id: 1, username: 'admin', display_name: 'Store Administrator', role_id: 1, is_active: 1 },
-      { id: 2, username: 'manager', display_name: 'Rajesh Kumar (Manager)', role_id: 2, is_active: 1 },
-      { id: 3, username: 'arun.cashier', display_name: 'Arun Kumar', role_id: 3, is_active: 1 },
-      { id: 4, username: 'priya.sales', display_name: 'Priya Sharma', role_id: 3, is_active: 1 },
-      { id: 5, username: 'karthik.inventory', display_name: 'Karthik Raja', role_id: 4, is_active: 1 },
-      { id: 6, username: 'anitha.hr', display_name: 'Anitha Ramesh', role_id: 6, is_active: 1 },
-      { id: 7, username: 'inactive.staff', display_name: 'Inactive Staff User', role_id: 3, is_active: 0 },
-      { id: 8, username: 'suspended.staff', display_name: 'Suspended Staff User', role_id: 3, is_active: 1 },
+      { id: 2, username: 'manager', display_name: 'Rajesh Kumar (Manager)', role_id: 2, email: 'rajesh.manager@ratnavilas.com', phone: '+91 98765 43211', is_active: 1 },
+      { id: 3, username: 'arun.cashier', display_name: 'Arun Kumar', role_id: 3, email: 'arun.cashier@ratnavilas.com', phone: '+91 98765 43212', is_active: 1 },
+      { id: 4, username: 'priya.sales', display_name: 'Priya Sundaram', role_id: 3, email: 'priya.sales@ratnavilas.com', phone: '+91 98765 43213', is_active: 1 },
+      { id: 5, username: 'karthik.stock', display_name: 'Karthik Raja', role_id: 4, email: 'karthik.stock@ratnavilas.com', phone: '+91 98765 43214', is_active: 1 },
+      { id: 6, username: 'anitha.hr', display_name: 'Anitha Ramesh', role_id: 6, email: 'anitha.hr@ratnavilas.com', phone: '+91 98765 43215', is_active: 1 },
+      { id: 7, username: 'inactive_staff', display_name: 'Inactive User', role_id: 3, email: 'inactive@ratnavilas.com', phone: '+91 98765 43216', is_active: 0 },
+      { id: 8, username: 'suspended_staff', display_name: 'Suspended User', role_id: 3, email: 'suspended@ratnavilas.com', phone: '+91 98765 43217', is_active: 1 },
     ];
 
     for (const u of users) {
@@ -440,9 +440,10 @@ export function seedDatabase(db: Database.Database) {
     // ----------------------------------------------------
     db.exec(`
       INSERT INTO settings (key, value) VALUES
-        ('shop_name', 'Texora Fashion Store'),
+        ('shop_name', 'ரத்னா விலாஸ் (Ratna Vilas)'),
         ('shop_address', '123 Crosscut Road, Gandhipuram, Coimbatore, Tamil Nadu - 641012'),
         ('shop_phone', '+91 98765 43210'),
+        ('shop_email', 'contact@ratnavilas.com'),
         ('gst_number', '33AAAAA0000A1Z5'),
         ('currency', 'INR'),
         ('invoice_prefix', 'INV-'),

@@ -285,19 +285,17 @@ export const Sidebar: React.FC = () => {
   return (
     <aside className="w-64 bg-white border-r border-slate-200/80 flex flex-col h-screen select-none shrink-0 shadow-xs">
       {/* Brand Header */}
-      <div className="h-16 px-5 flex items-center justify-between border-b border-slate-200/80 bg-slate-50/50">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center text-[#2012ad] shadow-xs">
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-            </svg>
+      <div className="h-16 px-4 flex items-center justify-between border-b border-slate-200/80 bg-gradient-to-r from-amber-50/40 via-white to-indigo-50/30">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="w-10 h-10 rounded-xl bg-white border border-amber-200/80 shadow-xs flex items-center justify-center overflow-hidden shrink-0 p-0.5">
+            <img src="/logo.png" alt="ரத்னா விலாஸ்" className="w-full h-full object-contain" />
           </div>
-          <div>
-            <h1 className="text-base font-black text-slate-900 tracking-tight leading-tight">TEXORA</h1>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Textile ERP</p>
+          <div className="min-w-0">
+            <h1 className="text-sm font-black text-slate-900 tracking-tight leading-tight truncate">ரத்னா விலாஸ்</h1>
+            <p className="text-[9px] font-extrabold text-amber-800 uppercase tracking-tight truncate">பட்டு &amp; ஜவுளி மாளிகை</p>
           </div>
         </div>
-        <span className="text-[9px] font-mono font-black px-2 py-0.5 rounded bg-indigo-50 text-[#2012ad] border border-indigo-100 uppercase">
+        <span className="text-[9px] font-mono font-black px-2 py-0.5 rounded bg-indigo-50 text-[#2012ad] border border-indigo-100 uppercase shrink-0">
           {currentUser?.roleName || 'Staff'}
         </span>
       </div>

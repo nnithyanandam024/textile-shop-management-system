@@ -42,7 +42,10 @@ export const POSReceiptModal: React.FC<POSReceiptModalProps> = ({
         <div className="p-5 bg-slate-50 rounded-2xl border border-slate-200 font-mono text-slate-800 space-y-4 select-none print:m-0 print:border-none print:shadow-none">
           {/* Brand & Store Header */}
           <div className="text-center space-y-1 border-b border-dashed border-slate-300 pb-3">
-            <h3 className="text-sm font-black tracking-widest uppercase">TEXORA TEXTILES</h3>
+            <h3 className="text-sm font-black tracking-widest uppercase">ரத்னா விலாஸ்</h3>
+            <p className="text-[10px] text-amber-800 font-extrabold uppercase">
+              RATNA VILAS SILKS &amp; TEXTILES • பட்டு &amp; ஜவுளி மாளிகை
+            </p>
             <p className="text-[10px] text-slate-500 font-sans">
               Main Store • 100 Feet Ring Road, Chennai
             </p>

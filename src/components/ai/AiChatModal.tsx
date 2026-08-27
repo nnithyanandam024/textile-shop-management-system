@@ -30,7 +30,7 @@ export const AiChatModal: React.FC<AiChatModalProps> = ({ isOpen, onClose }) => 
       {
         id: 'welcome_msg',
         sender: 'assistant',
-        text: `👋 Hello **${currentUser?.displayName || 'Store Associate'}**! I am your **Texora AI Business Assistant**.\n\nI can analyze your store's live sales, check low stock inventory alerts, track fast-moving products, and generate executive summaries.\n\n*Click any quick question below or ask me anything about your showroom:*`,
+        text: `👋 வணக்கம் **${currentUser?.displayName || 'பணியாளர்'}**! நான் உங்கள் **ரத்னா விலாஸ் AI அசிஸ்டன்ட் (Ratna AI Assistant)**.\n\nகடையின் நேரடி விற்பனை நிலவரம், குறைந்த இருப்பு எச்சரிக்கைகள், வேகமான விற்பனைப் பொருட்கள் மற்றும் வாடிக்கையாளர் விவரங்களை என்னிடம் தமிழில் அல்லது ஆங்கிலத்தில் கேட்கலாம்.\n\n*கீழே உள்ள கேள்விகளைத் தேர்ந்தெடுக்கலாம் அல்லது உங்கள் கேள்வியை உள்ளிடவும்:*`,
         generatedAt: new Date().toISOString(),
       },
     ];
@@ -148,19 +148,19 @@ export const AiChatModal: React.FC<AiChatModalProps> = ({ isOpen, onClose }) => 
         {/* Header */}
         <div className="px-5 py-4 bg-gradient-to-r from-[#2012ad] via-[#3525cb] to-[#4837ea] text-white flex items-center justify-between shadow-md shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-inner">
-              <Bot className="w-6 h-6 animate-pulse text-amber-300" />
+            <div className="w-10 h-10 rounded-xl bg-white p-0.5 border border-amber-300/80 flex items-center justify-center overflow-hidden shadow-inner shrink-0">
+              <img src="/logo.png" alt="ரத்னா விலாஸ்" className="w-full h-full object-contain" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-base font-bold tracking-tight">Texora AI Business Assistant</h2>
+                <h2 className="text-base font-bold tracking-tight">ரத்னா AI அசிஸ்டன்ட்</h2>
                 <span className="px-2 py-0.5 text-[10px] font-bold bg-amber-400 text-slate-950 rounded-full uppercase tracking-wider shadow-sm">
-                  AI ASSISTANT
+                  Ratna AI
                 </span>
               </div>
               <div className="flex items-center gap-2 text-xs text-indigo-100/90 font-medium">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-300" />
-                <span>RBAC Protected</span>
+                <span>பாதுகாக்கப்பட்ட RBAC</span>
                 <span>•</span>
                 <span className="capitalize">{currentUser?.roleName || 'Cashier'} Mode</span>
               </div>

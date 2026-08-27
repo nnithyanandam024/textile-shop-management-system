@@ -22,7 +22,9 @@ export const ThermalReceiptTemplate: React.FC<ThermalReceiptProps> = ({ invoiceD
     >
       {/* Shop Header */}
       <div className="text-center pb-2 border-b border-dashed border-black">
-        <h2 className="text-base font-black uppercase tracking-wider">{shopName || 'TEXORA TEXTILE HUB'}</h2>
+        <h2 className="text-base font-black uppercase tracking-wider">{shopName || 'ரத்னா விலாஸ்'}</h2>
+        <p className="text-[10px] font-extrabold uppercase tracking-wide">RATNA VILAS SILKS &amp; TEXTILES</p>
+        <p className="text-[10px] text-slate-700">பட்டு &amp; ஜவுளி மாளிகை</p>
         <p className="text-[10px] mt-0.5">{shopAddress || '123 Cross Cut Rd, Coimbatore, TN'}</p>
         <p className="text-[10px]">Ph: {shopPhone || '+91 98765 43210'}</p>
         <p className="text-[10px] font-bold">GSTIN: {shopGst || '33AAAAA0000A1Z5'}</p>
@@ -130,9 +132,11 @@ export const ThermalReceiptTemplate: React.FC<ThermalReceiptProps> = ({ invoiceD
 
       {/* Receipt Footer */}
       <div className="text-center pt-3 text-[9px] space-y-1">
-        <p className="font-bold">Exchange allowed within 7 days with bill.</p>
-        <p>No exchange on altered goods & sarees with cut blouse.</p>
-        <p className="text-[10px] font-extrabold mt-1">*** THANK YOU! VISIT AGAIN ***</p>
+        <p className="font-bold">பொருட்களை மாற்ற 7 நாட்களுக்குள் ரசீதுடன் வரவும்.</p>
+        <p>Exchange allowed within 7 days with bill.</p>
+        <p>வெட்டப்பட்ட ரவிக்கை &amp; மாற்றிய சேலைகளுக்கு அனுமதி இல்லை.</p>
+        <p className="text-[10px] font-black mt-1 tracking-wider">*** நன்றி! மீண்டும் வருக! ***</p>
+        <p className="text-[9px] font-bold">THANK YOU! VISIT AGAIN</p>
       </div>
     </div>
   );

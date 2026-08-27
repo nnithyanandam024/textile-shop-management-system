@@ -972,10 +972,10 @@ export function initBrowserMockApi() {
             sale: saleObj,
             items: saleObj.items || [],
             payments: saleObj.payments || [{ payment_method: 'CASH', amount: saleObj.total }],
-            shopName: 'TEXORA TEXTILE HUB',
+            shopName: 'ரத்னா விலாஸ் (Ratna Vilas)',
             shopAddress: '123 Cross Cut Road, Gandhipuram, Coimbatore, TN - 641012',
             shopPhone: '+91 98765 43210',
-            shopEmail: 'contact@texora.shop',
+            shopEmail: 'contact@ratnavilas.com',
             shopGst: '33AAAAA0000A1Z5',
             currencySymbol: '₹',
             amountInWords: (BillingCalculationEngine as any).amountToWords(saleObj.total || 0),
@@ -1968,7 +1968,7 @@ export function initBrowserMockApi() {
               title: 'Assistant Scope Notice',
               aiInsight: 'For forward replenishment models, consult the Inventory Planning module.',
             },
-            source: 'Texora AI Capability Registry',
+            source: 'Ratna Vilas AI Capability Registry',
             sourcesUsed: ['AI Capability Definition'],
             generatedAt: now,
             confidence: 1.0,
@@ -1977,18 +1977,18 @@ export function initBrowserMockApi() {
 
         // Default General Guidance Response
         return {
-          answer: `🤖 **Texora Business Assistant**\n\n` +
-            `I specialize in answering questions about your textile showroom's **Sales, Inventory, Customers, Products, and Staff Attendance**.\n\n` +
+          answer: `🤖 **ரத்னா விலாஸ் AI அசிஸ்டன்ட் (Ratna Vilas AI)**\n\n` +
+            `கடையின் **விற்பனை (Sales), இருப்பு (Inventory), வாடிக்கையாளர் (Customers), பட்டு சேலைகள் (Products)** பற்றிய கேள்விகளை என்னிடம் கேட்கலாம்.\n\n` +
             `Try asking:\n` +
             `• *"How much did we sell today?"*\n` +
             `• *"What are today's top-selling products?"*\n` +
             `• *"Which items are low in stock?"*\n` +
-            `• *"Give me today's business summary"*`,
+            `• *"இன்னைக்கு sales நிலவரம் என்ன?"*`,
           data: {
             type: 'general_answer',
             title: 'Assistant Help',
           },
-          source: 'Texora AI Assistant',
+          source: 'Ratna Vilas AI Assistant',
           sourcesUsed: ['Textile Business Intelligence Guide'],
           generatedAt: now,
           confidence: 1.0,
@@ -3239,7 +3239,7 @@ export function initBrowserMockApi() {
           id: 'msg_welcome',
           conversationId: conversationId || 'conv_general_today',
           role: 'assistant',
-          content: `👋 **Welcome to Texora Business AI!**\n\nI am your conversational store assistant. You can ask me anything about **Sales performance**, **Inventory restocking**, **Demand forecasts**, **Customer retention**, or **Operational risk alerts** in English or Tamil.\n\nTry asking:\n• *"How are sales today compared to yesterday?"*\n• *"Which fast-moving products have less than 10 days of stock?"*\n• *"Show sales trend for the last 7 days"*\n• *"இன்னைக்கு sales எப்படி இருக்கு?"*`,
+          content: `👋 **வணக்கம்! Welcome to ரத்னா விலாஸ் Business AI!**\n\nநான் உங்கள் ஸ்டோர் அசிஸ்டன்ட். விற்பனை நிலவரம் (**Sales performance**), குறைந்த இருப்பு (**Inventory restocking**), தேவை முன்னறிவிப்பு (**Demand forecasts**), அல்லது இடர் எச்சரிக்கைகள் (**Operational risk alerts**) பற்றி என்னிடம் தமிழில் அல்லது ஆங்கிலத்தில் கேட்கலாம்.\n\nTry asking:\n• *"How are sales today compared to yesterday?"*\n• *"Which fast-moving products have less than 10 days of stock?"*\n• *"Show sales trend for the last 7 days"*\n• *"இன்னைக்கு sales எப்படி இருக்கு?"*`,
           timestamp: new Date().toISOString(),
           suggestedFollowUps: [
             'How much did we sell today?',

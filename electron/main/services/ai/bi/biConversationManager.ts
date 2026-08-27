@@ -21,7 +21,7 @@ export class BiConversationManager {
         id: 'msg_welcome',
         conversationId: defaultId,
         role: 'assistant',
-        content: `👋 **Welcome to Texora Business AI!**\n\nI am your conversational store assistant. You can ask me anything about **Sales performance**, **Inventory restocking**, **Demand forecasts**, **Customer retention**, or **Operational risk alerts** in English or Tamil.\n\nTry asking:\n• *"How are sales today compared to yesterday?"*\n• *"Which fast-moving products have less than 10 days of stock?"*\n• *"Show sales trend for the last 7 days"*\n• *"இன்னைக்கு sales எப்படி இருக்கு?"*`,
+        content: `👋 **வணக்கம்! Welcome to ரத்னா விலாஸ் Business AI!**\n\nநான் உங்கள் ஸ்டோர் அசிஸ்டன்ட். விற்பனை நிலவரம் (**Sales performance**), குறைந்த இருப்பு (**Inventory restocking**), தேவை முன்னறிவிப்பு (**Demand forecasts**), அல்லது இடர் எச்சரிக்கைகள் (**Operational risk alerts**) பற்றி என்னிடம் தமிழில் அல்லது ஆங்கிலத்தில் கேட்கலாம்.\n\nTry asking:\n• *"How are sales today compared to yesterday?"*\n• *"Which fast-moving products have less than 10 days of stock?"*\n• *"Show sales trend for the last 7 days"*\n• *"இன்னைக்கு sales எப்படி இருக்கு?"*`,
         timestamp: new Date().toISOString(),
         suggestedFollowUps: [
           'How much did we sell today?',

@@ -32,26 +32,34 @@ export const TaxInvoiceA4Template: React.FC<TaxInvoiceA4Props> = ({ invoiceData 
       className="w-full max-w-[800px] mx-auto bg-white p-8 border border-slate-300 shadow-sm rounded-xl text-slate-800 text-xs font-sans leading-normal"
     >
       {/* Top Header */}
-      <div className="flex justify-between items-start pb-4 border-b-2 border-slate-900">
-        <div>
-          <span className="px-2.5 py-1 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded">
-            TAX INVOICE
-          </span>
-          <h1 className="text-2xl font-black text-slate-900 mt-2 uppercase tracking-wide">
-            {shopName || 'TEXORA TEXTILE HUB'}
-          </h1>
-          <p className="text-xs text-slate-600 mt-0.5 max-w-sm">{shopAddress || '123 Cross Cut Road, Gandhipuram, Coimbatore, Tamil Nadu - 641012'}</p>
-          <div className="flex gap-4 mt-1 text-slate-600 text-[11px] font-medium">
-            <span>Ph: {shopPhone || '+91 98765 43210'}</span>
-            <span>Email: {shopEmail || 'accounts@texora.shop'}</span>
+      <div className="flex justify-between items-start pb-5 border-b-2 border-slate-900">
+        <div className="flex items-start gap-4">
+          <div className="w-16 h-16 rounded-xl bg-white border border-amber-200/90 p-1 flex items-center justify-center shrink-0 shadow-xs">
+            <img src="/logo.png" alt="ரத்னா விலாஸ்" className="w-full h-full object-contain" />
           </div>
-          <div className="mt-1 flex items-center gap-3">
-            <span className="font-extrabold text-slate-900">GSTIN: {shopGst || '33AAAAA0000A1Z5'}</span>
-            <span className="text-slate-500 font-semibold">State Code: 33 (Tamil Nadu)</span>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-0.5 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded">
+                ஜிஎஸ்டி வரி விலைப்பட்டியல் • TAX INVOICE
+              </span>
+            </div>
+            <h1 className="text-2xl font-black text-slate-900 mt-1 uppercase tracking-wide">
+              {shopName || 'ரத்னா விலாஸ்'}
+            </h1>
+            <p className="text-xs font-extrabold text-amber-800 uppercase tracking-wide">RATNA VILAS SILKS &amp; TEXTILES • பட்டு &amp; ஜவுளி மாளிகை</p>
+            <p className="text-xs text-slate-600 mt-0.5 max-w-sm">{shopAddress || '123 Cross Cut Road, Gandhipuram, Coimbatore, Tamil Nadu - 641012'}</p>
+            <div className="flex gap-4 mt-1 text-slate-600 text-[11px] font-medium">
+              <span>Ph: {shopPhone || '+91 98765 43210'}</span>
+              <span>Email: {shopEmail || 'contact@ratnavilas.com'}</span>
+            </div>
+            <div className="mt-1 flex items-center gap-3">
+              <span className="font-extrabold text-slate-900">GSTIN: {shopGst || '33AAAAA0000A1Z5'}</span>
+              <span className="text-slate-500 font-semibold">State Code: 33 (Tamil Nadu)</span>
+            </div>
           </div>
         </div>
 
-        <div className="text-right border-l pl-6 border-slate-200">
+        <div className="text-right border-l pl-6 border-slate-200 shrink-0">
           <p className="text-[10px] font-bold text-slate-400 uppercase">INVOICE DETAILS</p>
           <p className="text-base font-black text-slate-900 mt-0.5">{sale.invoice_number}</p>
           <p className="text-xs text-slate-600 mt-1">Date: <span className="font-bold text-slate-800">{new Date(sale.sale_date || sale.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span></p>
@@ -219,7 +227,7 @@ export const TaxInvoiceA4Template: React.FC<TaxInvoiceA4Props> = ({ invoiceData 
         </div>
 
         <div className="text-right flex flex-col justify-between items-end">
-          <p className="font-extrabold text-slate-900 text-[10px] uppercase">For {shopName || 'TEXORA TEXTILE HUB'}</p>
+          <p className="font-extrabold text-slate-900 text-[10px] uppercase">For {shopName || 'ரத்னா விலாஸ் (RATNA VILAS)'}</p>
           <div className="pt-10">
             <p className="border-t border-slate-400 font-bold text-slate-800 px-6 inline-block">Authorized Signatory</p>
           </div>

@@ -3,7 +3,7 @@ import { useStaffAuth } from '../hooks/useStaffAuth';
 import { ProfileDropdown } from './ProfileDropdown';
 import { LogoutDialog } from './LogoutDialog';
 import { ConnectionStatusIndicator } from '../../../components/common/ConnectionStatusIndicator';
-import { Bell, ChevronDown, Sparkles } from 'lucide-react';
+import { Bell, ChevronDown } from 'lucide-react';
 
 export const StaffHeader: React.FC = () => {
   const { currentStaffUser, logout } = useStaffAuth();
@@ -25,16 +25,16 @@ export const StaffHeader: React.FC = () => {
     <>
       <header className="h-16 bg-white border-b border-slate-200/80 px-6 flex items-center justify-between sticky top-0 z-30 shadow-sm">
         {/* Left Branding */}
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#2012ad] shadow-sm">
-            <Sparkles className="w-4 h-4" />
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-white border border-amber-200/80 shadow-xs flex items-center justify-center overflow-hidden shrink-0 p-0.5">
+            <img src="/logo.png" alt="ரத்னா விலாஸ்" className="w-full h-full object-contain" />
           </div>
           <div>
-            <h1 className="text-sm font-extrabold text-slate-900 tracking-tight leading-tight">
-              TEXORA
+            <h1 className="text-sm font-black text-slate-900 tracking-tight leading-tight">
+              ரத்னா விலாஸ்
             </h1>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-              Staff Portal
+            <p className="text-[9px] font-extrabold text-amber-800 uppercase tracking-tight">
+              பணியாளர் போர்ட்டல்
             </p>
           </div>
         </div>

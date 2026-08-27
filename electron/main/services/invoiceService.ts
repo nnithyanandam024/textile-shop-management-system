@@ -37,10 +37,10 @@ export class InvoiceService {
       return {
         success: true,
         data: {
-          shopName: settings.shop_name || 'TEXORA TEXTILE HUB',
+          shopName: settings.shop_name || 'ரத்னா விலாஸ் (Ratna Vilas)',
           shopAddress: settings.shop_address || '123 Cross Cut Road, Gandhipuram, Coimbatore, TN - 641012',
           shopPhone: settings.shop_phone || '+91 98765 43210',
-          shopEmail: settings.shop_email || 'contact@texora.shop',
+          shopEmail: settings.shop_email || 'contact@ratnavilas.com',
           shopGst: settings.shop_gst || '33AAAAA0000A1Z5',
           currencySymbol: settings.currency_symbol || '₹',
           amountInWords: BillingCalculationEngine.amountToWords(sale.total),

@@ -36,9 +36,10 @@ export class InvoicePdfService {
         <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-3xl">
           <div class="border-b pb-4 flex justify-between">
             <div>
-              <h1 class="text-2xl font-black">${invoiceData.shopName || 'TEXORA TEXTILE HUB'}</h1>
-              <p class="text-sm text-slate-500">${invoiceData.shopAddress || ''}</p>
-              <p class="text-sm text-slate-500">GSTIN: ${invoiceData.shopGst || ''}</p>
+              <h1 class="text-2xl font-black">${invoiceData.shopName || 'ரத்னா விலாஸ் (RATNA VILAS)'}</h1>
+              <p class="text-xs font-bold text-amber-800 uppercase">பட்டு &amp; ஜவுளி மாளிகை • SILKS &amp; TEXTILES</p>
+              <p class="text-sm text-slate-500">${invoiceData.shopAddress || '123 Cross Cut Rd, Coimbatore, TN'}</p>
+              <p class="text-sm text-slate-500">GSTIN: ${invoiceData.shopGst || '33AAAAA0000A1Z5'}</p>
             </div>
             <div class="text-right">
               <h2 class="text-xl font-bold">${invoiceNo}</h2>
@@ -75,6 +76,9 @@ export class InvoicePdfService {
             <p>GST Tax: ₹${Number(invoiceData.sale.tax).toFixed(2)}</p>
             <p class="text-xl font-black text-indigo-900 mt-2">Grand Total: ₹${Number(invoiceData.sale.total).toLocaleString('en-IN')}</p>
           </div>
+          <div class="mt-6 text-center text-xs text-slate-500 border-t pt-3">
+            <p class="font-bold text-slate-800">*** நன்றி! மீண்டும் வருக! (THANK YOU! VISIT AGAIN) ***</p>
+          </div>
         </div>
       </body>
       </html>
@@ -100,23 +104,25 @@ export class InvoicePdfService {
     const { sale, items, shopName, shopPhone } = invoiceData;
     const invNo = sale.invoice_number;
     const total = sale.total?.toLocaleString('en-IN');
-    const custName = sale.customer_name || 'Valued Customer';
+    const custName = sale.customer_name || 'அன்பார்ந்த வாடிக்கையாளர்';
     const dateStr = new Date(sale.sale_date || sale.created_at).toLocaleDateString('en-IN');
+    const shopDisplayName = shopName || 'ரத்னா விலாஸ் (RATNA VILAS)';
 
-    let text = `🧾 *INVOICE FROM ${shopName.toUpperCase()}*\n`;
-    text += `📅 Date: ${dateStr}\n`;
-    text += `🔢 Invoice: *${invNo}*\n`;
-    text += `👤 Customer: ${custName}\n\n`;
-    text += `*ITEMS PURCHASED:*\n`;
+    let text = `🧾 *${shopDisplayName}* — பில் விவரங்கள்\n`;
+    text += `வணக்கம் ${custName}! ரத்னா விலாஸில் ஷாப்பிங் செய்ததற்கு நன்றி.\n\n`;
+    text += `📅 தேதி: ${dateStr}\n`;
+    text += `🔢 பில் எண்: *${invNo}*\n\n`;
+    text += `*வாங்கிய பொருட்கள் (Items):*\n`;
 
     items.forEach((item: any, i: number) => {
       const name = item.product_name || item.product_name_snapshot;
       text += `${i + 1}. ${name} (${item.quantity}x) — ₹${item.total}\n`;
     });
 
-    text += `\n💰 *Total Amount: ₹${total}*\n`;
-    text += `✅ Status: ${sale.status}\n\n`;
-    text += `Thank you for shopping with us! For enquiries call ${shopPhone}.`;
+    text += `\n💰 *மொத்த தொகை (Total): ₹${total}*\n`;
+    text += `✅ நிலை (Status): ${sale.status}\n\n`;
+    text += `நன்றி! மீண்டும் வருக! (Thank you! Visit again!)\n`;
+    text += `தொடர்புக்கு: ${shopPhone || '+91 98765 43210'}`;
 
     const encodedText = encodeURIComponent(text);
     const phone = sale.customer_phone ? sale.customer_phone.replace(/[^0-9]/g, '') : '';

@@ -49,9 +49,14 @@ export const PrintStaffProfileModal: React.FC<PrintStaffProfileModalProps> = ({
         <div className="p-8 overflow-y-auto space-y-6 text-slate-900 printable-area">
           {/* Shop Brand Header */}
           <div className="border-b-2 border-slate-900 pb-4 flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-extrabold tracking-tight">TEXORA RETAIL</h1>
-              <p className="text-xs text-slate-500 uppercase tracking-widest font-bold">Textile Shop Management System</p>
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-white border border-amber-200/90 p-0.5 flex items-center justify-center shrink-0">
+                <img src="/logo.png" alt="ரத்னா விலாஸ்" className="w-full h-full object-contain" />
+              </div>
+              <div>
+                <h1 className="text-xl font-black tracking-tight">ரத்னா விலாஸ் (RATNA VILAS)</h1>
+                <p className="text-xs text-amber-800 uppercase tracking-wider font-extrabold">பட்டு &amp; ஜவுளி மாளிகை • SILKS &amp; TEXTILES</p>
+              </div>
             </div>
             <div className="text-right">
               <span className="text-lg font-extrabold text-[#2012ad] font-mono">{staff.staff_code}</span>

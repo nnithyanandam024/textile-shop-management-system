@@ -54,13 +54,12 @@ export const LoginPage: React.FC = () => {
       <div className="w-full max-w-md bg-white rounded-2xl border border-slate-200/80 shadow-xl shadow-slate-200/50 p-8 my-auto relative z-10">
         {/* Brand Header */}
         <div className="text-center mb-6">
-          <div className="w-14 h-14 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-3 text-[#2012ad] shadow-sm">
-            <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-            </svg>
+          <div className="w-20 h-20 bg-white border border-amber-200/90 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-md overflow-hidden p-1">
+            <img src="/logo.png" alt="ரத்னா விலாஸ்" className="w-full h-full object-contain" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">TEXORA</h1>
-          <p className="text-sm font-medium text-slate-500 mt-1">Textile Shop Management System</p>
+          <h1 className="text-2xl font-black tracking-tight text-slate-900">ரத்னா விலாஸ்</h1>
+          <p className="text-xs font-extrabold text-amber-800 uppercase tracking-wider mt-0.5">Ratna Vilas • பட்டு &amp; ஜவுளி மாளிகை</p>
+          <p className="text-xs text-slate-500 font-medium mt-1">வணக்கம்! உங்கள் கணக்கில் உள்நுழையவும்</p>
         </div>
 
         {/* Error Alert */}

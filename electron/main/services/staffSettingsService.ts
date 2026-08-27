@@ -210,7 +210,7 @@ export class StaffSettingsService {
    */
   getAppVersionInfo(): AppVersionInfo {
     return {
-      appName: 'Texora Textile Shop Management System',
+      appName: 'ரத்னா விலாஸ் (Ratna Vilas) Textile Management System',
       version: '1.0.0',
       buildDate: '2026.08.22',
       electronVersion: process.versions.electron || '28.2.0',

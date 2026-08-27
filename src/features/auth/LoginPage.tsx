@@ -142,9 +142,16 @@ export const LoginPage: React.FC = () => {
           }}
         />
 
-        {/* Footer info */}
-        <div className="mt-5 text-center text-xs text-slate-400 font-medium border-t border-slate-100 pt-3">
-          ரத்னா விலாஸ் (Ratna Vilas) • Version 1.0.0
+        {/* Footer info & Welcome page return link */}
+        <div className="mt-5 flex flex-col items-center gap-2 text-xs text-slate-400 font-medium border-t border-slate-100 pt-3">
+          <button
+            type="button"
+            onClick={() => navigate('/welcome')}
+            className="text-amber-800 hover:text-amber-950 font-bold hover:underline transition-colors flex items-center gap-1 text-[11px]"
+          >
+            <span>← முகப்பு பக்கம் (Welcome Screen)</span>
+          </button>
+          <span>ரத்னா விலாஸ் (Ratna Vilas) • Version 1.0.0</span>
         </div>
       </div>
     </div>

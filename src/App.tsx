@@ -53,14 +53,36 @@ import { MyDocumentsPage } from './features/staff-self-service/pages/MyDocuments
 import { MyPerformancePage } from './features/staff-self-service/pages/MyPerformancePage';
 import { MySettingsPage } from './features/staff-self-service/pages/MySettingsPage';
 
+import { SplashScreen } from './components/common/SplashScreen';
+import { LoomLoader } from './components/common/LoomLoader';
+import { WelcomePage } from './features/welcome/WelcomePage';
+
 const MainAppRouter: React.FC = () => {
   const { currentUser, isLoading, isLocked, setupRequired } = useAuth();
+  const [showSplash, setShowSplash] = React.useState<boolean>(() => {
+    return !sessionStorage.getItem('splash_screen_shown');
+  });
+
+  const handleSplashFinish = () => {
+    sessionStorage.setItem('splash_screen_shown', 'true');
+    setShowSplash(false);
+  };
+
+  if (showSplash) {
+    return <SplashScreen onFinish={handleSplashFinish} durationMs={1100} />;
+  }
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#f9fafc] flex flex-col justify-center items-center">
-        <div className="w-10 h-10 border-4 border-[#2012ad] border-t-transparent rounded-full animate-spin mb-3" />
-        <p className="text-sm font-semibold text-slate-600">Initializing ரத்னா விலாஸ் (Ratna Vilas)...</p>
+      <div className="min-h-screen bg-[#f9fafc] flex flex-col justify-center items-center relative">
+        <div className="fixed inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-60 pointer-events-none" />
+        <div className="relative z-10">
+          <LoomLoader
+            message="ரத்னா விலாஸ் மேலாண்மை மென்பொருள் துவங்குகிறது..."
+            subMessage="பாதுகாப்பான தரவுத்தளம் & பில்லிங் வசதிகள் தயாராகிறது..."
+            size="lg"
+          />
+        </div>
       </div>
     );
   }
@@ -69,17 +91,21 @@ const MainAppRouter: React.FC = () => {
     return <SetupWizard />;
   }
 
+  const shouldSkipWelcome = localStorage.getItem('skip_welcome_screen') === 'true';
+
   return (
     <Routes>
       {/* Route legacy staff login to unified login */}
-      <Route path="/staff/login" element={<Navigate to="/" replace />} />
+      <Route path="/staff/login" element={<Navigate to="/login" replace />} />
+      <Route path="/welcome" element={<WelcomePage />} />
+      <Route path="/login" element={currentUser ? <RoleDefaultRedirect /> : <LoginPage />} />
 
       {/* Main Unified Administrative & Store App Routes */}
       <Route
         path="/*"
         element={
           !currentUser ? (
-            <LoginPage />
+            <Navigate to={shouldSkipWelcome ? '/login' : '/welcome'} replace />
           ) : (
             <>
               {isLocked && <LockScreenModal />}

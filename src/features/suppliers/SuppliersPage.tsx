@@ -211,7 +211,7 @@ export const SuppliersPage: React.FC = () => {
                   type="text"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
-                  placeholder="e.g. Texora Mills Ltd"
+                  placeholder="e.g. Surat Fabrics Wholesalers"
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium"
                   required
                 />

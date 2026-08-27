@@ -278,7 +278,7 @@ describe('Staff Portal — Phase 11 Test Suite (Production, Reports & Final Inte
     // Version info
     const version = settingsService.getAppVersionInfo();
     expect(version.version).toBe('1.0.0');
-    expect(version.appName).toContain('Texora');
+    expect(version.appName).toContain('Ratna Vilas');
     expect(version.databaseStatus).toBe('CONNECTED');
 
     // Reject wrong current password (seeded password is 'password123')

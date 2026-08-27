@@ -54,7 +54,7 @@ export const UserAccessCard: React.FC<UserAccessCardProps> = ({
           </div>
           <h4 className="text-sm font-bold text-slate-900">No Login Account Linked</h4>
           <p className="text-xs text-slate-500 max-w-sm mx-auto">
-            This employee does not currently have access to log into Texora Management Software. Click "Create Login Account" to assign a username and role.
+            This employee does not currently have access to log into Ratna Vilas Management Software. Click "Create Login Account" to assign a username and role.
           </p>
         </div>
       ) : (

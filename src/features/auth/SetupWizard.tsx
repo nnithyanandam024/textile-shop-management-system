@@ -107,7 +107,7 @@ export const SetupWizard: React.FC = () => {
           <form onSubmit={handleNext} className="space-y-4">
             <div className="text-center mb-6">
               <Store className="w-10 h-10 text-[#2012ad] mx-auto mb-2" />
-              <h2 className="text-xl font-bold text-slate-900">Welcome to Texora</h2>
+              <h2 className="text-xl font-bold text-slate-900">Welcome to Ratna Vilas (ரத்னா விலாஸ்)</h2>
               <p className="text-sm text-slate-500">Configure your textile shop business details</p>
             </div>
 
@@ -169,7 +169,7 @@ export const SetupWizard: React.FC = () => {
             <div className="text-center mb-6">
               <User className="w-10 h-10 text-[#2012ad] mx-auto mb-2" />
               <h2 className="text-xl font-bold text-slate-900">Create Administrator Account</h2>
-              <p className="text-sm text-slate-500">Set up the primary Owner account for Texora</p>
+              <p className="text-sm text-slate-500">Set up the primary Owner account for Ratna Vilas</p>
             </div>
 
             <div>

@@ -55,7 +55,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
   const changeDue = Math.max(0, cashTendered - totalAmount);
   const splitTotal = splitCash + splitUpi + splitCard;
-  const upiUri = `upi://pay?pa=texora@okhdfcbank&pn=Texora+Textile+Hub&am=${totalAmount}&cu=INR&tn=Invoice+Payment`;
+  const upiUri = `upi://pay?pa=ratnavilas@okhdfcbank&pn=Ratna+Vilas&am=${totalAmount}&cu=INR&tn=Invoice+Payment`;
 
   // Quick Cash Add Buttons
   const handleQuickAdd = (amt: number) => {
@@ -333,7 +333,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-bold text-slate-900">Scan & Pay via any UPI App</p>
-                  <p className="text-[11px] text-slate-500 font-mono">texora@okhdfcbank</p>
+                  <p className="text-[11px] text-slate-500 font-mono">ratnavilas@okhdfcbank</p>
                   <p className="text-xs font-extrabold text-[#2012ad] mt-1">₹{totalAmount.toLocaleString('en-IN')}</p>
                   <button
                     type="button"

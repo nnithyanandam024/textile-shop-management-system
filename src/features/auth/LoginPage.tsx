@@ -58,8 +58,6 @@ export const LoginPage: React.FC = () => {
             <img src="/logo.png" alt="ரத்னா விலாஸ்" className="w-full h-full object-contain" />
           </div>
           <h1 className="text-2xl font-black tracking-tight text-slate-900">ரத்னா விலாஸ்</h1>
-          <p className="text-xs font-extrabold text-amber-800 uppercase tracking-wider mt-0.5">Ratna Vilas • பட்டு &amp; ஜவுளி மாளிகை</p>
-          <p className="text-xs text-slate-500 font-medium mt-1">வணக்கம்! உங்கள் கணக்கில் உள்நுழையவும்</p>
         </div>
 
         {/* Error Alert */}
@@ -146,7 +144,7 @@ export const LoginPage: React.FC = () => {
 
         {/* Footer info */}
         <div className="mt-5 text-center text-xs text-slate-400 font-medium border-t border-slate-100 pt-3">
-          Texora Retail & POS Software • Version 0.1.0
+          ரத்னா விலாஸ் (Ratna Vilas) • Version 1.0.0
         </div>
       </div>
     </div>

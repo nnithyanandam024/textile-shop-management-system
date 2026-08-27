@@ -63,7 +63,7 @@ export class SelfServiceRepository {
         staff_code: `ADM-${String(user.id).padStart(4, '0')}`,
         first_name: parts[0] || 'Store',
         last_name: parts.slice(1).join(' ') || 'Admin',
-        email: `${user.username}@texora.shop`,
+        email: `${user.username}@ratnavilas.com`,
         phone: '+91 98765 00001',
         department_name: 'Store Management',
         designation_name: user.role_name || 'Store Administrator',

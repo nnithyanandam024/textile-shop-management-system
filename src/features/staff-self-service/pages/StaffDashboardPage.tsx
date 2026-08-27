@@ -43,7 +43,7 @@ export const StaffDashboardPage: React.FC = () => {
       last_name: currentUser?.displayName?.split(' ').slice(1).join(' ') || '',
       designation_name: currentUser?.roleName || 'Store Staff',
       department_name: currentUser?.roleName === 'Owner' || currentUser?.roleName === 'Manager' ? 'Store Management' : 'Store Operations',
-      email: `${currentUser?.username || 'staff'}@texora.shop`,
+      email: `${currentUser?.username || 'staff'}@ratnavilas.com`,
       phone: '+91 98765 00000',
       work_location: 'Main Textile Store',
     };

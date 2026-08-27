@@ -43,7 +43,7 @@ export const SmartReportViewer: React.FC = () => {
   const handleExportCSV = () => {
     if (!report) return;
     const lines = [
-      ['Texora Textile ERP - Smart Executive Business Report'],
+      ['ரத்னா விலாஸ் (Ratna Vilas) - Smart Executive Business Report'],
       ['Report Type', report.periodLabel],
       ['Generated At', new Date(report.generatedAt).toLocaleString()],
       [''],

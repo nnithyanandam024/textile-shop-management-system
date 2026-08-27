@@ -22,7 +22,7 @@ export class AiService {
     if (!rateCheck.allowed) {
       const resp: AiChatResponse = {
         answer: `⏳ **Rate Limit Reached**\n\nYou have made multiple requests in a short time. Please wait **${rateCheck.retryAfterSec || 30} seconds** before asking another question.`,
-        source: 'Texora AI Rate Limiter',
+        source: 'Ratna Vilas AI Rate Limiter',
         sourcesUsed: ['Traffic Protection Policy'],
         generatedAt: new Date().toISOString(),
         confidence: 1.0,
@@ -193,7 +193,7 @@ export class AiService {
               items: data.items,
               aiInsight: 'Pairing high-margin accessories boosts basket size by over 35%.',
             },
-            source: 'Texora Smart Product Affinity Engine',
+            source: 'Ratna Vilas Smart Product Affinity Engine',
             sourcesUsed: ['Historical POS Invoices', 'Basket Co-occurrence Matrix'],
             generatedAt: new Date().toISOString(),
             confidence: 1.0,

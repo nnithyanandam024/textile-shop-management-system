@@ -90,7 +90,7 @@ export const staffProfileService = {
       gender: 'Male',
       phone: '+91 98765 22002',
       alternatePhone: null,
-      email: 'arun.cashier@texora.shop',
+      email: 'arun.cashier@ratnavilas.com',
       addressLine1: '123 Crosscut Road',
       addressLine2: 'Gandhipuram',
       city: 'Coimbatore',

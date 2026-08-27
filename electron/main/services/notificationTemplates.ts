@@ -63,7 +63,7 @@ export function formatNotificationTemplate(payload: NotificationTemplatePayload)
       return {
         type: 'SYSTEM',
         title: 'System Notification',
-        message: 'You have a new update in Texora Management System.',
+        message: 'You have a new update in Ratna Vilas Management System.',
         priority: 'LOW',
       };
   }

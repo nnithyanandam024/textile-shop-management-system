@@ -185,7 +185,7 @@ export class AiTools {
     return {
       answer,
       items: pairings,
-      sourceAudit: 'Texora Smart Product Affinity Engine, historical invoice basket co-occurrence records',
+      sourceAudit: 'Ratna Vilas Smart Product Affinity Engine, historical invoice basket co-occurrence records',
     };
   }
 

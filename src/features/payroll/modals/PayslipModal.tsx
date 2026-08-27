@@ -55,7 +55,8 @@ export const PayslipModal: React.FC<PayslipModalProps> = ({
         <div className="p-8 space-y-6 text-slate-900 font-sans">
           {/* Shop Branding */}
           <div className="text-center border-b border-slate-200 pb-4">
-            <h1 className="text-2xl font-extrabold text-[#2012ad] tracking-wider uppercase">Texora Textile Hub</h1>
+            <h1 className="text-2xl font-extrabold text-[#2012ad] tracking-wider uppercase">ரத்னா விலாஸ் (RATNA VILAS)</h1>
+            <p className="text-xs text-amber-800 font-extrabold uppercase mt-0.5">பட்டு &amp; ஜவுளி மாளிகை • SILKS &amp; TEXTILES</p>
             <p className="text-xs text-slate-500 font-semibold mt-1">Official Employee Salary Payment Advice</p>
           </div>
 

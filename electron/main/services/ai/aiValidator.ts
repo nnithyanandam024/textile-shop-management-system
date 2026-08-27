@@ -312,7 +312,7 @@ export class AiValidator {
         title: 'Access Restricted',
         aiInsight: 'Request rejected by RBAC security guard.',
       },
-      source: 'Texora Security & RBAC Guard',
+      source: 'Ratna Vilas Security & RBAC Guard',
       sourcesUsed: ['Role Permission Matrix'],
       generatedAt: new Date().toISOString(),
       confidence: 1.0,
@@ -339,7 +339,7 @@ export class AiValidator {
         `• Top-selling fast movers & categories\n` +
         `• Current low stock & out-of-stock items\n` +
         `• Customer loyalty & on-duty staff attendance`
-      : `🤖 **Texora Business Assistant**\n\n` +
+      : `🤖 **ரத்னா விலாஸ் AI அசிஸ்டன்ட் (Ratna AI)**\n\n` +
         `I specialize in answering questions about your textile store's **Sales, Inventory, Customers, Products, and Staff Attendance**.\n\n` +
         `Try asking:\n` +
         `• *"How much did we sell today?"*\n` +
@@ -354,7 +354,7 @@ export class AiValidator {
         title: 'Assistant Scope Notice',
         aiInsight: 'For forward replenishment models, consult the Inventory Planning module.',
       },
-      source: 'Texora AI Capability Registry',
+      source: 'Ratna Vilas AI Capability Registry',
       sourcesUsed: ['AI Capability Definition'],
       generatedAt: new Date().toISOString(),
       confidence: 1.0,

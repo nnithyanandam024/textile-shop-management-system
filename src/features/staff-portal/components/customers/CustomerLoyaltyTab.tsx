@@ -42,7 +42,7 @@ export const CustomerLoyaltyTab: React.FC<CustomerLoyaltyTabProps> = ({
               </span>
             </div>
             <span className="text-[10px] font-bold opacity-80 uppercase tracking-wider">
-              Texora Rewards
+              Ratna Vilas Rewards
             </span>
           </div>
 

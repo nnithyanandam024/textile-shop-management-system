@@ -253,7 +253,7 @@ export const ContactInformation: React.FC<ContactInformationProps> = ({
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="employee@texora.shop"
+                placeholder="employee@ratnavilas.com"
                 disabled={isSaving}
                 className="w-full pl-9 pr-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2012ad]/20 focus:border-[#2012ad]"
               />

@@ -307,7 +307,7 @@ export const AiChatModal: React.FC<AiChatModalProps> = ({ isOpen, onClose }) => 
               </div>
               <div className="bg-white border border-slate-200/90 rounded-2xl rounded-bl-xs p-4 shadow-sm flex items-center gap-2 text-xs font-semibold text-slate-600">
                 <Sparkles className="w-4 h-4 text-amber-500 animate-bounce" />
-                <span>Texora AI is querying authorized store metrics...</span>
+                <span>ரத்னா AI தகவல்களை சரிபார்க்கிறது... (Ratna AI is querying store metrics...)</span>
               </div>
             </div>
           )}
@@ -368,7 +368,7 @@ export const AiChatModal: React.FC<AiChatModalProps> = ({ isOpen, onClose }) => 
             </button>
           </form>
           <div className="mt-2 text-[10px] text-center text-slate-400 flex items-center justify-center gap-2">
-            <span>Powered by Texora AI Engine</span>
+            <span>Powered by Ratna AI Engine (ரத்னா AI)</span>
             <span>•</span>
             <span>Financial numbers are exact from SQLite ledger</span>
           </div>

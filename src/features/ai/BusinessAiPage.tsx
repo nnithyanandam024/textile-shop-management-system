@@ -339,7 +339,7 @@ export const BusinessAiPage: React.FC = () => {
             </div>
             <div>
               <h1 className="text-sm font-bold text-slate-900 leading-tight">
-                Texora Business Intelligence Assistant
+                ரத்னா AI அசிஸ்டன்ட் (Ratna AI Business Assistant)
               </h1>
               <p className="text-[11px] text-slate-500 font-medium flex items-center gap-2">
                 <span>Direct Backend Intelligence</span>
@@ -606,7 +606,7 @@ export const BusinessAiPage: React.FC = () => {
 
           {/* Privacy & Anti-Hallucination Notice */}
           <div className="flex items-center justify-between text-[10px] text-slate-400 px-1 font-medium">
-            <span>Texora AI answers using 100% verified showroom database records.</span>
+            <span>Ratna AI answers using 100% verified showroom database records.</span>
             <span>Shift + Enter for new line</span>
           </div>
         </div>

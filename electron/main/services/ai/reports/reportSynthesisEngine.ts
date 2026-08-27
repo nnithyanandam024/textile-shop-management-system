@@ -93,7 +93,7 @@ export class ReportSynthesisEngine {
       risk: raw.risk,
       actionItems,
       generatedAt: new Date().toISOString(),
-      generatedBy: 'Texora AI Management Engine',
+      generatedBy: 'Ratna Vilas AI Management Engine (ரத்னா AI)',
     };
   }
 }

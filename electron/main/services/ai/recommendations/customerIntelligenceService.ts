@@ -104,7 +104,7 @@ export class CustomerIntelligenceService {
     let segment: CustomerSegment = 'new_customer';
     let segmentLabel = 'New Customer';
     let isDueForVisit = false;
-    let suggestedAction = 'Welcome customer with enrollment in Texora Loyalty Rewards.';
+    let suggestedAction = 'Welcome customer with enrollment in Ratna Vilas Loyalty Rewards.';
 
     if (totalSpent >= 40000 || (totalVisits >= 4 && aov >= 3500)) {
       segment = 'vip_high_value';

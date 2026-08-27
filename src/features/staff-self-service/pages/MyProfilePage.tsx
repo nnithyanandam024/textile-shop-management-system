@@ -51,7 +51,7 @@ export const MyProfilePage: React.FC = () => {
       staff_code: currentUser?.username === 'admin' ? 'ADM-0001' : `STF-${String(currentUser?.userId || 1).padStart(4, '0')}`,
       first_name: currentUser?.displayName?.split(' ')[0] || currentUser?.username || 'Staff',
       last_name: currentUser?.displayName?.split(' ').slice(1).join(' ') || '',
-      email: `${currentUser?.username || 'staff'}@texora.shop`,
+      email: `${currentUser?.username || 'staff'}@ratnavilas.com`,
       phone: '+91 98765 00000',
       designation_name: currentUser?.roleName || 'Store Staff',
       department_name: currentUser?.roleName === 'Owner' || currentUser?.roleName === 'Manager' ? 'Store Management' : 'Store Operations',

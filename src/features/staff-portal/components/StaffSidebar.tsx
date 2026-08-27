@@ -26,23 +26,22 @@ interface SidebarItem {
   path: string;
   icon: React.ElementType;
   permission?: string;
-  isPhase1Active?: boolean;
 }
 
 const navItems: SidebarItem[] = [
-  { name: 'Dashboard', path: '/staff/dashboard', icon: LayoutDashboard, permission: 'DASHBOARD_VIEW', isPhase1Active: true },
-  { name: 'POS & Billing', path: '/staff/pos', icon: ShoppingCart, permission: 'POS_VIEW', isPhase1Active: true },
-  { name: 'My Sales', path: '/staff/sales', icon: TrendingUp, permission: 'SALES_VIEW_SELF', isPhase1Active: true },
-  { name: 'Customers', path: '/staff/customers', icon: Users, permission: 'CUSTOMER_VIEW', isPhase1Active: true },
-  { name: 'My Inventory', path: '/staff/inventory', icon: Package, permission: 'INVENTORY_VIEW', isPhase1Active: true },
-  { name: 'Attendance', path: '/staff/attendance', icon: CalendarCheck, permission: 'ATTENDANCE_VIEW_SELF', isPhase1Active: true },
-  { name: 'My Shifts', path: '/staff/shifts', icon: Clock, permission: 'SHIFT_VIEW', isPhase1Active: true },
-  { name: 'My Leave', path: '/staff/leave', icon: Calendar, permission: 'LEAVE_VIEW_SELF', isPhase1Active: true },
-  { name: 'My Payroll', path: '/staff/payroll', icon: DollarSign, permission: 'PAYROLL_VIEW_SELF', isPhase1Active: true },
-  { name: 'Reports', path: '/staff/reports', icon: BarChart3, permission: 'REPORT_VIEW', isPhase1Active: true },
-  { name: 'Notifications', path: '/staff/notifications', icon: Bell, permission: 'COMMUNICATION_VIEW', isPhase1Active: true },
-  { name: 'Settings', path: '/staff/settings', icon: Settings, permission: 'SETTINGS_VIEW', isPhase1Active: true },
-  { name: 'My Profile', path: '/staff/profile', icon: User, permission: 'STAFF_VIEW_PROFILE', isPhase1Active: true },
+  { name: 'Dashboard', path: '/staff/dashboard', icon: LayoutDashboard, permission: 'DASHBOARD_VIEW' },
+  { name: 'POS & Billing', path: '/staff/pos', icon: ShoppingCart, permission: 'POS_VIEW' },
+  { name: 'My Sales', path: '/staff/sales', icon: TrendingUp, permission: 'SALES_VIEW_SELF' },
+  { name: 'Customers', path: '/staff/customers', icon: Users, permission: 'CUSTOMER_VIEW' },
+  { name: 'My Inventory', path: '/staff/inventory', icon: Package, permission: 'INVENTORY_VIEW' },
+  { name: 'Attendance', path: '/staff/attendance', icon: CalendarCheck, permission: 'ATTENDANCE_VIEW_SELF' },
+  { name: 'My Shifts', path: '/staff/shifts', icon: Clock, permission: 'SHIFT_VIEW' },
+  { name: 'My Leave', path: '/staff/leave', icon: Calendar, permission: 'LEAVE_VIEW_SELF' },
+  { name: 'My Payroll', path: '/staff/payroll', icon: DollarSign, permission: 'PAYROLL_VIEW_SELF' },
+  { name: 'Reports', path: '/staff/reports', icon: BarChart3, permission: 'REPORT_VIEW' },
+  { name: 'Notifications', path: '/staff/notifications', icon: Bell, permission: 'COMMUNICATION_VIEW' },
+  { name: 'Settings', path: '/staff/settings', icon: Settings, permission: 'SETTINGS_VIEW' },
+  { name: 'My Profile', path: '/staff/profile', icon: User, permission: 'STAFF_VIEW_PROFILE' },
 ];
 
 export const StaffSidebar: React.FC = () => {

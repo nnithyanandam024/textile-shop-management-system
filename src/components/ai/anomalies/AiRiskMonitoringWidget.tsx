@@ -64,7 +64,7 @@ export const AiRiskMonitoringWidget: React.FC = () => {
                 AI Anomaly & Operational Risk Monitor
               </h2>
               <span className="px-2.5 py-0.5 text-[10px] font-extrabold bg-rose-100 text-rose-800 rounded-full">
-                Phase 5 Active
+                Live Auditing
               </span>
             </div>
             <p className="text-xs text-slate-500 font-medium mt-0.5">

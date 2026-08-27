@@ -332,8 +332,8 @@ export class AiValidator {
 
     const answer = isForecast
       ? `🔮 **Demand & Sales Forecasting Notice**\n\n` +
-        `I am currently operating in **AI Phase 1 (Foundation & Business Assistant)**. ` +
-        `Predictive sales forecasting, AI demand planning, and replenishment models are scheduled for **AI Phase 2**.\n\n` +
+        `I specialize in real-time showroom analytics, live sales performance, stock movements, and staff operational data. ` +
+        `For deep predictive replenishment, please explore the **Smart Reorders & Inventory Planning** tab.\n\n` +
         `Right now, I can provide real-time reporting on:\n` +
         `• Today's / Yesterday's sales & transactions\n` +
         `• Top-selling fast movers & categories\n` +
@@ -352,7 +352,7 @@ export class AiValidator {
       data: {
         type: 'out_of_scope',
         title: 'Assistant Scope Notice',
-        aiInsight: 'Query is outside current Phase 1 capabilities.',
+        aiInsight: 'For forward replenishment models, consult the Inventory Planning module.',
       },
       source: 'Texora AI Capability Registry',
       sourcesUsed: ['AI Capability Definition'],

@@ -155,7 +155,7 @@ export const AiChatModal: React.FC<AiChatModalProps> = ({ isOpen, onClose }) => 
               <div className="flex items-center gap-2">
                 <h2 className="text-base font-bold tracking-tight">Texora AI Business Assistant</h2>
                 <span className="px-2 py-0.5 text-[10px] font-bold bg-amber-400 text-slate-950 rounded-full uppercase tracking-wider shadow-sm">
-                  Phase 1
+                  AI ASSISTANT
                 </span>
               </div>
               <div className="flex items-center gap-2 text-xs text-indigo-100/90 font-medium">

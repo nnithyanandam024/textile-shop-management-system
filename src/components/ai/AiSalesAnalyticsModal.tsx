@@ -85,7 +85,7 @@ export const AiSalesAnalyticsModal: React.FC<AiSalesAnalyticsModalProps> = ({ is
               <div className="flex items-center gap-2">
                 <h2 className="text-lg font-black tracking-tight">AI Sales Analytics & Velocity Explorer</h2>
                 <span className="px-2 py-0.5 text-[10px] font-bold bg-amber-400 text-slate-950 rounded-full uppercase tracking-wider shadow-xs">
-                  Phase 2
+                  INTELLIGENCE
                 </span>
               </div>
               <p className="text-xs text-indigo-100 font-medium">

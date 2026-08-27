@@ -87,7 +87,7 @@ export const SmartReportViewer: React.FC = () => {
                   AI Smart Executive Business Report
                 </h2>
                 <span className="px-2.5 py-0.5 text-[10px] font-extrabold bg-[#2012ad] text-white rounded-full">
-                  Phase 6 Ready
+                  Executive Intelligence
                 </span>
               </div>
               <p className="text-xs text-slate-500 font-medium mt-0.5">

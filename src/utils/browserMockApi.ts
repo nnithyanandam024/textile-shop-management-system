@@ -4,6 +4,18 @@
  * when previewing the application in standard web browser mode (Vite dev server).
  */
 import { BillingCalculationEngine } from '../features/pos/billingCalculation';
+import {
+  MOCK_STAFF_LIST,
+  MOCK_SHIFT_TEMPLATES,
+  MOCK_LEAVE_TYPES,
+  MOCK_HOLIDAYS_2026,
+  MOCK_PAYROLL_PERIODS,
+  MOCK_APPRAISAL_CYCLES,
+  generateMockAttendanceList,
+  generateMockPurchases,
+  generateMockExpenses,
+  generateMockReturns,
+} from './browserMockData';
 
 const STORAGE_KEYS = {
   PRODUCTS: 'texora_demo_products',
@@ -14,6 +26,16 @@ const STORAGE_KEYS = {
   CUSTOMERS: 'texora_demo_customers',
   SALES: 'texora_demo_sales',
   HELD_CARTS: 'texora_demo_held_carts',
+  PURCHASES: 'texora_demo_purchases',
+  EXPENSES: 'texora_demo_expenses',
+  RETURNS: 'texora_demo_returns',
+  ATTENDANCE: 'texora_demo_attendance',
+  SHIFT_TEMPLATES: 'texora_demo_shift_templates',
+  LEAVE_TYPES: 'texora_demo_leave_types',
+  HOLIDAYS: 'texora_demo_holidays',
+  PAYROLL_PERIODS: 'texora_demo_payroll_periods',
+  APPRAISAL_CYCLES: 'texora_demo_appraisal_cycles',
+  STAFF: 'texora_demo_staff',
 };
 
 // Initial Demo Categories
@@ -385,32 +407,34 @@ export function initBrowserMockApi() {
   let brands = loadStorage(STORAGE_KEYS.BRANDS, DEFAULT_BRANDS);
   let suppliers = loadStorage(STORAGE_KEYS.SUPPLIERS, DEFAULT_SUPPLIERS);
   let customers = loadStorage(STORAGE_KEYS.CUSTOMERS, DEFAULT_CUSTOMERS);
+  let staff = loadStorage(STORAGE_KEYS.STAFF, MOCK_STAFF_LIST);
+  let purchases = loadStorage(STORAGE_KEYS.PURCHASES, generateMockPurchases());
+  let expenses = loadStorage(STORAGE_KEYS.EXPENSES, generateMockExpenses());
+  let returns = loadStorage(STORAGE_KEYS.RETURNS, generateMockReturns());
+  let attendance = loadStorage(STORAGE_KEYS.ATTENDANCE, generateMockAttendanceList());
+  let shiftTemplates = loadStorage(STORAGE_KEYS.SHIFT_TEMPLATES, MOCK_SHIFT_TEMPLATES);
+  let leaveTypes = loadStorage(STORAGE_KEYS.LEAVE_TYPES, MOCK_LEAVE_TYPES);
+  let holidays = loadStorage(STORAGE_KEYS.HOLIDAYS, MOCK_HOLIDAYS_2026);
+  let payrollPeriods = loadStorage(STORAGE_KEYS.PAYROLL_PERIODS, MOCK_PAYROLL_PERIODS);
+  let appraisalCycles = loadStorage(STORAGE_KEYS.APPRAISAL_CYCLES, MOCK_APPRAISAL_CYCLES);
 
-  // Force re-seed if products array is empty
-  if (!products || products.length === 0) {
-    products = DEFAULT_PRODUCTS;
-    saveStorage(STORAGE_KEYS.PRODUCTS, products);
-  }
-  if (!variants || variants.length === 0) {
-    variants = DEFAULT_VARIANTS;
-    saveStorage(STORAGE_KEYS.VARIANTS, variants);
-  }
-  if (!categories || categories.length === 0) {
-    categories = DEFAULT_CATEGORIES;
-    saveStorage(STORAGE_KEYS.CATEGORIES, categories);
-  }
-  if (!brands || brands.length === 0) {
-    brands = DEFAULT_BRANDS;
-    saveStorage(STORAGE_KEYS.BRANDS, brands);
-  }
-  if (!suppliers || suppliers.length === 0) {
-    suppliers = DEFAULT_SUPPLIERS;
-    saveStorage(STORAGE_KEYS.SUPPLIERS, suppliers);
-  }
-  if (!customers || customers.length === 0) {
-    customers = DEFAULT_CUSTOMERS;
-    saveStorage(STORAGE_KEYS.CUSTOMERS, customers);
-  }
+  // Force re-seed if arrays are empty
+  if (!products || products.length === 0) saveStorage(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS);
+  if (!variants || variants.length === 0) saveStorage(STORAGE_KEYS.VARIANTS, DEFAULT_VARIANTS);
+  if (!categories || categories.length === 0) saveStorage(STORAGE_KEYS.CATEGORIES, DEFAULT_CATEGORIES);
+  if (!brands || brands.length === 0) saveStorage(STORAGE_KEYS.BRANDS, DEFAULT_BRANDS);
+  if (!suppliers || suppliers.length === 0) saveStorage(STORAGE_KEYS.SUPPLIERS, DEFAULT_SUPPLIERS);
+  if (!customers || customers.length === 0) saveStorage(STORAGE_KEYS.CUSTOMERS, DEFAULT_CUSTOMERS);
+  if (!staff || staff.length === 0) saveStorage(STORAGE_KEYS.STAFF, MOCK_STAFF_LIST);
+  if (!purchases || purchases.length === 0) saveStorage(STORAGE_KEYS.PURCHASES, generateMockPurchases());
+  if (!expenses || expenses.length === 0) saveStorage(STORAGE_KEYS.EXPENSES, generateMockExpenses());
+  if (!returns || returns.length === 0) saveStorage(STORAGE_KEYS.RETURNS, generateMockReturns());
+  if (!attendance || attendance.length === 0) saveStorage(STORAGE_KEYS.ATTENDANCE, generateMockAttendanceList());
+  if (!shiftTemplates || shiftTemplates.length === 0) saveStorage(STORAGE_KEYS.SHIFT_TEMPLATES, MOCK_SHIFT_TEMPLATES);
+  if (!leaveTypes || leaveTypes.length === 0) saveStorage(STORAGE_KEYS.LEAVE_TYPES, MOCK_LEAVE_TYPES);
+  if (!holidays || holidays.length === 0) saveStorage(STORAGE_KEYS.HOLIDAYS, MOCK_HOLIDAYS_2026);
+  if (!payrollPeriods || payrollPeriods.length === 0) saveStorage(STORAGE_KEYS.PAYROLL_PERIODS, MOCK_PAYROLL_PERIODS);
+  if (!appraisalCycles || appraisalCycles.length === 0) saveStorage(STORAGE_KEYS.APPRAISAL_CYCLES, MOCK_APPRAISAL_CYCLES);
 
   const mockApi: any = {
     __isMock: true,
@@ -3340,6 +3364,946 @@ export function initBrowserMockApi() {
           },
         };
       },
+    },
+
+    // --- PURCHASES API ---
+    purchases: {
+      getAll: async () => loadStorage(STORAGE_KEYS.PURCHASES, generateMockPurchases()),
+      getById: async (id: number) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.PURCHASES, generateMockPurchases());
+        return list.find((p) => p.id === id) || null;
+      },
+      create: async (purchase: any) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.PURCHASES, generateMockPurchases());
+        const newId = list.length > 0 ? Math.max(...list.map((p) => p.id)) + 1 : 1;
+        const purchaseNumber = `PO-2026-${String(newId).padStart(4, '0')}`;
+        const newPO = {
+          id: newId,
+          purchase_number: purchaseNumber,
+          po_number: purchaseNumber,
+          supplier_id: purchase.supplier_id || purchase.supplierId || 1,
+          supplier_name: purchase.supplier_name || 'Kanchipuram Heritage Weaver Society',
+          supplier_gstin: '33AAACK1234D1ZP',
+          supplier_city: 'Kanchipuram',
+          purchase_date: purchase.purchase_date || new Date().toISOString().slice(0, 10),
+          expected_delivery_date: purchase.expected_delivery_date || new Date().toISOString().slice(0, 10),
+          subtotal: Number(purchase.subtotal) || Number(purchase.total) || 45000,
+          tax: Number(purchase.tax) || 0,
+          tax_amount: Number(purchase.tax) || 0,
+          total: Number(purchase.total) || 47250,
+          total_amount: Number(purchase.total) || 47250,
+          paid_amount: Number(purchase.paid_amount || purchase.paidAmount || purchase.total),
+          balance_amount: Number(purchase.balance_amount || purchase.balanceAmount || 0),
+          payment_status: purchase.payment_status || 'PAID',
+          status: 'RECEIVED',
+          items_count: (purchase.items || []).length || 3,
+          notes: purchase.notes || 'Consignment verified at receiving dock',
+          items: purchase.items || [
+            { id: newId * 10 + 1, product_name: 'Bridal Kanchipuram Silk Saree', sku: 'KAN-SLK-001', quantity: 10, unit_price: 3800, tax_rate: 5, total: 39900 },
+          ],
+        };
+        list.unshift(newPO);
+        saveStorage(STORAGE_KEYS.PURCHASES, list);
+        return { success: true, purchaseId: newId, purchaseNumber, purchase: newPO };
+      },
+      cancel: async (purchaseId: number) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.PURCHASES, generateMockPurchases());
+        const po = list.find((p) => p.id === purchaseId);
+        if (po) {
+          po.status = 'CANCELLED';
+          saveStorage(STORAGE_KEYS.PURCHASES, list);
+          return { success: true };
+        }
+        return { success: false, error: 'Purchase Order not found.' };
+      },
+    },
+
+    // --- EXPENSES API ---
+    expenses: {
+      getAll: async () => loadStorage(STORAGE_KEYS.EXPENSES, generateMockExpenses()),
+      create: async (expense: any) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.EXPENSES, generateMockExpenses());
+        const newId = list.length > 0 ? Math.max(...list.map((e) => e.id)) + 1 : 1;
+        const expenseNumber = `EXP-2026-${String(newId).padStart(4, '0')}`;
+        const newExp = {
+          id: newId,
+          expense_number: expenseNumber,
+          category: expense.category,
+          category_name: expense.category,
+          paid_to: expense.paid_to || expense.payee || 'Operational Vendor',
+          payee: expense.paid_to || expense.payee || 'Operational Vendor',
+          amount: Number(expense.amount) || 0,
+          expense_date: expense.expense_date || new Date().toISOString().slice(0, 10),
+          payment_mode: expense.payment_mode || expense.payment_method || 'CASH',
+          payment_method: expense.payment_mode || expense.payment_method || 'CASH',
+          status: 'APPROVED',
+          notes: expense.notes || '',
+        };
+        list.unshift(newExp);
+        saveStorage(STORAGE_KEYS.EXPENSES, list);
+        return { success: true, id: newId, expenseNumber, expense: newExp };
+      },
+      cancel: async (expenseId: number) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.EXPENSES, generateMockExpenses());
+        const exp = list.find((e) => e.id === expenseId);
+        if (exp) {
+          exp.status = 'CANCELLED';
+          saveStorage(STORAGE_KEYS.EXPENSES, list);
+          return { success: true };
+        }
+        return { success: false, error: 'Expense record not found.' };
+      },
+    },
+
+    // --- RETURNS & EXCHANGES API ---
+    returns: {
+      getAll: async () => loadStorage(STORAGE_KEYS.RETURNS, generateMockReturns()),
+      create: async (input: any) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.RETURNS, generateMockReturns());
+        const newId = list.length > 0 ? Math.max(...list.map((r) => r.id)) + 1 : 1;
+        const returnNumber = `RET-2026-${String(newId).padStart(4, '0')}`;
+        const refundAmt = Number(input.refund_amount || input.refundAmount || 0);
+        const newRet = {
+          id: newId,
+          return_number: returnNumber,
+          sale_id: input.sale_id || input.saleId || 1001,
+          invoice_number: input.invoice_number || `INV-2026-${input.sale_id || 1001}`,
+          customer_name: input.customer_name || 'Retail Customer',
+          return_date: new Date().toISOString().slice(0, 10),
+          refund_amount: refundAmt,
+          total_refund: refundAmt,
+          reason: input.reason || 'Customer Return',
+          status: 'COMPLETED',
+          refund_mode: input.refund_mode || 'CASH',
+          items: input.items || [],
+        };
+        list.unshift(newRet);
+        saveStorage(STORAGE_KEYS.RETURNS, list);
+        return { success: true, returnId: newId, returnNumber, refundAmount: refundAmt, return: newRet };
+      },
+    },
+    exchanges: {
+      create: async (_input: any) => ({
+        success: true,
+        exchangeNumber: `EXC-2026-${Date.now().toString().slice(-4)}`,
+        differenceAmount: 0,
+      }),
+    },
+
+    // --- ATTENDANCE & BIOMETRICS API ---
+    attendance: {
+      getSettings: async () => ({
+        default_grace_minutes: 15,
+        default_half_day_minutes: 240,
+        full_day_minutes: 480,
+        overtime_threshold_minutes: 60,
+        work_hours_per_day: 8,
+      }),
+      updateSettings: async () => ({ success: true }),
+      checkIn: async (staffId: number, time?: string) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.ATTENDANCE, generateMockAttendanceList());
+        const today = new Date().toISOString().slice(0, 10);
+        const stf = MOCK_STAFF_LIST.find((s) => s.id === staffId);
+        const checkInTime = time || new Date().toISOString();
+        const existing = list.find((a) => a.staff_id === staffId && a.date === today);
+        if (existing) {
+          existing.check_in = checkInTime;
+          existing.status = 'PRESENT';
+        } else {
+          list.unshift({
+            id: Date.now(),
+            staff_id: staffId,
+            staff_code: stf?.staff_code || `STF-${staffId}`,
+            staff_name: stf ? `${stf.first_name} ${stf.last_name}` : 'Staff Member',
+            department_name: stf?.department_name || 'Store Operations',
+            date: today,
+            shift_id: 1,
+            shift_name: 'Morning Retail Shift',
+            check_in: checkInTime,
+            check_out: null,
+            status: 'PRESENT',
+            work_duration_minutes: 0,
+            late_minutes: 0,
+            overtime_minutes: 0,
+            biometric_verified: 1,
+          });
+        }
+        saveStorage(STORAGE_KEYS.ATTENDANCE, list);
+        return { success: true };
+      },
+      checkOut: async (staffId: number, time?: string) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.ATTENDANCE, generateMockAttendanceList());
+        const today = new Date().toISOString().slice(0, 10);
+        const existing = list.find((a) => a.staff_id === staffId && a.date === today);
+        if (existing) {
+          existing.check_out = time || new Date().toISOString();
+          existing.work_duration_minutes = 510;
+          saveStorage(STORAGE_KEYS.ATTENDANCE, list);
+          return { success: true };
+        }
+        return { success: false, error: 'Check-in record not found for today.' };
+      },
+      getDaily: async (dateStr?: string, filters?: any) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.ATTENDANCE, generateMockAttendanceList());
+        const targetDate = dateStr || new Date().toISOString().slice(0, 10);
+        let daily = list.filter((a) => a.date === targetDate);
+        if (daily.length === 0) {
+          const latestDate = list[0]?.date || targetDate;
+          daily = list.filter((a) => a.date === latestDate);
+        }
+        if (filters?.department) {
+          daily = daily.filter((a) => a.department_name === filters.department);
+        }
+        if (filters?.status) {
+          daily = daily.filter((a) => a.status === filters.status);
+        }
+        const presentCount = daily.filter((a) => a.status === 'PRESENT' || a.status === 'LATE').length;
+        const lateCount = daily.filter((a) => a.status === 'LATE').length;
+        const absentCount = daily.filter((a) => a.status === 'ABSENT').length;
+        const leaveCount = daily.filter((a) => a.status === 'ON_LEAVE').length;
+        return {
+          kpis: {
+            total_staff: MOCK_STAFF_LIST.length,
+            present_count: presentCount > 0 ? presentCount : 11,
+            late_count: lateCount,
+            absent_count: absentCount,
+            on_leave_count: leaveCount,
+            attendance_rate: Math.round(((presentCount || 11) / MOCK_STAFF_LIST.length) * 100),
+          },
+          list: daily,
+        };
+      },
+      getStaffMonthly: async (staffId: number, _year: number, _month: number) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.ATTENDANCE, generateMockAttendanceList());
+        const staffRecords = list.filter((a) => a.staff_id === staffId);
+        const presentDays = staffRecords.filter((a) => a.status === 'PRESENT' || a.status === 'LATE').length;
+        const lateDays = staffRecords.filter((a) => a.status === 'LATE').length;
+        const otHours = Math.round(staffRecords.reduce((sum, a) => sum + (a.overtime_minutes || 0), 0) / 60);
+        return {
+          staff_id: staffId,
+          total_days: 30,
+          present_days: presentDays > 0 ? presentDays : 26,
+          late_days: lateDays,
+          absent_days: 0,
+          leave_days: 2,
+          overtime_hours: otHours,
+          attendance_rate: 96.5,
+          logs: staffRecords.slice(0, 30),
+        };
+      },
+      markManual: async (input: any) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.ATTENDANCE, generateMockAttendanceList());
+        list.unshift({
+          id: Date.now(),
+          staff_id: input.staff_id,
+          staff_name: input.staff_name || 'Staff Member',
+          date: input.date,
+          shift_name: 'Morning Retail Shift',
+          check_in: input.check_in,
+          check_out: input.check_out,
+          status: input.status || 'PRESENT',
+          work_duration_minutes: 510,
+          notes: input.notes || 'Manual Entry',
+        });
+        saveStorage(STORAGE_KEYS.ATTENDANCE, list);
+        return { success: true };
+      },
+      requestCorrection: async () => ({ success: true }),
+      approveCorrection: async () => ({ success: true }),
+      getPendingCorrections: async () => [
+        { id: 1, staff_id: 2, staff_name: 'Arun Kumar', date: '2026-08-25', requested_in: '08:50:00', requested_out: '18:10:00', reason: 'Biometric scanner glitch at store opening', status: 'PENDING' },
+        { id: 2, staff_id: 3, staff_name: 'Priya Sundaram', date: '2026-08-24', requested_in: '09:00:00', requested_out: '18:30:00', reason: 'VIP bridal consultation extended past shift', status: 'PENDING' },
+      ],
+    },
+
+    // --- SHIFTS & ROSTERING API ---
+    shifts: {
+      getTemplates: async () => loadStorage(STORAGE_KEYS.SHIFT_TEMPLATES, MOCK_SHIFT_TEMPLATES),
+      getTemplateById: async (id: number) => {
+        const templates = loadStorage<any[]>(STORAGE_KEYS.SHIFT_TEMPLATES, MOCK_SHIFT_TEMPLATES);
+        return templates.find((t) => t.id === id) || templates[0];
+      },
+      createTemplate: async (input: any) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.SHIFT_TEMPLATES, MOCK_SHIFT_TEMPLATES);
+        const newId = list.length > 0 ? Math.max(...list.map((t) => t.id)) + 1 : 1;
+        const newT = { id: newId, is_active: 1, ...input };
+        list.push(newT);
+        saveStorage(STORAGE_KEYS.SHIFT_TEMPLATES, list);
+        return { success: true, id: newId };
+      },
+      updateTemplate: async (id: number, input: any) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.SHIFT_TEMPLATES, MOCK_SHIFT_TEMPLATES);
+        const idx = list.findIndex((t) => t.id === id);
+        if (idx !== -1) {
+          list[idx] = { ...list[idx], ...input };
+          saveStorage(STORAGE_KEYS.SHIFT_TEMPLATES, list);
+          return { success: true };
+        }
+        return { success: false, error: 'Template not found' };
+      },
+      deactivateTemplate: async (id: number) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.SHIFT_TEMPLATES, MOCK_SHIFT_TEMPLATES);
+        const t = list.find((item) => item.id === id);
+        if (t) {
+          t.is_active = 0;
+          saveStorage(STORAGE_KEYS.SHIFT_TEMPLATES, list);
+          return { success: true };
+        }
+        return { success: false };
+      },
+      assignStaff: async () => ({ success: true }),
+      getStaffHistory: async () => [],
+      getSchedule: async (staffId: number, _dateStr?: string) => {
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        return days.map((day, idx) => ({
+          id: idx + 1,
+          staff_id: staffId,
+          day_of_week: idx + 1,
+          day_name: day,
+          shift_id: (staffId % 2 === 0 ? 2 : 1),
+          shift_name: staffId % 2 === 0 ? 'Evening Retail Shift (12:30 - 21:30)' : 'Morning Retail Shift (09:00 - 18:00)',
+          is_week_off: (staffId % 7 === (idx + 1) % 7) ? 1 : 0,
+        }));
+      },
+      setSchedule: async () => ({ success: true }),
+      createOverride: async () => ({ success: true }),
+      deleteOverride: async () => ({ success: true }),
+      getOverrides: async () => [
+        { id: 1, staff_id: 1, staff_name: 'Rajesh Kumar', date: '2026-08-28', override_shift_name: 'Festive Extended Shift (09:00 - 21:30)', reason: 'Aadi Sale Supervision' },
+        { id: 2, staff_id: 3, staff_name: 'Priya Sundaram', date: '2026-08-28', override_shift_name: 'Festive Extended Shift (09:00 - 21:30)', reason: 'VIP Bridal Lounge Rush' },
+      ],
+      resolveDate: async (staffId: number, dateStr: string) => {
+        const stf = MOCK_STAFF_LIST.find((s) => s.id === staffId);
+        return {
+          staff_id: staffId,
+          staff_name: stf ? `${stf.first_name} ${stf.last_name}` : 'Staff',
+          date: dateStr,
+          shift_id: 1,
+          shift_name: 'Morning Retail Shift (09:00 - 18:00)',
+          start_time: '09:00:00',
+          end_time: '18:00:00',
+          is_override: false,
+          is_holiday: false,
+          is_week_off: false,
+        };
+      },
+    },
+
+    // --- LEAVE & HOLIDAYS API ---
+    leave: {
+      getTypes: async () => loadStorage(STORAGE_KEYS.LEAVE_TYPES, MOCK_LEAVE_TYPES),
+      createType: async (input: any) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.LEAVE_TYPES, MOCK_LEAVE_TYPES);
+        const newId = list.length > 0 ? Math.max(...list.map((l) => l.id)) + 1 : 1;
+        list.push({ id: newId, is_active: 1, ...input });
+        saveStorage(STORAGE_KEYS.LEAVE_TYPES, list);
+        return { success: true, id: newId };
+      },
+      updateType: async (id: number, input: any) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.LEAVE_TYPES, MOCK_LEAVE_TYPES);
+        const idx = list.findIndex((l) => l.id === id);
+        if (idx !== -1) {
+          list[idx] = { ...list[idx], ...input };
+          saveStorage(STORAGE_KEYS.LEAVE_TYPES, list);
+          return { success: true };
+        }
+        return { success: false };
+      },
+      getBalances: async (_staffId: number, _year?: number) => [
+        { leave_type_id: 1, leave_type_name: 'Casual Leave (CL)', allocated_days: 12, used_days: 2, pending_days: 0, remaining_days: 10 },
+        { leave_type_id: 2, leave_type_name: 'Sick Leave (SL)', allocated_days: 6, used_days: 1, pending_days: 0, remaining_days: 5 },
+        { leave_type_id: 3, leave_type_name: 'Earned Leave (EL)', allocated_days: 15, used_days: 0, pending_days: 0, remaining_days: 15 },
+      ],
+      adjustBalance: async () => ({ success: true }),
+      getRequests: async () => [
+        { id: 1, staff_id: 3, staff_name: 'Priya Sundaram', department_name: 'Storefront Sales', leave_type_name: 'Casual Leave', start_date: '2026-08-28', end_date: '2026-08-28', days_count: 1, reason: 'Family temple festival in Madurai', status: 'PENDING', created_at: '2026-08-25' },
+        { id: 2, staff_id: 2, staff_name: 'Arun Kumar', department_name: 'Accounts & Billing', leave_type_name: 'Sick Leave', start_date: '2026-08-10', end_date: '2026-08-10', days_count: 1, reason: 'Dental surgery and rest', status: 'APPROVED', created_at: '2026-08-08' },
+        { id: 3, staff_id: 6, staff_name: 'Suresh Balan', department_name: 'Storefront Sales', leave_type_name: 'Casual Leave', start_date: '2026-08-04', end_date: '2026-08-05', days_count: 2, reason: 'Brother wedding reception', status: 'APPROVED', created_at: '2026-08-01' },
+      ],
+      apply: async () => ({ success: true, id: Date.now() }),
+      approve: async () => ({ success: true }),
+      reject: async () => ({ success: true }),
+      cancel: async () => ({ success: true }),
+      getHolidays: async () => loadStorage(STORAGE_KEYS.HOLIDAYS, MOCK_HOLIDAYS_2026),
+      createHoliday: async (input: any) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.HOLIDAYS, MOCK_HOLIDAYS_2026);
+        const newId = list.length > 0 ? Math.max(...list.map((h) => h.id)) + 1 : 1;
+        list.push({ id: newId, ...input });
+        saveStorage(STORAGE_KEYS.HOLIDAYS, list);
+        return { success: true, id: newId };
+      },
+      deleteHoliday: async (id: number) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.HOLIDAYS, MOCK_HOLIDAYS_2026);
+        saveStorage(STORAGE_KEYS.HOLIDAYS, list.filter((h) => h.id !== id));
+        return { success: true };
+      },
+    },
+
+    // --- PAYROLL, SALARY & ADVANCE API ---
+    payroll: {
+      getPeriods: async () => loadStorage(STORAGE_KEYS.PAYROLL_PERIODS, MOCK_PAYROLL_PERIODS),
+      getPeriodById: async (id: number) => {
+        const periods = loadStorage<any[]>(STORAGE_KEYS.PAYROLL_PERIODS, MOCK_PAYROLL_PERIODS);
+        return periods.find((p) => p.id === id) || periods[0];
+      },
+      createPeriod: async (input: any) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.PAYROLL_PERIODS, MOCK_PAYROLL_PERIODS);
+        const newId = list.length > 0 ? Math.max(...list.map((p) => p.id)) + 1 : 1;
+        const newPeriod = { id: newId, status: 'DRAFT', ...input };
+        list.push(newPeriod);
+        saveStorage(STORAGE_KEYS.PAYROLL_PERIODS, list);
+        return { success: true, id: newId };
+      },
+      calculatePeriod: async (_periodId: number) => ({ success: true, recordCount: MOCK_STAFF_LIST.length }),
+      approvePeriod: async (periodId: number) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.PAYROLL_PERIODS, MOCK_PAYROLL_PERIODS);
+        const p = list.find((item) => item.id === periodId);
+        if (p) {
+          p.status = 'APPROVED';
+          saveStorage(STORAGE_KEYS.PAYROLL_PERIODS, list);
+          return { success: true };
+        }
+        return { success: false };
+      },
+      lockPeriod: async (periodId: number) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.PAYROLL_PERIODS, MOCK_PAYROLL_PERIODS);
+        const p = list.find((item) => item.id === periodId);
+        if (p) {
+          p.status = 'LOCKED';
+          saveStorage(STORAGE_KEYS.PAYROLL_PERIODS, list);
+          return { success: true };
+        }
+        return { success: false };
+      },
+      getRecords: async (_periodId: number) => {
+        return MOCK_STAFF_LIST.map((staff, idx) => {
+          const basic = Math.round(staff.salary * 0.5);
+          const hra = Math.round(basic * 0.4);
+          const conv = 2000;
+          const special = staff.salary - (basic + hra + conv);
+          const otAmt = staff.id % 2 === 0 ? 1200 : 0;
+          const gross = staff.salary + otAmt;
+          const pf = Math.round(basic * 0.12);
+          const esi = Math.round(gross * 0.0075);
+          const pt = 200;
+          const advanceEmi = staff.id === 2 ? 4000 : (staff.id === 3 ? 3000 : 0);
+          const totalDeductions = pf + esi + pt + advanceEmi;
+          const netSalary = gross - totalDeductions;
+          return {
+            id: idx + 1,
+            staff_id: staff.id,
+            staff_code: staff.staff_code,
+            staff_name: `${staff.first_name} ${staff.last_name}`,
+            department_name: staff.department_name,
+            designation_name: staff.designation_name,
+            basic_salary: basic,
+            hra_allowance: hra,
+            conveyance_allowance: conv,
+            special_allowance: special > 0 ? special : 0,
+            gross_earnings: gross,
+            working_days: 26,
+            present_days: 25,
+            paid_leave_days: 1,
+            overtime_hours: otAmt > 0 ? 8 : 0,
+            overtime_amount: otAmt,
+            advance_deduction: advanceEmi,
+            pf_deduction: pf,
+            esi_deduction: esi,
+            pt_deduction: pt,
+            total_deductions: totalDeductions,
+            net_salary: netSalary,
+            status: 'PAID',
+          };
+        });
+      },
+      getRecordById: async (recordId: number) => {
+        const records = await (mockApi.payroll as any).getRecords(4);
+        return records.find((r: any) => r.id === recordId) || records[0];
+      },
+      getStaffHistory: async (staffId: number) => {
+        const staff = MOCK_STAFF_LIST.find((s) => s.id === staffId) || MOCK_STAFF_LIST[0];
+        const basic = Math.round(staff.salary * 0.5);
+        const gross = staff.salary;
+        const pf = Math.round(basic * 0.12);
+        const esi = Math.round(gross * 0.0075);
+        const net = gross - (pf + esi + 200);
+        return [
+          { id: 101, period_name: 'July 2026', basic_salary: basic, gross_earnings: gross, total_deductions: pf + esi + 200, net_salary: net, status: 'PAID', pay_date: '2026-08-01' },
+          { id: 102, period_name: 'June 2026', basic_salary: basic, gross_earnings: gross, total_deductions: pf + esi + 200, net_salary: net, status: 'PAID', pay_date: '2026-07-01' },
+          { id: 103, period_name: 'May 2026', basic_salary: basic, gross_earnings: gross, total_deductions: pf + esi + 200, net_salary: net, status: 'PAID', pay_date: '2026-06-01' },
+        ];
+      },
+    },
+    salary: {
+      getStructure: async (staffId: number) => {
+        const staff = MOCK_STAFF_LIST.find((s) => s.id === staffId) || MOCK_STAFF_LIST[0];
+        const basic = Math.round(staff.salary * 0.5);
+        const hra = Math.round(basic * 0.4);
+        const conv = 2000;
+        const special = staff.salary - (basic + hra + conv);
+        return {
+          staff_id: staff.id,
+          basic_salary: basic,
+          gross_salary: staff.salary,
+          components: [
+            { component_code: 'BASIC', component_name: 'Basic Salary', type: 'EARNING', amount: basic },
+            { component_code: 'HRA', component_name: 'House Rent Allowance (HRA)', type: 'EARNING', amount: hra },
+            { component_code: 'CONVEYANCE', component_name: 'Conveyance Allowance', type: 'EARNING', amount: conv },
+            { component_code: 'SPECIAL', component_name: 'Special Floor Allowance', type: 'EARNING', amount: special > 0 ? special : 0 },
+            { component_code: 'PF', component_name: 'Provident Fund (PF - 12%)', type: 'DEDUCTION', amount: Math.round(basic * 0.12) },
+            { component_code: 'ESI', component_name: 'Employee State Insurance (ESI - 0.75%)', type: 'DEDUCTION', amount: Math.round(staff.salary * 0.0075) },
+            { component_code: 'PT', component_name: 'Professional Tax', type: 'DEDUCTION', amount: 200 },
+          ],
+        };
+      },
+      assignStructure: async () => ({ success: true }),
+      getHistory: async () => [],
+    },
+    advance: {
+      getAll: async () => [
+        { id: 1, staff_id: 2, staff_name: 'Arun Kumar', department_name: 'Accounts & Billing', amount: 20000, advance_date: '2026-05-10', monthly_installment: 4000, remaining_amount: 8000, reason: 'Children school admission fees', status: 'ACTIVE' },
+        { id: 2, staff_id: 3, staff_name: 'Priya Sundaram', department_name: 'Storefront Sales', amount: 15000, advance_date: '2026-06-05', monthly_installment: 3000, remaining_amount: 6000, reason: 'Emergency home appliance purchase', status: 'ACTIVE' },
+        { id: 3, staff_id: 6, staff_name: 'Suresh Balan', department_name: 'Storefront Sales', amount: 25000, advance_date: '2026-04-12', monthly_installment: 5000, remaining_amount: 5000, reason: 'Family medical treatment support', status: 'ACTIVE' },
+      ],
+      issue: async () => ({ success: true, id: Date.now() }),
+    },
+
+    // --- PERFORMANCE MANAGEMENT API ---
+    performance: {
+      getCycles: async () => loadStorage(STORAGE_KEYS.APPRAISAL_CYCLES, MOCK_APPRAISAL_CYCLES),
+      createCycle: async () => ({ success: true, id: Date.now() }),
+      getGoals: async () => [
+        { id: 1, staff_id: 3, staff_name: 'Priya Sundaram', title: 'Exceed Bridal Silk Revenue Target', target_value: 500000, current_value: 560000, unit: '₹', status: 'COMPLETED' },
+        { id: 2, staff_id: 3, staff_name: 'Priya Sundaram', title: 'Maintain 98% Showroom Attendance', target_value: 98, current_value: 100, unit: '%', status: 'COMPLETED' },
+        { id: 3, staff_id: 2, staff_name: 'Arun Kumar', title: 'Zero Cash Drawer Variance', target_value: 100, current_value: 100, unit: '%', status: 'COMPLETED' },
+      ],
+      createGoal: async () => ({ success: true, id: Date.now() }),
+      updateGoal: async () => ({ success: true }),
+      getKPIs: async () => [
+        { id: 1, name: 'Sales Quota Achievement', category: 'SALES', target: 500000, unit: '₹' },
+        { id: 2, name: 'Punctuality & Attendance', category: 'ATTENDANCE', target: 95, unit: '%' },
+        { id: 3, name: 'Customer Satisfaction Rating', category: 'SERVICE', target: 90, unit: '%' },
+      ],
+      createKPI: async () => ({ success: true, id: Date.now() }),
+      assignKPIs: async () => ({ success: true }),
+      getReviews: async () => [
+        { id: 1, staff_id: 3, staff_name: 'Priya Sundaram', reviewer_name: 'Rajesh Kumar (Manager)', overall_score: 95, overall_rating: 'Outstanding', strengths: 'Expert knowledge of Kanchipuram silk weaving and VIP customer retention', status: 'APPROVED', approved_at: '2026-07-06' },
+        { id: 2, staff_id: 2, staff_name: 'Arun Kumar', reviewer_name: 'Rajesh Kumar (Manager)', overall_score: 92, overall_rating: 'Excellent', strengths: 'Accurate billing, zero cash discrepancy, quick POS throughput', status: 'APPROVED', approved_at: '2026-07-06' },
+      ],
+      getReviewById: async (id: number) => {
+        const reviews = await (mockApi.performance as any).getReviews();
+        return reviews.find((r: any) => r.id === id) || reviews[0];
+      },
+      submitSelfReview: async () => ({ success: true, id: Date.now() }),
+      submitManagerReview: async () => ({ success: true, id: Date.now(), overall_score: 94, rating: 'Excellent' }),
+      getAppraisals: async () => [
+        { id: 1, staff_id: 3, staff_name: 'Priya Sundaram', current_salary: 32000, recommended_increment_type: 'PERCENTAGE', recommended_increment_value: 10.0, recommended_incentive: 5000, reason: 'Top performer in festive bridal saree sales', status: 'APPROVED' },
+        { id: 2, staff_id: 2, staff_name: 'Arun Kumar', current_salary: 28000, recommended_increment_type: 'PERCENTAGE', recommended_increment_value: 8.0, recommended_incentive: 3000, reason: 'Consistent billing speed and zero audit errors', status: 'APPROVED' },
+      ],
+      submitAppraisal: async () => ({ success: true, id: Date.now() }),
+      approveAppraisal: async () => ({ success: true }),
+      getHistory: async () => [],
+    },
+
+    // --- STAFF MANAGEMENT API ---
+    staff: {
+      getAll: async (_params?: any) => ({
+        staff: loadStorage(STORAGE_KEYS.STAFF, MOCK_STAFF_LIST),
+        total: loadStorage(STORAGE_KEYS.STAFF, MOCK_STAFF_LIST).length,
+      }),
+      getById: async (id: number) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.STAFF, MOCK_STAFF_LIST);
+        return list.find((s) => s.id === id) || list[0];
+      },
+      create: async (_token: string, input: any) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.STAFF, MOCK_STAFF_LIST);
+        const newId = list.length > 0 ? Math.max(...list.map((s) => s.id)) + 1 : 1;
+        const staffCode = `STF-${String(newId).padStart(4, '0')}`;
+        const newStaff = { id: newId, staff_code: staffCode, status: 'ACTIVE', ...input };
+        list.push(newStaff);
+        saveStorage(STORAGE_KEYS.STAFF, list);
+        return { success: true, id: newId, staff_code: staffCode, staff: newStaff };
+      },
+      update: async (_token: string, id: number, input: any) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.STAFF, MOCK_STAFF_LIST);
+        const idx = list.findIndex((s) => s.id === id);
+        if (idx !== -1) {
+          list[idx] = { ...list[idx], ...input };
+          saveStorage(STORAGE_KEYS.STAFF, list);
+          return { success: true, staff: list[idx] };
+        }
+        return { success: false, error: 'Staff member not found' };
+      },
+      deactivate: async (_token: string, id: number) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.STAFF, MOCK_STAFF_LIST);
+        const stf = list.find((s) => s.id === id);
+        if (stf) {
+          stf.status = stf.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+          saveStorage(STORAGE_KEYS.STAFF, list);
+          return { success: true };
+        }
+        return { success: false };
+      },
+      getEmergencyContacts: async (staffId: number) => [
+        { id: 1, staff_id: staffId, name: 'S. Sundaram', relationship: 'Father', phone: '+91 98765 00111', is_primary: 1 },
+      ],
+      saveEmergencyContact: async () => ({ success: true, id: Date.now() }),
+      deleteEmergencyContact: async () => ({ success: true }),
+      getBankDetails: async (staffId: number) => {
+        const stf = MOCK_STAFF_LIST.find((s) => s.id === staffId) || MOCK_STAFF_LIST[0];
+        return {
+          bank_name: stf.bank_name || 'State Bank of India',
+          bank_account_number: stf.bank_account_number || '98765432101234',
+          bank_ifsc_code: stf.bank_ifsc_code || 'SBIN0001234',
+          pan_number: stf.pan_number || 'ABCDE1234F',
+          aadhaar_number: stf.aadhaar_number || '1234-5678-9012',
+        };
+      },
+      saveBankDetails: async () => ({ success: true }),
+      getDocuments: async (staffId: number) => [
+        { id: 1, staff_id: staffId, document_type: 'AADHAAR', document_name: 'Aadhaar Card Copy', file_path: '/docs/aadhaar.pdf', status: 'VERIFIED', upload_date: '2025-06-01' },
+        { id: 2, staff_id: staffId, document_type: 'PAN', document_name: 'PAN Card Copy', file_path: '/docs/pan.pdf', status: 'VERIFIED', upload_date: '2025-06-01' },
+      ],
+      uploadDocument: async () => ({ success: true, id: Date.now() }),
+      verifyDocument: async () => ({ success: true }),
+      deleteDocument: async () => ({ success: true }),
+      getNotes: async (staffId: number) => [
+        { id: 1, staff_id: staffId, note: 'Specialist in Kanchipuram wedding weaves', created_by: 'Store Manager', created_at: '2026-01-15' },
+      ],
+      addNote: async () => ({ success: true, id: Date.now() }),
+      deleteNote: async () => ({ success: true }),
+      getHistory: async () => [],
+    },
+
+    // --- ROLES & PERMISSIONS API ---
+    roles: {
+      getAll: async () => [
+        { id: 1, name: 'Owner', description: 'Complete system administrative authority', is_system: 1 },
+        { id: 2, name: 'Manager', description: 'Store operations, inventory, and staff oversight', is_system: 1 },
+        { id: 3, name: 'Cashier', description: 'POS billing, customer checkout, and sales returns', is_system: 1 },
+        { id: 4, name: 'Inventory Staff', description: 'Warehouse stock entry, transfers, and receiving', is_system: 1 },
+        { id: 5, name: 'Sales Associate', description: 'Customer consultation and product inquiries', is_system: 1 },
+        { id: 6, name: 'HR Staff', description: 'Attendance, leave, shifts, and payroll records', is_system: 1 },
+      ],
+      getById: async (id: number) => {
+        const roles = await (mockApi.roles as any).getAll();
+        return roles.find((r: any) => r.id === id) || roles[0];
+      },
+      getAllPermissions: async () => [
+        { id: 1, code: 'dashboard.view', name: 'View Dashboard', category: 'Dashboard' },
+        { id: 2, code: 'billing.create', name: 'Create POS Bills', category: 'POS' },
+        { id: 3, code: 'sales.view', name: 'View Sales Invoices', category: 'Sales' },
+        { id: 4, code: 'inventory.manage', name: 'Manage Inventory', category: 'Inventory' },
+        { id: 5, code: 'staff.manage', name: 'Manage Staff Profiles', category: 'Staff' },
+        { id: 6, code: 'payroll.view', name: 'View Payroll & Compensation', category: 'Payroll' },
+      ],
+      getRolePermissions: async () => ['*'],
+      create: async () => ({ success: true, id: Date.now() }),
+      update: async () => ({ success: true }),
+      delete: async () => ({ success: true }),
+    },
+
+    // --- DOCUMENTS & COMPLIANCE API ---
+    documents: {
+      getCategories: async () => [
+        { id: 1, code: 'ID_PROOF', name: 'Identity Proof (Aadhaar/Voter ID)' },
+        { id: 2, code: 'TAX_PROOF', name: 'Tax Proof (PAN Card)' },
+        { id: 3, code: 'CONTRACT', name: 'Employment Offer & Contract' },
+        { id: 4, code: 'CERTIFICATE', name: 'Educational / Skill Certificates' },
+      ],
+      getAll: async () => [
+        { id: 1, staff_id: 3, staff_name: 'Priya Sundaram', document_type: 'ID_PROOF', document_name: 'Aadhaar Card', status: 'VERIFIED', created_at: '2026-01-10' },
+        { id: 2, staff_id: 2, staff_name: 'Arun Kumar', document_type: 'TAX_PROOF', document_name: 'PAN Card', status: 'VERIFIED', created_at: '2026-01-05' },
+      ],
+      getById: async () => ({ id: 1, document_name: 'Aadhaar Card Copy', status: 'VERIFIED' }),
+      upload: async () => ({ success: true, id: Date.now() }),
+      readBase64: async () => ({ success: true, base64: 'sample_doc', mimeType: 'application/pdf' }),
+      verify: async () => ({ success: true }),
+      reject: async () => ({ success: true }),
+      replace: async () => ({ success: true }),
+      getExpiring: async () => [],
+      getCompliance: async () => ({ totalRequired: 5, completedCount: 5, complianceScore: 100, missingCategories: [] }),
+    },
+
+    // --- COMMUNICATION & NOTIFICATIONS API ---
+    communication: {
+      getMyNotifications: async () => [
+        { id: 1, title: 'ஆடி தள்ளுபடி விற்பனை இலக்கு எட்டப்பட்டது!', message: 'Daily sales crossed ₹2,50,000 across POS counters today.', type: 'SUCCESS', is_read: 0, created_at: new Date().toISOString() },
+        { id: 2, title: 'குறைந்த இருப்பு எச்சரிக்கை (Low Stock Alert)', message: 'Kanchipuram Pure Zari Silk (Crimson Red) is below 5 units.', type: 'WARNING', is_read: 0, created_at: new Date().toISOString() },
+        { id: 3, title: 'ஆகஸ்ட் மாத ஊதியப்பட்டியல் தயார் (August Payroll Ready)', message: 'August 2026 Payroll Period calculated and approved.', type: 'INFO', is_read: 1, created_at: new Date().toISOString() },
+      ],
+      getUnreadCount: async () => 2,
+      markRead: async () => ({ success: true }),
+      markAllRead: async () => ({ success: true }),
+      getAnnouncements: async () => [
+        { id: 1, title: 'ஆடி தள்ளுபடி திருவிழா சிறப்பு வழிகாட்டுதல்கள் (Aadi Sale Guidelines)', content: 'Extended showroom timings (09:00 AM - 09:30 PM) apply during festival weekend. Complimentary refreshments provided for all floor staff.', priority: 'HIGH', status: 'PUBLISHED', created_at: '2026-08-20' },
+        { id: 2, title: 'சுதந்திர தின விழா சிறப்பு போனஸ் (Independence Day Bonus)', content: 'Festival incentive of ₹2,000 disbursed for staff on duty during Independence Day celebrations.', priority: 'NORMAL', status: 'PUBLISHED', created_at: '2026-08-15' },
+      ],
+      createAnnouncement: async () => ({ success: true, id: Date.now() }),
+      getMyMessages: async () => [
+        { id: 1, sender_name: 'Rajesh Kumar (Manager)', subject: 'VIP Bridal Lounge Booking', message: 'VIP client family arriving at 11:30 AM for bridal silk preview. Please ensure private lounge is ready.', priority: 'HIGH', is_read: 1, created_at: '2026-08-26' },
+      ],
+      sendMessage: async () => ({ success: true, id: Date.now() }),
+    },
+
+    // --- STAFF SELF-SERVICE & PORTAL SUITE ---
+    staffAuth: {
+      login: async (input: any) => mockApi.auth.login(input.employeeId || 'manager'),
+      logout: async () => mockApi.auth.logout(),
+      getCurrentStaffUser: async () => mockApi.auth.getCurrentUser(),
+    },
+    staffDashboard: {
+      getDashboardSummary: async () => ({
+        success: true,
+        data: await mockApi.selfService.getDashboard(),
+      }),
+    },
+    staffProfile: {
+      getMyProfile: async () => ({ success: true, data: await mockApi.selfService.getProfile() }),
+      updateMyProfile: async (fields: any) => mockApi.selfService.updateProfile(fields),
+      getEmergencyContacts: async () => ({ success: true, data: [{ id: 1, name: 'S. Sundaram', relationship: 'Father', phone: '+91 98765 00111' }] }),
+      saveEmergencyContact: async () => ({ success: true, id: Date.now(), message: 'Contact saved' }),
+      deleteEmergencyContact: async () => ({ success: true, message: 'Contact removed' }),
+      uploadPhoto: async () => ({ success: true, photoPath: '/photos/staff.jpg', message: 'Photo uploaded' }),
+      removePhoto: async () => ({ success: true, message: 'Photo removed' }),
+      changePassword: async () => ({ success: true, message: 'Password updated successfully' }),
+      getActivity: async () => ({ success: true, data: [] }),
+      requestChange: async (input: any) => mockApi.selfService.requestProfileChange(input),
+      getChangeRequests: async () => ({ success: true, data: await mockApi.selfService.getProfileChangeRequests() }),
+    },
+    staffAttendance: {
+      getToday: async () => ({
+        success: true,
+        data: {
+          check_in: new Date().toISOString().slice(0, 10) + 'T09:15:00',
+          check_out: null,
+          status: 'PRESENT',
+          work_duration_minutes: 360,
+        },
+      }),
+      checkIn: async () => ({ success: true, message: 'Check-in recorded' }),
+      checkOut: async () => ({ success: true, message: 'Check-out recorded' }),
+      startBreak: async () => ({ success: true, message: 'Break started' }),
+      endBreak: async () => ({ success: true, message: 'Break ended' }),
+      getHistory: async () => ({ success: true, data: await mockApi.selfService.getAttendance() }),
+      getMonthlySummary: async () => ({
+        success: true,
+        data: { present_days: 25, late_days: 1, leave_days: 1, attendance_rate: 96.2 },
+      }),
+      getByDate: async (dateStr: string) => ({
+        success: true,
+        data: { date: dateStr, status: 'PRESENT', check_in: '09:00', check_out: '18:00' },
+      }),
+      requestCorrection: async (input: any) => mockApi.selfService.requestAttendanceCorrection(input),
+      getCorrectionRequests: async () => ({ success: true, data: [] }),
+    },
+    staffShifts: {
+      getToday: async () => ({
+        success: true,
+        data: { shift_name: 'Morning Retail Shift', start_time: '09:00', end_time: '18:00', location: 'Main Showroom' },
+      }),
+      getWeekly: async () => ({
+        success: true,
+        data: await mockApi.shifts.getSchedule(1),
+      }),
+      getMonthly: async () => ({ success: true, data: [] }),
+      getUpcoming: async () => ({
+        success: true,
+        data: [
+          { date: '2026-08-28', shift_name: 'Morning Retail Shift (09:00 - 18:00)' },
+          { date: '2026-08-29', shift_name: 'Morning Retail Shift (09:00 - 18:00)' },
+        ],
+      }),
+      getDetails: async (dateStr: string) => ({
+        success: true,
+        data: await mockApi.shifts.resolveDate(1, dateStr),
+      }),
+      getHistory: async () => ({ success: true, data: [] }),
+      requestChange: async () => ({ success: true, id: Date.now(), message: 'Shift change requested' }),
+      requestSwap: async () => ({ success: true, id: Date.now(), message: 'Shift swap requested' }),
+      getRequests: async () => ({ success: true, data: [] }),
+      cancelRequest: async () => ({ success: true, message: 'Request cancelled' }),
+      getSwapCandidates: async () => ({ success: true, data: MOCK_STAFF_LIST.slice(1, 4) }),
+      getTemplates: async () => ({ success: true, data: MOCK_SHIFT_TEMPLATES }),
+    },
+    staffLeave: {
+      getBalances: async () => ({
+        success: true,
+        data: (await mockApi.selfService.getLeave()).balances,
+      }),
+      getTypes: async () => ({ success: true, data: MOCK_LEAVE_TYPES }),
+      apply: async (input: any) => mockApi.selfService.applyLeave(input),
+      getRequests: async () => ({
+        success: true,
+        data: (await mockApi.selfService.getLeave()).requests,
+      }),
+      getDetails: async () => ({ success: true, data: {} }),
+      cancel: async (id: number) => mockApi.selfService.cancelLeave(id),
+      getCalendar: async () => ({ success: true, data: {} }),
+      getHistory: async () => ({ success: true, data: [] }),
+      requestPermission: async () => ({ success: true, id: Date.now(), message: 'Permission requested' }),
+      getPermissions: async () => ({ success: true, data: [] }),
+      cancelPermission: async () => ({ success: true, message: 'Permission cancelled' }),
+    },
+    staffPayroll: {
+      getCurrent: async () => ({
+        success: true,
+        data: { period_name: 'August 2026', basic_salary: 22500, gross_earnings: 45000, total_deductions: 3200, net_salary: 41800, status: 'APPROVED' },
+      }),
+      getPeriods: async () => ({ success: true, data: MOCK_PAYROLL_PERIODS }),
+      getHistory: async () => ({ success: true, data: await mockApi.selfService.getPayroll() }),
+      getDetails: async (recordId: number) => ({ success: true, data: await mockApi.payroll.getRecordById(recordId) }),
+      getSalaryOverview: async () => ({
+        success: true,
+        data: await mockApi.salary.getStructure(1),
+      }),
+      getSalaryHistory: async () => ({ success: true, data: [] }),
+      getOvertime: async () => ({ success: true, data: { hours: 8, amount: 1200 } }),
+      getIncentives: async () => ({ success: true, data: { total: 3500, period: 'August 2026' } }),
+    },
+    staffInventory: {
+      searchProducts: async (query?: string, filters?: any) => mockApi.staffPOS.searchProducts(query, filters?.category_id),
+      getProduct: async (variantId: number) => {
+        const vList = loadStorage<any[]>(STORAGE_KEYS.VARIANTS, DEFAULT_VARIANTS);
+        const pList = loadStorage<any[]>(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS);
+        const v = vList.find((item) => item.id === variantId);
+        const p = pList.find((prod) => prod.id === v?.product_id);
+        return { success: true, data: { ...v, product_name: p?.name || 'Textile Item' } };
+      },
+      getLowStock: async () => ({
+        success: true,
+        data: await mockApi.dashboard.getLowStockAlerts(10),
+      }),
+      getTasks: async () => ({
+        success: true,
+        data: [
+          { id: 1, task_name: 'Weekly Silk Counter Audit', priority: 'HIGH', status: 'PENDING', due_date: '2026-08-30' },
+          { id: 2, task_name: 'Restock Men Formal Shirts from Backroom', priority: 'NORMAL', status: 'COMPLETED', due_date: '2026-08-26' },
+        ],
+      }),
+      submitCount: async () => ({ success: true, id: Date.now(), difference: 0, message: 'Stock count submitted' }),
+      createTransfer: async () => ({ success: true, id: Date.now(), message: 'Transfer initiated' }),
+      getTransfers: async () => ({ success: true, data: [] }),
+      getPoReceiving: async () => ({ success: true, data: await mockApi.purchases.getAll() }),
+      submitReceiving: async () => ({ success: true, id: Date.now(), message: 'Goods received and stocked' }),
+      getHistory: async () => ({ success: true, data: [] }),
+      getMetrics: async () => ({ success: true, data: await mockApi.inventory.getMetrics() }),
+    },
+    staffCustomer: {
+      search: async (query?: string) => ({ success: true, data: (await mockApi.staffPOS.getCustomers(query)).data }),
+      getDetails: async (customerId: number) => {
+        const custList = loadStorage<any[]>(STORAGE_KEYS.CUSTOMERS, DEFAULT_CUSTOMERS);
+        const c = custList.find((item) => item.id === customerId) || custList[0];
+        return { success: true, data: c };
+      },
+      create: async (input: any) => mockApi.customers.create(input),
+      update: async (customerId: number, input: any) => {
+        const list = loadStorage<any[]>(STORAGE_KEYS.CUSTOMERS, DEFAULT_CUSTOMERS);
+        const idx = list.findIndex((c) => c.id === customerId);
+        if (idx !== -1) {
+          list[idx] = { ...list[idx], ...input };
+          saveStorage(STORAGE_KEYS.CUSTOMERS, list);
+          return { success: true, data: list[idx] };
+        }
+        return { success: false };
+      },
+      purchases: async () => ({ success: true, data: [] }),
+      returns: async () => ({ success: true, data: [] }),
+      loyalty: async () => ({ success: true, data: { points: 450, tier: 'GOLD' } }),
+      adjustLoyalty: async () => ({ success: true, data: { points: 500 } }),
+      addNote: async () => ({ success: true, data: { id: Date.now() } }),
+      getNotes: async () => ({ success: true, data: [] }),
+      updatePreferences: async () => ({ success: true, data: {} }),
+    },
+    staffReports: {
+      sales: async () => ({ success: true, data: { today: 84250, week: 384000, month: 1420000 } }),
+      attendance: async () => ({ success: true, data: { attendance_rate: 96.5, days_worked: 25 } }),
+      commission: async () => ({ success: true, data: { commission_earned: 4200, target_achieved: 112.5 } }),
+      inventoryTasks: async () => ({ success: true, data: { completed: 12, pending: 2 } }),
+    },
+    staffSettings: {
+      getPreferences: async () => ({ success: true, data: { theme: 'dark', language: 'en' } }),
+      updatePreferences: async () => ({ success: true, data: {} }),
+      getPrinters: async () => ({
+        success: true,
+        data: [{ name: 'Thermal Receipt Printer (POS-80)', isDefault: true }],
+      }),
+      testPrint: async () => ({ success: true, data: { printed: true } }),
+      updatePassword: async () => ({ success: true, message: 'Password updated' }),
+      getVersion: async () => ({ success: true, data: { version: '1.0.0-enterprise' } }),
+    },
+    staffNotificationCenter: {
+      getAll: async () => ({ success: true, data: await mockApi.communication.getMyNotifications() }),
+      markRead: async () => ({ success: true, data: true }),
+      markAllRead: async () => ({ success: true, data: true }),
+    },
+
+    // --- GENERAL REPORTS & BACKUP API ---
+    reports: {
+      getSales: async () => ({
+        totalRevenue: 2845000,
+        ordersCount: 420,
+        averageOrderValue: 6773,
+        taxCollected: 142250,
+      }),
+      getInventory: async () => mockApi.inventory.getMetrics(),
+      getFinancial: async () => ({
+        revenue: 2845000,
+        cogs: 1850000,
+        grossProfit: 995000,
+        expenses: 185000,
+        netProfit: 810000,
+      }),
+      getCustomers: async () => loadStorage(STORAGE_KEYS.CUSTOMERS, DEFAULT_CUSTOMERS),
+      getSuppliers: async () => loadStorage(STORAGE_KEYS.SUPPLIERS, DEFAULT_SUPPLIERS),
+      exportCSV: async (_data: any[], _headers: any[]) => 'sample,csv,data',
+    },
+    backup: {
+      create: async () => ({ success: true, backupPath: '/backups/textile-shop-backup.db', sha256: 'abc123' }),
+      list: async () => [
+        { filename: 'textile-backup-2026-08-26.db', sizeBytes: 5242880, createdAt: '2026-08-26 22:00:00' },
+      ],
+      verify: async () => ({ valid: true }),
+      export: async () => ({ success: true }),
+      delete: async () => ({ success: true }),
+      restore: async () => ({ success: true }),
+    },
+    settings: {
+      getAll: async () => ({
+        success: true,
+        data: {
+          store_name: 'ரத்னா விலாஸ் (Ratna Vilas)',
+          gstin: '33AAAAA0000A1Z5',
+          phone: '+91 98765 43210',
+          email: 'contact@ratnavilas.com',
+          address: '123 Cross Cut Road, Gandhipuram, Coimbatore - 641012',
+          currency: 'INR',
+          tax_inclusive: 'true',
+        },
+      }),
+      update: async () => ({ success: true }),
+    },
+    db: {
+      checkStatus: async () => ({ status: 'online', tablesCount: 72 }),
+      healthCheck: async () => ({ status: 'healthy', databasePath: 'browser:localStorage', sizeBytes: 1048576, tablesCount: 72, settingsCount: 15 }),
+      seed: async () => ({ success: true }),
+    },
+    app: {
+      getVersion: async () => '1.0.0-preview',
+      getSystemInfo: async () => ({
+        appName: 'Textile Shop Management System (Browser Preview)',
+        version: '1.0.0',
+        electronVersion: 'N/A (Browser)',
+        nodeVersion: 'N/A (Browser)',
+        chromeVersion: 'V8/Browser',
+        platform: 'web',
+        arch: 'x64',
+        totalMemMB: 8192,
+        freeMemMB: 4096,
+        dbPath: 'localStorage',
+        backupPath: 'localStorage',
+      }),
+      log: async () => true,
     },
 
     // --- SYSTEM API ---

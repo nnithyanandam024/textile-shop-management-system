@@ -153,62 +153,62 @@ export const AiRiskMonitoringWidget: React.FC = () => {
           <p className="text-xs font-bold text-slate-600">Running Multi-Domain Anomaly Diagnostics...</p>
         </div>
       ) : filtered.length === 0 ? (
-        <div className="py-12 text-center text-slate-400 text-xs">
+        <div className="py-12 text-center text-slate-400 text-xs font-medium">
           No active anomalies found for the selected severity level.
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           {filtered.map((item: any) => (
             <div
               key={item.id}
-              className="p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-indigo-200 transition-all shadow-2xs hover:shadow-xs flex flex-col justify-between space-y-3 group"
+              className="p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-indigo-300 transition-all shadow-2xs hover:shadow-xs flex flex-col justify-between space-y-3 group"
             >
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className={`px-2.5 py-0.5 text-[9px] font-black rounded-lg border uppercase tracking-wider ${getSeverityStyle(item.severity)}`}>
-                      {item.severity} Risk
-                    </span>
-                    <span className="text-[10px] font-mono text-slate-400 font-bold">
-                      {item.status?.replace('_', ' ').toUpperCase()}
-                    </span>
-                  </div>
-
-                  <h3 className="text-xs font-bold text-slate-900 group-hover:text-[#2012ad] transition-colors leading-snug">
-                    {item.title}
-                  </h3>
-
-                  {/* Evidence Comparison Snippet */}
-                  <div className="p-2 bg-slate-50 rounded-xl border border-slate-100 text-[11px] grid grid-cols-2 gap-2">
-                    <div>
-                      <span className="text-[9px] text-slate-400 font-bold uppercase">Detected:</span>
-                      <p className="font-bold text-rose-700 truncate">{item.evidence?.detectedValue}</p>
-                    </div>
-                    <div>
-                      <span className="text-[9px] text-slate-400 font-bold uppercase">Baseline:</span>
-                      <p className="font-bold text-slate-700 truncate">{item.evidence?.expectedBaseline}</p>
-                    </div>
-                  </div>
-
-                  <p className="text-[11px] text-slate-600 line-clamp-2 italic">
-                    💡 {item.aiExplanation}
-                  </p>
-                </div>
-
-                <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-[10px] text-slate-400 font-medium">
-                    {new Date(item.detectedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className={`px-2.5 py-0.5 text-[9px] font-black rounded-lg border uppercase tracking-wider ${getSeverityStyle(item.severity)}`}>
+                    {item.severity} Risk
                   </span>
-
-                  <button
-                    onClick={() => setSelectedAnomaly(item)}
-                    className="px-3 py-1.5 bg-slate-100 hover:bg-[#2012ad] text-slate-700 hover:text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1 shadow-2xs"
-                  >
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Investigate</span>
-                  </button>
+                  <span className="text-[10px] font-mono text-slate-400 font-bold">
+                    {item.status?.replace('_', ' ').toUpperCase()}
+                  </span>
                 </div>
+
+                <h3 className="text-xs font-bold text-slate-900 group-hover:text-[#2012ad] transition-colors leading-snug line-clamp-2">
+                  {item.title}
+                </h3>
+
+                {/* Evidence Comparison Snippet */}
+                <div className="p-2 bg-slate-50 rounded-xl border border-slate-100 text-[11px] grid grid-cols-2 gap-2">
+                  <div>
+                    <span className="text-[9px] text-slate-400 font-bold uppercase">Detected:</span>
+                    <p className="font-bold text-rose-700 truncate">{item.evidence?.detectedValue}</p>
+                  </div>
+                  <div>
+                    <span className="text-[9px] text-slate-400 font-bold uppercase">Baseline:</span>
+                    <p className="font-bold text-slate-700 truncate">{item.evidence?.expectedBaseline}</p>
+                  </div>
+                </div>
+
+                <p className="text-[11px] text-slate-600 line-clamp-2 italic">
+                  💡 {item.aiExplanation}
+                </p>
               </div>
-            ))}
+
+              <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-[10px] text-slate-400 font-medium">
+                  {new Date(item.detectedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </span>
+
+                <button
+                  onClick={() => setSelectedAnomaly(item)}
+                  className="px-3 py-1.5 bg-slate-100 hover:bg-[#2012ad] text-slate-700 hover:text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1 shadow-2xs"
+                >
+                  <Eye className="w-3.5 h-3.5" />
+                  <span>Investigate</span>
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 

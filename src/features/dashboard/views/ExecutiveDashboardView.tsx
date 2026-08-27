@@ -274,60 +274,87 @@ export const ExecutiveDashboardView: React.FC<ExecutiveDashboardProps> = ({
         </Card>
       </div>
 
-      {/* AI RISK MONITORING & LIVE RECENT TRANSACTIONS */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left: AI Risk & Anomaly Detection */}
-        <div className="lg:col-span-1">
-          <AiRiskMonitoringWidget />
-        </div>
+      {/* FULL-WIDTH AI RISK & ANOMALY DETECTION */}
+      <div className="w-full">
+        <AiRiskMonitoringWidget />
+      </div>
 
-        {/* Right: Stockout Warning & Live Recent Transactions */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Low Stock Alerts */}
-          {lowStockAlerts.length > 0 && (
-            <Card className="p-6 border-amber-200 bg-amber-50/20">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5 text-amber-600" />
-                  <h3 className="text-sm font-bold text-slate-900">Low Stock Replenishment Priorities</h3>
+      {/* STOCKOUT WARNING & LIVE RECENT TRANSACTIONS (2-COLUMN GRID) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Low Stock Replenishment Priorities */}
+        <Card className="p-6 border-amber-200 bg-amber-50/20 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center">
+                  <AlertTriangle className="w-4 h-4" />
                 </div>
-                <span className="text-xs font-bold text-amber-700">{lowStockAlerts.length} Critical Items</span>
+                <h3 className="text-sm font-bold text-slate-900">Low Stock Replenishment Priorities</h3>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <span className="text-xs font-bold text-amber-700 bg-amber-100/80 px-2.5 py-0.5 rounded-full">
+                {lowStockAlerts.length} Critical Items
+              </span>
+            </div>
+
+            {lowStockAlerts.length === 0 ? (
+              <div className="py-8 text-center text-xs text-slate-400 font-medium">
+                All inventory stock levels are healthy.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {lowStockAlerts.slice(0, 4).map((alert, i) => (
-                  <div key={i} className="p-2.5 bg-white rounded-xl border border-amber-200/80 flex items-center justify-between text-xs">
+                  <div key={i} className="p-3 bg-white rounded-xl border border-amber-200/80 flex items-center justify-between text-xs shadow-2xs hover:shadow-xs transition-shadow">
                     <div className="min-w-0 flex-1 pr-2">
                       <p className="font-bold text-slate-900 truncate">{alert.product_name}</p>
-                      <p className="text-[10px] text-slate-500 font-mono">{alert.sku}</p>
+                      <p className="text-[10px] text-slate-500 font-mono mt-0.5">{alert.sku}</p>
                     </div>
-                    <span className="px-2 py-0.5 rounded bg-rose-100 text-rose-700 font-black text-[10px]">
+                    <span className="px-2.5 py-1 rounded-lg bg-rose-100 text-rose-700 font-black text-[10px] shrink-0">
                       {alert.current_stock} left
                     </span>
                   </div>
                 ))}
               </div>
-            </Card>
-          )}
+            )}
+          </div>
+        </Card>
 
-          {/* Recent Invoices Stream */}
-          <Card className="p-6 border-slate-200/80">
-            <h3 className="text-sm font-bold text-slate-900 mb-3">Recent Sales Invoices</h3>
-            <div className="divide-y divide-slate-100 text-xs">
-              {recentTx.map((tx) => (
-                <div key={tx.id} className="py-2.5 flex items-center justify-between">
-                  <div>
-                    <p className="font-mono font-bold text-slate-900">{tx.invoice_number}</p>
-                    <p className="text-[10px] text-slate-500">{tx.customer_name || 'Walk-in Customer'} • {new Date(tx.sale_date).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-black text-[#2012ad]">₹{tx.total?.toLocaleString()}</p>
-                    <span className="text-[10px] font-bold text-emerald-600 uppercase">{tx.status || 'PAID'}</span>
-                  </div>
+        {/* Recent Invoices Stream */}
+        <Card className="p-6 border-slate-200/80 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-indigo-50 text-[#2012ad] flex items-center justify-center">
+                  <ShoppingCart className="w-4 h-4" />
                 </div>
-              ))}
+                <h3 className="text-sm font-bold text-slate-900">Recent Sales Invoices</h3>
+              </div>
+              <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full">
+                Live Store Terminal
+              </span>
             </div>
-          </Card>
-        </div>
+
+            {recentTx.length === 0 ? (
+              <div className="py-8 text-center text-xs text-slate-400 font-medium">
+                No recent transactions recorded today yet.
+              </div>
+            ) : (
+              <div className="divide-y divide-slate-100 text-xs">
+                {recentTx.slice(0, 4).map((tx) => (
+                  <div key={tx.id} className="py-2.5 flex items-center justify-between hover:bg-slate-50/60 px-1 rounded-lg transition-colors">
+                    <div>
+                      <p className="font-mono font-bold text-slate-900">{tx.invoice_number}</p>
+                      <p className="text-[10px] text-slate-500">{tx.customer_name || 'Walk-in Customer'} • {new Date(tx.sale_date).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-black text-[#2012ad]">₹{tx.total?.toLocaleString()}</p>
+                      <span className="text-[10px] font-bold text-emerald-600 uppercase">{tx.status || 'PAID'}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </Card>
       </div>
     </div>
   );

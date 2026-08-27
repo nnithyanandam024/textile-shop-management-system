@@ -22,7 +22,8 @@ export type AiToolName =
   | 'getAuditLogs'
   | 'getRiskSummary'
   | 'getForecast'
-  | 'getReorders';
+  | 'getReorders'
+  | 'getProductPairings';
 
 interface ToolPermissionRule {
   requiredPermission: string;
@@ -35,80 +36,85 @@ const TOOL_PERMISSIONS: Record<AiToolName, ToolPermissionRule> = {
   getSalesSummary: {
     requiredPermission: 'sales.view',
     aiPermissionKey: AI_PERMISSIONS.SALES_VIEW,
-    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Admin'],
     restrictedMessage: "🔒 Access Restricted: Storewide sales totals and financial revenue require Manager or Admin authorization.",
   },
   getCashierShiftSummary: {
     requiredPermission: 'pos.billing',
-    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Cashier'],
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Admin', 'Cashier', 'Staff'],
     restrictedMessage: "You don't have permission to access POS register summary.",
   },
   getTopSellingProducts: {
     requiredPermission: 'sales.view',
     aiPermissionKey: AI_PERMISSIONS.SALES_VIEW,
-    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Admin'],
     restrictedMessage: "🔒 Access Restricted: Executive top-selling product revenue analytics require Manager or Admin authorization.",
   },
   getLowStockProducts: {
     requiredPermission: 'inventory.view',
-    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Inventory Staff', 'Supervisor'],
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Admin', 'Inventory Staff', 'Supervisor', 'Cashier', 'Staff'],
     restrictedMessage: "You don't have permission to access inventory stock levels.",
   },
   getInventorySummary: {
     requiredPermission: 'inventory.view',
-    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Inventory Staff', 'Supervisor'],
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Admin', 'Inventory Staff', 'Supervisor'],
     restrictedMessage: "You don't have permission to access master inventory valuation metrics.",
   },
   getCustomerSummary: {
     requiredPermission: 'customers.view',
     aiPermissionKey: AI_PERMISSIONS.CUSTOMER_VIEW,
-    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Admin'],
     restrictedMessage: "You don't have permission to view aggregated customer lifetime analytics.",
   },
   getAttendanceSummary: {
     requiredPermission: 'attendance.view',
-    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'HR Staff'],
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Admin', 'HR Staff'],
     restrictedMessage: "You don't have permission to view overall staff attendance records.",
   },
   getLeaveSummary: {
     requiredPermission: 'leave.view',
-    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'HR Staff'],
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Admin', 'HR Staff'],
     restrictedMessage: "You don't have permission to access staff leave records.",
   },
   getDailyReport: {
     requiredPermission: 'reports.view',
     aiPermissionKey: AI_PERMISSIONS.REPORTS_VIEW,
-    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Admin'],
     restrictedMessage: "🔒 Access Restricted: Storewide executive reports and profit statements require Manager or Admin authorization.",
   },
   getStaffPayrollSummary: {
     requiredPermission: 'payroll.view',
-    allowedRoles: ['Owner', 'SUPER_ADMIN', 'HR Staff'],
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Admin', 'HR Staff'],
     restrictedMessage: "🔒 Access Restricted: Staff salary and payroll information is strictly restricted to Owner and HR.",
   },
   getAuditLogs: {
     requiredPermission: 'audit.view',
     aiPermissionKey: AI_PERMISSIONS.ANOMALIES_VIEW,
-    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Admin'],
     restrictedMessage: "🔒 Access Restricted: Security and operational anomaly logs require Manager or Admin authorization.",
   },
   getRiskSummary: {
     requiredPermission: 'audit.view',
     aiPermissionKey: AI_PERMISSIONS.RISK_VIEW,
-    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Admin'],
     restrictedMessage: "🔒 Access Restricted: Store risk monitoring dashboards require Manager or Admin authorization.",
   },
   getForecast: {
     requiredPermission: 'inventory.view',
     aiPermissionKey: AI_PERMISSIONS.FORECAST_VIEW,
-    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager'],
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Admin'],
     restrictedMessage: "🔒 Access Restricted: Demand forecasting is restricted to Store Managers and Inventory Planners.",
   },
   getReorders: {
     requiredPermission: 'inventory.view',
     aiPermissionKey: AI_PERMISSIONS.REORDERS_VIEW,
-    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Supervisor'],
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Admin', 'Supervisor'],
     restrictedMessage: "🔒 Access Restricted: Smart Reorder Point (ROP) analytics require Manager or Supervisor authorization.",
+  },
+  getProductPairings: {
+    requiredPermission: 'inventory.view',
+    allowedRoles: ['Owner', 'SUPER_ADMIN', 'Manager', 'Admin', 'Cashier', 'Staff', 'Inventory Staff', 'Supervisor'],
+    restrictedMessage: "You don't have permission to access product recommendation data.",
   },
 };
 

@@ -1504,18 +1504,20 @@ export function initBrowserMockApi() {
     // --- AI BUSINESS ASSISTANT API ---
     ai: {
       chat: async (request: any, userContext?: any) => {
-        const query = (request?.message || '').toLowerCase().trim();
+        const rawQuery = (request?.message || '').toLowerCase().trim();
+        const query = rawQuery.replace(/[’‘]/g, "'").replace(/-/g, ' ');
         const rawUser = localStorage.getItem('texora_current_user');
         let user = userContext;
         if (!user && rawUser) {
           try { user = JSON.parse(rawUser); } catch {}
         }
         const role = (user?.roleName || user?.role || 'Cashier').toLowerCase();
+        const isAdminOrManager = role === 'owner' || role === 'super_admin' || role === 'admin' || role === 'manager';
         const now = new Date().toISOString();
 
         // 1. Sensitive Payroll Check
         if (query.includes('salary') || query.includes('salaries') || query.includes('payroll') || query.includes('wage')) {
-          if (role !== 'owner' && role !== 'super_admin' && role !== 'hr staff') {
+          if (role !== 'owner' && role !== 'super_admin' && role !== 'admin' && role !== 'hr staff') {
             return {
               answer: "🔒 **Access Restricted**\n\nYou don't have permission to access staff salary or payroll information. Please contact your store administrator.",
               data: {
@@ -1541,7 +1543,7 @@ export function initBrowserMockApi() {
           query.includes('shop overview') ||
           query.includes('executive summary')
         ) {
-          if (role !== 'owner' && role !== 'super_admin' && role !== 'manager') {
+          if (!isAdminOrManager) {
             return {
               answer: "🔒 **Access Restricted**\n\nYou don't have permission to access executive business summary reports.",
               data: { type: 'permission_denied', title: 'Access Restricted' },
@@ -1621,14 +1623,49 @@ export function initBrowserMockApi() {
           };
         }
 
-        // 4. Profit & Gross Margins (RBAC Protected for Admin/Manager)
+        // 4. Product Pairings / Cross-Selling Recommendations
+        if (
+          query.includes('pair') ||
+          query.includes('accessor') ||
+          query.includes('cross sell') ||
+          query.includes('match') ||
+          query.includes('complement')
+        ) {
+          return {
+            answer: `### 👗 Cross-Selling & Pairing Recommendations for Bridal Silk Sarees\n\n` +
+              `Boost customer basket size with these complementary high-margin pairings:\n\n` +
+              `1. **Pure Zari Contrast Blouse Fabric** (\`BLS-ZAR-001\`) — **₹1,850** (+42% basket lift)\n` +
+              `2. **Gold-Plated Antique Temple Jewelry Set** (\`ACC-JWL-008\`) — **₹4,200** (+35% basket lift)\n` +
+              `3. **Handcrafted Zardozi Silk Potli Bag** (\`BAG-POT-003\`) — **₹950** (+28% basket lift)\n` +
+              `4. **Pure Satin Saree Shapewear / Petticoat** (\`UND-PET-002\`) — **₹799** (+50% attachment rate)\n\n` +
+              `💡 *Staff Tip: Suggest matching readymade blouse pieces and contrast potli bags at checkout to increase average invoice value.*`,
+            data: {
+              type: 'general_answer',
+              title: 'Bridal Saree Cross-Sell Recommendations',
+              items: [
+                { name: 'Pure Zari Contrast Blouse Fabric', sku: 'BLS-ZAR-001', price: 1850, margin: '62%' },
+                { name: 'Gold-Plated Antique Temple Jewelry Set', sku: 'ACC-JWL-008', price: 4200, margin: '55%' },
+                { name: 'Handcrafted Zardozi Silk Potli Bag', sku: 'BAG-POT-003', price: 950, margin: '70%' },
+                { name: 'Pure Satin Saree Shapewear', sku: 'UND-PET-002', price: 799, margin: '48%' },
+              ],
+              aiInsight: 'Pairing blouse fabrics and temple jewelry increases average ticket size by ₹3,400.',
+            },
+            source: 'Texora Smart Product Affinity Engine',
+            sourcesUsed: ['Historical POS Invoices', 'Basket Co-occurrence Matrix'],
+            generatedAt: now,
+            confidence: 1.0,
+            toolExecuted: 'getProductPairings',
+          };
+        }
+
+        // 5. Profit & Gross Margins (RBAC Protected for Admin/Manager)
         if (
           query.includes('profit') ||
           query.includes('margin') ||
           query.includes('gross profit') ||
           query.includes('net profit')
         ) {
-          if (role !== 'owner' && role !== 'super_admin' && role !== 'manager') {
+          if (!isAdminOrManager) {
             return {
               answer: "🔒 **Access Restricted**\n\nStorewide profit margins and financial statements require **Store Manager** or **Admin** authorization.\n\nAs a Cashier, you can check:\n• *\"Show my register sales today\"*\n• *\"Check stock for Bridal Silk Saree\"*\n• *\"What accessories pair with this saree?\"*",
               data: { type: 'permission_denied', title: 'Permission Denied' },
@@ -1641,18 +1678,64 @@ export function initBrowserMockApi() {
           }
         }
 
-        // 5. Storewide Sales Queries
+        // 6. Top Selling Products (PRIORITIZED BEFORE generic sales check)
+        if (
+          query.includes('top selling') ||
+          query.includes('top product') ||
+          query.includes('best seller') ||
+          query.includes('bestseller') ||
+          query.includes('fast moving') ||
+          query.includes('popular') ||
+          query.includes('most sold') ||
+          query.includes('top category') ||
+          query.includes('top items') ||
+          query.includes('top seller')
+        ) {
+          const topItems = [
+            { rank: 1, name: 'Bridal Kanchipuram Pure Silk Saree', category: 'Sarees', unitsSold: 18, revenue: 323982, sku: 'SAR-KAN-001-RED-FS', variantInfo: 'Crimson Red / Free Size' },
+            { rank: 2, name: 'Premium Egyptian Giza Cotton Shirt', category: 'Men’s Wear', unitsSold: 24, revenue: 59976, sku: 'MSH-EGY-002-WHT-40', variantInfo: 'Pure White / 40 (M)' },
+            { rank: 3, name: 'Banarasi Brocade Silk Saree', category: 'Sarees', unitsSold: 12, revenue: 143988, sku: 'SAR-BAN-003-NVY-FS', variantInfo: 'Navy Gold / Free Size' },
+            { rank: 4, name: 'Designer Soft Silk Partywear Saree', category: 'Sarees', unitsSold: 15, revenue: 112485, sku: 'SAR-SFT-004-PNK-FS', variantInfo: 'Rose Pink / Free Size' },
+            { rank: 5, name: 'Pure Linen Formal Trouser', category: 'Men’s Wear', unitsSold: 16, revenue: 36784, sku: 'MTR-LIN-005-BEI-32', variantInfo: 'Beige / 32' },
+          ];
+
+          let answer = `### 🏆 Top Selling Products & Fast Movers\n\n`;
+          topItems.forEach((p) => {
+            answer += `${p.rank}. **${p.name}** (${p.category})\n` +
+              `   • Units Sold: **${p.unitsSold} units** | Revenue: **₹${p.revenue.toLocaleString()}**\n` +
+              `   • Variant: \`${p.sku}\` (${p.variantInfo})\n\n`;
+          });
+
+          return {
+            answer,
+            data: {
+              type: 'top_products',
+              title: 'Top Fast-Moving Products',
+              items: topItems,
+              aiInsight: 'Bridal Silk Sarees and Giza Cotton Shirts represent 68% of today’s volume.',
+            },
+            source: 'Product Variant & Sales Item Aggregates',
+            sourcesUsed: ['Sale Items Database', 'Barcode Records', 'Inventory Movement Register'],
+            generatedAt: now,
+            confidence: 1.0,
+            toolExecuted: 'getTopSellingProducts',
+          };
+        }
+
+        // 7. Storewide Sales Queries
         if (
           query.includes('sale') ||
           query.includes('sold') ||
+          query.includes('sell') ||
           query.includes('revenue') ||
           query.includes('turnover') ||
           query.includes('collection') ||
           query.includes('bill') ||
           query.includes('yesterday') ||
-          query.includes('transaction')
+          query.includes('transaction') ||
+          query.includes('how much')
         ) {
-          if (role !== 'owner' && role !== 'super_admin' && role !== 'manager') {
+          if (!isAdminOrManager) {
             return {
               answer: "🔒 **Access Restricted**\n\nStorewide sales totals and financial revenue require **Store Manager** or **Admin** authorization.\n\nTo view your own terminal sales, ask: *\"Show my register sales today\"*.",
               data: { type: 'permission_denied', title: 'Permission Denied' },
@@ -1694,47 +1777,6 @@ export function initBrowserMockApi() {
             generatedAt: now,
             confidence: 1.0,
             toolExecuted: 'getSalesSummary',
-          };
-        }
-
-        // 4. Top Selling Products
-        if (
-          query.includes('top selling') ||
-          query.includes('top product') ||
-          query.includes('best seller') ||
-          query.includes('fast moving') ||
-          query.includes('popular') ||
-          query.includes('most sold') ||
-          query.includes('top category')
-        ) {
-          const topItems = [
-            { rank: 1, name: 'Bridal Kanchipuram Pure Silk Saree', category: 'Sarees', unitsSold: 18, revenue: 323982, sku: 'SAR-KAN-001-RED-FS', variantInfo: 'Crimson Red / Free Size' },
-            { rank: 2, name: 'Premium Egyptian Giza Cotton Shirt', category: 'Men’s Wear', unitsSold: 24, revenue: 59976, sku: 'MSH-EGY-002-WHT-40', variantInfo: 'Pure White / 40 (M)' },
-            { rank: 3, name: 'Banarasi Brocade Silk Saree', category: 'Sarees', unitsSold: 12, revenue: 143988, sku: 'SAR-BAN-003-NVY-FS', variantInfo: 'Navy Gold / Free Size' },
-            { rank: 4, name: 'Designer Soft Silk Partywear Saree', category: 'Sarees', unitsSold: 15, revenue: 112485, sku: 'SAR-SFT-004-PNK-FS', variantInfo: 'Rose Pink / Free Size' },
-            { rank: 5, name: 'Pure Linen Formal Trouser', category: 'Men’s Wear', unitsSold: 16, revenue: 36784, sku: 'MTR-LIN-005-BEI-32', variantInfo: 'Beige / 32' },
-          ];
-
-          let answer = `### 🏆 Top Selling Products & Fast Movers\n\n`;
-          topItems.forEach((p) => {
-            answer += `${p.rank}. **${p.name}** (${p.category})\n` +
-              `   • Units Sold: **${p.unitsSold} units** | Revenue: **₹${p.revenue.toLocaleString()}**\n` +
-              `   • Variant: \`${p.sku}\` (${p.variantInfo})\n\n`;
-          });
-
-          return {
-            answer,
-            data: {
-              type: 'top_products',
-              title: 'Top Fast-Moving Products',
-              items: topItems,
-              aiInsight: 'Bridal Silk Sarees and Giza Cotton Shirts represent 68% of today’s volume.',
-            },
-            source: 'Product Variant & Sales Item Aggregates',
-            sourcesUsed: ['Sale Items Database', 'Barcode Records', 'Inventory Movement Register'],
-            generatedAt: now,
-            confidence: 1.0,
-            toolExecuted: 'getTopSellingProducts',
           };
         }
 

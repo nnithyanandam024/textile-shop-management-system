@@ -183,6 +183,24 @@ export class AiService {
           };
           break;
         }
+        case 'getProductPairings': {
+          const data = await AiTools.getProductPairings();
+          result = {
+            answer: data.answer,
+            data: {
+              type: 'general_answer',
+              title: 'Product Pairings & Cross-Sell',
+              items: data.items,
+              aiInsight: 'Pairing high-margin accessories boosts basket size by over 35%.',
+            },
+            source: 'Texora Smart Product Affinity Engine',
+            sourcesUsed: ['Historical POS Invoices', 'Basket Co-occurrence Matrix'],
+            generatedAt: new Date().toISOString(),
+            confidence: 1.0,
+            toolExecuted: 'getProductPairings',
+          };
+          break;
+        }
         default:
           result = AiValidator.formatOutOfScopeResponse(query);
       }
@@ -227,7 +245,9 @@ export class AiService {
    * Identifies user query intent using natural language semantic rules.
    */
   private static identifyIntent(query: string): { tool?: AiToolName; params?: any } {
-    const q = query.toLowerCase().trim();
+    const raw = (query || '').toLowerCase().trim();
+    // Normalize quotes and hyphens (e.g. top-selling -> top selling, today’s -> today's)
+    const q = raw.replace(/[’‘]/g, "'").replace(/-/g, ' ');
 
     // 1. Personal Cashier Register / Shift Summary
     if (
@@ -265,7 +285,18 @@ export class AiService {
       return { tool: 'getStaffPayrollSummary' };
     }
 
-    // 4. Profit & Margins (Triggers RBAC check on getSalesSummary)
+    // 4. Product Pairings / Cross-Selling recommendations
+    if (
+      q.includes('pair') ||
+      q.includes('accessor') ||
+      q.includes('cross sell') ||
+      q.includes('match') ||
+      q.includes('complement')
+    ) {
+      return { tool: 'getProductPairings' };
+    }
+
+    // 5. Profit & Margins (Triggers RBAC check on getSalesSummary)
     if (
       q.includes('profit') ||
       q.includes('net margin') ||
@@ -275,7 +306,23 @@ export class AiService {
       return { tool: 'getSalesSummary', params: { timeframe: 'month', focus: 'profit' } };
     }
 
-    // 3. Sales Queries
+    // 6. Top Selling Products (PRIORITIZED BEFORE generic sales check)
+    if (
+      q.includes('top selling') ||
+      q.includes('top product') ||
+      q.includes('best seller') ||
+      q.includes('bestseller') ||
+      q.includes('fast moving') ||
+      q.includes('popular') ||
+      q.includes('most sold') ||
+      q.includes('top category') ||
+      q.includes('top items') ||
+      q.includes('top seller')
+    ) {
+      return { tool: 'getTopSellingProducts', params: { limit: 5 } };
+    }
+
+    // 7. Storewide Sales Queries
     if (q.includes('yesterday')) {
       return { tool: 'getSalesSummary', params: { timeframe: 'yesterday' } };
     }
@@ -288,26 +335,17 @@ export class AiService {
     if (
       q.includes('sale') ||
       q.includes('sold') ||
+      q.includes('sell') ||
       q.includes('revenue') ||
       q.includes('turnover') ||
       q.includes('collection') ||
       q.includes('bills') ||
-      q.includes('transactions')
+      q.includes('bill') ||
+      q.includes('transactions') ||
+      q.includes('transaction') ||
+      q.includes('how much')
     ) {
       return { tool: 'getSalesSummary', params: { timeframe: 'today' } };
-    }
-
-    // 4. Top Selling Products
-    if (
-      q.includes('top selling') ||
-      q.includes('top product') ||
-      q.includes('best seller') ||
-      q.includes('fast moving') ||
-      q.includes('popular') ||
-      q.includes('most sold') ||
-      q.includes('top category')
-    ) {
-      return { tool: 'getTopSellingProducts', params: { limit: 5 } };
     }
 
     // 5. Low Stock & Out of Stock Queries

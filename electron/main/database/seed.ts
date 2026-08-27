@@ -465,5 +465,15 @@ export function seedDatabase(db: Database.Database) {
   });
 
   transaction();
+
+  // Run Enterprise Dataset Generator (1,000+ records)
+  try {
+    const { seedEnterpriseDataset } = require('./enterpriseDataGenerator');
+    seedEnterpriseDataset(db);
+  } catch (err) {
+    log.error('Error generating enterprise dataset:', err);
+  }
+
   log.info('Comprehensive database seed completed successfully.');
 }
+

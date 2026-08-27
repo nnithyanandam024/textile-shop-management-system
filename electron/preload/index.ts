@@ -422,6 +422,7 @@ export interface ElectronAPI {
   system: {
     getHealth: () => Promise<any>;
     checkIntegrity: () => Promise<{ healthy: boolean; foreignKeysOk: boolean; error?: string }>;
+    seedEnterpriseData: () => Promise<{ success: boolean; message?: string; error?: string }>;
   };
   settings: {
     getAll: () => Promise<{ success: boolean; data?: Record<string, string>; error?: string }>;
@@ -868,6 +869,7 @@ const api: ElectronAPI = {
   system: {
     getHealth: () => ipcRenderer.invoke('system:get-health'),
     checkIntegrity: () => ipcRenderer.invoke('system:check-integrity'),
+    seedEnterpriseData: () => ipcRenderer.invoke('system:seed-enterprise-data'),
   },
   staff: {
     getAll: (params) => ipcRenderer.invoke('staff:getAll', params),

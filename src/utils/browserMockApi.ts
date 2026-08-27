@@ -3341,6 +3341,22 @@ export function initBrowserMockApi() {
         };
       },
     },
+
+    // --- SYSTEM API ---
+    system: {
+      getHealth: async () => ({
+        healthy: true,
+        databaseSizeMB: 4.8,
+        totalProducts: loadStorage(STORAGE_KEYS.PRODUCTS, []).length,
+        totalCustomers: loadStorage(STORAGE_KEYS.CUSTOMERS, []).length,
+        totalSales: loadStorage(STORAGE_KEYS.SALES, []).length,
+      }),
+      checkIntegrity: async () => ({ healthy: true, foreignKeysOk: true }),
+      seedEnterpriseData: async () => {
+        localStorage.clear();
+        return { success: true, message: 'Seeded enterprise dataset in browser preview storage' };
+      },
+    },
   };
 
   // Helper for mock staff profiles

@@ -626,6 +626,17 @@ export function registerIpcHandlers() {
     return BackupService.checkIntegrity();
   });
 
+  ipcMain.handle('system:seed-enterprise-data', () => {
+    try {
+      const { seedEnterpriseDataset } = require('../database/enterpriseDataGenerator');
+      seedEnterpriseDataset(getDatabase());
+      return { success: true, message: 'Successfully generated 1,000+ enterprise records.' };
+    } catch (error: any) {
+      log.error('Failed to seed enterprise dataset:', error);
+      return { success: false, error: error.message || String(error) };
+    }
+  });
+
   // Settings
   ipcMain.handle('settings:get-all', () => {
     try {
